@@ -105,6 +105,10 @@ function friendlyError(error) {
   };
   return messages[code] || error?.message || "The cloud save could not be completed.";
 }
+function restoreReloadKey(uid, id) { return `__firebaseCloudRestoreReload:${id}:${uid}`; }
+function clearRestoreReload(uid, id) {
+  try { sessionStorage.removeItem(restoreReloadKey(uid, id)); } catch {}
+}
 function setStatus(message) {
   statusText = message;
   const node = modal?.querySelector("[data-cloud-status]");
@@ -120,11 +124,13 @@ function updateButton() {
     const label = button.querySelector("[data-cloud-label]");
     if (label) label.textContent = shortLabel;
     button.setAttribute("aria-label", linked ? "Cloud account settings" : "Log in to sync your progress across devices");
+    if (statusText) button.title = statusText;
   }
   document.querySelectorAll("[data-cloud-login]").forEach(entry => {
     const label = entry.querySelector("[data-cloud-label]");
     if (label) label.textContent = linked ? "☁ Account synced" : "☁ Log in to sync";
     entry.setAttribute("aria-label", linked ? "Cloud account settings" : "Log in to sync your progress across devices");
+    if (statusText) entry.title = statusText;
   });
   if (modal) {
     const name = user?.displayName || user?.email || (linked ? "Linked account" : "Guest");
@@ -220,15 +226,33 @@ async function writeCloud(uid, id, payload) {
     updatedAt: serverTimestamp()
   });
   putMeta(id, { ownerUid: uid, modifiedAtMs });
+  clearRestoreReload(uid, id);
   setStatus("Progress synced to your account.");
 }
 async function restoreCloud(uid, id, payload, timestampMs) {
-  setLocalPayload(id, payload || {});
+  const nextPayload = payload || {};
+  let reloadAlreadyUsed = false;
+  try { reloadAlreadyUsed = sessionStorage.getItem(restoreReloadKey(uid, id)) === "1"; } catch {}
+  setLocalPayload(id, nextPayload);
+  const restoredPayload = localPayload(id);
+  if (!equalPayload(restoredPayload, nextPayload)) {
+    setStatus("Your cloud save is safe, but this browser could not keep its device copy. Check site storage settings, then open account settings to try again.");
+    return;
+  }
   putMeta(id, { ownerUid: uid, modifiedAtMs: Number(timestampMs) || Date.now() });
   setStatus("Cloud progress restored.");
   if (id === gameId) {
-    // The existing games read localStorage during startup, so reload to apply
-    // the restored save to their in-memory game state.
+    // The games read localStorage during startup. Reload once to apply the
+    // restored save, then stop if a browser fails to retain that copy.
+    if (reloadAlreadyUsed) {
+      setStatus("The cloud save is safe, but this browser did not finish loading its restored copy. Check site storage settings, then reload once.");
+      return;
+    }
+    try { sessionStorage.setItem(restoreReloadKey(uid, id), "1"); }
+    catch {
+      setStatus("The cloud save is safe, but this browser blocked the one-time restore reload. Check site storage settings, then reload once.");
+      return;
+    }
     window.location.reload();
   }
 }
@@ -250,6 +274,7 @@ async function syncGameInternal(uid, id) {
     return;
   }
   if (equalPayload(local, cloud)) {
+    clearRestoreReload(uid, id);
     putMeta(id, { ownerUid: uid, modifiedAtMs: Math.max(meta.modifiedAtMs || 0, cloudTime) });
     setStatus("Progress is synced.");
     return;
