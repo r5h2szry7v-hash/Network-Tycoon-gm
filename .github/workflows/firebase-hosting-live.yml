@@ -40,7 +40,11 @@ jobs:
               html = html.replace('<div class="setup-card home-card">', '<div class="setup-card home-card"><nav class="cross-game-links"><a href="/">← All games</a></nav>', 1)
               html = html.replace('<button id="setup-back" class="setup-back" type="button">← Home</button>', '<nav class="setup-nav"><button id="setup-back" class="setup-back" type="button">← Tycoon home</button><a href="/">All games</a></nav>', 1)
               html = html.replace('<div class="top-actions">', '<div class="top-actions"><details class="game-home-menu"><summary>⌂ Home</summary><div class="game-home-menu-list"><a href="/tycoon/">Tycoon home</a><a href="/">All games</a></div></details>', 1)
-          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=auth-redirect-1"; startCloudSync("networkTycoon");</script>'
+          login_nav = '<nav class="cross-game-links"><a href="/">← All games</a></nav>'
+          login_nav_with_button = '<nav class="cross-game-links"><a href="/">← All games</a><button type="button" class="cloud-home-login" data-cloud-login><span data-cloud-label>☁ Log in to sync</span></button></nav>'
+          if 'data-cloud-login' not in html:
+              html = html.replace(login_nav, login_nav_with_button, 1)
+          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=auth-home-login-2"; startCloudSync("networkTycoon");</script>'
           if tag not in html:
               html = html.replace("</body>", tag + "</body>", 1)
               page.write_text(html)
@@ -57,3 +61,4 @@ jobs:
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
           trap 'rm -f "$RUNNER_TEMP/firebase-service-account.json"' EXIT
           GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json" npx firebase-tools@latest deploy --only firestore:rules --project network-tycoon-gm --non-interactive
+

@@ -99,8 +99,9 @@ function friendlyError(error) {
     "auth/unauthorized-domain": "Add this website domain under Firebase Authentication → Settings → Authorized domains.",
     "auth/invalid-action-code": "This email sign-in link expired or was already used. Request a new link.",
     "permission-denied": "Firestore rules are not allowing this save yet.",
-    "auth/credential-already-in-use": "That account already exists. Signing in to it and checking both saves.",
-    "auth/account-exists-with-different-credential": "That email already uses another sign-in method. Sign in with the method already attached."
+    "auth/email-already-in-use": "An account already uses this email. Sign in with its existing provider instead of creating another account.",
+    "auth/credential-already-in-use": "This Google account is already registered. Choose Google again to sign in to that account and sync your saves.",
+    "auth/account-exists-with-different-credential": "This email already belongs to an account using a different sign-in method. Use that existing method to continue."
   };
   return messages[code] || error?.message || "The cloud save could not be completed.";
 }
@@ -114,9 +115,17 @@ function updateButton() {
   if (!button) return;
   const user = auth.currentUser;
   const linked = !!user && !user.isAnonymous;
-  const label = linked ? "☁ Synced" : "☁ Guest save";
-  button.querySelector("[data-cloud-label]").textContent = label;
-  button.setAttribute("aria-label", linked ? "Cloud account settings" : "Save progress across devices");
+  const shortLabel = linked ? "☁ Synced" : "☁ Log in";
+  if (button) {
+    const label = button.querySelector("[data-cloud-label]");
+    if (label) label.textContent = shortLabel;
+    button.setAttribute("aria-label", linked ? "Cloud account settings" : "Log in to sync your progress across devices");
+  }
+  document.querySelectorAll("[data-cloud-login]").forEach(entry => {
+    const label = entry.querySelector("[data-cloud-label]");
+    if (label) label.textContent = linked ? "☁ Account synced" : "☁ Log in to sync";
+    entry.setAttribute("aria-label", linked ? "Cloud account settings" : "Log in to sync your progress across devices");
+  });
   if (modal) {
     const name = user?.displayName || user?.email || (linked ? "Linked account" : "Guest");
     const account = modal.querySelector("[data-cloud-account]");
@@ -131,7 +140,7 @@ function mountStyles() {
   style.id = "firebase-cloud-styles";
   style.textContent = `
 .cloud-account-button{border:1px solid #d6e7e1;background:#f7fffb;color:#146b62;border-radius:999px;padding:9px 13px;font:800 12px/1.15 system-ui,sans-serif;white-space:nowrap;cursor:pointer;box-shadow:0 4px 12px #123b3514;transition:transform .16s,box-shadow .16s}
-.cloud-account-button:hover{transform:translateY(-1px);box-shadow:0 7px 16px #123b3520}.cloud-account-button:focus-visible,.cloud-card button:focus-visible,.cloud-card input:focus-visible{outline:3px solid #8e7bf2;outline-offset:2px}
+.cloud-account-button:hover{transform:translateY(-1px);box-shadow:0 7px 16px #123b3520}.cloud-home-login{border:1px solid #b8ddd0!important;border-radius:999px!important;background:#effaf5!important;color:#126e61!important;padding:9px 13px!important;font:800 12px/1.15 system-ui,sans-serif!important;white-space:nowrap;box-shadow:0 4px 12px #123b3514;font-weight:900!important}.cloud-account-button:focus-visible,.cloud-home-login:focus-visible,.cloud-card button:focus-visible,.cloud-card input:focus-visible{outline:3px solid #8e7bf2;outline-offset:2px}
 .cloud-overlay{position:fixed;inset:0;z-index:10000;background:#102937b8;display:grid;place-items:center;padding:18px;backdrop-filter:blur(5px);font-family:system-ui,sans-serif}
 .cloud-card{width:min(100%,430px);background:#fff;border:1px solid #e1e7e9;border-radius:22px;padding:23px;box-shadow:0 25px 80px #061c2b55;color:#183847}
 .cloud-card h2{font:850 24px/1.05 system-ui,sans-serif;margin:0 0 9px;letter-spacing:-.04em}
@@ -148,28 +157,37 @@ function mountStyles() {
 .cloud-email-field{width:100%;border:1px solid #cddadd;border-radius:11px;padding:12px;font:15px system-ui,sans-serif;margin:4px 0 2px}
 .cloud-status{min-height:20px;color:#42776f;font-size:12px;line-height:1.45;margin-top:8px}
 .cloud-conflict-actions{display:grid;gap:9px;margin-top:16px}
-@media(max-width:650px){.cloud-account-button{padding:8px 9px;font-size:11px}.cloud-account-button [data-cloud-long]{display:none}.cloud-card{padding:20px}.cloud-overlay{padding:12px}}
+@media(max-width:650px){.cloud-account-button{padding:8px 9px;font-size:11px}.cloud-home-login{padding:8px 9px!important;font-size:11px!important}.cloud-account-button [data-cloud-long]{display:none}.cloud-card{padding:20px}.cloud-overlay{padding:12px}}
 `;
   document.head.appendChild(style);
 }
 function ensureButton() {
   if (button || !gameId) return;
   mountStyles();
-  button = document.createElement("button");
-  button.type = "button";
-  button.className = "cloud-account-button";
-  button.innerHTML = '<span data-cloud-label>☁ Guest save</span>';
-  button.addEventListener("click", openAccountModal);
-  const target = document.querySelector(".top-actions") ||
-    (gameId === "matchGarden" ? document.querySelector(".topbar") : null);
-  if (target) target.appendChild(button);
-  else {
-    button.style.position = "fixed";
-    button.style.right = "14px";
-    button.style.bottom = "calc(14px + env(safe-area-inset-bottom))";
-    button.style.zIndex = "500";
-    document.body.appendChild(button);
+  button = gameId === "matchGarden" ? document.querySelector("[data-cloud-login]") : null;
+  if (button) {
+    button.classList.add("cloud-account-button");
+  } else {
+    button = document.createElement("button");
+    button.type = "button";
+    button.className = "cloud-account-button";
+    button.innerHTML = '<span data-cloud-label>☁ Log in</span>';
+    button.addEventListener("click", openAccountModal);
+    const target = document.querySelector(".top-actions");
+    if (target) target.appendChild(button);
+    else {
+      button.style.position = "fixed";
+      button.style.right = "14px";
+      button.style.bottom = "calc(14px + env(safe-area-inset-bottom))";
+      button.style.zIndex = "500";
+      document.body.appendChild(button);
+    }
   }
+  document.querySelectorAll("[data-cloud-login]").forEach(entry => {
+    if (entry.dataset.cloudBound) return;
+    entry.dataset.cloudBound = "true";
+    entry.addEventListener("click", openAccountModal);
+  });
   updateButton();
 }
 function showChoice(title, message, choices) {
@@ -366,7 +384,13 @@ async function connectProvider(id) {
     else await linkWithRedirect(current, provider);
   } catch (error) {
     localStorage.removeItem(pendingProviderKey);
-    setStatus(friendlyError(error));
+    const existingAccount = ["auth/credential-already-in-use", "auth/account-exists-with-different-credential", "auth/email-already-in-use"].includes(error.code);
+    if (existingAccount && !signInExisting) {
+      localStorage.setItem(pendingProviderSignInKey, id);
+      setStatus("This Google account is already registered, so Firebase could not attach it to the temporary guest profile. Choose Google again to sign in to the existing account. Your device save stays here while we check which cloud save to use.");
+    } else {
+      setStatus(friendlyError(error));
+    }
   }
 }
 async function sendEmailLink() {
@@ -409,9 +433,9 @@ async function startCloudSync(id) {
       setStatus("Google sign-in complete. Your progress is syncing.");
     } else if (redirectError) {
       const pendingProvider = localStorage.getItem(pendingProviderKey);
-      if (pendingProvider && ["auth/credential-already-in-use", "auth/account-exists-with-different-credential"].includes(redirectError.code)) {
+      if (pendingProvider && ["auth/credential-already-in-use", "auth/account-exists-with-different-credential", "auth/email-already-in-use"].includes(redirectError.code)) {
         localStorage.setItem(pendingProviderSignInKey, pendingProvider);
-        setStatus("That Google account already exists. Open account settings and choose Google again to sign in to it.");
+        setStatus("This Google account is already registered, so Firebase could not attach it to the temporary guest profile. Choose Google again to sign in to the existing account. Your device save stays here while we check which cloud save to use.");
       } else {
         setStatus(friendlyError(redirectError));
       }
@@ -442,4 +466,5 @@ async function startCloudSync(id) {
   return auth.currentUser;
 }
 export { startCloudSync };
+
 
