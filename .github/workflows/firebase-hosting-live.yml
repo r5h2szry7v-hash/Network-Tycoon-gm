@@ -21,6 +21,25 @@ jobs:
           from pathlib import Path
           page = Path("public/tycoon/index.html")
           html = page.read_text()
+          nav_css = """<style>
+          .cross-game-links{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
+          .cross-game-links a,.setup-nav a{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid #cfe0d8;border-radius:10px;background:#f7fffb;color:#267568;text-decoration:none;font:800 12px system-ui,sans-serif}
+          .setup-nav{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+          .setup-nav .setup-back{margin:0}
+          .game-home-menu{position:relative;z-index:100;display:inline-block}
+          .game-home-menu summary{list-style:none;cursor:pointer;white-space:nowrap;border:1px solid #57717e;border-radius:10px;background:#285061;color:#fff;padding:8px 10px;font:800 12px system-ui,sans-serif}
+          .game-home-menu summary::-webkit-details-marker{display:none}
+          .game-home-menu-list{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:145px;padding:6px;border:1px solid #dbe5e6;border-radius:12px;background:#fff;box-shadow:0 12px 28px #102b3a30}
+          .game-home-menu[open] .game-home-menu-list{display:grid;gap:3px}
+          .game-home-menu-list a{display:block;padding:9px 10px;border-radius:8px;color:#173143;text-decoration:none;font:800 12px system-ui,sans-serif;white-space:nowrap}
+          .game-home-menu-list a:hover{background:#edf7f3}
+          @media(max-width:700px){.game-home-menu summary{padding:7px 8px;font-size:11px}}
+          </style>"""
+          if 'class="game-home-menu"' not in html:
+              html = html.replace("</head>", nav_css + "</head>", 1)
+              html = html.replace('<div class="setup-card home-card">', '<div class="setup-card home-card"><nav class="cross-game-links"><a href="/">← All games</a></nav>', 1)
+              html = html.replace('<button id="setup-back" class="setup-back" type="button">← Home</button>', '<nav class="setup-nav"><button id="setup-back" class="setup-back" type="button">← Tycoon home</button><a href="/">All games</a></nav>', 1)
+              html = html.replace('<div class="top-actions">', '<div class="top-actions"><details class="game-home-menu"><summary>⌂ Home</summary><div class="game-home-menu-list"><a href="/tycoon/">Tycoon home</a><a href="/">All games</a></div></details>', 1)
           tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=auth-redirect-1"; startCloudSync("networkTycoon");</script>'
           if tag not in html:
               html = html.replace("</body>", tag + "</body>", 1)

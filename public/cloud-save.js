@@ -142,6 +142,7 @@ function mountStyles() {
 .cloud-card button:hover{background:#eef7f4;border-color:#9fcbc0}
 .cloud-card .cloud-primary{background:#158777;color:white;border-color:#158777}.cloud-card .cloud-primary:hover{background:#0f766a}
 .cloud-card .cloud-apple{background:#1b2730;color:#fff;border-color:#1b2730}
+.cloud-card .cloud-signout{border-color:#f1d5d2;color:#99473f;background:#fff8f7;text-align:center}
 .cloud-card button:disabled{opacity:.58;cursor:not-allowed}
 .cloud-card .cloud-cancel{background:transparent;border-color:transparent;color:#617680;text-align:center;width:100%;margin-top:8px}
 .cloud-email-field{width:100%;border:1px solid #cddadd;border-radius:11px;padding:12px;font:15px system-ui,sans-serif;margin:4px 0 2px}
@@ -320,7 +321,7 @@ function openAccountModal() {
         <button type="button" class="cloud-apple" data-provider="apple" disabled aria-disabled="true" title="Apple sign-in setup is pending">Apple sign-in coming soon</button>
         <input class="cloud-email-field" type="email" inputmode="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
         <button type="button" data-provider="email">Email me a sign-in link</button>
-        <button type="button" data-cloud-signout hidden>Sign out</button>
+        <button type="button" class="cloud-signout" data-cloud-signout hidden>Sign out of account</button>
       </div>
       <div class="cloud-status" data-cloud-status aria-live="polite"></div>
       <button type="button" class="cloud-cancel" data-cloud-close>Close</button>
@@ -334,10 +335,12 @@ function openAccountModal() {
   overlay.querySelector('[data-provider="email"]').onclick = sendEmailLink;
   overlay.querySelector("[data-cloud-signout]").onclick = async () => {
     try {
+      const signedOutName = auth.currentUser?.displayName || auth.currentUser?.email || "your account";
       await signOut(auth);
       const result = await signInAnonymously(auth);
+      activeUid = result.user.uid;
       await syncGame(result.user.uid, gameId);
-      setStatus("Signed out. Guest progress is ready on this device.");
+      setStatus(`Signed out of ${signedOutName}. You are now playing as a guest on this device.`);
       updateButton();
     } catch (error) { setStatus(friendlyError(error)); }
   };
