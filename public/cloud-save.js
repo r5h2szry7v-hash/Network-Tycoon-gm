@@ -1,15 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
 import {
   GoogleAuthProvider,
-  OAuthProvider,
   getAuth,
+  getRedirectResult,
   isSignInWithEmailLink,
-  linkWithPopup,
+  linkWithRedirect,
   onAuthStateChanged,
   sendSignInLinkToEmail,
   signInAnonymously,
   signInWithEmailLink,
-  signInWithPopup,
+  signInWithRedirect,
   signOut
 } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
 import {
@@ -22,7 +22,7 @@ import {
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhsKlogLmtsL92MvrCWV8ER4IA4hJ-pKk",
-  authDomain: "network-tycoon-gm.firebaseapp.com",
+  authDomain: "network-tycoon-gm.web.app",
   projectId: "network-tycoon-gm",
   storageBucket: "network-tycoon-gm.firebasestorage.app",
   messagingSenderId: "948292690047",
@@ -41,6 +41,8 @@ const gameStorage = {
   matchGarden: ["matchGarden"]
 };
 const emailKey = "firebaseCloudPendingEmail";
+const pendingProviderKey = "firebaseCloudPendingProvider";
+const pendingProviderSignInKey = "firebaseCloudProviderSignIn";
 let gameId = null;
 let activeUid = null;
 let ready = false;
@@ -142,6 +144,7 @@ function mountStyles() {
 .cloud-card button:hover{background:#eef7f4;border-color:#9fcbc0}
 .cloud-card .cloud-primary{background:#158777;color:white;border-color:#158777}.cloud-card .cloud-primary:hover{background:#0f766a}
 .cloud-card .cloud-apple{background:#1b2730;color:#fff;border-color:#1b2730}
+.cloud-card button:disabled{opacity:.58;cursor:not-allowed}
 .cloud-card .cloud-cancel{background:transparent;border-color:transparent;color:#617680;text-align:center;width:100%;margin-top:8px}
 .cloud-email-field{width:100%;border:1px solid #cddadd;border-radius:11px;padding:12px;font:15px system-ui,sans-serif;margin:4px 0 2px}
 .cloud-status{min-height:20px;color:#42776f;font-size:12px;line-height:1.45;margin-top:8px}
@@ -316,7 +319,7 @@ function openAccountModal() {
       <div class="cloud-account-name" data-cloud-account>Guest · this device</div>
       <div class="cloud-provider-list">
         <button type="button" class="cloud-primary" data-provider="google">Continue with Google</button>
-        <button type="button" class="cloud-apple" data-provider="apple">Continue with Apple</button>
+        <button type="button" class="cloud-apple" data-provider="apple" disabled aria-disabled="true" title="Apple sign-in setup is pending">Apple sign-in coming soon</button>
         <input class="cloud-email-field" type="email" inputmode="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
         <button type="button" data-provider="email">Email me a sign-in link</button>
         <button type="button" data-cloud-signout hidden>Sign out</button>
@@ -329,7 +332,7 @@ function openAccountModal() {
   overlay.querySelector("[data-cloud-close]").onclick = () => { overlay.remove(); modal = null; };
   overlay.addEventListener("click", e => { if (e.target === overlay) { overlay.remove(); modal = null; } });
   overlay.querySelector('[data-provider="google"]').onclick = () => connectProvider("google.com");
-  overlay.querySelector('[data-provider="apple"]').onclick = () => connectProvider("apple.com");
+  overlay.querySelector('[data-provider="apple"]').onclick = () => setStatus("Apple sign-in will be available when Apple Developer setup is complete.");
   overlay.querySelector('[data-provider="email"]').onclick = sendEmailLink;
   overlay.querySelector("[data-cloud-signout]").onclick = async () => {
     try {
@@ -344,28 +347,26 @@ function openAccountModal() {
   if (statusText) setStatus(statusText);
 }
 async function connectProvider(id) {
-  const current = auth.currentUser;
-  if (!current) { setStatus("Starting a guest session first."); return; }
-  if (id === "apple.com" && !window.confirm("Link your Apple ID to this game's saved progress so it can be used across your devices?")) return;
-  const provider = id === "google.com" ? new GoogleAuthProvider() : new OAuthProvider("apple.com");
-  if (id === "google.com") provider.setCustomParameters({ prompt: "select_account" });
-  if (id === "apple.com") { provider.addScope("email"); provider.addScope("name"); }
-  try {
-    const linked = current.providerData.some(p => p.providerId === id);
-    if (current.isAnonymous || !linked) await linkWithPopup(current, provider);
-    else await signInWithPopup(auth, provider);
-  } catch (error) {
-    if (error.code === "auth/credential-already-in-use" || error.code === "auth/account-exists-with-different-credential") {
-      try { await signInWithPopup(auth, provider); }
-      catch (signInError) { setStatus(friendlyError(signInError)); return; }
-    } else { setStatus(friendlyError(error)); return; }
+  if (id !== "google.com") return;
+  let current = auth.currentUser;
+  if (!current) current = (await signInAnonymously(auth)).user;
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  if (current.providerData.some(p => p.providerId === id)) {
+    setStatus("Google is already linked to this account.");
+    return;
   }
+  const signInExisting = localStorage.getItem(pendingProviderSignInKey) === id;
+  localStorage.removeItem(pendingProviderSignInKey);
+  localStorage.setItem(pendingProviderKey, id);
+  setStatus("Opening Google sign-in securely… This page will return here when you finish.");
   try {
-    const user = auth.currentUser;
-    if (user) await syncGame(user.uid, gameId);
-    setStatus("Account linked. Your progress will sync between devices.");
-    updateButton();
-  } catch (error) { setStatus(friendlyError(error)); }
+    if (signInExisting) await signInWithRedirect(auth, provider);
+    else await linkWithRedirect(current, provider);
+  } catch (error) {
+    localStorage.removeItem(pendingProviderKey);
+    setStatus(friendlyError(error));
+  }
 }
 async function sendEmailLink() {
   const input = modal?.querySelector(".cloud-email-field");
@@ -384,6 +385,10 @@ async function startCloudSync(id) {
   gameId = gameStorage[id] ? id : null;
   ensureButton();
   installStorageWatcher();
+  let redirectResult = null;
+  let redirectError = null;
+  try { redirectResult = await getRedirectResult(auth); }
+  catch (error) { redirectError = error; }
   let user = await getInitialUser();
   try {
     const completedLink = await completeEmailLink();
@@ -397,6 +402,20 @@ async function startCloudSync(id) {
         setStatus("Local save is active. Cloud sync needs Firebase Auth and Firestore rules.");
       }
     }
+    if (redirectResult?.user) {
+      localStorage.removeItem(pendingProviderKey);
+      localStorage.removeItem(pendingProviderSignInKey);
+      setStatus("Google sign-in complete. Your progress is syncing.");
+    } else if (redirectError) {
+      const pendingProvider = localStorage.getItem(pendingProviderKey);
+      if (pendingProvider && ["auth/credential-already-in-use", "auth/account-exists-with-different-credential"].includes(redirectError.code)) {
+        localStorage.setItem(pendingProviderSignInKey, pendingProvider);
+        setStatus("That Google account already exists. Open account settings and choose Google again to sign in to it.");
+      } else {
+        setStatus(friendlyError(redirectError));
+      }
+      localStorage.removeItem(pendingProviderKey);
+    }
   } catch (error) {
     console.warn("Firebase sign-in could not start:", error);
     setStatus(friendlyError(error));
@@ -409,6 +428,7 @@ async function startCloudSync(id) {
       .catch(() => setStatus("Saved on this device. Cloud sync will retry when available.")), 500);
   }
   updateButton();
+  if (redirectError) openAccountModal();
   onAuthStateChanged(auth, async next => {
     updateButton();
     if (!ready || !next || next.uid === activeUid) return;
