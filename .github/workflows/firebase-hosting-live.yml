@@ -17,8 +17,24 @@ jobs:
         run: |
           mkdir -p public/tycoon
           cp index.html public/tycoon/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path("public/tycoon/index.html")
+          html = page.read_text()
+          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js"; startCloudSync("networkTycoon");</script>'
+          if tag not in html:
+              html = html.replace("</body>", tag + "</body>", 1)
+              page.write_text(html)
+          PY
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
           projectId: network-tycoon-gm
           channelId: live
+      - name: Deploy Firestore security rules
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
+        run: |
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          trap 'rm -f "$RUNNER_TEMP/firebase-service-account.json"' EXIT
+          GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json" npx firebase-tools@latest deploy --only firestore:rules --project network-tycoon-gm --non-interactive

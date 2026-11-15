@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/saves/{gameId} {
+      function isOwner() {
+        return request.auth != null && request.auth.uid == uid;
+      }
+
+      allow get: if isOwner();
+      allow list: if false;
+      allow create, update: if isOwner()
+        && gameId in ['networkTycoon', 'matchGarden']
+        && request.resource.data.keys().hasOnly([
+          'schemaVersion', 'gameId', 'payload', 'updatedAtMs', 'updatedAt'
+        ])
+        && request.resource.data.gameId == gameId
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.payload is map
+        && request.resource.data.updatedAtMs is int;
+      allow delete: if isOwner()
+        && gameId in ['networkTycoon', 'matchGarden'];
+    }
+  }
+}
+
