@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
   <title id="title">Network Tycoon cityscape</title>
-  <desc id="desc">A compact skyline of three connected city towers with mint and gold lights.</desc>
+  <desc id="desc">A compact skyline of five city towers with mint and gold lights.</desc>
   <g fill="#123B4A">
     <path d="M4 58V34.5c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2V58H4Z"/>
     <path d="M17 58V26c0-1.1.9-2 2-2h6v34h-8Z"/>
