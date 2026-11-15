@@ -21,7 +21,7 @@ jobs:
           from pathlib import Path
           page = Path("public/tycoon/index.html")
           html = page.read_text()
-          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js"; startCloudSync("networkTycoon");</script>'
+          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=auth-redirect-1"; startCloudSync("networkTycoon");</script>'
           if tag not in html:
               html = html.replace("</body>", tag + "</body>", 1)
               page.write_text(html)

@@ -96,8 +96,6 @@ function friendlyError(error) {
   const code = error?.code || "";
   const messages = {
     "auth/operation-not-allowed": "That sign-in method is not enabled in Firebase yet.",
-    "auth/popup-blocked": "The sign-in window was blocked. Allow the sign-in window, or use email link.",
-    "auth/popup-closed-by-user": "Sign-in was cancelled.",
     "auth/unauthorized-domain": "Add this website domain under Firebase Authentication → Settings → Authorized domains.",
     "auth/invalid-action-code": "This email sign-in link expired or was already used. Request a new link.",
     "permission-denied": "Firestore rules are not allowing this save yet.",
