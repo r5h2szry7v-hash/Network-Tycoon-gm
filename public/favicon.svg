@@ -1,4 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="15" fill="#e9f5ef"/>
-  <text x="32" y="49" text-anchor="middle" font-size="46" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">🏙️</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Network Tycoon cityscape</title>
+  <desc id="desc">A compact skyline of three connected city towers with mint and gold lights.</desc>
+  <g fill="#123B4A">
+    <path d="M4 58V34.5c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2V58H4Z"/>
+    <path d="M17 58V26c0-1.1.9-2 2-2h6v34h-8Z"/>
+    <path d="M24 58V14c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v44H24Z"/>
+    <path d="M40 58V27c0-1.1.9-2 2-2h7v33H40Z"/>
+    <path d="M48 58V35c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v23H48Z"/>
+  </g>
+  <path d="M31 12V6" fill="none" stroke="#31C99A" stroke-linecap="round" stroke-width="2.5"/>
+  <circle cx="31" cy="4.5" r="2.5" fill="#FFD166"/>
+  <g fill="#31C99A">
+    <path d="M8 38h3v4H8zM8 46h3v4H8z"/>
+    <path d="M20 30h3v4h-3zM20 39h3v4h-3zM20 48h3v4h-3z"/>
+    <path d="M28 19h4v4h-4zM35 19h4v4h-4zM28 28h4v4h-4zM35 28h4v4h-4zM28 37h4v4h-4zM35 37h4v4h-4zM28 46h4v4h-4zM35 46h4v4h-4z"/>
+    <path d="M43 32h3v4h-3zM43 41h3v4h-3zM43 50h3v4h-3z"/>
+  </g>
+  <g fill="#FFD166">
+    <path d="M13 38h2v4h-2zM13 50h2v4h-2z"/>
+    <path d="M37 37h2v4h-2zM28 46h2v4h-2z"/>
+    <path d="M53 39h3v4h-3zM53 48h3v4h-3z"/>
+  </g>
+  <path d="M3 58h58" fill="none" stroke="#123B4A" stroke-linecap="round" stroke-width="4"/>
 </svg>
