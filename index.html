@@ -1696,6 +1696,12 @@ body.palette-golden .floating-time{background:linear-gradient(140deg,#fff8e8,#f5
 .rival-relay-grid .circuit-tile.route-complete{position:relative;z-index:2;background:#d9f6e9!important;color:#167d58!important;border-color:#35bd8a!important;box-shadow:0 0 0 4px #31c99a33,0 8px 18px #1e896544!important;animation:rival-route-complete .42s cubic-bezier(.2,.8,.25,1) both}
 @keyframes rival-route-complete{0%{transform:scale(1);filter:brightness(1)}45%{transform:scale(1.16);filter:brightness(1.25)}100%{transform:scale(1);filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.rival-relay-grid .circuit-tile.route-complete{animation:none}}
+/* Animated multicolor emphasis for live Race actions. */
+.rival-action-buttons [data-rival-relay]:not(:disabled),.rival-alert-race:not(:disabled){color:#fff!important;font-weight:900;border-color:#ffffffa8!important;background:linear-gradient(100deg,#285ee8 0%,#8049e6 25%,#d14b9c 50%,#f18254 75%,#27aeb1 100%)!important;background-size:220% 100%!important;background-position:0% 50%;box-shadow:0 4px 0 #313a9d,0 0 0 2px #8b59eb2e,0 7px 16px #4931bb43!important;text-shadow:0 1px 1px #263b7c75;animation:rival-race-gradient-flow 3.6s linear infinite,rival-race-pulse 1.75s ease-in-out infinite}
+.rival-action-buttons [data-rival-relay]:focus-visible,.rival-alert-race:not(:disabled):focus-visible{outline:3px solid #ffd76a;outline-offset:3px}
+@keyframes rival-race-gradient-flow{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+@keyframes rival-race-pulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.035);filter:brightness(1.08)}}
+@media(prefers-reduced-motion:reduce){.rival-action-buttons [data-rival-relay]:not(:disabled),.rival-alert-race:not(:disabled){animation:none!important;background-position:50% 50%}}
 </style></head>
 <body>
   <main id="app">
