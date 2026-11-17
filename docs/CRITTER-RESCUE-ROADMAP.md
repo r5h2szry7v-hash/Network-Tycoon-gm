@@ -33,11 +33,12 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 - Add one optional logic hint and one local 3×3 danger scan per trail. Track assists separately from rescue progress.
 - Review the three board profiles: Cozy 6×6 with 5 hazards, Wander 8×8 with 11 hazards, and Explore 10×10 with 18 hazards. Hazard density rises from about 14% to 18%.
 
-### Phase 3 — Worlds and progression
-- Add distinct motifs such as Moonlight Meadow, Coral Cove, Autumn Hollow, and Cloudtop Grove.
-- Add critter collections and rescue journal with lightweight unlocks.
-- Add a gradual campaign and optional daily rescue.
-- Keep visuals and rewards brief so the logic puzzle remains central.
+### Phase 3 — Worlds and progression ✅
+- Add four visual motifs: Moonlight Meadow, Coral Cove, Autumn Hollow, and Cloudtop Grove.
+- Add a 12-critter Rescue Journal. Campaign discoveries are saved locally as the player finds critters.
+- Add a campaign: clear two trails in each world to unlock the next setting.
+- Add a shared UTC-date Daily Rescue on a fixed 8×8 certified board with a marked safe start and a personal best time. Daily runs do not advance campaign unlocks or collection.
+- Keep the win feedback compact so the logic puzzle stays central.
 
 ### Phase 4 — Shared ecosystem and polish
 - Align account sync, home navigation, settings, reduced-motion override, and mobile behavior with Match Garden and Network Tycoon.
@@ -47,4 +48,4 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 ## Phase 1 and Phase 2 notes
 The first two phases provide the playable logic loop, first-click safety, solvability certification, tutorial, and optional assists. A board is accepted only when the built-in logical solver can reveal every safe tile from the player's first clear. If the generator cannot find a certified layout after its retry limit, it asks the player to start a new trail.
 
-The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign progression and post-round difficulty randomization remain in Phase 3.
+The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign unlocks, collection, and the daily puzzle are implemented in Phase 3. Progress currently stays in this browser's local storage; cross-game account sync remains in Phase 4.
