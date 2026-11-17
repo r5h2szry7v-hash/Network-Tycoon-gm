@@ -165,7 +165,7 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 @keyframes gateGlow{from{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 16%,transparent),inset 0 -3px 0 var(--tile-dark)}to{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 30%,transparent),inset 0 -3px 0 var(--tile-dark)}}
 .cell.gate-open{background:linear-gradient(145deg,#fff7dd,#ffedba);border-color:#d6a638;color:#785d22}
 .camp-marker{position:absolute;z-index:2;left:4px;bottom:3px;pointer-events:none;font-size:clamp(.56rem,1.2vw,.76rem);line-height:1;filter:drop-shadow(0 1px 1px #fff)}
-.endpoint-pop{animation:endpointNudge 1.45s cubic-bezier(.2,.8,.3,1) both}@keyframes endpointNudge{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(2.6) rotate(-9deg)}35%{transform:scale(2.6) rotate(8deg)}50%{transform:scale(2.6) rotate(-7deg)}65%{transform:scale(2.3) rotate(5deg)}}
+.endpoint-pop{animation:endpointNudge 3.5s cubic-bezier(.2,.8,.3,1) both}@keyframes endpointNudge{0%,100%{transform:scale(1) rotate(0)}18%{transform:scale(2.6) rotate(-9deg)}30%{transform:scale(2.6) rotate(8deg)}42%{transform:scale(2.6) rotate(-7deg)}54%{transform:scale(2.6) rotate(5deg)}66%{transform:scale(2.6) rotate(-4deg)}75%{transform:scale(2.6) rotate(3deg)}77%{transform:scale(2.3) rotate(0)}88%{transform:scale(1) rotate(0)}95%{transform:scale(1.08) rotate(3deg)}}
 .gate-marker{position:absolute;z-index:2;right:3px;bottom:3px;pointer-events:none;display:grid;place-items:center;width:1.55em;height:1.55em;border:1px solid var(--accent-dark);border-radius:50%;background:#fff;color:var(--accent-dark);font-size:clamp(.55rem,1.2vw,.72rem);line-height:1;filter:drop-shadow(0 1px 1px #fff)}
 .board-legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px 14px;margin:10px 0 0;color:#607980;font-size:.72rem;font-weight:850}.board-legend>span{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border:1px solid #dfe9e3;border-radius:99px;background:#ffffffb8}.board-legend-icon{font-size:.95rem;line-height:1}
 /* Flag tiles use the selected palette with a crisp edge, without the old yellow frame. */
@@ -182,24 +182,28 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 @keyframes clearFootsteps{0%{opacity:0;transform:translateY(5px) scale(.45) rotate(-10deg)}22%{opacity:.9;transform:translateY(-1px) scale(1) rotate(0)}100%{opacity:0;transform:translateY(-8px) scale(.82) rotate(6deg)}}
 
 /* Keep the mission visible as the player works through the rescue board. */
+.game-main{display:grid;gap:12px;min-width:0;align-content:start}
 .mission-card{
-  grid-column:1/-1;position:sticky;top:8px;z-index:15;
-  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;
+  width:100%;position:sticky;top:8px;z-index:15;
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px 12px;
   padding:10px 16px;border-color:color-mix(in srgb,var(--accent) 42%,white);
   background:linear-gradient(100deg,#fff,color-mix(in srgb,var(--accent) 11%,white));
   box-shadow:0 10px 28px color-mix(in srgb,var(--accent-dark) 18%,transparent);
 }
-.mission-card .side-title{margin:0;font-size:.98rem;white-space:nowrap}
+.mission-card .side-title{grid-column:1;margin:0;font-size:.98rem;white-space:nowrap}
 .mission-card .mascot{width:34px;height:34px;font-size:1.2rem}
-.mission-card .side-copy{font-size:.8rem;line-height:1.4}
-.mission-card .creature-list{margin:0;gap:6px}
-.mission-card .creature{width:36px;height:36px;border-radius:12px;font-size:1.2rem}
+.mission-card .side-copy{grid-column:2;font-size:.8rem;line-height:1.4}
+.mission-card .creature-list{grid-column:1/-1;width:100%;justify-content:center;align-items:center;margin:3px 0 0;gap:9px}
+.mission-card .creature{width:44px;height:44px;border-radius:13px;font-size:1.55rem}
+.mission-card .mini-trail{width:96px;min-width:96px;height:44px}
 @media(max-width:540px){
+  .game-main{gap:10px}
   .mission-card{top:5px;grid-template-columns:auto minmax(0,1fr);gap:6px 9px;padding:9px 11px;border-radius:16px}
   .mission-card .side-title{font-size:.9rem}
   .mission-card .side-copy{font-size:.75rem}
-  .mission-card .creature-list{grid-column:1/-1;justify-content:center;gap:7px}
-  .mission-card .creature{width:32px;height:32px}
+  .mission-card .creature-list{grid-column:1/-1;justify-content:center;gap:8px}
+  .mission-card .creature{width:40px;height:40px;font-size:1.45rem}
+  .mission-card .mini-trail{width:90px;min-width:90px;height:40px}
 }
 </style>
 </head>
@@ -208,6 +212,7 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 <nav class="topbar" aria-label="Game navigation"><a class="home" href="/">← <span>All games</span></a><div class="home-actions top-actions"><button class="journal-button" id="journalButton" type="button">🐾 Journal</button><button class="settings" id="settingsButton" type="button" aria-haspopup="dialog">⚙ Settings</button></div></nav>
 <header class="hero"><div class="kicker"><i aria-hidden="true"></i> Puzzle · Explore · Rescue</div><h1>Critter <span>Rescue</span></h1><p class="intro">Clear a safe trail through the wild, spot the hidden neighbors, and guide every little friend home.</p></header>
 <section class="game-layout" aria-label="Critter Rescue game">
+<div class="game-main">
 <section class="side-card mission-card"><h2 class="side-title"><span class="mascot" id="mascot">🦊</span>Mission</h2><p class="side-copy" id="missionText">Read the nearby clues, mark the danger, and uncover a safe route for three friends.</p><div class="creature-list" id="creatureList" aria-label="Critters on the safe trail"></div></section>
 <div class="board-card">
 <div class="toolbar"><div class="selects">
@@ -220,6 +225,7 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 <div class="status" id="status" role="status" aria-live="polite">Find three friends and connect your safe trail to the home marker. Your first step is safe.</div>
 <div class="actions board-actions" role="group" aria-label="Trail assists"><div class="modebar" role="group" aria-label="Tile action"><button class="mode active" id="revealMode" type="button" aria-pressed="true">👣<span>Clear trail</span></button><button class="mode" id="markMode" type="button" aria-pressed="false">🚩<span>Mark danger</span></button></div><button class="primary hint-button" id="hintButton" type="button">💡<span>Hint · 1</span></button><button class="primary scan-button" id="scanButton" type="button">🔎<span>Scan · 1</span></button><p class="assist-note" id="assistNote">Hints and scans are optional assists. They are tracked separately and do not change your rescue progress.</p><button class="secondary" id="newGameSide" type="button" style="grid-column:1/-1">↻ Start a new rescue</button></div>
 <div class="board-wrap"><div class="board" id="board" role="grid" aria-label="Rescue trail"></div></div><div class="board-legend" aria-label="Board markers"><span><b class="board-legend-icon" aria-hidden="true">🏕️</b> Camp · start</span><span><b class="board-legend-icon" id="goalLegendIcon" aria-hidden="true">🏮</b><span id="goalLegendText">Lantern Gate · finish</span></span></div>
+</div>
 </div>
 <aside class="side">
 <section class="side-card"><h2 class="side-title"><span class="mascot">🗺️</span>Campaign trail</h2><p class="campaign-status" id="campaignStatus"></p><div class="campaign-meter" role="progressbar" aria-label="World campaign progress"><span id="campaignBar"></span></div><button class="primary" id="dailyButton" type="button">📅 Play Daily Rescue</button><p class="daily-note" id="dailyNote">A shared UTC-date trail. Daily runs do not advance campaign unlocks.</p></section>
@@ -411,7 +417,7 @@ function reveal(index){
  checkWin();render();if(establishingEndpoints)animateEstablishedEndpoints();if(gatePathDuration)startGatePathSequence()
 }
 function mark(index){if(ended||pathSequenceActive||grid[index].open)return;if(firstReveal){setStatus("Take your first safe step before marking danger.");return}if(grid[index].gate){setStatus("That glowing tile is the home gate. It’s safe—clear it to finish!","good");return}ensureTimer();grid[index].marked=!grid[index].marked;animateFlagIndex=grid[index].marked?index:null;hintTarget=null;render();const marks=grid.filter(g=>g.marked).length;setStatus(marks===hazardTotal?"All danger markers placed. Keep connecting the safe trail home.":marks+" danger mark"+(marks===1?"":"s")+" placed.");}
-function animateEstablishedEndpoints(){if(document.documentElement.dataset.motion==="off")return;for(const marker of boardEl.querySelectorAll(".camp-marker,.gate-marker")){const tile=marker.closest(".cell");if(!tile)continue;const tr=tile.getBoundingClientRect(),mr=marker.getBoundingClientRect();if(!tr.width||!mr.width)continue;const dx=tr.left+tr.width/2-(mr.left+mr.width/2),dy=tr.top+tr.height/2-(mr.top+mr.height/2),scale=Math.min((tr.width-8)/mr.width,(tr.height-8)/mr.height),center=(factor,angle)=>`translate(${dx}px,${dy}px) scale(${(scale*factor).toFixed(3)}) rotate(${angle}deg)`,corner=(factor,angle)=>`translate(0px,0px) scale(${factor}) rotate(${angle}deg)`,oldZ=marker.style.zIndex;marker.style.zIndex="10";if(typeof marker.animate==="function"){const animation=marker.animate([{offset:0,transform:corner(1,0)},{offset:.18,transform:center(1.02,-9)},{offset:.3,transform:center(1,8)},{offset:.42,transform:center(.98,-7)},{offset:.54,transform:center(1,5)},{offset:.67,transform:center(.88,0)},{offset:.82,transform:corner(.84,0)},{offset:.92,transform:corner(1.08,3)},{offset:1,transform:corner(1,0)}],{duration:1450,easing:"cubic-bezier(.2,.8,.3,1)",fill:"both"});animation.onfinish=()=>{animation.cancel();marker.style.zIndex=oldZ}}else{marker.classList.add("endpoint-pop");setTimeout(()=>{marker.classList.remove("endpoint-pop");marker.style.zIndex=oldZ},1450)}}}
+function animateEstablishedEndpoints(){if(document.documentElement.dataset.motion==="off")return;for(const marker of boardEl.querySelectorAll(".camp-marker,.gate-marker")){const tile=marker.closest(".cell");if(!tile)continue;const tr=tile.getBoundingClientRect(),mr=marker.getBoundingClientRect();if(!tr.width||!mr.width)continue;const dx=tr.left+tr.width/2-(mr.left+mr.width/2),dy=tr.top+tr.height/2-(mr.top+mr.height/2),scale=Math.min((tr.width-8)/mr.width,(tr.height-8)/mr.height),center=(factor,angle)=>`translate(${dx}px,${dy}px) scale(${(scale*factor).toFixed(3)}) rotate(${angle}deg)`,corner=(factor,angle)=>`translate(0px,0px) scale(${factor}) rotate(${angle}deg)`,oldZ=marker.style.zIndex;marker.style.zIndex="10";if(typeof marker.animate==="function"){const animation=marker.animate([{offset:0,transform:corner(1,0)},{offset:.18,transform:center(1.02,-9)},{offset:.3,transform:center(1,8)},{offset:.42,transform:center(.98,-7)},{offset:.54,transform:center(1,5)},{offset:.66,transform:center(.98,-4)},{offset:.75,transform:center(1,3)},{offset:.77,transform:center(.88,0)},{offset:.88,transform:corner(.84,0)},{offset:.95,transform:corner(1.08,3)},{offset:1,transform:corner(1,0)}],{duration:3500,easing:"cubic-bezier(.2,.8,.3,1)",fill:"both"});animation.onfinish=()=>{animation.cancel();marker.style.zIndex=oldZ}}else{marker.classList.add("endpoint-pop");setTimeout(()=>{marker.classList.remove("endpoint-pop");marker.style.zIndex=oldZ},3500)}}}
 function playGatePathAnimation(){if(document.documentElement.dataset.motion==="off")return;const route=[...animateGatePath.entries()].sort((a,b)=>a[1]-b[1]),gateIndex=grid.findIndex(g=>g.gate),sweep=[{transform:"scale(.94)",filter:"brightness(1)",boxShadow:"inset 0 0 0 0 rgba(255,242,184,0)"},{offset:.42,transform:"scale(1.1)",filter:"brightness(1.28)",boxShadow:"inset 0 0 0 3px #fff7d9,0 0 0 5px rgba(247,214,107,.6),0 0 18px rgba(247,214,107,.8)"},{transform:"scale(1)",filter:"brightness(1.05)",boxShadow:"inset 0 0 0 2px #ffe79b,0 0 9px rgba(247,214,107,.53)"}],finish=[{transform:"scale(.88) rotate(0deg)",filter:"brightness(1)",boxShadow:"0 0 0 0 rgba(255,216,106,0)"},{offset:.32,transform:"scale(1.32) rotate(-5deg)",filter:"brightness(1.3)",boxShadow:"0 0 0 7px rgba(255,226,145,.73),0 0 25px 10px rgba(255,212,91,.6)"},{offset:.58,transform:"scale(1.12) rotate(4deg)",boxShadow:"0 0 0 3px rgba(255,226,145,.53),0 0 14px 5px rgba(255,212,91,.47)"},{transform:"scale(1) rotate(0deg)",filter:"brightness(1.06)",boxShadow:"0 0 0 2px rgba(255,226,145,.47),0 0 10px rgba(255,212,91,.4)"}];
  for(const [index,step] of route){if(index===gateIndex)continue;const tile=boardEl.children[index];if(!tile)continue;const delay=step*55;if(typeof tile.animate==="function")tile.animate(sweep,{duration:520,delay,easing:"cubic-bezier(.18,.78,.25,1)",fill:"both"});else{tile.classList.add("route-sweep");tile.style.animationDelay=delay+"ms";tile.style.setProperty("-webkit-animation-delay",delay+"ms")}}
  const gate=boardEl.children[gateIndex],finishDelay=Math.max(0,(route.length-1)*55+330);if(gate){if(typeof gate.animate==="function")gate.animate(finish,{duration:720,delay:finishDelay,easing:"cubic-bezier(.2,1.55,.35,1)",fill:"both"});else{gate.classList.add("gate-burst");gate.style.animationDelay=finishDelay+"ms";gate.style.setProperty("-webkit-animation-delay",finishDelay+"ms")}}}
