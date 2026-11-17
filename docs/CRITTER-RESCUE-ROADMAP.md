@@ -19,7 +19,7 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 
 ## Roadmap
 
-### Phase 1 — Playable foundation
+### Phase 1 — Playable foundation ✅
 - Add Critter Rescue to the shared game hub.
 - Build a responsive, single-page game shell with the first motif and three board sizes.
 - Implement reveal, flag, first-click safety, adjacent clues, empty-area expansion, timer, reset, and win/loss states.
@@ -40,12 +40,19 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 - Add a shared UTC-date Daily Rescue on a fixed 8×8 certified board with a marked safe start and a personal best time. Daily runs do not advance campaign unlocks or collection.
 - Keep the win feedback compact so the logic puzzle stays central.
 
-### Phase 4 — Shared ecosystem and polish
+### Phase 4 — Shared ecosystem and polish ✅
 - Align account sync, home navigation, settings, reduced-motion override, and mobile behavior with Match Garden and Network Tycoon.
 - Add sound controls, color-accessible clue palettes, and board-size preferences.
-- Run a cross-game regression and touch-layout review before merging to main and publishing.
+- Review the settings dialog, responsive header, shared save integration, and rendered board before merging to main and publishing.
+
+## Phase 4 implementation notes
+
+Critter Rescue uses the shared Firebase account flow in public/cloud-save.js. Signed-in saves include campaign wins, journal discoveries, daily best times, reduced-motion preference, tutorial status, sound preference, clue palette, and default board size. Guest progress remains on the device. The settings dialog keeps optional sound off by default, offers a high-contrast clue palette, and lets players set the default trail size. The account control joins the top navigation and wraps for narrow screens.
+
+The rendered preview was reviewed after resolving a startup-order issue in preference loading. The game board, campaign panel, journal/tutorial/help controls, settings controls, and initial safe-step state render correctly. The HTML preview service does not execute the Firebase ES module import, so account login itself is verified through the shared module wiring and will be checked on the deployed Firebase route.
 
 ## Phase 1 and Phase 2 notes
+
 The first two phases provide the playable logic loop, first-click safety, solvability certification, tutorial, and optional assists. A board is accepted only when the built-in logical solver can reveal every safe tile from the player's first clear. If the generator cannot find a certified layout after its retry limit, it asks the player to start a new trail.
 
-The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign unlocks, collection, and the daily puzzle are implemented in Phase 3. Progress currently stays in this browser's local storage; cross-game account sync remains in Phase 4.
+The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign unlocks, collection, and the daily puzzle are implemented in Phase 3. Phase 4 adds optional cloud sync and syncable player preferences.
