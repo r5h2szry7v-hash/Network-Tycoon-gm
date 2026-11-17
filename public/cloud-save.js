@@ -41,6 +41,7 @@ const gameStorage = {
   matchGarden: ["matchGarden"],
   critterRescue: [
     "critterRescue.campaignWins",
+    "critterRescue.difficultyWins",
     "critterRescue.collection",
     "critterRescue.dailyBest",
     "critterRescue.motion",
