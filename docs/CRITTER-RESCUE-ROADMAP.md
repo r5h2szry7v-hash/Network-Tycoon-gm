@@ -56,3 +56,13 @@ The rendered preview was reviewed after resolving a startup-order issue in prefe
 The first two phases provide the playable logic loop, first-click safety, solvability certification, tutorial, and optional assists. A board is accepted only when the built-in logical solver can reveal every safe tile from the player's first clear. If the generator cannot find a certified layout after its retry limit, it asks the player to start a new trail.
 
 The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign unlocks, collection, and the daily puzzle are implemented in Phase 3. Phase 4 adds optional cloud sync and syncable player preferences.
+
+## Final queued item — Board-wide rescue celebration (planned)
+
+When the last cactus is cleared and the rescue objective is complete:
+
+- Briefly reveal every animal still on the board.
+- Give the animals a playful growing and wiggling celebration.
+- Return the board to its normal state before showing the rescue-complete card.
+- Add a confetti burst styled after Match Garden’s celebration.
+- Keep the sequence brief, readable, and respectful of reduced-motion preferences.
