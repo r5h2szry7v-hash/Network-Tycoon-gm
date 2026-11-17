@@ -171,6 +171,27 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 .clear-footsteps{position:absolute;z-index:3;left:22%;top:22%;pointer-events:none;font-size:clamp(.58rem,1.35vw,.88rem);line-height:1;opacity:0;filter:drop-shadow(0 1px 1px #26314b35);animation:clearFootsteps .62s ease var(--clear-delay,0ms) both}
 @keyframes clearSquarePop{0%{transform:scale(.82);filter:brightness(1.1)}58%{transform:scale(1.09);filter:brightness(1.04)}100%{transform:scale(1);filter:none}}
 @keyframes clearFootsteps{0%{opacity:0;transform:translateY(5px) scale(.45) rotate(-10deg)}22%{opacity:.9;transform:translateY(-1px) scale(1) rotate(0)}100%{opacity:0;transform:translateY(-8px) scale(.82) rotate(6deg)}}
+
+/* Keep the mission visible as the player works through the rescue board. */
+.mission-card{
+  grid-column:1/-1;position:sticky;top:8px;z-index:15;
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;
+  padding:10px 16px;border-color:color-mix(in srgb,var(--accent) 42%,white);
+  background:linear-gradient(100deg,#fff,color-mix(in srgb,var(--accent) 11%,white));
+  box-shadow:0 10px 28px color-mix(in srgb,var(--accent-dark) 18%,transparent);
+}
+.mission-card .side-title{margin:0;font-size:.98rem;white-space:nowrap}
+.mission-card .mascot{width:34px;height:34px;font-size:1.2rem}
+.mission-card .side-copy{font-size:.8rem;line-height:1.4}
+.mission-card .creature-list{margin:0;gap:6px}
+.mission-card .creature{width:36px;height:36px;border-radius:12px;font-size:1.2rem}
+@media(max-width:540px){
+  .mission-card{top:5px;grid-template-columns:auto minmax(0,1fr);gap:6px 9px;padding:9px 11px;border-radius:16px}
+  .mission-card .side-title{font-size:.9rem}
+  .mission-card .side-copy{font-size:.75rem}
+  .mission-card .creature-list{grid-column:1/-1;justify-content:center;gap:7px}
+  .mission-card .creature{width:32px;height:32px}
+}
 </style>
 </head>
 <body>
@@ -178,6 +199,7 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 <nav class="topbar" aria-label="Game navigation"><a class="home" href="/">← <span>All games</span></a><div class="home-actions top-actions"><button class="journal-button" id="journalButton" type="button">🐾 Journal</button><button class="settings" id="settingsButton" type="button" aria-haspopup="dialog">⚙ Settings</button></div></nav>
 <header class="hero"><div class="kicker"><i aria-hidden="true"></i> Puzzle · Explore · Rescue</div><h1>Critter <span>Rescue</span></h1><p class="intro">Clear a safe trail through the wild, spot the hidden neighbors, and guide every little friend home.</p></header>
 <section class="game-layout" aria-label="Critter Rescue game">
+<section class="side-card"><h2 class="side-title"><span class="mascot" id="mascot">🦊</span>Mission</h2><p class="side-copy" id="missionText">Read the nearby clues, mark the danger, and uncover a safe route for three friends.</p><div class="creature-list" id="creatureList" aria-label="Critters on the safe trail"></div></section>
 <div class="board-card">
 <div class="toolbar"><div class="selects">
 <label class="select-wrap">World <select id="worldSelect" aria-label="Choose a world"><option value="moon">🌙 Moonlight Meadow</option><option value="reef">🪸 Coral Cove</option><option value="autumn">🍂 Autumn Hollow</option><option value="cloud">☁️ Cloudtop Grove</option></select></label>
@@ -191,7 +213,7 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 <div class="board-wrap"><div class="board" id="board" role="grid" aria-label="Rescue trail"></div></div><div class="board-legend" aria-label="Board markers"><span><b class="board-legend-icon" aria-hidden="true">🏕️</b> Camp · start</span><span><b class="board-legend-icon" id="goalLegendIcon" aria-hidden="true">🏮</b><span id="goalLegendText">Lantern Gate · finish</span></span></div>
 </div>
 <aside class="side">
-<section class="side-card"><h2 class="side-title"><span class="mascot" id="mascot">🦊</span>Mission</h2><p class="side-copy" id="missionText">Read the nearby clues, mark the danger, and uncover a safe route for three friends.</p><div class="creature-list" id="creatureList" aria-label="Critters on the safe trail"></div></section><section class="side-card"><h2 class="side-title"><span class="mascot">🗺️</span>Campaign trail</h2><p class="campaign-status" id="campaignStatus"></p><div class="campaign-meter" role="progressbar" aria-label="World campaign progress"><span id="campaignBar"></span></div><button class="primary" id="dailyButton" type="button">📅 Play Daily Rescue</button><p class="daily-note" id="dailyNote">A shared UTC-date trail. Daily runs do not advance campaign unlocks.</p></section>
+<section class="side-card"><h2 class="side-title"><span class="mascot">🗺️</span>Campaign trail</h2><p class="campaign-status" id="campaignStatus"></p><div class="campaign-meter" role="progressbar" aria-label="World campaign progress"><span id="campaignBar"></span></div><button class="primary" id="dailyButton" type="button">📅 Play Daily Rescue</button><p class="daily-note" id="dailyNote">A shared UTC-date trail. Daily runs do not advance campaign unlocks.</p></section>
 
 </aside>
 </section>
