@@ -136,7 +136,8 @@ function updateCampaignUI(){const select=document.getElementById("worldSelect");
 function recordCritter(animalIndex){if(dailyMode)return;collection.add(worldKey+":"+animalIndex);storeValue("critterRescue.collection",[...collection]);renderJournal()}
 
 const boardEl=document.getElementById("board"),statusEl=document.getElementById("status");
-let grid=[],size=8,hazardTotal=12,firstReveal=true,mode="reveal",ended=false,won=false,elapsed=0,timerId=null,worldKey="moon",rescued=new Set(),animals=[],hintTarget=null,scanCells=new Set(),hintUsed=0,scanUsed=0,tutorialStep=0,dailyMode=false,preGenerated=false,dailyStartIndex=36,rngState=0,campaignWins=readStored("critterRescue.campaignWins",{}),collection=new Set(readStored("critterRescue.collection",[])),dailyBest=readStored("critterRescue.dailyBest",{}),soundEnabled=false,audioContext=null,cluePalette="classic",preferencesLoaded=false;\nloadPreferences();
+let grid=[],size=8,hazardTotal=12,firstReveal=true,mode="reveal",ended=false,won=false,elapsed=0,timerId=null,worldKey="moon",rescued=new Set(),animals=[],hintTarget=null,scanCells=new Set(),hintUsed=0,scanUsed=0,tutorialStep=0,dailyMode=false,preGenerated=false,dailyStartIndex=36,rngState=0,campaignWins=readStored("critterRescue.campaignWins",{}),collection=new Set(readStored("critterRescue.collection",[])),dailyBest=readStored("critterRescue.dailyBest",{}),soundEnabled=false,audioContext=null,cluePalette="classic",preferencesLoaded=false;
+loadPreferences();
 const getMotion=()=>{try{return localStorage.getItem("critterRescue.motion")==="on"}catch(_){return false}};
 function setMotion(on){try{localStorage.setItem("critterRescue.motion",on?"on":"off")}catch(_){}document.documentElement.dataset.motion=on?"on":(matchMedia("(prefers-reduced-motion: reduce)").matches?"off":"on")}
 setMotion(getMotion());
