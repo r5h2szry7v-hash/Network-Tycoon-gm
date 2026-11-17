@@ -14,7 +14,7 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 - The first reveal is always safe.
 - Revealing an empty tile opens its connected empty area and bordering clues.
 - Three critters are placed on safe tiles. Finding one sends it along the cleared trail to the exit.
-- The round is won when all safe tiles are revealed and all critters have reached safety.
+- The round is won when the starting trail, all three found critters, and the home marker are connected through revealed safe tiles. Unrelated safe tiles can remain covered.
 - A hazard ends the round. The board then shows the remaining hazard locations and the critters are returned safely to camp.
 
 ## Roadmap
@@ -57,12 +57,6 @@ The first two phases provide the playable logic loop, first-click safety, solvab
 
 The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign unlocks, collection, and the daily puzzle are implemented in Phase 3. Phase 4 adds optional cloud sync and syncable player preferences.
 
-## Final queued item — Board-wide rescue celebration (planned)
+### Phase 5 — Board-wide rescue celebration ✅
 
-When the last cactus is cleared and the rescue objective is complete:
-
-- Briefly reveal every animal still on the board.
-- Give the animals a playful growing and wiggling celebration.
-- Return the board to its normal state before showing the rescue-complete card.
-- Add a confetti burst styled after Match Garden’s celebration.
-- Keep the sequence brief, readable, and respectful of reduced-motion preferences.
+On a successful rescue, reveal any remaining animal tiles, then give every critter a staggered growing and wiggling celebration. Restore the board before opening the rescue card and launching Match Garden-style confetti. The sequence respects reduced-motion preferences. The current win condition is the connected trail with all critters and home marker, so players can leave unrelated safe tiles covered.
