@@ -47,7 +47,8 @@ const gameStorage = {
     "critterRescue.tutorialSeen",
     "critterRescue.sound",
     "critterRescue.cluePalette",
-    "critterRescue.boardSize"
+    "critterRescue.boardSize",
+    "critterRescue.palette"
   ]
 };
 const emailKey = "firebaseCloudPendingEmail";
