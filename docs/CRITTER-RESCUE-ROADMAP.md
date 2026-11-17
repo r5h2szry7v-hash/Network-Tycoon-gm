@@ -27,11 +27,11 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 - Save the selected motif and motion preference locally.
 - Honor device reduced-motion settings by default, with a setting to opt into motion.
 
-### Phase 2 — Fairness and onboarding
-- Add a short skip-friendly tutorial and contextual controls for mouse, touch, and keyboard.
-- Add deterministic solvability checks and regenerate boards that require a guess.
-- Add optional hint and scan tools, clearly separated from normal scoring.
-- Review board sizes, hazard density, and difficulty progression across the first ten rounds.
+### Phase 2 — Fairness and onboarding ✅
+- Add a short skip-friendly tutorial that can be replayed from the game header.
+- Certify each generated board with deterministic clue and subset deductions from the player's first reveal; regenerate layouts that require a guess.
+- Add one optional logic hint and one local 3×3 danger scan per trail. Track assists separately from rescue progress.
+- Review the three board profiles: Cozy 6×6 with 5 hazards, Wander 8×8 with 11 hazards, and Explore 10×10 with 18 hazards. Hazard density rises from about 14% to 18%.
 
 ### Phase 3 — Worlds and progression
 - Add distinct motifs such as Moonlight Meadow, Coral Cove, Autumn Hollow, and Cloudtop Grove.
@@ -44,5 +44,7 @@ The title is intentionally broad. **Moonlight Meadow** is the first motif, with 
 - Add sound controls, color-accessible clue palettes, and board-size preferences.
 - Run a cross-game regression and touch-layout review before merging to main and publishing.
 
-## Phase 1 acceptance notes
-The first build is a playable framework, not the full campaign. It uses randomly generated boards with first-click safety, but does not yet guarantee that every board can be solved without guessing. Phase 2 addresses that fairness requirement before difficulty progression is expanded.
+## Phase 1 and Phase 2 notes
+The first two phases provide the playable logic loop, first-click safety, solvability certification, tutorial, and optional assists. A board is accepted only when the built-in logical solver can reveal every safe tile from the player's first clear. If the generator cannot find a certified layout after its retry limit, it asks the player to start a new trail.
+
+The certification currently uses direct clue deductions and pairwise subset deductions. More advanced deduction patterns may be added if later playtesting exposes boards that feel overly constrained. Campaign progression and post-round difficulty randomization remain in Phase 3.
