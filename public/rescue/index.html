@@ -422,8 +422,8 @@ function launchGatePathCelebration(completesRound){
    if(token!==pathCelebrationToken)return;
    pathAnimationActive=false;gateFinishCelebrating=false;pathCelebrationTimer=null;
    if(completesRound){checkWin();if(!won)render()}
-   else{setStatus("The trail reaches "+world.exitName+"! Keep exploring to find the remaining friends.","good");render()}
-  },reduced?900:900)
+   else{setStatus("The trail reaches "+world.exitName+"! Keep extending the safe trail to bring every friend home.","good");render()}
+  },900)
  },3000)
 }
 function mark(index){if(ended||pathAnimationActive||grid[index].open)return;if(firstReveal){setStatus("Take your first safe step before marking danger.");return}if(grid[index].gate){setStatus("That glowing tile is the home gate. It’s safe—clear it to finish!","good");return}ensureTimer();grid[index].marked=!grid[index].marked;animateFlagIndex=grid[index].marked?index:null;hintTarget=null;render();const marks=grid.filter(g=>g.marked).length;setStatus(marks===hazardTotal?"All danger markers placed. Keep connecting the safe trail home.":marks+" danger mark"+(marks===1?"":"s")+" placed.");}
