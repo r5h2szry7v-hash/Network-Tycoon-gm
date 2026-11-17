@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#142945">
+<meta name="description" content="Clear a safe trail and guide little critters home in Critter Rescue.">
+<title>Critter Rescue</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+:root{color-scheme:light;--ink:#213451;--muted:#687b90;--navy:#182d4b;--blue:#5275c7;--mint:#60cba7;--cream:#fbfaf4;--tile:#d8e4d5;--tile-dark:#c5d4c7}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;background:radial-gradient(ellipse at 8% 5%,#e2f6e5,transparent 32%),radial-gradient(ellipse at 92% 12%,#e8e4fb,transparent 34%),linear-gradient(150deg,#f4f7f0,#eef3f6 60%,#f8f0e9)}
+button,select{font:inherit}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #e29b47;outline-offset:3px}
+.shell{width:min(1120px,100%);margin:auto;padding:18px clamp(14px,3vw,30px) 34px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.home{display:inline-flex;align-items:center;gap:8px;color:#50677c;text-decoration:none;font-weight:800;font-size:.9rem;padding:10px 13px;border:1px solid #fff;background:#ffffffb8;border-radius:13px;box-shadow:0 3px 12px #293c5210}
+.settings{display:flex;align-items:center;gap:8px;border:1px solid #fff;background:#ffffffc9;color:#52697e;padding:9px 12px;border-radius:13px;font-weight:800;font-size:.82rem;cursor:pointer}
+.hero{text-align:center;margin:0 auto 22px;max-width:720px}
+.kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffffffd6;background:#ffffffab;color:#5b7285;padding:7px 12px;border-radius:99px;font-size:.68rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.kicker i{width:8px;height:8px;border-radius:50%;background:#edbd61;box-shadow:0 0 0 4px #edbd612e}
+h1{font:900 clamp(2.7rem,7vw,4.8rem)/.98 Outfit,system-ui,sans-serif;letter-spacing:-.065em;margin:13px 0 9px;color:#213451}
+h1 span{background:linear-gradient(90deg,#4777bd,#8367b9 72%,#cb8055);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro{margin:0 auto;color:var(--muted);line-height:1.55;font-size:clamp(.95rem,2vw,1.08rem);max-width:610px}
+.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 275px;align-items:start;gap:19px}
+.board-card,.side-card{border:1px solid #ffffffdf;background:linear-gradient(155deg,#ffffffed,#f8fcf8);border-radius:23px;box-shadow:0 17px 45px #314a4b16,0 3px 8px #2339450c}
+.board-card{padding:clamp(12px,2.5vw,22px);min-width:0}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap}
+.selects{display:flex;gap:8px;flex-wrap:wrap}
+.select-wrap{display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #e5eee7;background:#f7faf6;border-radius:12px;color:#71818e;font-size:.72rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+select{border:0;background:transparent;color:#354b61;font-weight:800;font-size:.82rem;max-width:145px;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{padding:9px 10px;border-radius:13px;background:#f0f5ef;text-align:center}
+.stat-label{display:block;color:#798b91;font-size:.64rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.stat-value{font:800 1.1rem Outfit,system-ui,sans-serif;color:#2c4359}
+.progress{height:7px;background:#e9efea;border-radius:10px;overflow:hidden;margin:0 2px 12px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#68c6a2,#8a80d2);border-radius:inherit;transition:width .35s ease}
+.status{min-height:39px;display:flex;align-items:center;justify-content:center;text-align:center;margin-bottom:10px;padding:8px 12px;border-radius:12px;color:#5c7180;background:#f4f7f4;font-size:.84rem;font-weight:700}
+.status.good{color:#28765e;background:#e8f7ed}.status.bad{color:#a34d51;background:#fff0e9}
+.modebar{display:flex;justify-content:center;gap:8px;margin:0 0 13px}
+.mode{border:1px solid #dce7e0;background:#fff;color:#617680;padding:9px 15px;border-radius:12px;font-weight:900;font-size:.82rem;cursor:pointer;transition:transform .16s,background .16s}
+.mode.active{color:#fff;background:#5876bd;border-color:#5876bd;box-shadow:0 4px 0 #405d9b}
+.mode:active,.primary:active,.iconbtn:active{transform:translateY(1px)}
+.board-wrap{display:flex;justify-content:center;overflow:auto;padding:2px 0 6px}
+.board{--cols:8;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:clamp(3px,.7vw,6px);width:min(100%,620px);aspect-ratio:1}
+.cell{appearance:none;border:0;position:relative;display:grid;place-items:center;min-width:0;min-height:0;padding:0;border-radius:clamp(5px,1vw,10px);background:linear-gradient(145deg,#e1ecdf,#cadbcf);box-shadow:inset 0 -3px 0 #afc4b4,0 2px 3px #344b4214;color:#35556f;font:900 clamp(.72rem,2vw,1.28rem) Outfit,system-ui,sans-serif;cursor:pointer;touch-action:manipulation;transition:transform .14s,background .14s,box-shadow .14s}
+.cell:hover:not(:disabled){transform:translateY(-2px);background:linear-gradient(145deg,#edf3e6,#d4e5d3)}
+.cell:active:not(:disabled){transform:translateY(1px);box-shadow:inset 0 1px 2px #526c5a30}
+.cell:disabled{cursor:default}
+.cell.open{background:#f0f2e9;box-shadow:inset 0 1px 2px #43524412;color:#4b667d}
+.cell.open:nth-child(odd){background:#e9eee3}
+.cell.marked{background:linear-gradient(145deg,#dce9fa,#bed1ed);color:#4663a6}
+.cell.hazard{background:linear-gradient(145deg,#f8dfd4,#efc6b8);color:#9e5553}
+.cell.animal{font-size:clamp(.95rem,2.7vw,1.7rem);animation:pop .32s cubic-bezier(.22,1.3,.4,1) both;filter:drop-shadow(0 2px 1px #53606b25)}
+.cell.daily-starter{color:#bd7d2f;font-size:1.4rem;background:linear-gradient(145deg,#fff0ca,#f2d48c);box-shadow:inset 0 -3px 0 #dfbb68,0 0 0 4px #efbf5a44;animation:starterGlow 1.5s ease-in-out infinite}.cell.hinted{outline:4px solid #edb34f;outline-offset:1px;animation:pulseHint 1.2s ease-in-out infinite}.cell.scanned{outline:3px solid #78a8d2;outline-offset:-3px;background:#dcecff}.cell .num-1{color:#4170b0}.cell .num-2{color:#399071}.cell .num-3{color:#ce7259}.cell .num-4{color:#785bb0}.cell .num-5,.cell .num-6,.cell .num-7,.cell .num-8{color:#a34f55}
+.side{display:grid;gap:13px}.clue-accessible .cell .num-1{color:#005a9c}.clue-accessible .cell .num-2{color:#007a3d}.clue-accessible .cell .num-3{color:#b54708}.clue-accessible .cell .num-4{color:#6d28d9}.clue-accessible .cell .num-5{color:#a61b1b}.clue-accessible .cell .num-6{color:#005a7d}.clue-accessible .cell .num-7{color:#111827}.clue-accessible .cell .num-8{color:#333}.clue-accessible .cell[class*="num-"]{font-weight:1000;text-shadow:0 1px 0 #fff}.campaign-meter{height:7px;background:#e9efea;border-radius:10px;overflow:hidden;margin:12px 0}.campaign-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#efb95e,#cd8bb8);transition:width .3s}.campaign-status{font-size:.82rem;color:#617688;line-height:1.5;margin:0}.daily-note{margin:8px 0 0;color:#879492;font-size:.72rem;line-height:1.4}.journal-summary{font-weight:900;color:#486a87;margin:0 0 13px}.journal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;max-height:55vh;overflow:auto;padding:2px}.journal-entry{border:1px solid #e5eee7;background:#f7faf6;border-radius:13px;padding:10px 7px;text-align:center;min-width:0}.journal-entry .animal{font-size:1.65rem;display:block;margin-bottom:4px}.journal-entry .animal.unknown{filter:grayscale(1);opacity:.3}.journal-entry strong{display:block;color:#435d72;font-size:.72rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.journal-entry small{display:block;color:#82918f;font-size:.63rem;margin-top:3px}
+.side-card{padding:17px}
+.side-title{display:flex;align-items:center;gap:9px;margin:0 0 9px;font:800 1.08rem Outfit,system-ui,sans-serif;color:#304963}
+.mascot{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;background:#f1eaff;font-size:1.4rem}
+.side-copy{margin:0;color:#6c7d8a;font-size:.84rem;line-height:1.55}
+.creature-list{display:flex;gap:8px;margin:14px 0 4px}
+.creature{display:grid;place-items:center;width:41px;height:41px;border-radius:14px;background:#f2f5ef;font-size:1.4rem;filter:grayscale(1);opacity:.38;transition:opacity .25s,filter .25s,transform .25s}
+.creature.saved{filter:none;opacity:1;transform:translateY(-2px);background:#e8f7ed;box-shadow:0 3px 0 #b8dec8}
+.primary{width:100%;border:0;border-radius:13px;padding:12px 14px;background:#5575bb;color:white;font-weight:900;box-shadow:0 4px 0 #405c99;cursor:pointer}
+.secondary{width:100%;border:1px solid #dce8e1;border-radius:12px;padding:10px 12px;background:#fff;color:#5d7380;font-weight:800;cursor:pointer}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.assist-note{grid-column:1/-1;color:#8a9594;font-size:.7rem;line-height:1.4;margin:0}.hint-button{background:#806bb8;box-shadow:0 4px 0 #685493}.scan-button{background:#328c91;box-shadow:0 4px 0 #247579}.home-actions.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.help-button,.journal-button{border:1px solid #fff;background:#ffffffc9;color:#52697e;padding:9px 12px;border-radius:13px;font-weight:800;font-size:.82rem;cursor:pointer}
+.keyhelp{font-size:.73rem;color:#82918f;line-height:1.5;margin:9px 0 0}
+.rules{display:grid;gap:8px;margin-top:13px}
+.rule{display:flex;gap:8px;color:#667987;font-size:.78rem;line-height:1.4}.rule b{color:#3c6073}
+dialog{border:1px solid #ffffff;border-radius:20px;padding:0;max-width:min(400px,calc(100vw - 28px));width:100%;box-shadow:0 25px 80px #13274155;color:var(--ink)}
+dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
+.dialog-inner{padding:22px}.tutorial-step{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:14px;min-height:130px;padding:17px;margin:14px 0;border-radius:17px;background:linear-gradient(135deg,#eff6f1,#f0effb)}.tutorial-icon{font-size:2.6rem;text-align:center}.tutorial-step h3{margin:0 0 5px;font:800 1.08rem Outfit}.tutorial-step p{margin:0;font-size:.87rem}.tutorial-progress{display:flex;gap:6px;justify-content:center;margin:14px}.tutorial-dot{width:8px;height:8px;border-radius:99px;background:#d8e1df}.tutorial-dot.active{width:22px;background:#657bc0}.tutorial-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.tutorial-actions .primary{width:auto}.dialog-inner h2{font:800 1.45rem Outfit;margin:0 0 8px}.dialog-inner p{color:#6b7e88;line-height:1.55;font-size:.9rem}.setting-row{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid #edf0ec;color:#536b7d;font-weight:800;font-size:.87rem}.setting-row input{width:20px;height:20px;accent-color:#5876bd}.setting-row>span{display:block;flex:1}.setting-row select{display:block;width:100%;margin-top:7px;padding:8px 10px;border:1px solid #dce7e0;border-radius:10px;background:#fff;color:#435d72;font-weight:800}.setting-row small{display:block;color:#7e8c91;font-weight:500;line-height:1.4;margin-top:3px}.close-row{text-align:right;margin-top:12px}
+footer{text-align:center;margin:16px auto 0;color:#869492;font-size:.72rem}
+@keyframes starterGlow{0%,100%{box-shadow:inset 0 -3px 0 #dfbb68,0 0 0 3px #efbf5a30}50%{box-shadow:inset 0 -3px 0 #dfbb68,0 0 0 7px #efbf5a45}}
+@keyframes pulseHint{0%,100%{box-shadow:0 0 0 0 #edb34f55, inset 0 -3px 0 #afc4b4}50%{box-shadow:0 0 0 6px #edb34f22,inset 0 -3px 0 #afc4b4}}
+@keyframes pop{from{transform:scale(.5);opacity:.1}to{transform:scale(1);opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(max-width:850px){.game-layout{grid-template-columns:1fr}.side{grid-template-columns:repeat(2,minmax(0,1fr))}.board{width:min(100%,680px)}}
+@media(max-width:540px){.shell{padding:12px 12px 26px}.topbar{margin-bottom:14px}.hero{margin-bottom:15px}.game-layout{gap:12px}.board-card{padding:10px;border-radius:18px}.toolbar{align-items:stretch}.selects{display:grid;grid-template-columns:1fr 1fr;width:100%}.select-wrap{justify-content:space-between}.select-wrap select{max-width:110px}.stats{gap:5px}.stat{padding:8px 5px}.mode{flex:1;padding:10px 8px}.side{grid-template-columns:1fr}.side-card{padding:15px}.board{gap:3px}.cell{border-radius:6px;box-shadow:inset 0 -2px 0 #afc4b4}.home,.settings,.help-button,.journal-button{padding:8px 9px;font-size:.72rem}.topbar{flex-wrap:wrap}.home-actions.top-actions{width:100%;justify-content:flex-end}.home-actions.top-actions .cloud-account-button{padding:7px 8px!important;font-size:10px!important}.journal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){html:not([data-motion="on"]) *,html:not([data-motion="on"]) *::before,html:not([data-motion="on"]) *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media(prefers-reduced-motion:no-preference){html:not([data-motion="off"]) *{scroll-behavior:smooth}}
+html[data-motion="on"] *,html[data-motion="on"] *::before,html[data-motion="on"] *::after{animation-duration:initial!important;animation-iteration-count:initial!important;transition-duration:initial!important}
+</style>
+</head>
+<body>
+<main class="shell">
+<nav class="topbar" aria-label="Game navigation"><a class="home" href="/">← <span>All games</span></a><div class="home-actions top-actions"><button class="help-button" id="helpButton" type="button">? How to play</button><button class="journal-button" id="journalButton" type="button">🐾 Journal</button><button class="settings" id="settingsButton" type="button" aria-haspopup="dialog">⚙ Settings</button></div></nav>
+<header class="hero"><div class="kicker"><i aria-hidden="true"></i> Puzzle · Explore · Rescue</div><h1>Critter <span>Rescue</span></h1><p class="intro">Clear a safe trail through the wild, spot the hidden neighbors, and guide every little friend home.</p></header>
+<section class="game-layout" aria-label="Critter Rescue game">
+<div class="board-card">
+<div class="toolbar"><div class="selects">
+<label class="select-wrap">World <select id="worldSelect" aria-label="Choose a world"><option value="moon">🌙 Moonlight Meadow</option><option value="reef">🪸 Coral Cove</option><option value="autumn">🍂 Autumn Hollow</option><option value="cloud">☁️ Cloudtop Grove</option></select></label>
+<label class="select-wrap">Trail <select id="sizeSelect" aria-label="Choose board size"><option value="6">Cozy · 6×6</option><option value="8" selected>Wander · 8×8</option><option value="10">Explore · 10×10</option></select></label>
+</div><button class="secondary" id="newGameTop" type="button" style="width:auto;padding:9px 12px">↻ New trail</button></div>
+<div class="stats" aria-label="Round status"><div class="stat"><span class="stat-label">Danger marks</span><span class="stat-value" id="dangerCount">0 / 12</span></div><div class="stat"><span class="stat-label">Critters home</span><span class="stat-value" id="rescueCount">0 / 3</span></div><div class="stat"><span class="stat-label">Trail time</span><span class="stat-value" id="timer">00:00</span></div></div>
+<div class="progress" aria-label="Rescue progress"><span id="progressBar"></span></div>
+<div class="status" id="status" role="status" aria-live="polite">Choose a covered tile to begin. Your first step is always safe.</div>
+<div class="modebar" role="group" aria-label="Tile action"><button class="mode active" id="revealMode" type="button" aria-pressed="true">👣 Clear trail</button><button class="mode" id="markMode" type="button" aria-pressed="false">🚩 Mark danger</button></div>
+<div class="board-wrap"><div class="board" id="board" role="grid" aria-label="Rescue trail"></div></div>
+</div>
+<aside class="side">
+<section class="side-card"><h2 class="side-title"><span class="mascot" id="mascot">🦊</span>Mission</h2><p class="side-copy" id="missionText">Read the nearby clues, mark the danger, and uncover a safe route for three friends.</p><div class="creature-list" id="creatureList" aria-label="Critters rescued"></div></section><section class="side-card"><h2 class="side-title"><span class="mascot">🗺️</span>Campaign trail</h2><p class="campaign-status" id="campaignStatus"></p><div class="campaign-meter" role="progressbar" aria-label="World campaign progress"><span id="campaignBar"></span></div><button class="primary" id="dailyButton" type="button">📅 Play Daily Rescue</button><p class="daily-note" id="dailyNote">A shared UTC-date trail. Daily runs do not advance campaign unlocks.</p></section>
+<section class="side-card"><h2 class="side-title"><span class="mascot">💡</span>How to play</h2><p class="side-copy">Each number tells how many danger patches touch that tile, including diagonals.</p><div class="rules"><div class="rule"><span>👣</span><span><b>Clear trail</b> to reveal a tile and open connected clear ground.</span></div><div class="rule"><span>🚩</span><span><b>Mark danger</b> when clues tell you a patch is hidden there.</span></div><div class="rule"><span>🏡</span><span><b>Bring all friends home</b> by clearing every safe tile.</span></div></div><p class="keyhelp">Tip: Switch to Mark danger before tapping tiles on touch screens.</p><div class="actions"><button class="primary hint-button" id="hintButton" type="button">💡 Hint · 1</button><button class="primary scan-button" id="scanButton" type="button">🔎 Scan · 1</button><p class="assist-note" id="assistNote">Hints and scans are optional assists. They are tracked separately and do not change your rescue progress.</p><button class="secondary" id="newGameSide" type="button" style="grid-column:1/-1">↻ Start a new rescue</button></div></section>
+</aside>
+</section>
+<footer>Every path home starts with one safe step.</footer>
+</main>
+<dialog id="tutorialDialog"><div class="dialog-inner"><div class="kicker"><i aria-hidden="true"></i> A quick trail guide</div><div class="tutorial-progress" id="tutorialProgress" aria-label="Tutorial progress"></div><div class="tutorial-step"><span class="tutorial-icon" id="tutorialIcon">👣</span><div><h3 id="tutorialTitle">Take a safe first step</h3><p id="tutorialCopy"></p></div></div><div class="tutorial-actions"><button class="secondary" id="skipTutorial" type="button" style="width:auto">Skip</button><div style="display:flex;gap:8px"><button class="secondary" id="backTutorial" type="button" style="width:auto">Back</button><button class="primary" id="nextTutorial" type="button">Next</button></div></div></div></dialog>
+<dialog id="journalDialog"><div class="dialog-inner"><h2>Rescue journal</h2><p class="journal-summary" id="journalSummary">0 of 12 friends discovered</p><div class="journal-grid" id="journalGrid"></div><div class="close-row"><button class="primary" id="closeJournal" type="button" style="width:auto">Back to the trail</button></div></div></dialog>
+<dialog id="settingsDialog"><div class="dialog-inner"><h2>Game settings</h2><p>Choose how Critter Rescue looks and sounds.</p><label class="setting-row"><input id="motionToggle" type="checkbox"><span>Ignore device reduced-motion setting<small>Animations follow your device setting by default. Turn this on to animate even when your device requests reduced motion.</small></span></label><label class="setting-row"><input id="soundToggle" type="checkbox"><span>Sound effects<small>Soft, optional tones for reveals, rescues, and round results. Off by default.</small></span></label><label class="setting-row"><span>Number clue palette<small>Choose a color-safe high-contrast set for number clues.</small><select id="cluePaletteSelect" aria-label="Number clue palette"><option value="classic">Classic</option><option value="accessible">Color-safe</option></select></span></label><label class="setting-row"><span>Default trail size<small>Your choice is remembered on this device and syncs with your account.</small><select id="sizePreference" aria-label="Default trail size"><option value="6">Cozy · 6×6</option><option value="8">Wander · 8×8</option><option value="10">Explore · 10×10</option></select></span></label><div class="close-row"><button class="primary" id="closeSettings" type="button" style="width:auto">Done</button></div></div></dialog>
+<script>
+(function(){
+"use strict";
+const worlds={
+ moon:{name:"Moonlight Meadow",mark:"✨",hazard:"🌵",critters:["🦊","🐇","🦉"],mission:"Read the moonlit clues, mark thorn patches, and guide three meadow friends to the lantern gate."},
+ reef:{name:"Coral Cove",mark:"🫧",hazard:"🪸",critters:["🐢","🐠","🐙"],mission:"Follow the tide clues, mark sharp coral, and guide three sea friends through the reef."},
+ autumn:{name:"Autumn Hollow",mark:"🍁",hazard:"🕳️",critters:["🦔","🐿️","🦝"],mission:"Read the leaf clues, mark hidden burrows, and guide three woodland friends to their den."},
+ cloud:{name:"Cloudtop Grove",mark:"☁️",hazard:"⚡",critters:["🐦","🐿️","🦋"],mission:"Follow the sky clues, mark storm pockets, and guide three tiny travelers to a safe nest."}
+};
+const levels={6:{hazards:5,label:"Cozy"},8:{hazards:11,label:"Wander"},10:{hazards:18,label:"Explore"}};
+const worldOrder=["moon","reef","autumn","cloud"];
+function readStored(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(_){return fallback}}
+function storeValue(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch(_){}}
+function dailyDateKey(){return new Date().toISOString().slice(0,10)}
+function loadPreferences(){soundEnabled=localStorage.getItem("critterRescue.sound")==="on";cluePalette=localStorage.getItem("critterRescue.cluePalette")==="accessible"?"accessible":"classic";document.documentElement.classList.toggle("clue-accessible",cluePalette==="accessible")}
+function setSoundEnabled(on){soundEnabled=!!on;try{localStorage.setItem("critterRescue.sound",soundEnabled?"on":"off")}catch(_){}}
+function setCluePalette(value){cluePalette=value==="accessible"?"accessible":"classic";document.documentElement.classList.toggle("clue-accessible",cluePalette==="accessible");try{localStorage.setItem("critterRescue.cluePalette",cluePalette)}catch(_){}}
+function playCue(kind){if(!soundEnabled)return;try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;if(!audioContext)audioContext=new Audio();if(audioContext.state==="suspended")audioContext.resume();const patterns={step:[[430,.07]],rescue:[[660,.09],[880,.12]],hazard:[[210,.18]],win:[[523,.1],[659,.1],[784,.16]],assist:[[740,.08]]};const notes=patterns[kind]||patterns.step;let at=audioContext.currentTime;for(const [hz,duration] of notes){const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type="sine";osc.frequency.setValueAtTime(hz,at);gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(.045,at+.012);gain.gain.exponentialRampToValueAtTime(.0001,at+duration);osc.connect(gain);gain.connect(audioContext.destination);osc.start(at);osc.stop(at+duration);at+=duration*.72}}catch(_){}}
+
+function seedDailyRandom(){let h=2166136261;for(const ch of dailyDateKey())h=Math.imul(h^ch.charCodeAt(0),16777619);rngState=(h>>>0)||1}
+function randomFloat(){if(!dailyMode)return Math.random();rngState^=rngState<<13;rngState^=rngState>>>17;rngState^=rngState<<5;return(rngState>>>0)/4294967296}
+function isWorldUnlocked(key){const index=worldOrder.indexOf(key);if(index<=0)return true;return worldOrder.slice(0,index).every(k=>(campaignWins[k]||0)>=2)}
+function renderJournal(){const entries=worldOrder.flatMap(k=>worlds[k].critters.map((animal,i)=>({key:k,index:i,name:animal,world:worlds[k].name,found:collection.has(k+":"+i)})));document.getElementById("journalSummary").textContent=collection.size+" of "+entries.length+" friends discovered";document.getElementById("journalGrid").innerHTML=entries.map(x=>'<div class="journal-entry"><span class="animal '+(x.found?"":"unknown")+'">'+(x.found?x.name:"🐾")+'</span><strong>'+ (x.found?x.name:"Unknown friend") +'</strong><small>'+x.world+'</small></div>').join("")}
+function updateCampaignUI(){const select=document.getElementById("worldSelect");for(const opt of select.options)opt.disabled=dailyMode||!isWorldUnlocked(opt.value);if(!isWorldUnlocked(worldKey)){worldKey="moon";select.value="moon"}const status=document.getElementById("campaignStatus"),bar=document.getElementById("campaignBar"),dailyButton=document.getElementById("dailyButton"),dailyNote=document.getElementById("dailyNote");if(dailyMode){status.textContent="Daily Rescue · "+dailyDateKey()+" · the same certified trail for today’s UTC date.";bar.style.width="100%";bar.parentElement.setAttribute("aria-valuenow","100");dailyButton.textContent="↩ Return to campaign";dailyNote.textContent="Daily runs are separate from campaign unlocks and the rescue journal."}else{const wins=campaignWins[worldKey]||0;const next=worldOrder[worldOrder.indexOf(worldKey)+1];status.textContent=next?(wins+"/2 rescues in "+worlds[worldKey].name+" to unlock "+worlds[next].name+"."):wins>=2?"All four worlds are open. Replay a trail or try today's daily rescue.":"Complete two trails in "+worlds[worldKey].name+" to finish the campaign.";bar.style.width=Math.min(100,wins/2*100)+"%";bar.parentElement.setAttribute("aria-valuenow",String(Math.min(100,wins/2*100)));const key=dailyDateKey();dailyButton.textContent=dailyBest[key]?"📅 Daily complete · "+formatTime(dailyBest[key]):"📅 Play Daily Rescue";dailyNote.textContent="A shared UTC-date trail. Daily runs do not advance campaign unlocks."}}
+function recordCritter(animalIndex){if(dailyMode)return;collection.add(worldKey+":"+animalIndex);storeValue("critterRescue.collection",[...collection]);renderJournal()}
+
+const boardEl=document.getElementById("board"),statusEl=document.getElementById("status");
+let grid=[],size=8,hazardTotal=12,firstReveal=true,mode="reveal",ended=false,won=false,elapsed=0,timerId=null,worldKey="moon",rescued=new Set(),animals=[],hintTarget=null,scanCells=new Set(),hintUsed=0,scanUsed=0,tutorialStep=0,dailyMode=false,preGenerated=false,dailyStartIndex=36,rngState=0,campaignWins=readStored("critterRescue.campaignWins",{}),collection=new Set(readStored("critterRescue.collection",[])),dailyBest=readStored("critterRescue.dailyBest",{}),soundEnabled=false,audioContext=null,cluePalette="classic",preferencesLoaded=false;
+loadPreferences();
+const getMotion=()=>{try{return localStorage.getItem("critterRescue.motion")==="on"}catch(_){return false}};
+function setMotion(on){try{localStorage.setItem("critterRescue.motion",on?"on":"off")}catch(_){}document.documentElement.dataset.motion=on?"on":(matchMedia("(prefers-reduced-motion: reduce)").matches?"off":"on")}
+setMotion(getMotion());
+const dialog=document.getElementById("settingsDialog"),toggle=document.getElementById("motionToggle"),soundToggle=document.getElementById("soundToggle"),clueSelect=document.getElementById("cluePaletteSelect"),sizePreference=document.getElementById("sizePreference");
+document.getElementById("settingsButton").addEventListener("click",()=>{toggle.checked=getMotion();soundToggle.checked=soundEnabled;clueSelect.value=cluePalette;sizePreference.value=String(readStored("critterRescue.boardSize",8));dialog.showModal()});
+document.getElementById("closeSettings").addEventListener("click",()=>dialog.close());
+dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close()});
+toggle.addEventListener("change",()=>setMotion(toggle.checked));soundToggle.addEventListener("change",()=>setSoundEnabled(soundToggle.checked));clueSelect.addEventListener("change",()=>setCluePalette(clueSelect.value));sizePreference.addEventListener("change",()=>{storeValue("critterRescue.boardSize",Number(sizePreference.value));if(!dailyMode){document.getElementById("sizeSelect").value=sizePreference.value;makeBoard()}});
+function neighbours(index){const r=Math.floor(index/size),c=index%size,out=[];for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=c+dc;if(rr>=0&&rr<size&&cc>=0&&cc<size)out.push(rr*size+cc)}return out}
+function recalc(){for(let i=0;i<grid.length;i++)grid[i].count=neighbours(i).filter(n=>grid[n].hazard).length}
+
+function neighborsFor(index,n){const r=Math.floor(index/n),col=index%n,out=[];for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=col+dc;if(rr>=0&&rr<n&&cc>=0&&cc<n)out.push(rr*n+cc)}return out}
+function countCandidate(cells,n){for(let i=0;i<cells.length;i++)cells[i].count=neighborsFor(i,n).filter(j=>cells[j].hazard).length}
+function solveWithDeductions(cells,startIndex,initialOpen,initialKnown){
+ const total=cells.length,opened=initialOpen?initialOpen.slice():Array(total).fill(false),known=initialKnown?initialKnown.slice():Array(total).fill(false),safeTotal=cells.filter(x=>!x.hazard).length;
+ let firstSafe=null,failed=false;
+ function flood(start){const q=[start];while(q.length){const i=q.pop();if(opened[i]||known[i]||cells[i].hazard)continue;opened[i]=true;if(cells[i].count===0)for(const j of neighborsFor(i,size))if(!opened[j]&&!known[j]&&!cells[j].hazard)q.push(j)}}
+ if(startIndex!==null&&startIndex!==undefined)flood(startIndex);
+ for(let pass=0;pass<total+2;pass++){
+  const constraints=[];
+  for(let i=0;i<total;i++)if(opened[i]&&cells[i].count>0){
+   const around=neighborsFor(i,size),unknown=around.filter(j=>!opened[j]&&!known[j]),need=cells[i].count-around.filter(j=>known[j]).length;
+   if(need<0||need>unknown.length){failed=true;break}
+   if(unknown.length)constraints.push({cells:unknown,need});
+  }
+  if(failed)break;
+  const safes=new Set(),mines=new Set();
+  for(const x of constraints){if(x.need===0)x.cells.forEach(i=>safes.add(i));else if(x.need===x.cells.length)x.cells.forEach(i=>mines.add(i))}
+  for(let a=0;a<constraints.length;a++)for(let b=0;b<constraints.length;b++){
+   if(a===b)continue;const A=constraints[a],B=constraints[b];
+   if(A.cells.length>B.cells.length||!A.cells.every(i=>B.cells.includes(i)))continue;
+   const diff=B.cells.filter(i=>!A.cells.includes(i)),need=B.need-A.need;
+   if(!diff.length)continue;
+   if(need===0)diff.forEach(i=>safes.add(i));else if(need===diff.length)diff.forEach(i=>mines.add(i));
+  }
+  for(const i of safes)if(cells[i].hazard)failed=true;
+  for(const i of mines)if(!cells[i].hazard)failed=true;
+  if(failed)break;
+  if(firstSafe===null){for(const i of safes){if(!cells[i].hazard&&!opened[i]){firstSafe=i;break}}}
+  let changed=false;for(const i of mines)if(!known[i]){known[i]=true;changed=true}
+  for(const i of safes)if(!opened[i]&&!known[i]&&!cells[i].hazard){const before=opened[i];flood(i);if(opened[i]!==before)changed=true}
+  const openedCount=opened.reduce((a,v)=>a+(v?1:0),0);
+  if(openedCount===safeTotal)return{solved:true,firstSafe};
+  if(!changed)break;
+ }
+ return{solved:!failed&&opened.reduce((a,v)=>a+(v?1:0),0)===safeTotal,firstSafe};
+}
+function generateSolvableBoard(firstIndex){
+ const savedMarks=grid.map(g=>g.marked),total=size*size;
+ for(let attempt=0;attempt<1800;attempt++){
+  const candidate=Array.from({length:total},()=>({hazard:false,open:false,marked:false,count:0,animal:null}));
+  const positions=[];for(let i=0;i<total;i++)if(i!==firstIndex)positions.push(i);
+  for(let i=positions.length-1;i>0;i--){const j=Math.floor(randomFloat()*(i+1));[positions[i],positions[j]]=[positions[j],positions[i]]}
+  for(let i=0;i<hazardTotal;i++)candidate[positions[i]].hazard=true;
+  countCandidate(candidate,size);
+  if(solveWithDeductions(candidate,firstIndex).solved){
+   grid=candidate;for(let i=0;i<grid.length;i++)grid[i].marked=savedMarks[i]||false;
+   const safe=grid.map((g,i)=>g.hazard?-1:i).filter(i=>i>=0);animals=[];rescued=new Set();
+   for(let n=0;n<3;n++){const pick=Math.floor(randomFloat()*safe.length),i=safe.splice(pick,1)[0];animals.push(i);grid[i].animal=n}
+   return true;
+  }
+ }
+ return false;
+}
+function makeBoard(){if(dailyMode){size=8;document.getElementById("sizeSelect").value="8";document.getElementById("worldSelect").value="moon";worldKey="moon"}else{if(!preferencesLoaded){const saved=String(readStored("critterRescue.boardSize",8));if(levels[saved])document.getElementById("sizeSelect").value=saved;preferencesLoaded=true}size=Number(document.getElementById("sizeSelect").value)}hazardTotal=levels[size].hazards;const total=size*size;grid=Array.from({length:total},()=>({hazard:false,open:false,marked:false,count:0,animal:null}));animals=[];rescued=new Set();firstReveal=true;ended=false;won=false;elapsed=0;hintTarget=null;scanCells=new Set();hintUsed=0;scanUsed=0;mode="reveal";preGenerated=false;clearInterval(timerId);timerId=null;if(dailyMode){seedDailyRandom();preGenerated=generateSolvableBoard(dailyStartIndex)}document.getElementById("sizeSelect").disabled=dailyMode;document.getElementById("worldSelect").disabled=dailyMode;updateCampaignUI();setStatus(dailyMode?(preGenerated?"Daily Rescue "+dailyDateKey()+" UTC: tap the glowing start tile.":"The daily trail could not be certified. Please try again later."):"Choose a covered tile to begin. Your first step is always safe.");render()}
+function ensureTimer(){if(!timerId&&!ended)timerId=setInterval(()=>{elapsed++;document.getElementById("timer").textContent=formatTime(elapsed)},1000)}
+function formatTime(n){return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
+function setStatus(text,kind=""){statusEl.textContent=text;statusEl.className="status"+(kind?" "+kind:"")}
+function reveal(index){if(ended||grid[index].open||grid[index].marked)return;if(firstReveal){if(dailyMode&&index!==dailyStartIndex){setStatus("Today’s shared trail begins at the glowing start tile.");return}if(!dailyMode&&!generateSolvableBoard(index)){setStatus("Couldn’t find a fair trail just yet. Start a new trail and try again.","bad");return}if(dailyMode&&!preGenerated){setStatus("The daily trail could not be certified. Please try again later.","bad");return}firstReveal=false}hintTarget=null;scanCells=new Set();mode="reveal";ensureTimer();if(grid[index].hazard){playCue("hazard");grid[index].open=true;ended=true;clearInterval(timerId);won=false;setStatus("Oh! A danger patch. Everyone is safe at camp. Try another trail.", "bad");render(true);return}
+const rescueBefore=rescued.size;const queue=[index];while(queue.length){const i=queue.pop();if(grid[i].open||grid[i].marked||grid[i].hazard)continue;grid[i].open=true;if(grid[i].animal!==null){rescued.add(grid[i].animal);recordCritter(grid[i].animal)}if(grid[i].count===0){for(const n of neighbours(i))if(!grid[n].open&&!grid[n].marked&&!grid[n].hazard)queue.push(n)}}playCue(rescued.size>rescueBefore?"rescue":"step");if(rescued.size===3)setStatus("All three friends found the safe trail. Keep clearing to bring them home!","good");else if(grid[index].animal!==null)setStatus(worlds[worldKey].critters[grid[index].animal]+" Found a friend! They’re following your safe trail.","good");else if(grid[index].count>0)setStatus("Safe tile. " + grid[index].count+" danger patch"+(grid[index].count===1?"":"es")+" nearby.");else setStatus("Clear ground! The quiet patch opens a wider safe trail.","good");checkWin();render()}
+function mark(index){if(ended||grid[index].open)return;if(!firstReveal)ensureTimer();grid[index].marked=!grid[index].marked;hintTarget=null;render();const marks=grid.filter(g=>g.marked).length;setStatus(marks===hazardTotal?"All danger markers placed. Keep clearing the safe trail.":marks+" danger mark"+(marks===1?"":"s")+" placed.");}
+function checkWin(){if(grid.every(g=>g.hazard||g.open)&&rescued.size===3){ended=true;won=true;clearInterval(timerId);playCue("win");if(dailyMode){const key=dailyDateKey(),old=Number(dailyBest[key]||0);if(!old||elapsed<old){dailyBest[key]=elapsed;storeValue("critterRescue.dailyBest",dailyBest)}setStatus("Daily rescue complete in "+formatTime(elapsed)+". Come back tomorrow for a new trail!","good")}else{const before=isWorldUnlocked(worldOrder[worldOrder.indexOf(worldKey)+1]);campaignWins[worldKey]=Math.min(2,(campaignWins[worldKey]||0)+1);storeValue("critterRescue.campaignWins",campaignWins);const next=worldOrder[worldOrder.indexOf(worldKey)+1],unlocked=next&&!before&&isWorldUnlocked(next);setStatus(unlocked?"Trail cleared! "+worlds[next].name+" is now open.":"Trail cleared! Every friend made it home in "+formatTime(elapsed)+".","good")}updateCampaignUI()}}
+function render(showHazards=false){const world=worlds[worldKey];boardEl.style.setProperty("--cols",size);boardEl.innerHTML="";boardEl.setAttribute("aria-label",world.name+" "+size+" by "+size+" rescue trail");grid.forEach((cell,i)=>{const b=document.createElement("button");b.type="button";b.className="cell";b.setAttribute("role","gridcell");let label="Covered trail tile";if(cell.open){b.classList.add("open");if(cell.hazard&&showHazards){b.classList.add("hazard");b.textContent=world.hazard;label="Danger patch"}else if(cell.animal!==null){b.classList.add("animal");b.textContent=world.critters[cell.animal];label="Critter found"}else if(cell.count>0){b.textContent=cell.count;b.classList.add("num-"+cell.count);label=cell.count+" nearby danger patches"}}else if(cell.marked){b.classList.add("marked");b.textContent=world.mark;label="Marked as danger"}if(showHazards&&cell.hazard&&!cell.open){b.classList.add("hazard");b.textContent=world.hazard;label="Danger patch"}if(dailyMode&&firstReveal&&i===dailyStartIndex){b.classList.add("daily-starter");b.textContent="✦";label="Daily Rescue safe starting tile"}b.setAttribute("aria-label",label);b.setAttribute("aria-disabled",ended?"true":"false");b.disabled=ended;if(hintTarget===i&&!cell.open)b.classList.add("hinted");if(scanCells.has(i))b.classList.add("scanned");b.addEventListener("click",()=>{if(dailyMode&&firstReveal&&i!==dailyStartIndex){setStatus("Today’s shared trail begins at the glowing start tile.");return}mode==="mark"?mark(i):mode==="scan"?scan(i):reveal(i)});boardEl.appendChild(b)});document.getElementById("dangerCount").textContent=grid.filter(g=>g.marked).length+" / "+hazardTotal;document.getElementById("rescueCount").textContent=rescued.size+" / 3";document.getElementById("progressBar").style.width=Math.round(rescued.size/3*100)+"%";document.getElementById("hintButton").textContent="💡 Hint · "+(1-hintUsed);document.getElementById("scanButton").textContent=mode==="scan"?"Tap an area":"🔎 Scan · "+(1-scanUsed);document.getElementById("hintButton").disabled=hintUsed>=1||ended;document.getElementById("scanButton").disabled=scanUsed>=1||ended;document.getElementById("scanButton").style.opacity=scanUsed>=1||ended?".55":"1";document.getElementById("creatureList").innerHTML=world.critters.map((c,i)=>'<span class="creature '+(rescued.has(i)?"saved":"")+'" aria-label="'+(rescued.has(i)?"Rescued":"Waiting to be found")+'">'+c+"</span>").join("");document.getElementById("missionText").textContent=world.mission;document.getElementById("mascot").textContent=world.critters[0];document.getElementById("timer").textContent=formatTime(elapsed);document.getElementById("revealMode").classList.toggle("active",mode==="reveal");document.getElementById("revealMode").setAttribute("aria-pressed",mode==="reveal");document.getElementById("markMode").classList.toggle("active",mode==="mark");document.getElementById("markMode").setAttribute("aria-pressed",mode==="mark")}
+
+function requestHint(){if(ended)return;if(firstReveal){setStatus("Your first step is always safe. Clear any tile to begin.");return}if(hintUsed>=1){setStatus("Your hint is already used on this trail. Keep following the clues.");return}const result=solveWithDeductions(grid,null,grid.map(g=>g.open),grid.map(g=>g.marked));if(result.firstSafe===null){setStatus("No guaranteed safe move is visible yet. Check your danger marks or use a scan.");return}hintTarget=result.firstSafe;hintUsed++;mode="reveal";playCue("assist");setStatus("The glowing tile is guaranteed safe from the clues you’ve uncovered.","good");render()}
+function requestScan(){if(ended)return;if(firstReveal){setStatus("Clear one safe tile before using a scan.");return}if(scanUsed>=1){setStatus("Your scan is already used on this trail.");return}mode="scan";setStatus("Choose a tile to scan its surrounding 3×3 area.");render()}
+function scan(index){if(ended||firstReveal)return;const area=[index,...neighbours(index)];const count=area.filter(i=>grid[i].hazard).length;scanCells=new Set(area);scanUsed++;mode="reveal";playCue("assist");setStatus("Scan found "+count+" danger patch"+(count===1?"":"es")+" in the highlighted area.","good");render()}
+document.getElementById("hintButton").addEventListener("click",requestHint);document.getElementById("scanButton").addEventListener("click",requestScan);
+function tutorialData(){return[{icon:"👣",title:"Take a safe first step",copy:"Your first clear is guaranteed safe. Pick any covered tile to reveal the start of your trail."},{icon:"🔢",title:"Read the nearby clues",copy:"A number counts danger patches touching that tile, including diagonals. Use overlapping clues to narrow down what is safe."},{icon:"🚩",title:"Mark danger when you're sure",copy:"Switch to Mark danger to flag a tile you’ve deduced is hazardous. Empty clear tiles open connected safe ground."},{icon:"🏡",title:"Guide every friend home",copy:"Find all three critters, then clear every safe tile to finish the rescue. Hints and scans are optional and tracked separately."}]}
+function renderTutorial(){const steps=tutorialData(),step=steps[tutorialStep];document.getElementById("tutorialIcon").textContent=step.icon;document.getElementById("tutorialTitle").textContent=step.title;document.getElementById("tutorialCopy").textContent=step.copy;document.getElementById("tutorialProgress").innerHTML=steps.map((_,i)=>'<span class="tutorial-dot '+(i===tutorialStep?"active":"")+'"></span>').join("");document.getElementById("backTutorial").style.visibility=tutorialStep===0?"hidden":"visible";document.getElementById("nextTutorial").textContent=tutorialStep===steps.length-1?"Let’s rescue":"Next"}
+function finishTutorial(){try{localStorage.setItem("critterRescue.tutorialSeen","yes")}catch(_){}document.getElementById("tutorialDialog").close()}
+function showTutorial(){tutorialStep=0;renderTutorial();document.getElementById("tutorialDialog").showModal()}
+document.getElementById("helpButton").addEventListener("click",showTutorial);document.getElementById("skipTutorial").addEventListener("click",finishTutorial);document.getElementById("nextTutorial").addEventListener("click",()=>{if(tutorialStep>=tutorialData().length-1){finishTutorial();return}tutorialStep++;renderTutorial()});document.getElementById("backTutorial").addEventListener("click",()=>{if(tutorialStep>0){tutorialStep--;renderTutorial()}});
+document.getElementById("revealMode").addEventListener("click",()=>{mode="reveal";render()});document.getElementById("markMode").addEventListener("click",()=>{mode="mark";render()});document.getElementById("newGameTop").addEventListener("click",makeBoard);document.getElementById("newGameSide").addEventListener("click",makeBoard);document.getElementById("sizeSelect").addEventListener("change",e=>{if(!dailyMode){storeValue("critterRescue.boardSize",Number(e.target.value));sizePreference.value=e.target.value}makeBoard()});document.getElementById("worldSelect").addEventListener("change",e=>{worldKey=e.target.value;makeBoard()});document.getElementById("dailyButton").addEventListener("click",()=>{if(dailyMode){dailyMode=false;const pref=String(readStored("critterRescue.boardSize",8));if(levels[pref])document.getElementById("sizeSelect").value=pref;updateCampaignUI();makeBoard()}else{dailyMode=true;makeBoard()}});document.getElementById("journalButton").addEventListener("click",()=>{renderJournal();document.getElementById("journalDialog").showModal()});document.getElementById("closeJournal").addEventListener("click",()=>document.getElementById("journalDialog").close());
+makeBoard();renderJournal();try{if(localStorage.getItem("critterRescue.tutorialSeen")!=="yes")showTutorial()}catch(_){}
+})();
+</script>
+<script type="module">import{startCloudSync}from"/cloud-save.js?v=critter-rescue-phase4";startCloudSync("critterRescue");</script>
+</body>
+</html>

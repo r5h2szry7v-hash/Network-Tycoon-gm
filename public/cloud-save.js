@@ -38,7 +38,17 @@ const gameStorage = {
     "network-tycoon-player-preferences-v1",
     "network-tycoon-player-legacy-v1"
   ],
-  matchGarden: ["matchGarden"]
+  matchGarden: ["matchGarden"],
+  critterRescue: [
+    "critterRescue.campaignWins",
+    "critterRescue.collection",
+    "critterRescue.dailyBest",
+    "critterRescue.motion",
+    "critterRescue.tutorialSeen",
+    "critterRescue.sound",
+    "critterRescue.cluePalette",
+    "critterRescue.boardSize"
+  ]
 };
 const emailKey = "firebaseCloudPendingEmail";
 const pendingProviderKey = "firebaseCloudPendingProvider";
