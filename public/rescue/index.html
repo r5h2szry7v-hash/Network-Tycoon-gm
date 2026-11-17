@@ -89,6 +89,13 @@ dialog::backdrop{background:#15294077;backdrop-filter:blur(4px)}
 .board-actions .mode{height:68px;border-radius:13px;background:#fff;color:#617680;border:1px solid #dce7e0}
 .board-actions .mode.active{color:#fff;background:var(--accent);border-color:var(--accent);box-shadow:0 4px 0 var(--accent-dark)}
 .board-actions .assist-note{grid-column:1/-1;text-align:center}
+@media(min-width:851px){
+.board-actions #hintButton{order:0}
+.board-actions #scanButton{order:1}
+.board-actions .modebar{order:2}
+.board-actions .assist-note{order:3}
+.board-actions #newGameSide{order:4}
+}
 .avatar-setting{display:block}
 .avatar-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}
 .avatar-option{min-width:0;width:100%;min-height:64px;border:1px solid #e8e4f4;background:#fbfaff;border-radius:14px;padding:7px 5px;color:#3b3452;font-size:27px;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,box-shadow .18s}
