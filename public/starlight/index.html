@@ -448,13 +448,15 @@ function loadColorArtworkLibrary(){
  return fetch("./color-art-library.svg").then(function(response){if(!response.ok)throw new Error("Color artwork library could not be loaded");return response.text()}).then(function(source){
   var doc=new DOMParser().parseFromString(source,"image/svg+xml");
   if(doc.querySelector("parsererror"))throw new Error("Color artwork library is not valid SVG");
-  var groups=Array.prototype.slice.call(doc.querySelectorAll("g[data-scene-id]"));
+  var svgNamespace="http://www.w3.org/2000/svg";
+  var groups=Array.prototype.slice.call(doc.getElementsByTagNameNS(svgNamespace,"g")).filter(function(group){return group.hasAttribute("data-scene-id")});
   groups.forEach(function(group){
-   var zones=Array.prototype.slice.call(group.querySelectorAll("path.fillable-region")).map(function(path,index){
+   var zones=Array.prototype.slice.call(group.getElementsByTagNameNS(svgNamespace,"path")).filter(function(path){return path.classList.contains("fillable-region")}).map(function(path,index){
     return {label:path.getAttribute("data-label")||("Region "+(index+1)),d:path.getAttribute("d"),x:Number(path.getAttribute("data-x"))||180,y:Number(path.getAttribute("data-y"))||150,guide:Math.max(1,Math.min(8,Number(path.getAttribute("data-guide"))||1))}
    });
    if(!zones.length)return;
-   colorScenes.push({id:group.getAttribute("data-scene-id"),title:group.getAttribute("data-title")||"Space scene",icon:group.getAttribute("data-icon")||"✦",tagline:group.getAttribute("data-tagline")||"Color a little piece of space",viewBox:group.getAttribute("data-viewbox")||"0 0 360 300",zones:zones,decorations:Array.prototype.slice.call(group.querySelectorAll("path.decorative-region")).map(function(path){return path.getAttribute("d")})})
+   var allPaths=Array.prototype.slice.call(group.getElementsByTagNameNS(svgNamespace,"path"));
+   colorScenes.push({id:group.getAttribute("data-scene-id"),title:group.getAttribute("data-title")||"Space scene",icon:group.getAttribute("data-icon")||"✦",tagline:group.getAttribute("data-tagline")||"Color a little piece of space",viewBox:group.getAttribute("data-viewbox")||"0 0 360 300",zones:zones,decorations:allPaths.filter(function(path){return path.classList.contains("decorative-region")}).map(function(path){return path.getAttribute("d")})})
   });
   if(document.getElementById("colorStudio").classList.contains("active")){renderColorScenes();renderColorArtwork()}
  }).catch(function(error){console.warn("Starlight coloring art library:",error)})
