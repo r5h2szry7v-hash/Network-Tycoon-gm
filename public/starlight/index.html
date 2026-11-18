@@ -511,6 +511,50 @@ function renderColorProgress(){
  pill.textContent=count===scene.zones.length?"Scene complete ✦":count+" of "+scene.zones.length+" filled";
  board.classList.toggle("complete",count===scene.zones.length)
 }
+// Active overlays are visual only; saved fill colors remain authoritative.
+var colorFillAnimations=new Map();
+function cancelColorFillAnimations(){
+ colorFillAnimations.forEach(function(entry){cancelAnimationFrame(entry.frame);entry.cleanup()});
+ colorFillAnimations.clear()
+}
+function animateColorRegionFill(index,hex){
+ var original=document.querySelector('#colorArtwork [data-index="'+index+'"]');
+ if(!original)return;
+ var prior=colorFillAnimations.get(index);
+ if(prior){cancelAnimationFrame(prior.frame);prior.cleanup();colorFillAnimations.delete(index)}
+ if(document.documentElement.classList.contains("pref-reduced-motion")){
+  original.style.fill=hex;return
+ }
+ var svg=original.ownerSVGElement,defs=svg.querySelector("defs"),bounds;
+ try{bounds=original.getBBox()}catch(e){original.style.fill=hex;return}
+ if(!defs||!bounds.width||!bounds.height){original.style.fill=hex;return}
+ // Expand slightly past both edges, so no unfilled sliver remains on curved paths.
+ var margin=5,left=bounds.x-margin,total=bounds.width+margin*2;
+ var clipId="colorFillSweep"+index+"_"+Date.now().toString(36);
+ var clip=svgElement("clipPath",{id:clipId,clipPathUnits:"userSpaceOnUse"});
+ var windowRect=svgElement("rect",{x:left,y:bounds.y-margin,width:"0",height:bounds.height+margin*2});
+ clip.appendChild(windowRect);defs.appendChild(clip);
+ var overlay=svgElement("path",{d:original.getAttribute("d"),fill:hex,"fill-rule":original.getAttribute("fill-rule")||"nonzero","clip-path":"url(#"+clipId+")","pointer-events":"none","aria-hidden":"true"});
+ var originalClip=original.getAttribute("clip-path");
+ if(originalClip)overlay.setAttribute("clip-path",originalClip);
+ // For planet-clipped paths, use a nested group to intersect both clips.
+ var wrapper=svgElement("g",{"pointer-events":"none","aria-hidden":"true"});
+ if(originalClip){wrapper.setAttribute("clip-path",originalClip);overlay.setAttribute("clip-path","url(#"+clipId+")")}
+ wrapper.appendChild(overlay);original.after(wrapper);
+ var entry={frame:0,cleanup:function(){wrapper.remove();clip.remove()}};
+ colorFillAnimations.set(index,entry);
+ var start=null,duration=1500;
+ function tick(now){
+  if(!colorFillAnimations.has(index)||colorFillAnimations.get(index)!==entry)return;
+  if(start===null)start=now;
+  var t=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-t,3);
+  windowRect.setAttribute("width",String(total*eased));
+  overlay.setAttribute("opacity",String(.25+.75*Math.min(1,t*2)));
+  if(t<1){entry.frame=requestAnimationFrame(tick)}
+  else{original.style.fill=hex;entry.cleanup();colorFillAnimations.delete(index)}
+ }
+ entry.frame=requestAnimationFrame(tick)
+}
 function renderColorArtwork(){
  var scene=colorScenes[colorStudioState.scene]||colorScenes[0],svg=document.getElementById("colorArtwork");svg.innerHTML="";svg.setAttribute("viewBox",scene.viewBox||"0 0 360 300");svg.setAttribute("aria-label",scene.title+" coloring scene");
  var defs=svgElement("defs"),glow=svgElement("radialGradient",{id:"colorStudioGlow",cx:"50%",cy:"48%",r:"65%"});
@@ -545,7 +589,7 @@ function fillColorRegion(index){
  if(!color)return;
  colorUndoStack.push({scene:scene.id,fills:before});if(colorUndoStack.length>80)colorUndoStack.shift();
  fills[index]=color.hex;colorStudioState.fills[scene.id]=fills;colorStudioState.selectedColor=colorIndex;persistColorStudio();
- var path=document.querySelector('#colorArtwork [data-index="'+index+'"]');if(path){path.style.fill=color.hex;path.setAttribute("aria-label",zone.label+", "+color.name)}
+ var path=document.querySelector('#colorArtwork [data-index="'+index+'"]');if(path){animateColorRegionFill(index,color.hex);path.setAttribute("aria-label",zone.label+", "+color.name)}
  document.getElementById("selectedColorLabel").textContent=color.name;renderColorPalette();renderColorProgress();updateColorActions()
 }
 function undoColor(){
