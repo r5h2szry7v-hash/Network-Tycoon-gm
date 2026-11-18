@@ -556,6 +556,7 @@ function animateColorRegionFill(index,hex){
  entry.frame=requestAnimationFrame(tick)
 }
 function renderColorArtwork(){
+ cancelColorFillAnimations();
  var scene=colorScenes[colorStudioState.scene]||colorScenes[0],svg=document.getElementById("colorArtwork");svg.innerHTML="";svg.setAttribute("viewBox",scene.viewBox||"0 0 360 300");svg.setAttribute("aria-label",scene.title+" coloring scene");
  var defs=svgElement("defs"),glow=svgElement("radialGradient",{id:"colorStudioGlow",cx:"50%",cy:"48%",r:"65%"});
  var stop1=svgElement("stop",{offset:"0%","stop-color":"var(--trace)","stop-opacity":".18"}),stop2=svgElement("stop",{offset:"100%","stop-color":"var(--bg)","stop-opacity":"0"});
