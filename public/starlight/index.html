@@ -40,6 +40,9 @@ a{color:inherit}
 .start-ring{fill:var(--trace);opacity:.22;filter:drop-shadow(0 0 10px var(--trace));pointer-events:none}
 .start-core,.finish-core{fill:#f1fbff;stroke:var(--trace);stroke-width:4;filter:drop-shadow(0 0 10px var(--trace));pointer-events:none}
 .finish-core{stroke:var(--accent)}
+.trail-star{fill:#fff;opacity:0;filter:drop-shadow(0 0 8px var(--trace));pointer-events:none}.board.has-progress .trail-star{opacity:.95}
+.finish-burst{fill:none;stroke:var(--trace);stroke-width:4;opacity:0;pointer-events:none}.board.finished .finish-burst{animation:finish-bloom .95s ease-out 1}
+@keyframes finish-bloom{0%{opacity:.9;transform:scale(.55)}100%{opacity:0;transform:scale(4)}}
 .guide-start{fill:#d6fbff;font-size:11px;font-weight:900;letter-spacing:1px}
 .board-hint{z-index:2;position:absolute;left:50%;bottom:20px;transform:translateX(-50%);padding:8px 13px;border-radius:999px;color:#e6f4ff;background:#0a1425df;border:1px solid #ffffff1a;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none;box-shadow:0 7px 22px #0005}
 .progress-row{width:min(100%,590px);display:flex;align-items:center;justify-content:space-between;gap:10px;margin:13px 0 0}
@@ -72,7 +75,7 @@ a{color:inherit}
 .setting-copy{flex:1}.setting-copy b{display:block;font-size:13px}.setting-copy small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:3px}
 .switch{position:relative;width:46px;height:27px;flex:none}.switch input{position:absolute;opacity:0;width:1px;height:1px}.switch span{display:block;width:46px;height:27px;border-radius:99px;background:#39465a;transition:background .2s;cursor:pointer}.switch span:after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#eaf1fa;transition:transform .2s}.switch input:checked+span{background:var(--trace)}.switch input:checked+span:after{transform:translateX(19px);background:#091222}.switch input:focus-visible+span{outline:3px solid var(--accent);outline-offset:3px}
 .toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-12px);opacity:0;pointer-events:none;border:1px solid color-mix(in srgb,var(--trace) 35%,transparent);border-radius:99px;padding:9px 14px;background:#101a2cf2;color:var(--ink);font-size:12px;z-index:20;transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-motion *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-motion *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}html.pref-reduced-motion .board.finished #finishCore{fill:var(--trace);stroke-width:6}html.pref-reduced-motion .board.finished #tracePath{filter:drop-shadow(0 0 14px var(--trace))}
 @media(max-width:600px){.shell{padding:12px 14px 24px}.topbar{min-height:48px}.brand-mark{width:37px;height:37px;border-radius:13px}.brand-title{font-size:15px}.brand-sub{font-size:10px}.quiet-link{font-size:11px;padding:9px 10px}.settings-btn{font-size:12px;padding:9px 11px}.settings-btn .label{display:none}.main{padding:18px 0 4px}.subline{font-size:13px;margin-bottom:14px}.board{border-radius:20px;padding:10px}.board-hint{bottom:14px;font-size:11px;padding:7px 10px}.progress-row{margin-top:11px}.footer-note{margin-top:11px}}
 @media(max-width:370px){.quiet-link{max-width:95px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.theme-grid{grid-template-columns:1fr}.board-hint{bottom:10px}}
 @media(prefers-reduced-motion:reduce){html:not(.motion-override) *{scroll-behavior:auto}}
@@ -100,7 +103,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
       <path id="tracePath" class="trace"></path>
       <g id="nodes"></g>
       <circle id="startRing" class="start-ring" r="18"></circle><circle id="startCore" class="start-core" r="8"></circle>
-      <circle id="finishCore" class="finish-core" r="7"></circle>
+      <circle id="finishCore" class="finish-core" r="7"></circle><circle id="finishBurst" class="finish-burst" r="9"></circle><circle id="trailStar" class="trail-star" r="5"></circle>
       <text id="startText" class="guide-start" text-anchor="middle">START</text>
     </svg>
     <div class="board-hint" id="boardHint">Touch the bright star, then trace</div>
@@ -176,7 +179,7 @@ function renderLevel(){
  totalLength=guide.getTotalLength();trace.style.strokeDasharray=totalLength+" "+totalLength;trace.style.strokeDashoffset=totalLength;
  positionMarkers();makeStars();progress=0;complete=false;isTracing=false;
  document.getElementById("progressFill").style.width="0%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow","0");document.getElementById("percentText").textContent="0%";
- document.getElementById("completion").classList.remove("show");document.getElementById("nextBtn").classList.remove("show");
+ board.classList.remove("finished","has-progress","tracing");document.getElementById("completion").classList.remove("show");document.getElementById("nextBtn").classList.remove("show");
  document.getElementById("restartBtn").style.display="";hint.textContent="Touch the bright star, then trace";
  save()
 }
@@ -188,22 +191,22 @@ function nearestLength(point){
  return {length:bestL,distance:Math.sqrt(bestD)}
 }
 function updateProgress(value){
- progress=Math.max(progress,Math.min(1,value));var pct=Math.round(progress*100);trace.style.strokeDashoffset=String(totalLength*(1-progress));
+ progress=Math.max(progress,Math.min(1,value));board.classList.add("has-progress");var trailPoint=guide.getPointAtLength(totalLength*progress),trailStar=document.getElementById("trailStar");trailStar.setAttribute("cx",trailPoint.x);trailStar.setAttribute("cy",trailPoint.y);var pct=Math.round(progress*100);trace.style.strokeDashoffset=String(totalLength*(1-progress));
  document.getElementById("progressFill").style.width=pct+"%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow",String(pct));document.getElementById("percentText").textContent=pct+"%";
  if(progress>=.995)finishLevel()
 }
 function startTrace(e){
  if(complete)return;var p=svgPoint(e),near=nearestLength(p);
  if(progress===0&&near.length>Math.max(48,totalLength*.12)){hint.textContent="Start at the bright star";return}
- isTracing=true;hint.textContent="Keep following the glow";board.setPointerCapture&&board.setPointerCapture(e.pointerId);moveTrace(e)
+ isTracing=true;board.classList.add("tracing");hint.textContent="Keep following the glow";board.setPointerCapture&&board.setPointerCapture(e.pointerId);moveTrace(e)
 }
 function moveTrace(e){
  if(!isTracing||complete)return;var p=svgPoint(e),near=nearestLength(p),corridor=53;
  if(near.distance<=corridor){updateProgress(near.length/totalLength)}
 }
-function stopTrace(){isTracing=false;if(!complete&&progress>0)hint.textContent="Pick up where you left off"}
+function stopTrace(){isTracing=false;board.classList.remove("tracing");if(!complete&&progress>0)hint.textContent="Pick up where you left off"}
 function finishLevel(){
- if(complete)return;complete=true;isTracing=false;progress=1;trace.style.strokeDashoffset="0";
+ if(complete)return;complete=true;isTracing=false;board.classList.remove("tracing");board.classList.add("finished","has-progress");progress=1;var endPoint=guide.getPointAtLength(totalLength),burst=document.getElementById("finishBurst");burst.setAttribute("cx",endPoint.x);burst.setAttribute("cy",endPoint.y);trace.style.strokeDashoffset="0";
  document.getElementById("progressFill").style.width="100%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow","100");document.getElementById("percentText").textContent="100%";
  hint.textContent="Beautifully traced";document.getElementById("completion").classList.add("show");document.getElementById("nextBtn").classList.add("show");document.getElementById("restartBtn").style.display="none";
  save()
