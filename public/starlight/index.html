@@ -210,7 +210,7 @@ function generateLevel(number){
   }
   var finish={x:180+baseRx*.12,y:336},exitDx=finish.x-previous.x;
   path+=cubic({x:previous.x+24,y:previous.y+24},{x:finish.x+28,y:finish.y-22},finish);
-  var pairPattern=/(-?\\d+(?:\\.\\d+)?)\\s+(-?\\d+(?:\\.\\d+)?)/g,maxRadius=0;
+  var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,maxRadius=0;
   path.replace(pairPattern,function(match,sx,sy){maxRadius=Math.max(maxRadius,Math.hypot(Number(sx)-180,Number(sy)-180));return match});
   var scale=Math.min(1,148/Math.max(1,maxRadius)),angle=random()*Math.PI*2,co=Math.cos(angle),si=Math.sin(angle);
   return path.replace(pairPattern,function(match,sx,sy){var x=(Number(sx)-180)*scale,y=(Number(sy)-180)*scale;return fmt(180+x*co-y*si)+" "+fmt(180+x*si+y*co)})
