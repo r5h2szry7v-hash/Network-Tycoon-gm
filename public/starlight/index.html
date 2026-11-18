@@ -119,7 +119,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .color-artboard{position:relative;overflow:hidden;border:1px solid #ffffff12;border-radius:16px;background:radial-gradient(ellipse at 50% 48%,color-mix(in srgb,var(--trace) 9%,#0b1424),#08111f 72%);box-shadow:inset 0 0 45px #0005;aspect-ratio:1.2/1}
 .color-artboard svg{display:block;width:100%;height:100%;touch-action:manipulation}
 .color-zone{stroke:#d7e6ffb8;stroke-width:2.2;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .28s ease,filter .25s ease,stroke .2s ease}.color-zone:hover,.color-zone:focus{filter:drop-shadow(0 0 9px var(--trace));stroke:#fff;outline:none}.color-zone:focus{stroke-width:4}
-.color-zone-number{fill:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:900;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#101827;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.color-decoration{fill:none;stroke:#d7e6ffb8;stroke-width:1.65;stroke-linejoin:round;vector-effect:non-scaling-stroke;pointer-events:none}.color-zone-number{fill:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:900;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#101827;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .color-complete-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;padding:10px 15px;border:1px solid color-mix(in srgb,var(--trace) 45%,transparent);border-radius:99px;background:#091321e8;color:var(--trace);font-size:13px;font-weight:900;box-shadow:0 0 34px var(--glow);pointer-events:none;transition:opacity .35s,transform .35s;white-space:nowrap}
 .color-artboard.complete .color-complete-glow{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .color-instruction{margin:10px 2px 0;color:var(--muted);font-size:11px;line-height:1.45}
@@ -171,7 +171,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
  </header>
  <div class="color-intro"><p class="landing-eyebrow">A softer way to explore</p><h1 id="colorStudioTitle">Color the cosmos</h1><p>Choose a scene, pick a glow, and fill each region with a tap.</p></div>
  <section class="color-scene-section" aria-label="Choose a space scene">
-  <div class="color-section-heading"><h2>Choose a scene</h2><span>3 little worlds</span></div>
+  <div class="color-section-heading"><h2>Choose a scene</h2><span>14 space scenes</span></div>
   <div class="color-scene-grid" id="colorSceneGrid"></div>
  </section>
  <div class="color-workspace">
@@ -364,7 +364,7 @@ var state={theme:stored.theme||"Deep Orbit",level:Math.max(1,Number(stored.level
 
 var colorStudioState=state.colorStudio&&typeof state.colorStudio==="object"?state.colorStudio:{scene:0,selectedColor:0,guided:false,fills:{}};
 if(!colorStudioState.fills||typeof colorStudioState.fills!=="object")colorStudioState.fills={};
-colorStudioState.scene=Math.max(0,Math.min(2,Number(colorStudioState.scene)||0));
+colorStudioState.scene=Math.max(0,Math.min(13,Number(colorStudioState.scene)||0));
 colorStudioState.selectedColor=Math.max(0,Math.min(11,Number(colorStudioState.selectedColor)||0));
 colorStudioState.guided=!!colorStudioState.guided;
 state.colorStudio=colorStudioState;
@@ -444,6 +444,22 @@ function buildColorScenes(){
  ]
 }
 var colorScenes=buildColorScenes();
+function loadColorArtworkLibrary(){
+ return fetch("./color-art-library.svg").then(function(response){if(!response.ok)throw new Error("Color artwork library could not be loaded");return response.text()}).then(function(source){
+  var doc=new DOMParser().parseFromString(source,"image/svg+xml");
+  if(doc.querySelector("parsererror"))throw new Error("Color artwork library is not valid SVG");
+  var groups=Array.prototype.slice.call(doc.querySelectorAll("g[data-scene-id]"));
+  groups.forEach(function(group){
+   var zones=Array.prototype.slice.call(group.querySelectorAll("path.fillable-region")).map(function(path,index){
+    return {label:path.getAttribute("data-label")||("Region "+(index+1)),d:path.getAttribute("d"),x:Number(path.getAttribute("data-x"))||180,y:Number(path.getAttribute("data-y"))||150,guide:Math.max(1,Math.min(8,Number(path.getAttribute("data-guide"))||1))}
+   });
+   if(!zones.length)return;
+   colorScenes.push({id:group.getAttribute("data-scene-id"),title:group.getAttribute("data-title")||"Space scene",icon:group.getAttribute("data-icon")||"✦",tagline:group.getAttribute("data-tagline")||"Color a little piece of space",viewBox:group.getAttribute("data-viewbox")||"0 0 360 300",zones:zones,decorations:Array.prototype.slice.call(group.querySelectorAll("path.decorative-region")).map(function(path){return path.getAttribute("d")})})
+  });
+  if(document.getElementById("colorStudio").classList.contains("active")){renderColorScenes();renderColorArtwork()}
+ }).catch(function(error){console.warn("Starlight coloring art library:",error)})
+}
+var colorArtworkReady=loadColorArtworkLibrary();
 function studioPalette(){
  var theme=palettes.find(function(p){return p.name===state.theme})||palettes[0];
  return [{name:"Theme glow",hex:theme.trace},{name:"Theme accent",hex:theme.accent}].concat(extraColorSwatches)
@@ -489,14 +505,12 @@ function renderColorProgress(){
  board.classList.toggle("complete",count===scene.zones.length)
 }
 function renderColorArtwork(){
- var scene=colorScenes[colorStudioState.scene],svg=document.getElementById("colorArtwork");svg.innerHTML="";svg.setAttribute("aria-label",scene.title+" coloring scene");
+ var scene=colorScenes[colorStudioState.scene]||colorScenes[0],svg=document.getElementById("colorArtwork");svg.innerHTML="";svg.setAttribute("viewBox",scene.viewBox||"0 0 360 300");svg.setAttribute("aria-label",scene.title+" coloring scene");
  var defs=svgElement("defs"),glow=svgElement("radialGradient",{id:"colorStudioGlow",cx:"50%",cy:"48%",r:"65%"});
  var stop1=svgElement("stop",{offset:"0%","stop-color":"var(--trace)","stop-opacity":".18"}),stop2=svgElement("stop",{offset:"100%","stop-color":"var(--bg)","stop-opacity":"0"});
  glow.appendChild(stop1);glow.appendChild(stop2);defs.appendChild(glow);
  if(scene.clip){var cp=svgElement("clipPath",{id:"colorStudioPlanetClip"});var clipPath=svgElement("path",{d:scene.clip});cp.appendChild(clipPath);defs.appendChild(cp)}
  svg.appendChild(defs);svg.appendChild(svgElement("rect",{x:"0",y:"0",width:"360",height:"300",fill:"url(#colorStudioGlow)"}));
- var seed=scene.id.length*617+43;function random(){seed=(seed*48271)%2147483647;return seed/2147483647}
- for(var si=0;si<30;si++){var r=si%8===0?2.4:1.35;svg.appendChild(svgElement("circle",{cx:(18+random()*324).toFixed(1),cy:(15+random()*270).toFixed(1),r:r,fill:si%3===0?"var(--accent)":"#dceaff",opacity:(.24+random()*.4).toFixed(2)}))}
  var fills=colorStudioState.fills[scene.id]||{},palette=studioPalette(),guideLabels=[];
  scene.zones.forEach(function(zone,index){
   var d=svgElement("path",{d:zone.d,class:"color-zone",fill:fills[index]||"#142239","fill-rule":zone.fillRule||"nonzero","data-index":index,role:"button",tabindex:"0","aria-label":zone.label+(fills[index]?", colored":", uncolored")});
@@ -506,6 +520,11 @@ function renderColorArtwork(){
   svg.appendChild(d);
   if(colorStudioState.guided){var label=svgElement("text",{x:zone.x,y:zone.y,class:"color-zone-number","aria-hidden":"true"});label.textContent=zone.guide;guideLabels.push(label)}
  });
+ if(scene.decorations&&scene.decorations.length){scene.decorations.forEach(function(d){svg.appendChild(svgElement("path",{d:d,class:"color-decoration","aria-hidden":"true"}))})}
+ else{
+  var seed=scene.id.length*617+43;function random(){seed=(seed*48271)%2147483647;return seed/2147483647}
+  for(var si=0;si<30;si++){var r=si%8===0?2.4:1.35;svg.appendChild(svgElement("circle",{cx:(18+random()*324).toFixed(1),cy:(15+random()*270).toFixed(1),r:r,fill:si%3===0?"var(--accent)":"#dceaff",opacity:(.24+random()*.4).toFixed(2)}))}
+ }
  guideLabels.forEach(function(label){svg.appendChild(label)});
  document.getElementById("colorSceneTitle").textContent=scene.title;
  renderColorProgress();updateColorActions()
