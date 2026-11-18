@@ -39,6 +39,7 @@ const gameStorage = {
     "network-tycoon-player-legacy-v1"
   ],
   matchGarden: ["matchGarden"],
+  starlightTracer: ["starlightTracer"],
   critterRescue: [
     "critterRescue.campaignWins",
     "critterRescue.difficultyWins",
