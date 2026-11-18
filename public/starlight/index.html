@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080f20">
+<title>Starlight Tracer — Drift through the stars</title>
+<style>
+:root{color-scheme:dark;--bg:#080f20;--bg2:#101b32;--panel:#101a2c;--panel2:#15223a;--ink:#edf4ff;--muted:#a7b5ca;--line:#ffffff17;--trace:#72d7f2;--accent:#a7bdf7;--glow:#72d7f250;--shadow:#0008}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:ui-rounded,"Avenir Next",Avenir,system-ui,sans-serif;background:radial-gradient(ellipse at 50% -18%,color-mix(in srgb,var(--trace) 14%,transparent),transparent 52%),radial-gradient(ellipse at 90% 80%,color-mix(in srgb,var(--accent) 7%,transparent),transparent 40%),linear-gradient(155deg,var(--bg),var(--bg2) 72%,var(--bg));}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--trace);outline-offset:3px}
+a{color:inherit}
+.shell{max-width:1100px;margin:0 auto;padding:18px 24px 34px;min-height:100svh;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:-.4px}
+.brand-mark{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,color-mix(in srgb,var(--trace) 35%,#15213c),#182342);border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);box-shadow:0 0 24px var(--glow);font-size:22px}
+.brand-title{font-size:17px}.brand-sub{display:block;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.2px;margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.quiet-link,.settings-btn,.restart-btn,.next-btn,.modal-close{border:1px solid var(--line);background:#ffffff08;border-radius:13px;text-decoration:none}
+.quiet-link{padding:10px 13px;color:var(--muted);font-size:13px}
+.settings-btn{padding:10px 14px;display:flex;align-items:center;gap:8px;font-weight:750;font-size:13px;background:color-mix(in srgb,var(--trace) 12%,#111a2c);border-color:color-mix(in srgb,var(--trace) 30%,transparent)}
+.main{width:min(100%,780px);margin:auto;display:flex;flex-direction:column;align-items:center;padding:16px 0 10px}
+.eyebrow{color:var(--accent);font-size:11px;font-weight:850;letter-spacing:1.7px;text-transform:uppercase}
+.headline{text-align:center;margin:9px 0 5px;font-size:clamp(26px,5vw,42px);letter-spacing:-1.2px;line-height:1.1}
+.subline{text-align:center;color:var(--muted);font-size:14px;margin:0 0 17px}
+.board{width:min(100%,590px);border:1px solid color-mix(in srgb,var(--trace) 25%,var(--line));border-radius:26px;background:radial-gradient(ellipse at 50% 45%,color-mix(in srgb,var(--trace) 9%,transparent),transparent 48%),linear-gradient(145deg,#0e192b,#0b1425 70%);box-shadow:0 26px 70px var(--shadow),inset 0 1px #ffffff0a;position:relative;overflow:hidden;padding:clamp(12px,3vw,25px);touch-action:none;user-select:none;-webkit-user-select:none}
+.board:before,.board:after{content:"";position:absolute;border-radius:50%;pointer-events:none;filter:blur(28px);opacity:.23;background:var(--region-glow,var(--trace))}
+.board:before{width:100px;height:100px;top:12%;left:10%}.board:after{width:80px;height:80px;right:9%;bottom:8%;background:var(--accent);opacity:.16}
+.starfield{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.starfield i{position:absolute;width:2px;height:2px;border-radius:50%;background:#e8f5ff;opacity:var(--o,.45);box-shadow:0 0 7px #b8dcff70}
+.starfield i:nth-child(3n){width:3px;height:3px;background:var(--accent)}.starfield[data-style="Aurora"] i:nth-child(4n){width:3px;height:3px;background:var(--trace);box-shadow:0 0 9px var(--trace)}.starfield[data-style="Stardust"] i:nth-child(odd){width:3px;height:3px;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.trace-svg{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:1/1;overflow:visible;touch-action:none}
+.guide{fill:none;stroke:#d1e3ff2e;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.guide-halo{fill:none;stroke:var(--trace);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;opacity:.09;filter:drop-shadow(0 0 14px var(--trace))}
+.trace{fill:none;stroke:url(#traceGradient);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 9px var(--trace));pointer-events:none}
+.node{fill:#d9eaff;opacity:.76;filter:drop-shadow(0 0 5px #d9eaff80);pointer-events:none}
+.start-ring{fill:var(--trace);opacity:.22;filter:drop-shadow(0 0 10px var(--trace));pointer-events:none}
+.start-core,.finish-core{fill:#f1fbff;stroke:var(--trace);stroke-width:4;filter:drop-shadow(0 0 10px var(--trace));pointer-events:none}
+.finish-core{stroke:var(--accent)}
+.trail-star{fill:#fff;opacity:0;filter:drop-shadow(0 0 8px var(--trace));pointer-events:none}.board.has-progress .trail-star{opacity:.95}
+.finish-burst{fill:none;stroke:var(--trace);stroke-width:4;opacity:0;pointer-events:none;transform-box:fill-box;transform-origin:center}.board.finished .finish-burst{animation:finish-bloom .95s ease-out 1}
+@keyframes finish-bloom{0%{opacity:.9;transform:scale(.55)}100%{opacity:0;transform:scale(4)}}
+.guide-start{fill:#d6fbff;font-size:11px;font-weight:900;letter-spacing:1px}
+.board-hint{z-index:2;position:absolute;left:50%;bottom:20px;transform:translateX(-50%);padding:8px 13px;border-radius:999px;color:#e6f4ff;background:#0a1425df;border:1px solid #ffffff1a;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none;box-shadow:0 7px 22px #0005}
+.progress-row{width:min(100%,590px);display:flex;align-items:center;justify-content:space-between;gap:10px;margin:13px 0 0}
+.level-label{font-size:12px;color:var(--muted);font-weight:750}.level-label strong{color:var(--ink);font-size:13px}
+.progress-track{height:5px;flex:1;max-width:250px;background:#ffffff13;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--trace),var(--accent));border-radius:inherit;transition:width .18s ease}
+.controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:15px;min-height:48px}
+.restart-btn{padding:11px 16px;color:var(--muted);font-size:13px;font-weight:700}
+.next-btn{display:none;padding:12px 20px;font-size:13px;font-weight:850;border-color:color-mix(in srgb,var(--trace) 40%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--trace) 25%,#111a2c),color-mix(in srgb,var(--accent) 13%,#111a2c));box-shadow:0 8px 28px var(--glow)}
+.next-btn.show{display:block}
+.completion{display:none;text-align:center;margin:13px auto 0;padding:13px 18px;max-width:390px;border:1px solid color-mix(in srgb,var(--trace) 28%,var(--line));border-radius:17px;background:color-mix(in srgb,var(--trace) 8%,#101a2c)}
+.completion.show{display:block}
+.completion .spark{font-size:21px;display:block;margin-bottom:3px}
+.completion h2{margin:0;font-size:17px}.completion p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.footer-note{color:#8595ae;font-size:11px;text-align:center;margin:14px 0 0}
+.modal-cover{position:fixed;inset:0;background:#020612bd;display:none;align-items:center;justify-content:center;padding:16px;z-index:10;backdrop-filter:blur(10px)}
+.modal-cover.open{display:flex}
+.modal{width:min(100%,500px);max-height:min(88svh,760px);overflow:auto;border:1px solid color-mix(in srgb,var(--trace) 27%,#ffffff1a);border-radius:23px;background:linear-gradient(155deg,#142137,#0b1424);box-shadow:0 25px 90px #000b;padding:22px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:6px}
+.modal h2{font-size:21px;margin:0;letter-spacing:-.4px}.modal-intro{color:var(--muted);font-size:13px;line-height:1.5;margin:5px 0 18px}
+.modal-close{width:38px;height:38px;font-size:19px;color:var(--muted)}
+.settings-section{border-top:1px solid var(--line);padding:16px 0}
+.section-title{font-size:11px;color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:1.3px;margin:0 0 11px}
+.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.theme-choice{display:flex;align-items:center;gap:10px;text-align:left;min-height:60px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#ffffff06}
+.theme-choice.selected{border-color:var(--trace);background:color-mix(in srgb,var(--trace) 10%,#111a2c);box-shadow:0 0 0 2px color-mix(in srgb,var(--trace) 12%,transparent)}
+.swatches{display:flex;flex:none}.swatches i{width:15px;height:27px;border-radius:8px;border:1px solid #ffffff32;margin-right:-4px}
+.theme-copy b{display:block;font-size:12px}.theme-copy small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.setting-row{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#ffffff05}
+.setting-copy{flex:1}.setting-copy b{display:block;font-size:13px}.setting-copy small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:3px}
+.switch{position:relative;width:46px;height:27px;flex:none}.switch input{position:absolute;opacity:0;width:1px;height:1px}.switch span{display:block;width:46px;height:27px;border-radius:99px;background:#39465a;transition:background .2s;cursor:pointer}.switch span:after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#eaf1fa;transition:transform .2s}.switch input:checked+span{background:var(--trace)}.switch input:checked+span:after{transform:translateX(19px);background:#091222}.switch input:focus-visible+span{outline:3px solid var(--accent);outline-offset:3px}
+.map-summary{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.3px;margin:-3px 0 12px}.map-grid{display:grid;grid-template-columns:1fr;gap:9px}.map-region{border:1px solid var(--line);border-radius:14px;background:#ffffff04;overflow:hidden}.map-region>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;color:var(--ink);font-size:12px;font-weight:850;cursor:pointer;list-style:none}.map-region>summary::-webkit-details-marker{display:none}.map-region>summary:after{content:"⌄";color:var(--accent);margin-left:auto}.map-region>summary small{color:var(--muted);font-size:10px;font-weight:650}.map-region-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 9px 9px}.map-entry{display:flex;align-items:center;gap:10px;text-align:left;min-height:62px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#ffffff06}.map-entry:hover{border-color:color-mix(in srgb,var(--trace) 48%,transparent)}.map-entry.current{border-color:var(--trace);background:color-mix(in srgb,var(--trace) 10%,#111a2c)}.map-entry .map-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--trace) 14%,#101a2c);color:var(--trace);font-size:16px}.map-entry b{display:block;font-size:12px}.map-entry small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.map-entry .map-status{margin-left:auto;color:var(--accent);font-size:11px}.theme-choice.locked{opacity:.5;cursor:default}.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-12px);opacity:0;pointer-events:none;border:1px solid color-mix(in srgb,var(--trace) 35%,transparent);border-radius:99px;padding:9px 14px;background:#101a2cf2;color:var(--ink);font-size:12px;z-index:20;transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-motion *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}html.pref-reduced-motion .board.finished #finishCore{fill:var(--trace);stroke-width:6}html.pref-reduced-motion .board.finished #tracePath{filter:drop-shadow(0 0 14px var(--trace))}
+@media(max-width:600px){.map-btn .label{display:none}.shell{padding:12px 14px 24px}.topbar{min-height:48px}.brand-mark{width:37px;height:37px;border-radius:13px}.brand-title{font-size:15px}.brand-sub{font-size:10px}.quiet-link{font-size:11px;padding:9px 10px}.settings-btn{font-size:12px;padding:9px 11px}.settings-btn .label{display:none}.main{padding:18px 0 4px}.subline{font-size:13px;margin-bottom:14px}.board{border-radius:20px;padding:10px}.board-hint{bottom:14px;font-size:11px;padding:7px 10px}.progress-row{margin-top:11px}.footer-note{margin-top:11px}}
+@media(max-width:370px){.topbar{gap:8px}.brand{gap:8px;min-width:0}.brand-mark{width:32px;height:32px}.brand-title{font-size:13px;white-space:nowrap}.brand-sub{display:none}.top-actions{gap:6px}.quiet-link{font-size:0;max-width:36px;width:36px;padding:9px 0;text-align:center}.quiet-link:before{content:"←";font-size:14px}.settings-btn{padding:9px 10px}.map-grid{grid-template-columns:1fr}.map-region-list{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.board-hint{bottom:10px}}
+@media(prefers-reduced-motion:reduce){html:not(.motion-override) *{scroll-behavior:auto}}
+</style>
+<script>
+(function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
+</script>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark" aria-hidden="true">✦</div><div><span class="brand-title">Starlight Tracer</span><span class="brand-sub">A little space to unwind</span></div></div>
+  <div class="top-actions"><a class="quiet-link" href="/" aria-label="Return to game home">← Games</a><button class="settings-btn map-btn" id="mapOpen" type="button"><span aria-hidden="true">✦</span><span class="label">Sky map</span></button><button class="settings-btn" id="settingsOpen" type="button"><span aria-hidden="true">⚙</span><span class="label">Settings</span></button></div>
+</header>
+<main class="main">
+  <div class="eyebrow" id="chapter">Drifting · 1</div>
+  <h1 class="headline" id="shapeTitle">First Light</h1>
+  <p class="subline">Follow the starlight at your own pace.</p>
+  <section class="board" id="board" aria-label="Tracing board">
+    <div class="starfield" aria-hidden="true" id="starfield"></div>
+    <svg class="trace-svg" id="traceSvg" viewBox="0 0 360 360" role="img" aria-label="Trace the glowing constellation from the cyan star to the pale star">
+      <defs><linearGradient id="traceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--trace)"/><stop offset="100%" stop-color="var(--accent)"/></linearGradient></defs>
+      <path id="haloPath" class="guide-halo"></path>
+      <path id="guidePath" class="guide"></path>
+      <path id="tracePath" class="trace"></path>
+      <g id="nodes"></g>
+      <circle id="startRing" class="start-ring" r="18"></circle><circle id="startCore" class="start-core" r="8"></circle>
+      <circle id="finishCore" class="finish-core" r="7"></circle><circle id="finishBurst" class="finish-burst" r="9"></circle><circle id="trailStar" class="trail-star" r="5"></circle>
+      <text id="startText" class="guide-start" text-anchor="middle">START</text>
+    </svg>
+    <div class="board-hint" id="boardHint">Touch the bright star, then trace</div>
+  </section>
+  <div class="progress-row"><div class="level-label"><strong id="levelText">Shape 1</strong> <span id="levelOf">· 1 of 6</span></div><div class="progress-track" role="progressbar" aria-label="Trace progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div><div class="level-label" id="percentText">0%</div></div>
+  <div class="completion" id="completion" aria-live="polite"><span class="spark" aria-hidden="true">✧</span><h2>Constellation found</h2><p>A new little light joins your sky.</p></div>
+  <div class="controls"><button class="restart-btn" id="restartBtn" type="button">↺ Start over</button><button class="next-btn" id="nextBtn" type="button">Next shape <span aria-hidden="true">→</span></button></div>
+  <p class="footer-note">No timer. No wrong turns. Just follow the glow.</p>
+</main>
+</div>
+<div class="modal-cover" id="modalCover" aria-hidden="true">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-head"><div><h2 id="settingsTitle">Make it yours</h2></div><button class="modal-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
+    <p class="modal-intro">Choose a quiet corner of space and tune the motion to your liking.</p>
+    <div class="settings-section"><h3 class="section-title">Space colors</h3><div class="theme-grid" id="themeGrid"></div></div>
+    <div class="settings-section"><h3 class="section-title">Starfield</h3><div class="theme-grid" id="starStyleGrid"></div></div><div class="settings-section"><h3 class="section-title">Sound</h3><div class="setting-row"><div class="setting-copy"><b>Completion chime</b><small>A soft two-note signal when a trace is complete. Sound starts off.</small></div><label class="switch" aria-label="Enable completion chime"><input id="soundToggle" type="checkbox"><span></span></label></div></div><div class="settings-section"><h3 class="section-title">Motion</h3><div class="setting-row"><div class="setting-copy"><b>Ignore device reduced-motion setting</b><small>By default, Starlight Tracer follows your device preference. Turn this on to restore the full effects.</small></div><label class="switch"><input id="motionToggle" type="checkbox"><span></span></label></div></div>
+  </section>
+</div>
+<div class="modal-cover" id="mapCover" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="mapTitle"><div class="modal-head"><h2 id="mapTitle">Your sky map</h2><button class="modal-close" id="mapClose" type="button" aria-label="Close sky map">×</button></div><p class="modal-intro">Return to any constellation you have found. Your journey will be right where you left it.</p><div class="map-summary" id="mapSummary"></div><div class="map-grid" id="mapGrid"></div></section></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+"use strict";
+var palettes=[
+ {name:"Deep Orbit",bg:"#080f20",bg2:"#101b32",trace:"#72d7f2",accent:"#a7bdf7",desc:"Cyan · blue",unlockLevel:1},
+ {name:"Nebula",bg:"#160d22",bg2:"#24132e",trace:"#c6a0f5",accent:"#f2a9d2",desc:"Lavender · rose",unlockLevel:1},
+ {name:"Aurora",bg:"#08191b",bg2:"#102926",trace:"#77d8be",accent:"#a5c9f5",desc:"Mint · teal",unlockLevel:1},
+ {name:"Lunar",bg:"#101722",bg2:"#1b2633",trace:"#c7d7e8",accent:"#8ccfe0",desc:"Silver · aqua",unlockLevel:1},
+ {name:"Solar Drift",bg:"#171320",bg2:"#241b2b",trace:"#ffc77a",accent:"#f49a82",desc:"Amber · coral",unlockLevel:1},
+ {name:"Comet Dust",bg:"#19131b",bg2:"#2b1e25",trace:"#ffab8f",accent:"#f6d18c",desc:"Rose · gold",unlockLevel:13},
+ {name:"Pulsar Blue",bg:"#0a1222",bg2:"#182641",trace:"#91a7ff",accent:"#d18df2",desc:"Iris · violet",unlockLevel:25}
+];
+var levels=[
+ {title:"First Light",chapter:"Drifting",d:"M88 224 L145 172 L207 130 L274 94"},
+ {title:"Three Stars",chapter:"Drifting",d:"M84 120 L145 214 L190 143 L251 230 L285 174"},
+ {title:"Crescent Trail",chapter:"Drifting",d:"M83 213 C103 157 149 115 204 108 C239 104 268 122 281 147"},
+ {title:"Little Orbit",chapter:"Soft Glow",d:"M74 183 C88 128 136 96 181 103 C226 109 264 140 273 178 C284 222 246 257 202 253 C164 249 144 218 151 188 C158 157 197 142 223 157"},
+ {title:"Lantern",chapter:"Soft Glow",d:"M92 105 L180 69 L264 116 L281 207 L213 273 L130 247 L84 176"},
+ {title:"Quiet Comet",chapter:"Soft Glow",d:"M79 228 C112 218 128 189 131 153 C134 119 153 93 180 93 C207 93 223 119 224 150 C225 181 205 203 180 203 C155 203 139 183 140 161 C141 139 158 124 177 127 C201 130 216 154 238 177 C258 198 278 208 294 212"},
+ {title:"Moonflower",chapter:"Farther Out",d:"M180 278 C143 262 104 234 102 195 C100 163 128 145 155 157 C170 164 177 180 180 196 C183 180 190 164 205 157 C232 145 260 163 258 195 C256 234 217 262 180 278"},
+ {title:"Faraway",chapter:"Farther Out",d:"M71 227 C104 203 113 165 141 142 C165 122 192 120 215 132 C240 145 256 170 280 180 C257 191 240 218 216 231 C190 245 163 238 141 220 C116 200 93 203 71 227"},
+ {title:"Blue Hour",chapter:"Farther Out",d:"M91 251 C100 208 128 177 166 170 C198 164 228 181 235 209 C242 237 218 259 191 255 C162 252 148 229 154 207 C161 180 192 163 222 147 C243 136 261 119 269 97"},
+ {title:"Sleeping Satellite",chapter:"Deep Space",d:"M68 190 C89 148 118 124 151 128 C178 130 196 154 193 180 C189 210 157 227 130 215 C108 205 101 179 114 160 C129 138 164 133 193 149 C224 166 242 198 275 218"},
+ {title:"Nebula Fold",chapter:"Deep Space",d:"M73 251 C99 220 111 178 136 151 C158 127 190 119 215 134 C241 150 242 182 221 202 C200 222 169 217 157 195 C143 168 158 139 186 123 C218 104 256 114 282 141"},
+ {title:"Homeward",chapter:"Deep Space",d:"M83 105 C120 83 155 92 171 121 C188 152 169 181 140 178 C116 175 105 151 118 132 C137 104 183 104 213 126 C248 151 260 197 240 229 C222 259 186 267 154 246 C124 226 116 193 133 169 C151 143 188 143 211 161 C236 181 241 217 277 247"}
+];
+var storageKey="starlightTracer",stored={};
+try{stored=JSON.parse(localStorage.getItem(storageKey)||"{}")}catch(e){}
+var state={theme:stored.theme||"Deep Orbit",level:Math.max(1,Number(stored.level)||1),highestLevel:Math.max(1,Number(stored.highestLevel)||Number(stored.level)||1),starStyle:stored.starStyle||"Quiet",sound:!!stored.sound,ignoreDeviceReducedMotion:!!stored.ignoreDeviceReducedMotion};
+var starStyles=[{name:"Quiet",desc:"A few gentle stars",unlockLevel:1},{name:"Aurora",desc:"More colored glimmers",unlockLevel:13},{name:"Stardust",desc:"A fuller starfield",unlockLevel:25}];
+var svg=document.getElementById("traceSvg"),guide=document.getElementById("guidePath"),trace=document.getElementById("tracePath"),halo=document.getElementById("haloPath");
+var isTracing=false,complete=false,progress=0,totalLength=0,toastTimer=null;
+var board=document.getElementById("board"),hint=document.getElementById("boardHint"),startCore=document.getElementById("startCore"),startRing=document.getElementById("startRing"),finishCore=document.getElementById("finishCore"),startText=document.getElementById("startText");
+var motionQuery=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):null;
+function save(){try{localStorage.setItem(storageKey,JSON.stringify(state))}catch(e){}}
+function reduced(){return !!(motionQuery&&motionQuery.matches&&!state.ignoreDeviceReducedMotion)}
+function applyMotion(){document.documentElement.classList.toggle("pref-reduced-motion",reduced());document.documentElement.classList.toggle("motion-override",state.ignoreDeviceReducedMotion)}
+function applyPalette(){
+ var p=palettes.find(function(x){return x.name===state.theme})||palettes[0];if(state.highestLevel<p.unlockLevel){p=palettes[0];state.theme=p.name}state.theme=p.name;
+ var root=document.documentElement;root.style.setProperty("--bg",p.bg);root.style.setProperty("--bg2",p.bg2);root.style.setProperty("--trace",p.trace);root.style.setProperty("--accent",p.accent);root.style.setProperty("--glow",p.trace+"55");
+ document.querySelector('meta[name="theme-color"]').setAttribute("content",p.bg);save();renderThemes()
+}
+function renderStarStyles(){var grid=document.getElementById("starStyleGrid");grid.innerHTML="";starStyles.forEach(function(style){var locked=state.highestLevel<style.unlockLevel,b=document.createElement("button");b.type="button";b.disabled=locked;b.className="theme-choice"+(state.starStyle===style.name?" selected":"")+(locked?" locked":"");b.setAttribute("aria-pressed",state.starStyle===style.name?"true":"false");b.innerHTML='<span class="theme-copy"><b>'+style.name+'</b><small>'+(locked?"Unlock at shape "+style.unlockLevel:style.desc)+'</small></span>';b.addEventListener("click",function(){if(locked)return;state.starStyle=style.name;save();makeStars();renderStarStyles();showToast(style.name+" starfield selected")});grid.appendChild(b)})}
+function renderThemes(){
+ var grid=document.getElementById("themeGrid");grid.innerHTML="";
+ palettes.forEach(function(p){var locked=state.highestLevel<p.unlockLevel,b=document.createElement("button");b.type="button";b.disabled=locked;b.className="theme-choice"+(state.theme===p.name?" selected":"")+(locked?" locked":"");b.setAttribute("aria-pressed",state.theme===p.name?"true":"false");b.innerHTML='<span class="swatches" aria-hidden="true"><i style="background:'+p.bg+'"></i><i style="background:'+p.trace+'"></i><i style="background:'+p.accent+'"></i></span><span class="theme-copy"><b>'+p.name+'</b><small>'+(locked?"Unlock at shape "+p.unlockLevel:p.desc)+'</small></span>';b.addEventListener("click",function(){if(locked)return;state.theme=p.name;applyPalette();showToast(p.name+" selected")});grid.appendChild(b)})
+}
+function currentLevel(){return state.level<=levels.length?levels[state.level-1]:generateLevel(state.level)}
+function getLevel(number){return number<=levels.length?levels[number-1]:generateLevel(number)}
+function generateLevel(number){var regionIndex=Math.floor((number-13)/12),regions=[{name:"Nebula Fields",color:"#8a6bc3"},{name:"Aurora Reach",color:"#42a88f"},{name:"Comet Veil",color:"#c47c60"},{name:"Deep Current",color:"#6285c9"},{name:"Stellar Expanse",color:"#a66da8"}],region=regions[regionIndex%regions.length],regionName=region.name+(regionIndex>=regions.length?" "+(Math.floor(regionIndex/regions.length)+1):"");var seed=number*7919+37;function rand(){seed=(seed*48271)%2147483647;return seed/2147483647}var patterns=[[.67,.44,.28,.43,.68,.79,.57,.34,.45,.66],[.43,.67,.51,.28,.38,.69,.77,.56,.31,.48],[.73,.57,.34,.27,.49,.72,.61,.37,.31,.58],[.48,.29,.39,.68,.76,.55,.33,.43,.71,.62],[.32,.48,.72,.61,.36,.29,.51,.77,.65,.4]],pattern=patterns[Math.floor(rand()*patterns.length)],count=Math.min(10,5+Math.floor((number-13)/8)),points=[];for(var i=0;i<count;i++){var baseIndex=Math.round(i*(pattern.length-1)/(count-1)),noise=(rand()-.5)*.07,y=Math.max(62,Math.min(298,68+(pattern[baseIndex]+noise)*220)),step=258/(count-1),x=51+i*step+(i>0&&i<count-1?(rand()-.5)*5:0);points.push({x:Math.round(x),y:Math.round(y)})}var d="M"+points[0].x+" "+points[0].y;for(var j=0;j<points.length-1;j++){var p0=points[Math.max(0,j-1)],p1=points[j],p2=points[j+1],p3=points[Math.min(points.length-1,j+2)],c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;d+=" C"+c1x.toFixed(1)+" "+c1y.toFixed(1)+" "+c2x.toFixed(1)+" "+c2y.toFixed(1)+" "+p2.x+" "+p2.y}var first=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"],second=["Ribbon","Lantern","Bloom","Current","Spiral","Comet","Petal","Sail","Echo","Orbit","Whisper","Arc"],serial=number-13,title=first[(serial*7)%first.length]+" "+second[(serial*5+3)%second.length];return {title:title,chapter:regionName,d:d,regionGlow:region.color}}
+function positionMarkers(){
+ var start=guide.getPointAtLength(0),end=guide.getPointAtLength(totalLength);
+ startCore.setAttribute("cx",start.x);startCore.setAttribute("cy",start.y);startRing.setAttribute("cx",start.x);startRing.setAttribute("cy",start.y);
+ finishCore.setAttribute("cx",end.x);finishCore.setAttribute("cy",end.y);
+ startText.setAttribute("x",start.x);startText.setAttribute("y",start.y+31)
+}
+function makeStars(){
+ var layer=document.getElementById("starfield");layer.innerHTML="";layer.setAttribute("data-style",state.starStyle);
+ var seed=state.level*19+3;function rand(){seed=(seed*9301+49297)%233280;return seed/233280}var count=state.starStyle==="Stardust"?76:state.starStyle==="Aurora"?58:42;
+ for(var i=0;i<count;i++){var s=document.createElement("i");s.style.left=(rand()*100)+"%";s.style.top=(rand()*100)+"%";s.style.setProperty("--o",(0.18+rand()*0.48).toFixed(2));layer.appendChild(s)}
+}
+function renderLevel(){
+ var l=currentLevel();document.getElementById("shapeTitle").textContent=l.title;document.getElementById("chapter").textContent=l.chapter+" · "+state.level;board.style.setProperty("--region-glow",l.regionGlow||({Drifting:"#6992d8","Soft Glow":"#aa82d8","Farther Out":"#5bb8a1","Deep Space":"#e39a78"}[l.chapter]||"#7b8eb5"));
+ document.getElementById("levelText").textContent="Shape "+state.level;document.getElementById("levelOf").textContent="· "+l.chapter;
+ guide.setAttribute("d",l.d);trace.setAttribute("d",l.d);halo.setAttribute("d",l.d);
+ totalLength=guide.getTotalLength();trace.style.strokeDasharray=totalLength+" "+totalLength;trace.style.strokeDashoffset=totalLength;
+ positionMarkers();makeStars();progress=0;complete=false;isTracing=false;
+ document.getElementById("progressFill").style.width="0%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow","0");document.getElementById("percentText").textContent="0%";
+ board.classList.remove("finished","has-progress","tracing");document.getElementById("completion").classList.remove("show");document.getElementById("nextBtn").classList.remove("show");
+ document.getElementById("restartBtn").style.display="";hint.textContent="Touch the bright star, then trace";
+ save()
+}
+function svgPoint(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+function nearestLength(point){
+ var step=Math.max(2,totalLength/260),bestD=Infinity,bestL=0;
+ for(var l=0;l<=totalLength;l+=step){var p=guide.getPointAtLength(Math.min(l,totalLength)),dx=p.x-point.x,dy=p.y-point.y,d=dx*dx+dy*dy;if(d<bestD){bestD=d;bestL=l}}
+ var end=guide.getPointAtLength(totalLength),edx=end.x-point.x,edy=end.y-point.y,ed=edx*edx+edy*edy;if(ed<bestD){bestD=ed;bestL=totalLength}
+ return {length:bestL,distance:Math.sqrt(bestD)}
+}
+function updateProgress(value){
+ progress=Math.max(progress,Math.min(1,value));board.classList.add("has-progress");var trailPoint=guide.getPointAtLength(totalLength*progress),trailStar=document.getElementById("trailStar");trailStar.setAttribute("cx",trailPoint.x);trailStar.setAttribute("cy",trailPoint.y);var pct=Math.round(progress*100);trace.style.strokeDashoffset=String(totalLength*(1-progress));
+ document.getElementById("progressFill").style.width=pct+"%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow",String(pct));document.getElementById("percentText").textContent=pct+"%";
+ if(progress>=.995)finishLevel()
+}
+function startTrace(e){
+ if(complete)return;var p=svgPoint(e),near=nearestLength(p);
+ if(progress===0&&near.length>Math.max(48,totalLength*.12)){hint.textContent="Start at the bright star";return}
+ isTracing=true;board.classList.add("tracing");hint.textContent="Keep following the glow";board.setPointerCapture&&board.setPointerCapture(e.pointerId);moveTrace(e)
+}
+function moveTrace(e){
+ if(!isTracing||complete)return;var p=svgPoint(e),near=nearestLength(p),corridor=53;
+ if(near.distance<=corridor){updateProgress(near.length/totalLength)}
+}
+function stopTrace(){isTracing=false;board.classList.remove("tracing");if(!complete&&progress>0)hint.textContent="Pick up where you left off"}
+function playCompletionSound(){if(!state.sound)return;try{var AudioCtor=window.AudioContext||window.webkitAudioContext;if(!AudioCtor)return;var context=new AudioCtor(),now=context.currentTime;[[523.25,0],[783.99,.16]].forEach(function(note){var osc=context.createOscillator(),gain=context.createGain();osc.type="sine";osc.frequency.value=note[0];gain.gain.setValueAtTime(.0001,now+note[1]);gain.gain.exponentialRampToValueAtTime(.045,now+note[1]+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+note[1]+.42);osc.connect(gain);gain.connect(context.destination);osc.start(now+note[1]);osc.stop(now+note[1]+.45)});setTimeout(function(){context.close()},800)}catch(e){}}
+function finishLevel(){
+ if(complete)return;complete=true;playCompletionSound();isTracing=false;board.classList.remove("tracing");board.classList.add("finished","has-progress");progress=1;var endPoint=guide.getPointAtLength(totalLength),burst=document.getElementById("finishBurst");burst.setAttribute("cx",endPoint.x);burst.setAttribute("cy",endPoint.y);trace.style.strokeDashoffset="0";
+ document.getElementById("progressFill").style.width="100%";document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow","100");document.getElementById("percentText").textContent="100%";
+ hint.textContent="Beautifully traced";document.getElementById("completion").classList.add("show");document.getElementById("nextBtn").classList.add("show");document.getElementById("restartBtn").style.display="none";
+ save()
+}
+function restart(){renderLevel()}
+function nextLevel(){var oldHigh=state.highestLevel;state.level++;state.highestLevel=Math.max(state.highestLevel,state.level);save();renderLevel();if(oldHigh<13&&state.highestLevel>=13)showToast("Comet Dust palette and Aurora stars unlocked");else if(oldHigh<25&&state.highestLevel>=25)showToast("Pulsar Blue palette and Stardust unlocked");window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"})}
+function renderMap(){var grid=document.getElementById("mapGrid");grid.innerHTML="";var found=Math.max(0,state.highestLevel-1);document.getElementById("mapSummary").textContent=found+" constellations found · all found shapes stay replayable";var groups={};for(var number=1;number<=state.highestLevel;number++){var level=getLevel(number);if(!groups[level.chapter])groups[level.chapter]=[];groups[level.chapter].push({number:number,level:level})}Object.keys(groups).forEach(function(chapter){var details=document.createElement("details");details.className="map-region";details.open=chapter===currentLevel().chapter;var summary=document.createElement("summary");summary.innerHTML='<span>'+chapter+'</span><small>'+groups[chapter].length+' shapes</small>';details.appendChild(summary);var list=document.createElement("div");list.className="map-region-list";groups[chapter].forEach(function(entry){var b=document.createElement("button"),id=entry.number,isCurrent=id===state.level,done=id<state.highestLevel;b.type="button";b.className="map-entry"+(isCurrent?" current":"");b.setAttribute("aria-current",isCurrent?"true":"false");b.innerHTML='<span class="map-icon" aria-hidden="true">'+(done?"✧":"✦")+'</span><span><b>'+entry.level.title+'</b><small>Shape '+id+'</small></span><span class="map-status">'+(isCurrent?"Here":done?"Found":"Next")+'</span>';b.addEventListener("click",function(){state.level=id;save();renderLevel();closeMap()});list.appendChild(b)});details.appendChild(list);grid.appendChild(details)})}
+function openMap(){renderMap();var c=document.getElementById("mapCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("mapClose").focus()}
+function closeMap(){var c=document.getElementById("mapCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");document.getElementById("mapOpen").focus()}
+function showToast(text){var t=document.getElementById("toast");t.textContent=text;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove("show")},1500)}
+function openSettings(){var c=document.getElementById("modalCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("motionToggle").checked=state.ignoreDeviceReducedMotion;document.getElementById("soundToggle").checked=state.sound;renderThemes();renderStarStyles();document.getElementById("settingsClose").focus()}
+function closeSettings(){var c=document.getElementById("modalCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");document.getElementById("settingsOpen").focus()}
+document.getElementById("mapOpen").addEventListener("click",openMap);document.getElementById("mapClose").addEventListener("click",closeMap);document.getElementById("mapCover").addEventListener("click",function(e){if(e.target===this)closeMap()});document.getElementById("settingsOpen").addEventListener("click",openSettings);document.getElementById("settingsClose").addEventListener("click",closeSettings);
+document.getElementById("modalCover").addEventListener("click",function(e){if(e.target===this)closeSettings()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&document.getElementById("modalCover").classList.contains("open"))closeSettings();if(e.key==="Escape"&&document.getElementById("mapCover").classList.contains("open"))closeMap()});
+document.getElementById("motionToggle").addEventListener("change",function(){state.ignoreDeviceReducedMotion=this.checked;save();applyMotion();showToast(this.checked?"Full motion enabled":"Device motion setting restored")});document.getElementById("soundToggle").addEventListener("change",function(){state.sound=this.checked;save();showToast(this.checked?"Completion chime enabled":"Sound off")});
+document.getElementById("restartBtn").addEventListener("click",restart);document.getElementById("nextBtn").addEventListener("click",nextLevel);
+board.addEventListener("pointerdown",function(e){if(e.target.closest&&e.target.closest("button"))return;e.preventDefault();startTrace(e)});
+board.addEventListener("pointermove",function(e){if(isTracing){e.preventDefault();moveTrace(e)}});
+board.addEventListener("pointerup",stopTrace);board.addEventListener("pointercancel",stopTrace);board.addEventListener("lostpointercapture",stopTrace);
+if(motionQuery){if(motionQuery.addEventListener)motionQuery.addEventListener("change",applyMotion);else if(motionQuery.addListener)motionQuery.addListener(applyMotion)}
+applyMotion();applyPalette();renderLevel();
+})();
+</script>
+</body>
+</html>
