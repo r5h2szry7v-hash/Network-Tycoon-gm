@@ -188,46 +188,64 @@ function generateLevel(number){
  var d="M24 180";
  function clampY(y){return Math.max(54,Math.min(306,y))}
  function smoothPath(points){var path="M"+points[0].x.toFixed(1)+" "+points[0].y.toFixed(1);for(var i=0;i<points.length-1;i++){var p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;path+=" C"+c1x.toFixed(1)+" "+c1y.toFixed(1)+" "+c2x.toFixed(1)+" "+c2y.toFixed(1)+" "+p2.x.toFixed(1)+" "+p2.y.toFixed(1)}return path}
- function makeLoopPattern(index,random){
-  var count=1+Math.floor(index/5),style=index%5,baseRx=[86,100,112,94,106][style],yTop=48,yBottom=312,spacing=(yBottom-yTop)/count,path="";
+ function makeSpringPattern(index){
+  var type=Math.floor(index/54),slot=index%54,counts=[4,5,6,7,8,9,10,2,3],count=counts[slot%9],spacingModes=[.68,.78,.88,.98,1.08,1.16],spacingScale=spacingModes[Math.floor(slot/9)],k=.55228475;
   function fmt(n){return Number(n).toFixed(1)}
-  function cubic(a,b,p){return " C"+fmt(a.x)+" "+fmt(a.y)+" "+fmt(b.x)+" "+fmt(b.y)+" "+fmt(p.x)+" "+fmt(p.y)}
-  function point(cx,cy,rx,ry,angle,tilt){var co=Math.cos(tilt),si=Math.sin(tilt),ct=Math.cos(angle),st=Math.sin(angle);return{x:cx+rx*ct*co-ry*st*si,y:cy+rx*ct*si+ry*st*co}}
-  function tangent(rx,ry,angle,tilt){var co=Math.cos(tilt),si=Math.sin(tilt),st=Math.sin(angle),ct=Math.cos(angle);return{x:-rx*st*co-ry*ct*si,y:-rx*st*si+ry*ct*co}}
-  function addArc(cx,cy,rx,ry,tilt,a0,a1){
-   var pieces=4,step=(a1-a0)/pieces;
-   for(var p=0;p<pieces;p++){var a=a0+p*step,b=a+step,p0=point(cx,cy,rx,ry,a,tilt),p1=point(cx,cy,rx,ry,b,tilt),v0=tangent(rx,ry,a,tilt),v1=tangent(rx,ry,b,tilt),handle=4/3*Math.tan(step/4),c1={x:p0.x+v0.x*handle,y:p0.y+v0.y*handle},c2={x:p1.x-v1.x*handle,y:p1.y-v1.y*handle};path+=cubic(c1,c2,p1)}
+  function curve(c1,c2,p){d+=" C"+fmt(c1.x)+" "+fmt(c1.y)+" "+fmt(c2.x)+" "+fmt(c2.y)+" "+fmt(p.x)+" "+fmt(p.y)}
+  function sideLoop(cx,cy,rx,ry){
+   var right={x:cx+rx,y:cy},bottom={x:cx,y:cy+ry},left={x:cx-rx,y:cy},top={x:cx,y:cy-ry};
+   curve({x:right.x,y:cy+k*ry},{x:cx+k*rx,y:bottom.y},bottom);
+   curve({x:cx-k*rx,y:bottom.y},{x:left.x,y:cy+k*ry},left);
+   curve({x:left.x,y:cy-k*ry},{x:cx-k*rx,y:top.y},top);
+   curve({x:cx+k*rx,y:top.y},{x:right.x,y:cy-k*ry},right);
   }
-  var start={x:180+baseRx*.12,y:24},previous=null;path="M"+fmt(start.x)+" "+fmt(start.y);
-  for(var i=0;i<count;i++){
-   var t=(i+.5)/count,cx=180,cy=yTop+spacing*(i+.5),rx=Math.min(118,baseRx)*(style===1?(i%2?1.05:.95):style===2?.9+.14*Math.sin(Math.PI*t):style===3?.9+.2*t:.94+random()*.12),ry=Math.min(54,spacing*.43),heightFactor=style===0?1:style===1?(i%2?1.12:.88):style===2?.82+.34*Math.sin(Math.PI*t):style===3?.9+.22*t:.86+random()*.24;
-   ry*=heightFactor;
-   var sway=style===1?(i%2?5:-5):style===2?Math.sin(t*Math.PI*2)*12:style===3?(t-.5)*20:style===4?Math.sin(t*Math.PI*3)*10:0;cx+=sway;
-   var tilt=style===0?(random()-.5)*.1:style===1?(i%2?-.15:.15):style===2?Math.sin(t*Math.PI*2)*.19:style===3?(t-.5)*.42:(i%2?-.2:.2)+(random()-.5)*.08;
-   var loopGap=.48+style*.11+(random()-.5)*.1,a0=-loopGap/2,a1=-Math.PI*2+loopGap/2,entry=point(cx,cy,rx,ry,a0,tilt);
-   if(i===0){var leadDx=entry.x-start.x;path+=cubic({x:start.x+leadDx*.35,y:start.y+20},{x:entry.x+24,y:entry.y-24},entry)}else{var dy=entry.y-previous.y,bulge=10+style*3+random()*8;path+=cubic({x:previous.x+bulge,y:previous.y+dy*.32},{x:entry.x+bulge,y:entry.y-dy*.32},entry)}
-   addArc(cx,cy,rx,ry,tilt,a0,a1);previous=point(cx,cy,rx,ry,a1,tilt)
+  function topLoop(cx,cy,rx,ry){
+   var top={x:cx,y:cy-ry},right={x:cx+rx,y:cy},bottom={x:cx,y:cy+ry},left={x:cx-rx,y:cy};
+   curve({x:cx+k*rx,y:top.y},{x:right.x,y:cy-k*ry},right);
+   curve({x:right.x,y:cy+k*ry},{x:cx+k*rx,y:bottom.y},bottom);
+   curve({x:cx-k*rx,y:bottom.y},{x:left.x,y:cy+k*ry},left);
+   curve({x:left.x,y:cy-k*ry},{x:cx-k*rx,y:top.y},top);
   }
-  var finish={x:180+baseRx*.12,y:336};
-  path+=cubic({x:previous.x+24,y:previous.y+24},{x:finish.x+28,y:finish.y-22},finish);
-  var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,maxRadius=0;
-  path.replace(pairPattern,function(match,sx,sy){maxRadius=Math.max(maxRadius,Math.hypot(Number(sx)-180,Number(sy)-180));return match});
-  var scale=Math.min(1,148/Math.max(1,maxRadius)),angle=random()*Math.PI*2,co=Math.cos(angle),si=Math.sin(angle);
-  return path.replace(pairPattern,function(match,sx,sy){var x=(Number(sx)-180)*scale,y=(Number(sy)-180)*scale;return fmt(180+x*co-y*si)+" "+fmt(180+x*si+y*co)})
+  function verticalSpring(tapered){
+   var totalSpan=240*spacingScale,gaps=[],weightTotal=0,centers=[180-totalSpan/2];
+   for(var gi=0;gi<count-1;gi++){var w=tapered?.56+.88*((gi+.5)/(count-1)):1;gaps.push(w);weightTotal+=w}
+   for(var yi=0;yi<gaps.length;yi++)centers.push(centers[yi]+totalSpan*gaps[yi]/weightTotal);
+   var radii=[];
+   for(var ri=0;ri<count;ri++)radii.push(tapered?54+70*(ri/(count-1)):96);
+   var anchors=radii.map(function(rx){return 180+rx}),first={x:anchors[0],y:centers[0]},startPoint={x:180,y:22};
+   d="M"+fmt(startPoint.x)+" "+fmt(startPoint.y);
+   var firstGap=centers[0]-startPoint.y;
+   curve({x:startPoint.x,y:startPoint.y+firstGap*.28},{x:first.x,y:first.y-firstGap*.28},first);
+   for(var li=0;li<count;li++){
+    var before=li?centers[li]-centers[li-1]:centers[1]-centers[0],after=li<count-1?centers[li+1]-centers[li]:centers[count-1]-centers[count-2],ry=Math.min(26,Math.min(before,after)*.27);
+    sideLoop(180,centers[li],radii[li],ry);
+    if(li<count-1){
+     var next={x:anchors[li+1],y:centers[li+1]},here={x:anchors[li],y:centers[li]},dy=next.y-here.y,bulge=Math.max(here.x,next.x)+18,mid={x:bulge,y:(here.y+next.y)/2};
+     curve({x:here.x,y:here.y+dy*.22},{x:mid.x,y:mid.y-dy*.22},mid);
+     curve({x:mid.x,y:mid.y+dy*.22},{x:next.x,y:next.y-dy*.22},next)
+    }
+   }
+   var last={x:anchors[count-1],y:centers[count-1]},endPoint={x:180,y:338},dy=endPoint.y-last.y;
+   curve({x:last.x,y:last.y+dy*.24},{x:endPoint.x,y:endPoint.y-dy*.24},endPoint)
+  }
+  function horizontalSpring(){
+   var span=236*spacingScale,left=180-span/2,right=180+span/2,step=span/(count-1),topY=88,cy=112,ry=24;
+   var xs=[];for(var i=0;i<count;i++)xs.push(left+i*step);
+   var startPoint={x:34,y:338},first={x:xs[0],y:topY},lead=topY-startPoint.y;
+   d="M"+fmt(startPoint.x)+" "+fmt(startPoint.y);
+   curve({x:startPoint.x,y:startPoint.y+lead*.3},{x:first.x-step*.28,y:topY},first);
+   for(var i=0;i<count;i++){
+    var loopRx=Math.min(14,Math.max(7,step*.34));
+    topLoop(xs[i],cy,loopRx,ry);
+    if(i<count-1){var next={x:xs[i+1],y:topY},gap=next.x-xs[i];curve({x:xs[i]+gap*.28,y:topY},{x:next.x-gap*.28,y:topY},next)}
+   }
+   var last={x:xs[count-1],y:topY},endPoint={x:326,y:338};
+   curve({x:last.x+(endPoint.x-last.x)*.18,y:topY},{x:endPoint.x,y:endPoint.y-(endPoint.y-topY)*.28},endPoint)
+  }
+  if(type===2)horizontalSpring();else verticalSpring(type===1);
  }
- var family=(number-13)%5;
- if(family===0||family===3||family===4){
-  var patternGroup=Math.floor((number-13)/5),patternSlot=family===0?0:family===3?1:2,patternIndex=(patternGroup*3+patternSlot)%50;
-  d=makeLoopPattern(patternIndex,rand)
- }else if(family===1){
-  var waves=Math.min(8,2+Math.floor((number-13)/6)),samples=waves*4,amplitude=42+rand()*34,phase=(rand()-.5)*.24,wavePoints=[];
-  for(var wi=0;wi<=samples;wi++){var wy=wi===0||wi===samples?180:180+Math.sin(wi/samples*waves*Math.PI*2+phase)*amplitude+(rand()-.5)*16;wavePoints.push({x:24+312*wi/samples,y:clampY(wy)})}
-  d=smoothPath(wavePoints)
- }else{
-  var turns=Math.min(18,4+Math.floor((number-13)/2)),zigPoints=[{x:24,y:180}];
-  for(var zi=1;zi<turns;zi++){var zy=clampY((zi%2?112:248)+(rand()-.5)*62);zigPoints.push({x:24+312*zi/turns,y:zy})}
-  zigPoints.push({x:336,y:180});d=zigPoints.map(function(p,index){return (index?" L":"M")+p.x.toFixed(1)+" "+p.y.toFixed(1)}).join("")
- }
+ var patternIndex=(number-13)%162;
+ makeSpringPattern(patternIndex);
  return {title:title,chapter:regionName,d:d,regionGlow:region.color}
 }
 function positionMarkers(){
