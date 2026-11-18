@@ -189,7 +189,7 @@ function generateLevel(number){
  function clampY(y){return Math.max(54,Math.min(306,y))}
  function smoothPath(points){var path="M"+points[0].x.toFixed(1)+" "+points[0].y.toFixed(1);for(var i=0;i<points.length-1;i++){var p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;path+=" C"+c1x.toFixed(1)+" "+c1y.toFixed(1)+" "+c2x.toFixed(1)+" "+c2y.toFixed(1)+" "+p2.x.toFixed(1)+" "+p2.y.toFixed(1)}return path}
  function makeLoopPattern(index,random){
-  var count=1+Math.floor(index/5),style=index%5,baseRx=[86,100,112,94,106][style],xStart=30,xEnd=330,yTop=48,yBottom=312,spacing=(yBottom-yTop)/count,path="M"+xStart+" 24",k;
+  var count=1+Math.floor(index/5),style=index%5,baseRx=[86,100,112,94,106][style],yTop=48,yBottom=312,spacing=(yBottom-yTop)/count,path="";
   function fmt(n){return Number(n).toFixed(1)}
   function cubic(a,b,p){return " C"+fmt(a.x)+" "+fmt(a.y)+" "+fmt(b.x)+" "+fmt(b.y)+" "+fmt(p.x)+" "+fmt(p.y)}
   function point(cx,cy,rx,ry,angle,tilt){var co=Math.cos(tilt),si=Math.sin(tilt),ct=Math.cos(angle),st=Math.sin(angle);return{x:cx+rx*ct*co-ry*st*si,y:cy+rx*ct*si+ry*st*co}}
@@ -198,7 +198,7 @@ function generateLevel(number){
    var pieces=4,step=(a1-a0)/pieces;
    for(var p=0;p<pieces;p++){var a=a0+p*step,b=a+step,p0=point(cx,cy,rx,ry,a,tilt),p1=point(cx,cy,rx,ry,b,tilt),v0=tangent(rx,ry,a,tilt),v1=tangent(rx,ry,b,tilt),handle=4/3*Math.tan(step/4),c1={x:p0.x+v0.x*handle,y:p0.y+v0.y*handle},c2={x:p1.x-v1.x*handle,y:p1.y-v1.y*handle};path+=cubic(c1,c2,p1)}
   }
-  var start={x:180+baseRx*.12,y:24},previous=null;
+  var start={x:180+baseRx*.12,y:24},previous=null;path="M"+fmt(start.x)+" "+fmt(start.y);
   for(var i=0;i<count;i++){
    var t=(i+.5)/count,cx=180,cy=yTop+spacing*(i+.5),rx=Math.min(118,baseRx)*(style===1?(i%2?1.05:.95):style===2?.9+.14*Math.sin(Math.PI*t):style===3?.9+.2*t:.94+random()*.12),ry=Math.min(54,spacing*.43),heightFactor=style===0?1:style===1?(i%2?1.12:.88):style===2?.82+.34*Math.sin(Math.PI*t):style===3?.9+.22*t:.86+random()*.24;
    ry*=heightFactor;
@@ -208,7 +208,7 @@ function generateLevel(number){
    if(i===0){var leadDx=entry.x-start.x;path+=cubic({x:start.x+leadDx*.35,y:start.y+20},{x:entry.x+24,y:entry.y-24},entry)}else{var dy=entry.y-previous.y,bulge=10+style*3+random()*8;path+=cubic({x:previous.x+bulge,y:previous.y+dy*.32},{x:entry.x+bulge,y:entry.y-dy*.32},entry)}
    addArc(cx,cy,rx,ry,tilt,a0,a1);previous=point(cx,cy,rx,ry,a1,tilt)
   }
-  var finish={x:180+baseRx*.12,y:336},exitDx=finish.x-previous.x;
+  var finish={x:180+baseRx*.12,y:336};
   path+=cubic({x:previous.x+24,y:previous.y+24},{x:finish.x+28,y:finish.y-22},finish);
   var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,maxRadius=0;
   path.replace(pairPattern,function(match,sx,sy){maxRadius=Math.max(maxRadius,Math.hypot(Number(sx)-180,Number(sy)-180));return match});
