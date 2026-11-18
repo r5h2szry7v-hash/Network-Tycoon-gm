@@ -208,7 +208,7 @@ function generateLevel(number){
   }
   function verticalSpring(tapered){
    var totalSpan=240*spacingScale,gaps=[],weightTotal=0,centers=[180-totalSpan/2];
-   for(var gi=0;gi<count-1;gi++){var w=tapered?.56+.88*((gi+.5)/(count-1)):1;gaps.push(w);weightTotal+=w}
+   for(var gi=0;gi<count-1;gi++){var w=tapered ? 0.56+0.88*((gi+0.5)/(count-1)) : 1;gaps.push(w);weightTotal+=w}
    for(var yi=0;yi<gaps.length;yi++)centers.push(centers[yi]+totalSpan*gaps[yi]/weightTotal);
    var radii=[];
    for(var ri=0;ri<count;ri++)radii.push(tapered?54+70*(ri/(count-1)):96);
