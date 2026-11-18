@@ -227,46 +227,62 @@ function fitShapeToBoard(path){
  return path.replace(pairPattern,function(match,sx,sy){var x=(Number(sx)-180)*scale,y=(Number(sy)-180)*scale;return (180+x).toFixed(2)+" "+(180+y).toFixed(2)})
 }
 function buildSmoothShapeLibrary(){
- var waves=[],spirals=[],amplitudes=[58,76,94,112];
- for(var cycles=1;cycles<=10;cycles++){
+ var waves=[],spirals=[],arcs=[],ovals=[],squiggles=[],amplitudes=[48,66,84,102,120];
+ function seeded(seed){return function(){seed=(seed*48271)%2147483647;return seed/2147483647}}
+ function sampleCurve(fn,count){var points=[];for(var i=0;i<=count;i++){var u=i/count,p=fn(u);points.push({x:p.x,y:p.y})}return fitShapeToBoard(smoothCurvePath(points))}
+ for(var cycles=1;cycles<=5;cycles++){
   for(var ai=0;ai<amplitudes.length;ai++){
-   var amplitude=amplitudes[ai],points=[],samples=Math.max(64,cycles*20);
-   for(var j=0;j<=samples;j++){var u=j/samples;points.push({x:34+292*u,y:180+amplitude*Math.sin(2*Math.PI*cycles*u)})}
-   waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(points))})
+   var amplitude=amplitudes[ai];
+   waves.push({kind:"wave",d:sampleCurve(function(u){return{x:34+292*u,y:180+amplitude*Math.sin(2*Math.PI*cycles*u)}},Math.max(72,cycles*24))})
   }
- }
- for(var ei=0;ei<10;ei++){
-  var enveloped=[],eCycles=2+(ei%7),eAmp=76+(ei%4)*10,eSamples=Math.max(80,eCycles*22);
-  for(var ej=0;ej<=eSamples;ej++){var eu=ej/eSamples,envelope=.72+.22*(.5+.5*Math.sin(2*Math.PI*eu+ei*.31));enveloped.push({x:34+292*eu,y:180+eAmp*envelope*Math.sin(2*Math.PI*eCycles*eu)})}
-  waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(enveloped))})
- }
- for(var ci=0;ci<10;ci++){
-  var chirped=[],baseCycles=2+(ci%7),sweep=-.85+ci*.17,cAmp=72+(ci%3)*12,cSamples=Math.max(80,baseCycles*24);
-  for(var ck=0;ck<=cSamples;ck++){var cu=ck/cSamples,phase=2*Math.PI*(baseCycles*cu+sweep*cu*(1-cu));chirped.push({x:34+292*cu,y:180+cAmp*Math.sin(phase)})}
-  waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(chirped))})
  }
  var profiles=[
-  {curve:.78,rx:1,ry:.84,phase:0},
-  {curve:.94,rx:.88,ry:1.08,phase:.14},
-  {curve:1.12,rx:1.12,ry:.96,phase:-.10},
-  {curve:1.32,rx:.96,ry:1.14,phase:.25}
+  {curve:.78,rx:1,ry:.72,phase:0},
+  {curve:.94,rx:1.16,ry:.84,phase:.14},
+  {curve:1.08,rx:.82,ry:1.12,phase:-.10},
+  {curve:1.22,rx:1.05,ry:.98,phase:.25},
+  {curve:1.36,rx:.9,ry:1.2,phase:-.2}
  ];
- for(var turns=1;turns<=10;turns++){
+ for(var turns=1;turns<=5;turns++){
   for(var pi=0;pi<profiles.length;pi++){
-   var profile=profiles[pi],coil=[],samples=Math.max(96,turns*36);
-   for(var sk=0;sk<=samples;sk++){
-    var su=sk/samples,radius=13+111*Math.pow(su,profile.curve),angle=2*Math.PI*turns*su+profile.phase;
-    coil.push({x:180+radius*profile.rx*Math.cos(angle),y:180+radius*profile.ry*Math.sin(angle)})
-   }
-   spirals.push({kind:"spiral",turns:turns,d:fitShapeToBoard(smoothCurvePath(coil))})
+   var profile=profiles[pi],samples=Math.max(100,turns*48);
+   spirals.push({kind:"spiral",turns:turns,spacing:pi+1,d:sampleCurve(function(u){
+    var radius=14+108*Math.pow(u,profile.curve),angle=2*Math.PI*turns*u+profile.phase;
+    return{x:180+radius*profile.rx*Math.cos(angle),y:180+radius*profile.ry*Math.sin(angle)}
+   },samples)})
   }
  }
- var ordered=[];
- for(var pair=0;pair<20;pair++){
-  ordered.push(waves[pair*2],spirals[pair*2],waves[pair*2+1],spirals[pair*2+1])
+ for(var ar=0;ar<20;ar++){
+  var arcRng=seeded(9401+ar*97),arcRx=68+(ar%5)*10,arcRy=54+Math.floor(ar/5)*13;
+  var arcStart=-Math.PI/2+ar*.31,arcSweep=Math.PI*(1.13+(ar%6)*.105),arcTilt=(arcRng()-.5)*1.2,arcCx=180+(arcRng()-.5)*28,arcCy=180+(arcRng()-.5)*24;
+  arcs.push({kind:"arc",d:sampleCurve(function(u){
+   var t=arcStart+arcSweep*u,co=Math.cos(arcTilt),si=Math.sin(arcTilt),x=arcRx*Math.cos(t),y=arcRy*Math.sin(t);
+   return{x:arcCx+x*co-y*si,y:arcCy+x*si+y*co}
+  },144)})
  }
- for(var rest=40;rest<waves.length;rest++)ordered.push(waves[rest]);
- return ordered.slice(0,100)
+ for(var oi=0;oi<15;oi++){
+  var ovalRng=seeded(17389+oi*131),ovalRx=55+(oi%5)*12,ovalRy=42+Math.floor(oi/5)*17;
+  var ovalStart=-Math.PI/2+oi*.23,ovalSweep=2*Math.PI-(.27+(oi%5)*.12),ovalTilt=(ovalRng()-.5)*1.5;
+  var ovalCx=180+(ovalRng()-.5)*22,ovalCy=180+(ovalRng()-.5)*22;
+  ovals.push({kind:"oval",d:sampleCurve(function(u){
+   var t=ovalStart+ovalSweep*u,co=Math.cos(ovalTilt),si=Math.sin(ovalTilt),x=ovalRx*Math.cos(t),y=ovalRy*Math.sin(t);
+   return{x:ovalCx+x*co-y*si,y:ovalCy+x*si+y*co}
+  },156)})
+ }
+ for(var qi=0;qi<15;qi++){
+  var qRng=seeded(38191+qi*193),qCycles=1.6+(qi%6)*.47,qAmp=42+qRng()*50,qSecondary=10+qRng()*25;
+  var qFreq=1.1+qRng()*1.8,qPhase=qRng()*Math.PI*2,qPhase2=qRng()*Math.PI*2,qTilt=(qRng()-.5)*.8;
+  squiggles.push({kind:"squiggle",d:sampleCurve(function(u){
+   var primary=qAmp*Math.sin(2*Math.PI*qCycles*u+qPhase),secondary=qSecondary*Math.sin(2*Math.PI*qFreq*u+qPhase2),ease=Math.sin(Math.PI*u),drift=(u-.5)*14*ease;
+   var x=34+292*u,y=180+primary+secondary+drift,co=Math.cos(qTilt),si=Math.sin(qTilt),dx=x-180,dy=y-180;
+   return{x:180+dx*co-dy*si,y:180+dx*si+dy*co}
+  },144)})
+ }
+ var ordered=[];
+ for(var mix=0;mix<15;mix++)ordered.push(waves[mix],spirals[mix],arcs[mix],ovals[mix],squiggles[mix]);
+ for(var rest=15;rest<20;rest++)ordered.push(waves[rest],spirals[rest],arcs[rest]);
+ for(var tail=20;tail<25;tail++)ordered.push(waves[tail],spirals[tail]);
+ return ordered
 }
 var shapeLibrary=buildSmoothShapeLibrary();
 var libraryAdjectives=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"];
