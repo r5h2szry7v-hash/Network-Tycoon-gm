@@ -323,6 +323,31 @@ function solveWithDeductions(cells,startIndex,initialOpen,initialKnown){
  }
  return{solved:!failed&&opened.reduce((a,v)=>a+(v?1:0),0)===safeTotal,firstSafe};
 }
+function spacedAnimalSlots(cells,reachable,gateIndex,n){
+ const unseen=new Set([...reachable].filter(i=>i!==gateIndex&&!cells[i].hazard&&cells[i].count===0)),components=[];
+ while(unseen.size){
+  const first=unseen.values().next().value,component=[],queue=[first];unseen.delete(first);
+  for(let cursor=0;cursor<queue.length;cursor++){
+   const i=queue[cursor];component.push(i);
+   for(const next of neighborsFor(i,n))if(unseen.has(next)){unseen.delete(next);queue.push(next)}
+  }
+  components.push(component)
+ }
+ if(components.length<3)return null;
+ const available=new Set(components.map((_,i)=>i)),chosen=[];
+ while(chosen.length<3){
+  let best=-1,options=[];
+  for(const componentIndex of available)for(const index of components[componentIndex]){
+   const r=Math.floor(index/n),c=index%n;
+   const spread=chosen.length?Math.min(...chosen.map(other=>{const rr=Math.floor(other/n),cc=other%n;return Math.abs(r-rr)+Math.abs(c-cc)})):Infinity;
+   if(spread>best){best=spread;options=[{componentIndex,index}]}
+   else if(spread===best)options.push({componentIndex,index})
+  }
+  const pick=options[Math.floor(randomFloat()*options.length)];
+  chosen.push(pick.index);available.delete(pick.componentIndex)
+ }
+ return chosen
+}
 function safeTrailCells(cells,startIndex,n){
  const reached=new Set([startIndex]),queue=[startIndex];
  for(let cursor=0;cursor<queue.length;cursor++)for(const next of neighborsFor(queue[cursor],n))if(!cells[next].hazard&&!reached.has(next)){reached.add(next);queue.push(next)}
@@ -345,9 +370,9 @@ function generateSolvableBoard(firstIndex){
   countCandidate(candidate,size);
   const reachable=safeTrailCells(candidate,firstIndex,size);
   if(!reachable.has(gateIndex)||!solveWithDeductions(candidate,firstIndex).solved)continue;
-  const animalSlots=[...reachable].filter(i=>i!==gateIndex&&!candidate[i].hazard&&candidate[i].count===0);if(animalSlots.length<3)continue;
+  const animalSlots=spacedAnimalSlots(candidate,reachable,gateIndex,size);if(!animalSlots)continue;
   grid=candidate;animals=[];rescued=new Set();
-  for(let n=0;n<3;n++){const pick=Math.floor(randomFloat()*animalSlots.length),i=animalSlots.splice(pick,1)[0];animals.push(i);grid[i].animal=n}
+  for(let n=0;n<animalSlots.length;n++){const i=animalSlots[n];animals.push(i);grid[i].animal=n}
   return true;
  }
  return false;
@@ -402,7 +427,7 @@ function reveal(index){
  const connected=connectedTrailCells(),homeCount=connectedHomeCount(connected),gateConnected=gateIndex>=0&&connected.has(gateIndex);
  for(let animal=0;animal<animals.length;animal++){const tile=animals[animal];if(rescued.has(animal)&&connected.has(tile)&&!connectedBefore.has(tile))animateHomeAnimals.add(animal)}
  animateGateArrival=gateConnected&&(!gateWasConnected||homeCount===3);
- if(animateGateArrival){const route=pathToGate(connected,gateIndex);animateGatePath=new Map(route.map((tile,step)=>[tile,step]));gatePathDuration=document.documentElement.dataset.motion==="off"?120:Math.min(2200,Math.max(1050,(route.length-1)*55+1050));pathSequenceActive=true}
+ if(animateGateArrival){const route=pathToGate(connected,gateIndex);animateGatePath=new Map(route.map((tile,step)=>[tile,step]));gatePathDuration=document.documentElement.dataset.motion==="off"?120:4000;pathSequenceActive=true}
  const world=worlds[worldKey];
  if(homeCount===3&&gateConnected)setStatus(world.winBeat,"good");
  else if(animateHomeAnimals.size>1)setStatus(world.groupHomeBeat,"good");
@@ -419,8 +444,9 @@ function reveal(index){
 function mark(index){if(ended||pathSequenceActive||grid[index].open)return;if(firstReveal){setStatus("Take your first safe step before marking danger.");return}if(grid[index].gate){setStatus("That glowing tile is the home gate. It’s safe—clear it to finish!","good");return}ensureTimer();grid[index].marked=!grid[index].marked;animateFlagIndex=grid[index].marked?index:null;hintTarget=null;render();const marks=grid.filter(g=>g.marked).length;setStatus(marks===hazardTotal?"All danger markers placed. Keep connecting the safe trail home.":marks+" danger mark"+(marks===1?"":"s")+" placed.");}
 function animateEstablishedEndpoints(){if(document.documentElement.dataset.motion==="off")return;for(const marker of boardEl.querySelectorAll(".camp-marker,.gate-marker")){const tile=marker.closest(".cell");if(!tile)continue;const tr=tile.getBoundingClientRect(),mr=marker.getBoundingClientRect();if(!tr.width||!mr.width)continue;const dx=tr.left+tr.width/2-(mr.left+mr.width/2),dy=tr.top+tr.height/2-(mr.top+mr.height/2),scale=Math.min((tr.width-8)/mr.width,(tr.height-8)/mr.height),center=(factor,angle)=>`translate(${dx}px,${dy}px) scale(${(scale*factor).toFixed(3)}) rotate(${angle}deg)`,corner=(factor,angle)=>`translate(0px,0px) scale(${factor}) rotate(${angle}deg)`,oldZ=marker.style.zIndex;marker.style.zIndex="10";if(typeof marker.animate==="function"){const animation=marker.animate([{offset:0,transform:corner(1,0)},{offset:.18,transform:center(1.02,-9)},{offset:.3,transform:center(1,8)},{offset:.42,transform:center(.98,-7)},{offset:.54,transform:center(1,5)},{offset:.66,transform:center(.98,-4)},{offset:.75,transform:center(1,3)},{offset:.77,transform:center(.88,0)},{offset:.88,transform:corner(.84,0)},{offset:.95,transform:corner(1.08,3)},{offset:1,transform:corner(1,0)}],{duration:3500,easing:"cubic-bezier(.2,.8,.3,1)",fill:"both"});animation.onfinish=()=>{animation.cancel();marker.style.zIndex=oldZ}}else{marker.classList.add("endpoint-pop");setTimeout(()=>{marker.classList.remove("endpoint-pop");marker.style.zIndex=oldZ},3500)}}}
 function playGatePathAnimation(){if(document.documentElement.dataset.motion==="off")return;const route=[...animateGatePath.entries()].sort((a,b)=>a[1]-b[1]),gateIndex=grid.findIndex(g=>g.gate),sweep=[{transform:"scale(.94)",filter:"brightness(1)",boxShadow:"inset 0 0 0 0 rgba(255,242,184,0)"},{offset:.42,transform:"scale(1.1)",filter:"brightness(1.28)",boxShadow:"inset 0 0 0 3px #fff7d9,0 0 0 5px rgba(247,214,107,.6),0 0 18px rgba(247,214,107,.8)"},{transform:"scale(1)",filter:"brightness(1.05)",boxShadow:"inset 0 0 0 2px #ffe79b,0 0 9px rgba(247,214,107,.53)"}],finish=[{transform:"scale(.88) rotate(0deg)",filter:"brightness(1)",boxShadow:"0 0 0 0 rgba(255,216,106,0)"},{offset:.32,transform:"scale(1.32) rotate(-5deg)",filter:"brightness(1.3)",boxShadow:"0 0 0 7px rgba(255,226,145,.73),0 0 25px 10px rgba(255,212,91,.6)"},{offset:.58,transform:"scale(1.12) rotate(4deg)",boxShadow:"0 0 0 3px rgba(255,226,145,.53),0 0 14px 5px rgba(255,212,91,.47)"},{transform:"scale(1) rotate(0deg)",filter:"brightness(1.06)",boxShadow:"0 0 0 2px rgba(255,226,145,.47),0 0 10px rgba(255,212,91,.4)"}];
- for(const [index,step] of route){if(index===gateIndex)continue;const tile=boardEl.children[index];if(!tile)continue;const delay=step*55;if(typeof tile.animate==="function")tile.animate(sweep,{duration:520,delay,easing:"cubic-bezier(.18,.78,.25,1)",fill:"both"});else{tile.classList.add("route-sweep");tile.style.animationDelay=delay+"ms";tile.style.setProperty("-webkit-animation-delay",delay+"ms")}}
- const gate=boardEl.children[gateIndex],finishDelay=Math.max(0,(route.length-1)*55+330);if(gate){if(typeof gate.animate==="function")gate.animate(finish,{duration:720,delay:finishDelay,easing:"cubic-bezier(.2,1.55,.35,1)",fill:"both"});else{gate.classList.add("gate-burst");gate.style.animationDelay=finishDelay+"ms";gate.style.setProperty("-webkit-animation-delay",finishDelay+"ms")}}}
+ const pathTiles=route.filter(([index])=>index!==gateIndex),sweepDuration=520,finishDuration=720,finishDelay=4000-finishDuration,maxSweepDelay=Math.max(0,finishDelay-sweepDuration),stepDelay=pathTiles.length>1?maxSweepDelay/(pathTiles.length-1):0;
+ for(const [order,[index]] of pathTiles.entries()){const tile=boardEl.children[index];if(!tile)continue;const delay=order*stepDelay;if(typeof tile.animate==="function")tile.animate(sweep,{duration:sweepDuration,delay,easing:"cubic-bezier(.18,.78,.25,1)",fill:"both"});else{tile.classList.add("route-sweep");tile.style.animationDelay=delay+"ms";tile.style.setProperty("-webkit-animation-delay",delay+"ms")}}
+ const gate=boardEl.children[gateIndex];if(gate){if(typeof gate.animate==="function")gate.animate(finish,{duration:finishDuration,delay:finishDelay,easing:"cubic-bezier(.2,1.55,.35,1)",fill:"both"});else{gate.classList.add("gate-burst");gate.style.animationDelay=finishDelay+"ms";gate.style.setProperty("-webkit-animation-delay",finishDelay+"ms")}}}
 function startGatePathSequence(){const duration=gatePathDuration;if(!duration)return;playGatePathAnimation();clearTimeout(pathSequenceTimer);pathSequenceTimer=setTimeout(()=>{pathSequenceTimer=null;pathSequenceActive=false;gatePathDuration=0;animateGatePath=new Map();if(won)launchRescueCelebration();else render()},duration)}
 function launchGardenConfetti(){if(document.documentElement.dataset.motion==="off")return;winDialog.querySelectorAll(".confetti-piece").forEach(p=>p.remove());const colors=["#8062e8","#f482b4","#ffc64f","#57c7a2","#ff936d","#62a8eb","#d979d0"];for(let i=0;i<110;i++){const p=document.createElement("i");p.className="confetti-piece";p.setAttribute("aria-hidden","true");p.style.left=(Math.random()*100)+"vw";p.style.bottom=(-Math.random()*8)+"vh";p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.width=(7+Math.random()*9)+"px";p.style.height=(10+Math.random()*14)+"px";p.style.borderRadius=Math.random()>.55?"50%":"3px";p.style.setProperty("--mid-x",((Math.random()-.5)*45)+"vw");p.style.setProperty("--mid-y",(-24-Math.random()*44)+"vh");p.style.setProperty("--drift",((Math.random()-.5)*105)+"vw");p.style.animationDelay=(.08+Math.random()*.32)+"s";p.style.animationDuration=(2.5+Math.random()*.9)+"s";winDialog.appendChild(p);setTimeout(()=>p.remove(),4200)}}
 function launchRescueCelebration(){const reduced=document.documentElement.dataset.motion==="off";for(const index of animals)if(index>=0&&grid[index])grid[index].open=true;animateAnimalCells=new Set();animateFinaleAnimals=new Set(animals.filter(index=>index>=0&&grid[index]&&grid[index].animal!==null));render();const wrap=boardEl.parentElement,icons=["✨","🌟","🌼","💛"];if(!reduced){boardEl.classList.add("board-won");for(let i=0;i<18;i++){const spark=document.createElement("span");spark.className="rescue-spark";spark.setAttribute("aria-hidden","true");spark.textContent=icons[i%icons.length];spark.style.setProperty("--spark-x",Math.round((Math.random()-.5)*260)+"px");spark.style.setProperty("--spark-y",Math.round((Math.random()-.5)*190)+"px");spark.style.animationDelay=(Math.random()*.16)+"s";wrap.appendChild(spark);setTimeout(()=>spark.remove(),1700)}}setTimeout(()=>{boardEl.classList.remove("board-won");wrap.querySelectorAll(".rescue-spark").forEach(x=>x.remove());animateAnimalCells=new Set();animateFinaleAnimals=new Set();render();setTimeout(()=>{showWinCard();if(!reduced)launchGardenConfetti()},reduced?0:150)},reduced?120:1850)}
