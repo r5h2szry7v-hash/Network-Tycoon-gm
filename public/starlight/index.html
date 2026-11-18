@@ -198,17 +198,14 @@ function generateLevel(number){
    var pieces=4,step=(a1-a0)/pieces;
    for(var p=0;p<pieces;p++){var a=a0+p*step,b=a+step,p0=point(cx,cy,rx,ry,a,tilt),p1=point(cx,cy,rx,ry,b,tilt),v0=tangent(rx,ry,a,tilt),v1=tangent(rx,ry,b,tilt),handle=4/3*Math.tan(step/4),c1={x:p0.x+v0.x*handle,y:p0.y+v0.y*handle},c2={x:p1.x-v1.x*handle,y:p1.y-v1.y*handle};path+=cubic(c1,c2,p1)}
   }
-  var start={x:180+baseRx*.12,y:24},firstCy=yTop+spacing*.5,firstRx=Math.min(118,baseRx),firstRy=Math.min(54,spacing*.43),gap=.52+(style*.095);
-  var firstCx=180,firstEntry=point(firstCx,firstCy,firstRx,firstRy,-gap/2,0),leadDx=firstEntry.x-start.x;
-  path+=cubic({x:start.x+leadDx*.35,y:start.y+20},{x:firstEntry.x+24,y:firstEntry.y-24},firstEntry);
-  var previous=firstEntry;
+  var start={x:180+baseRx*.12,y:24},previous=null;
   for(var i=0;i<count;i++){
    var t=(i+.5)/count,cx=180,cy=yTop+spacing*(i+.5),rx=Math.min(118,baseRx)*(style===1?(i%2?1.05:.95):style===2?.9+.14*Math.sin(Math.PI*t):style===3?.9+.2*t:.94+random()*.12),ry=Math.min(54,spacing*.43),heightFactor=style===0?1:style===1?(i%2?1.12:.88):style===2?.82+.34*Math.sin(Math.PI*t):style===3?.9+.22*t:.86+random()*.24;
    ry*=heightFactor;
    var sway=style===1?(i%2?5:-5):style===2?Math.sin(t*Math.PI*2)*12:style===3?(t-.5)*20:style===4?Math.sin(t*Math.PI*3)*10:0;cx+=sway;
    var tilt=style===0?(random()-.5)*.1:style===1?(i%2?-.15:.15):style===2?Math.sin(t*Math.PI*2)*.19:style===3?(t-.5)*.42:(i%2?-.2:.2)+(random()-.5)*.08;
    var loopGap=.48+style*.11+(random()-.5)*.1,a0=-loopGap/2,a1=-Math.PI*2+loopGap/2,entry=point(cx,cy,rx,ry,a0,tilt);
-   if(i>0){var dy=entry.y-previous.y,bulge=10+style*3+random()*8;path+=cubic({x:previous.x+bulge,y:previous.y+dy*.32},{x:entry.x+bulge,y:entry.y-dy*.32},entry)}
+   if(i===0){var leadDx=entry.x-start.x;path+=cubic({x:start.x+leadDx*.35,y:start.y+20},{x:entry.x+24,y:entry.y-24},entry)}else{var dy=entry.y-previous.y,bulge=10+style*3+random()*8;path+=cubic({x:previous.x+bulge,y:previous.y+dy*.32},{x:entry.x+bulge,y:entry.y-dy*.32},entry)}
    addArc(cx,cy,rx,ry,tilt,a0,a1);previous=point(cx,cy,rx,ry,a1,tilt)
   }
   var finish={x:180+baseRx*.12,y:336},exitDx=finish.x-previous.x;
