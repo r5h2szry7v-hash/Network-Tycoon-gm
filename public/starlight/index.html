@@ -157,6 +157,77 @@ var levels=[
  {title:"Nebula Fold",chapter:"Deep Space",d:"M73 251 C99 220 111 178 136 151 C158 127 190 119 215 134 C241 150 242 182 221 202 C200 222 169 217 157 195 C143 168 158 139 186 123 C218 104 256 114 282 141"},
  {title:"Homeward",chapter:"Deep Space",d:"M83 105 C120 83 155 92 171 121 C188 152 169 181 140 178 C116 175 105 151 118 132 C137 104 183 104 213 126 C248 151 260 197 240 229 C222 259 186 267 154 246 C124 226 116 193 133 169 C151 143 188 143 211 161 C236 181 241 217 277 247"}
 ];
+function smoothCurvePath(points){
+ var path="M"+points[0].x.toFixed(2)+" "+points[0].y.toFixed(2);
+ for(var i=0;i<points.length-1;i++){
+  var p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)];
+  var c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6;
+  var c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;
+  path+=" C"+c1x.toFixed(2)+" "+c1y.toFixed(2)+" "+c2x.toFixed(2)+" "+c2y.toFixed(2)+" "+p2.x.toFixed(2)+" "+p2.y.toFixed(2)
+ }
+ return path
+}
+function fitShapeToBoard(path){
+ var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,maxRadius=0;
+ path.replace(pairPattern,function(match,sx,sy){maxRadius=Math.max(maxRadius,Math.hypot(Number(sx)-180,Number(sy)-180));return match});
+ var scale=Math.min(1,136/Math.max(1,maxRadius));
+ return path.replace(pairPattern,function(match,sx,sy){var x=(Number(sx)-180)*scale,y=(Number(sy)-180)*scale;return (180+x).toFixed(2)+" "+(180+y).toFixed(2)})
+}
+function buildSmoothShapeLibrary(){
+ var waves=[],spirals=[],amplitudes=[58,76,94,112];
+ for(var cycles=1;cycles<=10;cycles++){
+  for(var ai=0;ai<amplitudes.length;ai++){
+   var amplitude=amplitudes[ai],points=[],samples=Math.max(64,cycles*20);
+   for(var j=0;j<=samples;j++){var u=j/samples;points.push({x:34+292*u,y:180+amplitude*Math.sin(2*Math.PI*cycles*u)})}
+   waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(points))})
+  }
+ }
+ for(var ei=0;ei<10;ei++){
+  var enveloped=[],eCycles=2+(ei%7),eAmp=76+(ei%4)*10,eSamples=Math.max(80,eCycles*22);
+  for(var ej=0;ej<=eSamples;ej++){var eu=ej/eSamples,envelope=.72+.22*(.5+.5*Math.sin(2*Math.PI*eu+ei*.31));enveloped.push({x:34+292*eu,y:180+eAmp*envelope*Math.sin(2*Math.PI*eCycles*eu)})}
+  waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(enveloped))})
+ }
+ for(var ci=0;ci<10;ci++){
+  var chirped=[],baseCycles=2+(ci%7),sweep=-.85+ci*.17,cAmp=72+(ci%3)*12,cSamples=Math.max(80,baseCycles*24);
+  for(var ck=0;ck<=cSamples;ck++){var cu=ck/cSamples,phase=2*Math.PI*(baseCycles*cu+sweep*cu*(1-cu));chirped.push({x:34+292*cu,y:180+cAmp*Math.sin(phase)})}
+  waves.push({kind:"wave",d:fitShapeToBoard(smoothCurvePath(chirped))})
+ }
+ var profiles=[
+  {curve:.78,rx:1,ry:.84,phase:0},
+  {curve:.94,rx:.88,ry:1.08,phase:.14},
+  {curve:1.12,rx:1.12,ry:.96,phase:-.10},
+  {curve:1.32,rx:.96,ry:1.14,phase:.25}
+ ];
+ for(var turns=1;turns<=10;turns++){
+  for(var pi=0;pi<profiles.length;pi++){
+   var profile=profiles[pi],coil=[],samples=Math.max(96,turns*36);
+   for(var sk=0;sk<=samples;sk++){
+    var su=sk/samples,radius=13+111*Math.pow(su,profile.curve),angle=2*Math.PI*turns*su+profile.phase;
+    coil.push({x:180+radius*profile.rx*Math.cos(angle),y:180+radius*profile.ry*Math.sin(angle)})
+   }
+   spirals.push({kind:"spiral",turns:turns,d:fitShapeToBoard(smoothCurvePath(coil))})
+  }
+ }
+ var ordered=[];
+ for(var pair=0;pair<20;pair++){
+  ordered.push(waves[pair*2],spirals[pair*2],waves[pair*2+1],spirals[pair*2+1])
+ }
+ for(var rest=40;rest<waves.length;rest++)ordered.push(waves[rest]);
+ return ordered.slice(0,100)
+}
+var shapeLibrary=buildSmoothShapeLibrary();
+var libraryAdjectives=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"];
+var libraryNouns=["Ribbon","Lantern","Bloom","Current","Spiral","Comet","Petal","Sail","Echo","Orbit","Whisper","Arc"];
+var libraryRegions=[{name:"Nebula Fields",color:"#8a6bc3"},{name:"Aurora Reach",color:"#42a88f"},{name:"Comet Veil",color:"#c47c60"},{name:"Deep Current",color:"#6285c9"},{name:"Stellar Expanse",color:"#a66da8"}];
+for(var libraryIndex=0;libraryIndex<shapeLibrary.length;libraryIndex++){
+ if(libraryIndex<levels.length){levels[libraryIndex].d=shapeLibrary[libraryIndex].d;levels[libraryIndex].shapeKind=shapeLibrary[libraryIndex].kind;continue}
+ var regionOffset=Math.floor((libraryIndex-12)/12),libraryRegion=libraryRegions[regionOffset%libraryRegions.length];
+ levels.push({
+  title:libraryAdjectives[libraryIndex%libraryAdjectives.length]+" "+libraryNouns[(libraryIndex*5+3)%libraryNouns.length]+" "+(libraryIndex+1),
+  chapter:libraryRegion.name+(regionOffset>=libraryRegions.length?" "+(Math.floor(regionOffset/libraryRegions.length)+1):""),
+  d:shapeLibrary[libraryIndex].d,shapeKind:shapeLibrary[libraryIndex].kind,regionGlow:libraryRegion.color
+ })
+}
 var storageKey="starlightTracer",stored={};
 try{stored=JSON.parse(localStorage.getItem(storageKey)||"{}")}catch(e){}
 var state={theme:stored.theme||"Deep Orbit",level:Math.max(1,Number(stored.level)||1),highestLevel:Math.max(1,Number(stored.highestLevel)||Number(stored.level)||1),starStyle:stored.starStyle||"Quiet",sound:!!stored.sound,music:stored.music!==false,haptics:stored.haptics!==false,ignoreDeviceReducedMotion:!!stored.ignoreDeviceReducedMotion};
@@ -182,53 +253,15 @@ function renderThemes(){
 function currentLevel(){return state.level<=levels.length?levels[state.level-1]:generateLevel(state.level)}
 function getLevel(number){return number<=levels.length?levels[number-1]:generateLevel(number)}
 function generateLevel(number){
- var regionIndex=Math.floor((number-13)/12),regions=[{name:"Nebula Fields",color:"#8a6bc3"},{name:"Aurora Reach",color:"#42a88f"},{name:"Comet Veil",color:"#c47c60"},{name:"Deep Current",color:"#6285c9"},{name:"Stellar Expanse",color:"#a66da8"}],region=regions[regionIndex%regions.length],regionName=region.name+(regionIndex>=regions.length?" "+(Math.floor(regionIndex/regions.length)+1):"");
- var seed=number*7919+37;function rand(){return (seed=(seed*48271)%2147483647)/2147483647}
- var first=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"],second=["Ribbon","Lantern","Bloom","Current","Spiral","Comet","Petal","Sail","Echo","Orbit","Whisper","Arc"],serial=number-13,title=first[(serial*7)%first.length]+" "+second[(serial*5+3)%second.length];if(serial>=12)title+=" "+(Math.floor(serial/12)+1);
- var d="M24 180";
- function clampY(y){return Math.max(54,Math.min(306,y))}
- function smoothPath(points){var path="M"+points[0].x.toFixed(1)+" "+points[0].y.toFixed(1);for(var i=0;i<points.length-1;i++){var p0=points[Math.max(0,i-1)],p1=points[i],p2=points[i+1],p3=points[Math.min(points.length-1,i+2)],c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;path+=" C"+c1x.toFixed(1)+" "+c1y.toFixed(1)+" "+c2x.toFixed(1)+" "+c2y.toFixed(1)+" "+p2.x.toFixed(1)+" "+p2.y.toFixed(1)}return path}
- function makeLoopPattern(index,random){
-  var count=1+Math.floor(index/5),style=index%5,baseRx=[86,100,112,94,106][style],yTop=48,yBottom=312,spacing=(yBottom-yTop)/count,path="";
-  function fmt(n){return Number(n).toFixed(1)}
-  function cubic(a,b,p){return " C"+fmt(a.x)+" "+fmt(a.y)+" "+fmt(b.x)+" "+fmt(b.y)+" "+fmt(p.x)+" "+fmt(p.y)}
-  function point(cx,cy,rx,ry,angle,tilt){var co=Math.cos(tilt),si=Math.sin(tilt),ct=Math.cos(angle),st=Math.sin(angle);return{x:cx+rx*ct*co-ry*st*si,y:cy+rx*ct*si+ry*st*co}}
-  function tangent(rx,ry,angle,tilt){var co=Math.cos(tilt),si=Math.sin(tilt),st=Math.sin(angle),ct=Math.cos(angle);return{x:-rx*st*co-ry*ct*si,y:-rx*st*si+ry*ct*co}}
-  function addArc(cx,cy,rx,ry,tilt,a0,a1){
-   var pieces=4,step=(a1-a0)/pieces;
-   for(var p=0;p<pieces;p++){var a=a0+p*step,b=a+step,p0=point(cx,cy,rx,ry,a,tilt),p1=point(cx,cy,rx,ry,b,tilt),v0=tangent(rx,ry,a,tilt),v1=tangent(rx,ry,b,tilt),handle=4/3*Math.tan(step/4),c1={x:p0.x+v0.x*handle,y:p0.y+v0.y*handle},c2={x:p1.x-v1.x*handle,y:p1.y-v1.y*handle};path+=cubic(c1,c2,p1)}
-  }
-  var start={x:180+baseRx*.12,y:24},previous=null;path="M"+fmt(start.x)+" "+fmt(start.y);
-  for(var i=0;i<count;i++){
-   var t=(i+.5)/count,cx=180,cy=yTop+spacing*(i+.5),rx=Math.min(118,baseRx)*(style===1?(i%2?1.05:.95):style===2?.9+.14*Math.sin(Math.PI*t):style===3?.9+.2*t:.94+random()*.12),ry=Math.min(54,spacing*.43),heightFactor=style===0?1:style===1?(i%2?1.12:.88):style===2?.82+.34*Math.sin(Math.PI*t):style===3?.9+.22*t:.86+random()*.24;
-   ry*=heightFactor;
-   var sway=style===1?(i%2?5:-5):style===2?Math.sin(t*Math.PI*2)*12:style===3?(t-.5)*20:style===4?Math.sin(t*Math.PI*3)*10:0;cx+=sway;
-   var tilt=style===0?(random()-.5)*.1:style===1?(i%2?-.15:.15):style===2?Math.sin(t*Math.PI*2)*.19:style===3?(t-.5)*.42:(i%2?-.2:.2)+(random()-.5)*.08;
-   var loopGap=.48+style*.11+(random()-.5)*.1,a0=-loopGap/2,a1=-Math.PI*2+loopGap/2,entry=point(cx,cy,rx,ry,a0,tilt);
-   if(i===0){var leadDx=entry.x-start.x;path+=cubic({x:start.x+leadDx*.35,y:start.y+20},{x:entry.x+24,y:entry.y-24},entry)}else{var dy=entry.y-previous.y,bulge=10+style*3+random()*8;path+=cubic({x:previous.x+bulge,y:previous.y+dy*.32},{x:entry.x+bulge,y:entry.y-dy*.32},entry)}
-   addArc(cx,cy,rx,ry,tilt,a0,a1);previous=point(cx,cy,rx,ry,a1,tilt)
-  }
-  var finish={x:180+baseRx*.12,y:336};
-  path+=cubic({x:previous.x+24,y:previous.y+24},{x:finish.x+28,y:finish.y-22},finish);
-  var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g,maxRadius=0;
-  path.replace(pairPattern,function(match,sx,sy){maxRadius=Math.max(maxRadius,Math.hypot(Number(sx)-180,Number(sy)-180));return match});
-  var scale=Math.min(1,148/Math.max(1,maxRadius)),angle=random()*Math.PI*2,co=Math.cos(angle),si=Math.sin(angle);
-  return path.replace(pairPattern,function(match,sx,sy){var x=(Number(sx)-180)*scale,y=(Number(sy)-180)*scale;return fmt(180+x*co-y*si)+" "+fmt(180+x*si+y*co)})
- }
- var family=(number-13)%5;
- if(family===0||family===3||family===4){
-  var patternGroup=Math.floor((number-13)/5),patternSlot=family===0?0:family===3?1:2,patternIndex=(patternGroup*3+patternSlot)%50;
-  d=makeLoopPattern(patternIndex,rand)
- }else if(family===1){
-  var waves=Math.min(8,2+Math.floor((number-13)/6)),samples=waves*4,amplitude=42+rand()*34,phase=(rand()-.5)*.24,wavePoints=[];
-  for(var wi=0;wi<=samples;wi++){var wy=wi===0||wi===samples?180:180+Math.sin(wi/samples*waves*Math.PI*2+phase)*amplitude+(rand()-.5)*16;wavePoints.push({x:24+312*wi/samples,y:clampY(wy)})}
-  d=smoothPath(wavePoints)
- }else{
-  var turns=Math.min(18,4+Math.floor((number-13)/2)),zigPoints=[{x:24,y:180}];
-  for(var zi=1;zi<turns;zi++){var zy=clampY((zi%2?112:248)+(rand()-.5)*62);zigPoints.push({x:24+312*zi/turns,y:zy})}
-  zigPoints.push({x:336,y:180});d=zigPoints.map(function(p,index){return (index?" L":"M")+p.x.toFixed(1)+" "+p.y.toFixed(1)}).join("")
- }
- return {title:title,chapter:regionName,d:d,regionGlow:region.color}
+ var baseIndex=(number-101)%shapeLibrary.length,base=levels[baseIndex],cycle=Math.floor((number-101)/shapeLibrary.length)+1;
+ var regionIndex=Math.floor((number-101)/12),region=libraryRegions[regionIndex%libraryRegions.length];
+ var angle=((number-100)*137.50776405003785)*Math.PI/180,co=Math.cos(angle),si=Math.sin(angle);
+ var pairPattern=/(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)/g;
+ var d=base.d.replace(pairPattern,function(match,sx,sy){
+  var x=Number(sx)-180,y=Number(sy)-180;
+  return (180+x*co-y*si).toFixed(2)+" "+(180+x*si+y*co).toFixed(2)
+ });
+ return {title:base.title+" · Drift "+cycle,chapter:region.name+(regionIndex>=libraryRegions.length?" "+(Math.floor(regionIndex/libraryRegions.length)+1):""),d:d,shapeKind:base.shapeKind,regionGlow:region.color}
 }
 function positionMarkers(){
  var start=guide.getPointAtLength(0),end=guide.getPointAtLength(totalLength);
