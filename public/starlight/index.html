@@ -102,6 +102,37 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .landing-secondary-action{min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:14px;background:#ffffff06;font-size:12px;font-weight:800;transition:transform .18s,border-color .18s,background .18s}.landing-secondary-action span{color:var(--trace);font-size:15px}
 .shape-library-link{display:inline-flex;gap:7px;align-items:center;margin-top:21px;color:var(--muted);font-size:11px;text-decoration:none}.shape-library-link:hover{color:var(--trace)}
 .tutorial-steps{display:grid;gap:11px;margin:0 0 20px;padding:0;list-style:none}.tutorial-steps li{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#ffffff05}.tutorial-steps li>span{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;color:#08121e;background:var(--trace);font-size:13px;font-weight:900}.tutorial-steps b{display:block;font-size:13px}.tutorial-steps small{display:block;color:var(--muted);font-size:11px;line-height:1.45;margin-top:3px}.tutorial-start{justify-content:space-between}
+.color-studio{display:none;min-height:calc(100svh - 42px);padding:18px 0 34px}.color-studio.active{display:block}
+.color-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:950px;margin:0 auto 10px}
+.studio-nav-btn{min-width:76px;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:13px;background:#ffffff08;color:var(--muted);font:inherit;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:6px}.studio-nav-btn:hover{border-color:color-mix(in srgb,var(--trace) 45%,transparent);color:var(--ink)}.studio-settings{min-width:40px;width:40px;font-size:17px}
+.color-brand{display:flex;align-items:center;gap:9px;font-weight:850;font-size:14px;letter-spacing:-.2px}.color-brand-mark{color:var(--trace);font-size:20px;text-shadow:0 0 14px var(--glow)}
+.color-intro{text-align:center;margin:15px 0 22px}.color-intro h1{margin:4px 0;font-size:clamp(27px,5vw,38px);letter-spacing:-1px}.color-intro p:last-child{margin:7px 0 0;color:var(--muted);font-size:13px}
+.color-scene-section{max-width:950px;margin:0 auto 15px}.color-section-heading,.color-tools-heading,.color-art-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.color-section-heading{margin:0 0 9px}.color-section-heading h2,.color-tools-heading h2,.color-art-heading h2{margin:0;font-size:15px;letter-spacing:-.2px}.color-section-heading>span{color:var(--muted);font-size:11px}
+.color-scene-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.color-scene-card{min-height:55px;padding:9px 12px;border:1px solid var(--line);border-radius:14px;background:#ffffff06;color:var(--muted);display:flex;align-items:center;gap:10px;text-align:left;font:inherit;transition:border-color .2s,background .2s,transform .2s}
+.color-scene-card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--trace) 45%,transparent)}.color-scene-card[aria-pressed="true"]{border-color:color-mix(in srgb,var(--trace) 63%,transparent);background:color-mix(in srgb,var(--trace) 11%,#111a2c);color:var(--ink);box-shadow:0 0 18px color-mix(in srgb,var(--trace) 10%,transparent)}
+.color-scene-icon{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:11px;background:#ffffff0a;font-size:19px}.color-scene-card b{font-size:12px}.color-scene-card small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.color-workspace{max-width:950px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(230px,.72fr);gap:14px;align-items:stretch}
+.color-art-column,.color-tools{border:1px solid color-mix(in srgb,var(--trace) 19%,var(--line));border-radius:20px;background:linear-gradient(145deg,#101a2c,#0b1424);box-shadow:0 18px 52px #0005,inset 0 1px #ffffff08}
+.color-art-column{padding:15px}.color-art-heading{margin:0 0 11px}.color-art-heading h2{font-size:17px;margin-top:3px}.color-art-kicker{font-size:9px;font-weight:900;letter-spacing:1.5px;color:var(--accent)}
+.color-progress-pill{border:1px solid color-mix(in srgb,var(--trace) 23%,transparent);border-radius:99px;padding:7px 10px;color:var(--trace);font-size:10px;font-weight:800;white-space:nowrap;background:color-mix(in srgb,var(--trace) 8%,transparent)}
+.color-artboard{position:relative;overflow:hidden;border:1px solid #ffffff12;border-radius:16px;background:radial-gradient(ellipse at 50% 48%,color-mix(in srgb,var(--trace) 9%,#0b1424),#08111f 72%);box-shadow:inset 0 0 45px #0005;aspect-ratio:1.2/1}
+.color-artboard svg{display:block;width:100%;height:100%;touch-action:manipulation}
+.color-zone{stroke:#d7e6ffb8;stroke-width:2.2;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .28s ease,filter .25s ease,stroke .2s ease}.color-zone:hover,.color-zone:focus{filter:drop-shadow(0 0 9px var(--trace));stroke:#fff;outline:none}.color-zone:focus{stroke-width:4}
+.color-zone-number{fill:#fff;font-family:system-ui,sans-serif;font-size:12px;font-weight:900;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#101827;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.color-complete-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;padding:10px 15px;border:1px solid color-mix(in srgb,var(--trace) 45%,transparent);border-radius:99px;background:#091321e8;color:var(--trace);font-size:13px;font-weight:900;box-shadow:0 0 34px var(--glow);pointer-events:none;transition:opacity .35s,transform .35s;white-space:nowrap}
+.color-artboard.complete .color-complete-glow{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.color-instruction{margin:10px 2px 0;color:var(--muted);font-size:11px;line-height:1.45}
+.color-tools{padding:17px;display:flex;flex-direction:column;gap:14px}.color-tools-heading{align-items:flex-start}.color-tools-heading h2{margin-top:3px}
+.selected-color-label{padding:6px 9px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:10px;font-weight:800}
+.color-palette{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.color-swatch{position:relative;min-width:0;aspect-ratio:1;border:2px solid #ffffff20;border-radius:14px;background:var(--swatch);box-shadow:inset 0 1px #ffffff35,0 4px 12px #0004;transition:transform .16s,border-color .16s,box-shadow .16s}.color-swatch:hover{transform:scale(1.07)}.color-swatch[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 2px var(--trace),0 0 18px var(--glow),inset 0 1px #ffffff55}.color-swatch small{position:absolute;inset:auto 0 3px;text-align:center;color:#fff;text-shadow:0 1px 3px #000b;font-size:8px;font-weight:900;line-height:1}
+.color-guide-toggle{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:11px;border:1px solid var(--line);border-radius:14px;background:#ffffff05;cursor:pointer}.color-guide-toggle b{display:block;font-size:11px}.color-guide-toggle small{display:block;color:var(--muted);font-size:9px;line-height:1.35;margin-top:3px}
+.color-tool-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}.color-tool-btn{min-height:42px;border:1px solid var(--line);border-radius:12px;background:#ffffff07;color:var(--ink);font:inherit;font-size:11px;font-weight:800}.color-tool-btn:hover:not(:disabled){border-color:color-mix(in srgb,var(--trace) 45%,transparent);background:color-mix(in srgb,var(--trace) 9%,#111a2c)}.color-tool-btn:disabled{opacity:.4;cursor:not-allowed}
+.color-footer-note{max-width:950px;margin:14px auto 0;text-align:center;color:var(--muted);font-size:10px}.color-footer-note span{color:var(--trace)}
+@media(max-width:740px){.color-studio{padding:10px 0 24px}.color-workspace{grid-template-columns:1fr}.color-tools{gap:11px}.color-palette{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.color-swatch{border-radius:11px}.color-art-column{padding:11px}.color-scene-card{padding:8px;gap:7px;min-height:52px}.color-scene-icon{width:30px;height:30px;font-size:16px}.color-scene-card b{font-size:10px}.color-scene-card small{font-size:9px}}
+@media(max-width:390px){.color-scene-grid{gap:6px}.color-scene-card{flex-direction:column;justify-content:center;text-align:center}.color-scene-card small{display:none}.color-brand{font-size:12px}.color-topbar{gap:6px}.studio-nav-btn{min-width:62px;padding:7px 9px;font-size:11px}.color-progress-pill{font-size:9px;padding:6px 8px}}
+@media(prefers-reduced-motion:reduce){.color-zone,.color-complete-glow,.color-scene-card,.color-swatch{transition:none!important;animation:none!important}}
 @media(max-width:600px){.landing-screen{min-height:calc(100svh - 36px);padding:18px 0 25px}.landing-card{border-radius:24px}.landing-emblem{width:66px;height:66px;border-radius:23px;margin-bottom:15px}.landing-copy{font-size:13px;margin-bottom:20px}.landing-action{min-height:66px}.landing-secondary-action{min-height:46px;font-size:11px}}
 @media(max-width:600px){.starlight-page .top-actions{gap:6px}.starlight-page .top-actions .cloud-account-button{width:36px;height:36px;min-height:36px;padding:0!important;display:grid;place-items:center}.starlight-page .top-actions .cloud-account-button [data-cloud-label]{font-size:0}.starlight-page .top-actions .cloud-account-button [data-cloud-label]::before{content:"☁";font-size:15px;line-height:1}.map-btn .label{display:none}.shell{padding:12px 14px 24px}.topbar{min-height:48px}.brand-mark{width:37px;height:37px;border-radius:13px}.brand-title{font-size:15px}.brand-sub{font-size:10px}.quiet-link{font-size:11px;padding:9px 10px}.settings-btn{font-size:12px;padding:9px 11px}.settings-btn .label{display:none}.main{padding:18px 0 4px}.subline{font-size:13px;margin-bottom:14px}.board{border-radius:20px;padding:10px}.board-hint{bottom:14px;font-size:11px;padding:7px 10px}.progress-row{margin-top:11px}.footer-note{margin-top:11px}}
 @media(max-width:370px){.topbar{gap:8px}.brand{gap:8px;min-width:0}.brand-mark{width:32px;height:32px}.brand-title{font-size:13px;white-space:nowrap}.brand-sub{display:none}.top-actions{gap:6px}.quiet-link{font-size:0;max-width:36px;width:36px;padding:9px 0;text-align:center}.quiet-link:before{content:"←";font-size:14px}.settings-btn{padding:9px 10px}.map-grid{grid-template-columns:1fr}.map-region-list{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.board-hint{bottom:10px}}
@@ -123,6 +154,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   <div class="landing-actions">
    <button class="landing-action landing-primary" id="newGameBtn" type="button"><span class="landing-action-icon" aria-hidden="true">✧</span><span><b>Start a new game</b><small>Begin again with the first shape</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="resumeBtn" type="button"><span class="landing-action-icon" aria-hidden="true">☾</span><span><b>Resume game</b><small id="resumeDescription">Continue your saved journey</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action color-launch-action" id="colorStudioOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✿</span><span><b>Cosmic Color Studio</b><small>Color a space scene at your own pace</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
@@ -130,6 +162,35 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   </div>
   <a class="shape-library-link" href="./shape-library.svg" download="starlight-shape-library.svg">Browse the full shape library <span aria-hidden="true">↗</span></a>
  </div>
+</section>
+<section class="color-studio" id="colorStudio" aria-labelledby="colorStudioTitle" aria-hidden="true">
+ <header class="color-topbar">
+  <button class="studio-nav-btn" id="colorBack" type="button"><span aria-hidden="true">←</span> Menu</button>
+  <div class="color-brand"><span class="color-brand-mark" aria-hidden="true">✦</span><span>Cosmic Color Studio</span></div>
+  <button class="studio-nav-btn studio-settings" id="colorSettings" type="button" aria-label="Open settings">⚙</button>
+ </header>
+ <div class="color-intro"><p class="landing-eyebrow">A softer way to explore</p><h1 id="colorStudioTitle">Color the cosmos</h1><p>Choose a scene, pick a glow, and fill each region with a tap.</p></div>
+ <section class="color-scene-section" aria-label="Choose a space scene">
+  <div class="color-section-heading"><h2>Choose a scene</h2><span>3 little worlds</span></div>
+  <div class="color-scene-grid" id="colorSceneGrid"></div>
+ </section>
+ <div class="color-workspace">
+  <div class="color-art-column">
+   <div class="color-art-heading"><div><span class="color-art-kicker">YOUR CANVAS</span><h2 id="colorSceneTitle">Ringed Planet</h2></div><div class="color-progress-pill" id="colorProgress">0 of 10 filled</div></div>
+   <div class="color-artboard" id="colorArtboard">
+    <svg id="colorArtwork" viewBox="0 0 360 300" role="img" aria-label="A space coloring scene"></svg>
+    <div class="color-complete-glow" id="colorCompleteGlow" aria-hidden="true">✦ Scene complete ✦</div>
+   </div>
+   <p class="color-instruction" id="colorInstruction">Choose a color, then tap a region to fill it.</p>
+  </div>
+  <aside class="color-tools" aria-label="Coloring tools">
+   <div class="color-tools-heading"><div><span class="color-art-kicker">PALETTE</span><h2>Choose a color</h2></div><span class="selected-color-label" id="selectedColorLabel">Aqua</span></div>
+   <div class="color-palette" id="colorPalette" role="group" aria-label="Color palette"></div>
+   <label class="color-guide-toggle"><span><b>Paint by number</b><small>Tap a region to use its guide color</small></span><span class="switch"><input id="colorGuideToggle" type="checkbox"><span></span></span></label>
+   <div class="color-tool-buttons"><button class="color-tool-btn" id="colorUndo" type="button" disabled>↶ Undo</button><button class="color-tool-btn" id="colorReset" type="button">Clear scene</button></div>
+  </aside>
+ </div>
+ <div class="color-footer-note"><span aria-hidden="true">✧</span> No timer. No wrong colors. Just make it yours.</div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
 <header class="topbar">
@@ -299,7 +360,178 @@ for(var libraryIndex=0;libraryIndex<shapeLibrary.length;libraryIndex++){
 }
 var storageKey="starlightTracer",stored={};
 try{stored=JSON.parse(localStorage.getItem(storageKey)||"{}")}catch(e){}
-var state={theme:stored.theme||"Deep Orbit",level:Math.max(1,Number(stored.level)||1),highestLevel:Math.max(1,Number(stored.highestLevel)||Number(stored.level)||1),starStyle:stored.starStyle||"Quiet",sound:!!stored.sound,music:stored.music!==false,haptics:stored.haptics!==false,ignoreDeviceReducedMotion:!!stored.ignoreDeviceReducedMotion};
+var state={theme:stored.theme||"Deep Orbit",level:Math.max(1,Number(stored.level)||1),highestLevel:Math.max(1,Number(stored.highestLevel)||Number(stored.level)||1),starStyle:stored.starStyle||"Quiet",sound:!!stored.sound,music:stored.music!==false,haptics:stored.haptics!==false,ignoreDeviceReducedMotion:!!stored.ignoreDeviceReducedMotion,colorStudio:stored.colorStudio||null};
+
+var colorStudioState=state.colorStudio&&typeof state.colorStudio==="object"?state.colorStudio:{scene:0,selectedColor:0,guided:false,fills:{}};
+if(!colorStudioState.fills||typeof colorStudioState.fills!=="object")colorStudioState.fills={};
+colorStudioState.scene=Math.max(0,Math.min(2,Number(colorStudioState.scene)||0));
+colorStudioState.selectedColor=Math.max(0,Math.min(11,Number(colorStudioState.selectedColor)||0));
+colorStudioState.guided=!!colorStudioState.guided;
+state.colorStudio=colorStudioState;
+var colorUndoStack=[];
+var colorSvgNS="http://www.w3.org/2000/svg";
+var extraColorSwatches=[
+ {name:"Starlight",hex:"#edf5ff"},{name:"Ice Blue",hex:"#91cfe7"},{name:"Ocean",hex:"#347cae"},{name:"Indigo",hex:"#5552a4"},
+ {name:"Lavender",hex:"#b79ce8"},{name:"Orchid",hex:"#dc8fc6"},{name:"Rose",hex:"#ee9a9d"},{name:"Coral",hex:"#f28f70"},
+ {name:"Sunbeam",hex:"#f4ca7e"},{name:"Mint",hex:"#88c9a9"}
+];
+function studioEllipse(cx,cy,rx,ry){
+ var k=.55228475;
+ return "M"+(cx+rx).toFixed(2)+" "+cy.toFixed(2)+" C"+(cx+rx).toFixed(2)+" "+(cy+ry*k).toFixed(2)+" "+(cx+rx*k).toFixed(2)+" "+(cy+ry).toFixed(2)+" "+cx.toFixed(2)+" "+(cy+ry).toFixed(2)+
+ " C"+(cx-rx*k).toFixed(2)+" "+(cy+ry).toFixed(2)+" "+(cx-rx).toFixed(2)+" "+(cy+ry*k).toFixed(2)+" "+(cx-rx).toFixed(2)+" "+cy.toFixed(2)+
+ " C"+(cx-rx).toFixed(2)+" "+(cy-ry*k).toFixed(2)+" "+(cx-rx*k).toFixed(2)+" "+(cy-ry).toFixed(2)+" "+cx.toFixed(2)+" "+(cy-ry).toFixed(2)+
+ " C"+(cx+rx*k).toFixed(2)+" "+(cy-ry).toFixed(2)+" "+(cx+rx).toFixed(2)+" "+(cy-ry*k).toFixed(2)+" "+(cx+rx).toFixed(2)+" "+cy.toFixed(2)+" Z"
+}
+function studioClosedCurve(points){
+ var path="M"+points[0].x.toFixed(2)+" "+points[0].y.toFixed(2),n=points.length;
+ for(var i=0;i<n;i++){
+  var p0=points[(i+n-1)%n],p1=points[i],p2=points[(i+1)%n],p3=points[(i+2)%n];
+  var c1x=p1.x+(p2.x-p0.x)/6,c1y=p1.y+(p2.y-p0.y)/6,c2x=p2.x-(p3.x-p1.x)/6,c2y=p2.y-(p3.y-p1.y)/6;
+  path+=" C"+c1x.toFixed(2)+" "+c1y.toFixed(2)+" "+c2x.toFixed(2)+" "+c2y.toFixed(2)+" "+p2.x.toFixed(2)+" "+p2.y.toFixed(2)
+ }
+ return path+" Z"
+}
+function studioBlob(cx,cy,rx,ry,phase,tilt){
+ var points=[],co=Math.cos(tilt||0),si=Math.sin(tilt||0);
+ for(var i=0;i<16;i++){
+  var a=2*Math.PI*i/16,f=1+.10*Math.sin(3*a+phase)+.045*Math.cos(5*a-phase*.7),x=rx*f*Math.cos(a),y=ry*f*Math.sin(a);
+  points.push({x:cx+x*co-y*si,y:cy+x*si+y*co})
+ }
+ return studioClosedCurve(points)
+}
+function studioRing(cx,cy,rx,ry,innerRx,innerRy){return studioEllipse(cx,cy,rx,ry)+" "+studioEllipse(cx,cy,innerRx,innerRy)}
+function buildColorScenes(){
+ var planetClip=studioEllipse(184,149,79,79),nebula=[];
+ var planetZones=[
+  {label:"Orbit ring",d:studioRing(180,154,147,60,123,39),x:96,y:118,fillRule:"evenodd"},
+  {label:"Planet",d:studioEllipse(184,149,79,79),x:184,y:149},
+  {label:"Cloud bank",d:studioBlob(154,126,53,23,.4,-.16),x:153,y:126,clip:true},
+  {label:"Cloud ribbon",d:studioBlob(208,155,49,20,1.6,.14),x:208,y:155,clip:true},
+  {label:"Lower atmosphere",d:studioBlob(169,185,56,22,2.2,-.08),x:169,y:185,clip:true},
+  {label:"Crater",d:studioEllipse(207,127,12,8),x:207,y:127,clip:true},
+  {label:"Small moon",d:studioEllipse(286,79,24,24),x:286,y:79},
+  {label:"Moon glow",d:studioEllipse(286,79,12,12),x:286,y:79}
+ ];
+ var nebulaZones=[
+  {label:"Nebula heart",d:studioBlob(178,151,77,61,.2,.1),x:178,y:151},
+  {label:"Violet cloud",d:studioBlob(125,127,54,44,1.1,-.25),x:125,y:127},
+  {label:"Blue cloud",d:studioBlob(229,128,55,42,2.4,.2),x:229,y:128},
+  {label:"Rose cloud",d:studioBlob(136,190,57,39,3.2,.16),x:136,y:190},
+  {label:"Aqua cloud",d:studioBlob(220,189,60,43,4.4,-.15),x:220,y:189},
+  {label:"Golden cloud",d:studioBlob(180,214,44,27,5.2,.05),x:180,y:214},
+  {label:"Moonlet",d:studioEllipse(284,81,20,20),x:284,y:81},
+  {label:"Stardust",d:studioEllipse(77,86,12,12),x:77,y:86},
+  {label:"Soft glow",d:studioEllipse(279,221,9,9),x:279,y:221}
+ ];
+ var cometZones=[
+  {label:"Long comet tail",d:studioBlob(123,150,87,30,1.1,-.24),x:123,y:150},
+  {label:"Upper tail",d:studioBlob(135,112,73,20,2.2,-.12),x:135,y:112},
+  {label:"Lower tail",d:studioBlob(140,190,68,21,3.4,.13),x:140,y:190},
+  {label:"Tail shimmer",d:studioBlob(175,151,55,15,4.2,-.2),x:175,y:151},
+  {label:"Comet head",d:studioBlob(238,151,49,48,.3,.1),x:238,y:151},
+  {label:"Bright core",d:studioEllipse(245,143,25,24),x:245,y:143},
+  {label:"Warm glint",d:studioEllipse(226,128,11,10),x:226,y:128},
+  {label:"Orbiting moon",d:studioEllipse(294,91,17,17),x:294,y:91},
+  {label:"Tiny moon",d:studioEllipse(72,216,12,12),x:72,y:216}
+ ];
+ for(var i=0;i<nebulaZones.length;i++)nebulaZones[i].guide=i%12+1;
+ for(var p=0;p<planetZones.length;p++)planetZones[p].guide=p%12+1;
+ for(var c=0;c<cometZones.length;c++)cometZones[c].guide=c%12+1;
+ return [
+  {id:"ringed-world",title:"Ringed World",icon:"🪐",tagline:"A quiet planet with drifting rings",clip:planetClip,zones:planetZones},
+  {id:"nebula-cloud",title:"Nebula Cloud",icon:"🌌",tagline:"Layer soft color through a star cloud",zones:nebulaZones},
+  {id:"comet-drift",title:"Comet Drift",icon:"☄️",tagline:"Give a passing comet its own glow",zones:cometZones}
+ ]
+}
+var colorScenes=buildColorScenes();
+function studioPalette(){
+ var theme=palettes.find(function(p){return p.name===state.theme})||palettes[0];
+ return [{name:"Theme glow",hex:theme.trace},{name:"Theme accent",hex:theme.accent}].concat(extraColorSwatches)
+}
+function persistColorStudio(){state.colorStudio=colorStudioState;save()}
+function showColorStudio(){
+ document.getElementById("landingScreen").hidden=true;
+ document.getElementById("gameScreen").classList.remove("active");
+ document.getElementById("gameScreen").setAttribute("aria-hidden","true");
+ var studio=document.getElementById("colorStudio");studio.classList.add("active");studio.setAttribute("aria-hidden","false");
+ renderColorScenes();renderColorPalette();renderColorArtwork();window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
+ document.getElementById("colorBack").focus()
+}
+function hideColorStudio(){
+ var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");showLanding()
+}
+function svgElement(tag,attrs){
+ var el=document.createElementNS(colorSvgNS,tag);
+ Object.keys(attrs||{}).forEach(function(key){el.setAttribute(key,attrs[key])});
+ return el
+}
+function renderColorScenes(){
+ var grid=document.getElementById("colorSceneGrid");grid.innerHTML="";
+ colorScenes.forEach(function(scene,index){
+  var b=document.createElement("button");b.type="button";b.className="color-scene-card";b.setAttribute("aria-pressed",colorStudioState.scene===index?"true":"false");
+  b.innerHTML='<span class="color-scene-icon" aria-hidden="true">'+scene.icon+'</span><span><b>'+scene.title+'</b><small>'+scene.tagline+'</small></span>';
+  b.addEventListener("click",function(){colorStudioState.scene=index;persistColorStudio();renderColorScenes();renderColorArtwork()});grid.appendChild(b)
+ })
+}
+function renderColorPalette(){
+ var palette=studioPalette(),grid=document.getElementById("colorPalette");grid.innerHTML="";
+ palette.forEach(function(color,index){
+  var b=document.createElement("button");b.type="button";b.className="color-swatch";b.style.setProperty("--swatch",color.hex);b.setAttribute("aria-label","Color "+(index+1)+": "+color.name);b.setAttribute("aria-pressed",colorStudioState.selectedColor===index?"true":"false");b.title=(index+1)+" · "+color.name;
+  if(colorStudioState.guided){var num=document.createElement("small");num.textContent=index+1;b.appendChild(num)}
+  b.addEventListener("click",function(){colorStudioState.selectedColor=index;persistColorStudio();renderColorPalette();document.getElementById("selectedColorLabel").textContent=color.name});grid.appendChild(b)
+ });
+ document.getElementById("selectedColorLabel").textContent=palette[colorStudioState.selectedColor].name;
+ document.getElementById("colorGuideToggle").checked=colorStudioState.guided
+}
+function renderColorProgress(){
+ var scene=colorScenes[colorStudioState.scene],fills=colorStudioState.fills[scene.id]||{},count=scene.zones.reduce(function(total,z,index){return total+(fills[index]?1:0)},0),pill=document.getElementById("colorProgress"),board=document.getElementById("colorArtboard");
+ pill.textContent=count===scene.zones.length?"Scene complete ✦":count+" of "+scene.zones.length+" filled";
+ board.classList.toggle("complete",count===scene.zones.length)
+}
+function renderColorArtwork(){
+ var scene=colorScenes[colorStudioState.scene],svg=document.getElementById("colorArtwork");svg.innerHTML="";svg.setAttribute("aria-label",scene.title+" coloring scene");
+ var defs=svgElement("defs"),glow=svgElement("radialGradient",{id:"colorStudioGlow",cx:"50%",cy:"48%",r:"65%"});
+ var stop1=svgElement("stop",{offset:"0%","stop-color":"var(--trace)","stop-opacity":".18"}),stop2=svgElement("stop",{offset:"100%","stop-color":"var(--bg)","stop-opacity":"0"});
+ glow.appendChild(stop1);glow.appendChild(stop2);defs.appendChild(glow);
+ if(scene.clip){var cp=svgElement("clipPath",{id:"colorStudioPlanetClip"});var clipPath=svgElement("path",{d:scene.clip});cp.appendChild(clipPath);defs.appendChild(cp)}
+ svg.appendChild(defs);svg.appendChild(svgElement("rect",{x:"0",y:"0",width:"360",height:"300",fill:"url(#colorStudioGlow)"}));
+ var seed=scene.id.length*617+43;function random(){seed=(seed*48271)%2147483647;return seed/2147483647}
+ for(var si=0;si<30;si++){var r=si%8===0?2.4:1.35;svg.appendChild(svgElement("circle",{cx:(18+random()*324).toFixed(1),cy:(15+random()*270).toFixed(1),r:r,fill:si%3===0?"var(--accent)":"#dceaff",opacity:(.24+random()*.4).toFixed(2)}))}
+ var fills=colorStudioState.fills[scene.id]||{},palette=studioPalette(),guideLabels=[];
+ scene.zones.forEach(function(zone,index){
+  var d=svgElement("path",{d:zone.d,class:"color-zone",fill:fills[index]||"#142239","fill-rule":zone.fillRule||"nonzero","data-index":index,role:"button",tabindex:"0","aria-label":zone.label+(fills[index]?", colored":", uncolored")});
+  if(zone.clip)d.setAttribute("clip-path","url(#colorStudioPlanetClip)");
+  d.addEventListener("click",function(){fillColorRegion(index)});
+  d.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();fillColorRegion(index)}});
+  svg.appendChild(d);
+  if(colorStudioState.guided){var label=svgElement("text",{x:zone.x,y:zone.y,class:"color-zone-number","aria-hidden":"true"});label.textContent=zone.guide;guideLabels.push(label)}
+ });
+ guideLabels.forEach(function(label){svg.appendChild(label)});
+ document.getElementById("colorSceneTitle").textContent=scene.title;
+ renderColorProgress();updateColorActions()
+}
+function updateColorActions(){
+ var last=colorUndoStack[colorUndoStack.length-1],scene=colorScenes[colorStudioState.scene];
+ document.getElementById("colorUndo").disabled=!last||last.scene!==scene.id
+}
+function fillColorRegion(index){
+ var scene=colorScenes[colorStudioState.scene],zone=scene.zones[index],fills=colorStudioState.fills[scene.id]||{},before=Object.assign({},fills),palette=studioPalette(),colorIndex=colorStudioState.guided?zone.guide-1:colorStudioState.selectedColor,color=palette[colorIndex];
+ if(!color)return;
+ colorUndoStack.push({scene:scene.id,fills:before});if(colorUndoStack.length>80)colorUndoStack.shift();
+ fills[index]=color.hex;colorStudioState.fills[scene.id]=fills;colorStudioState.selectedColor=colorIndex;persistColorStudio();
+ var path=document.querySelector('#colorArtwork [data-index="'+index+'"]');if(path){path.style.fill=color.hex;path.setAttribute("aria-label",zone.label+", "+color.name)}
+ document.getElementById("selectedColorLabel").textContent=color.name;renderColorPalette();renderColorProgress();updateColorActions()
+}
+function undoColor(){
+ var scene=colorScenes[colorStudioState.scene],last=colorUndoStack[colorUndoStack.length-1];if(!last||last.scene!==scene.id)return;
+ colorStudioState.fills[scene.id]=last.fills;colorUndoStack.pop();persistColorStudio();renderColorArtwork()
+}
+function clearColorScene(){
+ var scene=colorScenes[colorStudioState.scene],before=colorStudioState.fills[scene.id]||{};
+ if(!Object.keys(before).length)return;
+ colorUndoStack.push({scene:scene.id,fills:Object.assign({},before)});colorStudioState.fills[scene.id]={};persistColorStudio();renderColorArtwork()
+}
+
 var starStyles=[{name:"Quiet",desc:"A few gentle stars",unlockLevel:1},{name:"Aurora",desc:"More colored glimmers",unlockLevel:13},{name:"Stardust",desc:"A fuller starfield",unlockLevel:25}];
 var svg=document.getElementById("traceSvg"),guide=document.getElementById("guidePath"),trace=document.getElementById("tracePath"),halo=document.getElementById("haloPath");
 var isTracing=false,complete=false,progress=0,totalLength=0,toastTimer=null,pathSamples=[],lastInputPoint=null,splashStartTimer=null,splashFinishTimer=null,hapticStep=0;
@@ -407,11 +639,13 @@ function showLanding(){
  document.getElementById("landingScreen").hidden=false;
  document.getElementById("gameScreen").classList.remove("active");
  document.getElementById("gameScreen").setAttribute("aria-hidden","true");
+ var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");
  window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
  document.getElementById("newGameBtn").focus()
 }
 function showGame(){
  document.getElementById("landingScreen").hidden=true;
+ var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");
  document.getElementById("gameScreen").classList.add("active");
  document.getElementById("gameScreen").setAttribute("aria-hidden","false");
  window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
@@ -429,6 +663,12 @@ function closeTutorial(){
 
 function openSettings(){settingsReturnFocus=document.activeElement;var c=document.getElementById("modalCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("motionToggle").checked=state.ignoreDeviceReducedMotion;document.getElementById("hapticToggle").checked=state.haptics;document.getElementById("musicToggle").checked=state.music;document.getElementById("soundToggle").checked=state.sound;renderThemes();renderStarStyles();document.getElementById("settingsClose").focus()}
 function closeSettings(){var c=document.getElementById("modalCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");if(settingsReturnFocus&&settingsReturnFocus.focus)settingsReturnFocus.focus();else document.getElementById("settingsOpen").focus()}
+document.getElementById("colorStudioOpen").addEventListener("click",showColorStudio);
+document.getElementById("colorBack").addEventListener("click",hideColorStudio);
+document.getElementById("colorSettings").addEventListener("click",openSettings);
+document.getElementById("colorGuideToggle").addEventListener("change",function(){colorStudioState.guided=this.checked;persistColorStudio();renderColorPalette();renderColorArtwork()});
+document.getElementById("colorUndo").addEventListener("click",undoColor);
+document.getElementById("colorReset").addEventListener("click",clearColorScene);
 document.getElementById("newGameBtn").addEventListener("click",function(){state.level=1;save();renderLevel();showGame()});
 document.getElementById("resumeBtn").addEventListener("click",function(){if(this.disabled)return;renderLevel();showGame()});
 document.getElementById("landingOpen").addEventListener("click",showLanding);
