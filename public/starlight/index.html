@@ -179,15 +179,15 @@ function currentLevel(){return state.level<=levels.length?levels[state.level-1]:
 function getLevel(number){return number<=levels.length?levels[number-1]:generateLevel(number)}
 function generateLevel(number){
  var regionIndex=Math.floor((number-13)/12),regions=[{name:"Nebula Fields",color:"#8a6bc3"},{name:"Aurora Reach",color:"#42a88f"},{name:"Comet Veil",color:"#c47c60"},{name:"Deep Current",color:"#6285c9"},{name:"Stellar Expanse",color:"#a66da8"}],region=regions[regionIndex%regions.length],regionName=region.name+(regionIndex>=regions.length?" "+(Math.floor(regionIndex/regions.length)+1):"");
- var seed=number*7919+37;function rand(){seed=(seed*48271)%2147483647;return seed/2147483647}
- var first=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"],second=["Ribbon","Lantern","Bloom","Current","Spiral","Comet","Petal","Sail","Echo","Orbit","Whisper","Arc"],serial=number-13,title=first[(serial*7)%first.length]+" "+second[(serial*5+3)%second.length];
+ var seed=number*7919+37;function rand(){return (seed=(seed*48271)%2147483647)/2147483647}
+ var first=["Quiet","Silver","Wandering","Velvet","Hidden","Frosted","Soft","Distant","Glowing","Amber","Lunar","Gentle"],second=["Ribbon","Lantern","Bloom","Current","Spiral","Comet","Petal","Sail","Echo","Orbit","Whisper","Arc"],serial=number-13,title=first[(serial*7)%first.length]+" "+second[(serial*5+3)%second.length];if(serial>=12)title+=" "+(Math.floor(serial/12)+1);
  if(number>=25){
-  var loops=number<37?1:Math.min(4,2+Math.floor((number-37)/8)),radius=loops===1?65:loops===2?43:loops===3?33:27,d="M22 180",lastX=22,lastY=180;
+  var loops=number<29?1:number<35?2:number<42?3:number<50?4:number<60?5:6,d="M22 180",lastX=22,lastY=180;
   for(var li=0;li<loops;li++){
-   var cx=loops===1?180:60+li*240/(loops-1),cy=loops===1?180:(li%2===0?90:270),entryX=cx-radius,upper=cy-radius*1.18,lower=cy+radius*1.18;
-   d+=" C"+(lastX+18).toFixed(1)+" "+lastY.toFixed(1)+" "+(entryX-16).toFixed(1)+" "+cy+" "+entryX.toFixed(1)+" "+cy;
-   d+=" C"+entryX.toFixed(1)+" "+upper.toFixed(1)+" "+(cx+radius).toFixed(1)+" "+upper.toFixed(1)+" "+(cx+radius).toFixed(1)+" "+cy;
-   d+=" C"+(cx+radius).toFixed(1)+" "+lower.toFixed(1)+" "+entryX.toFixed(1)+" "+lower.toFixed(1)+" "+entryX.toFixed(1)+" "+cy;
+   var baseRx=loops===1?56:Math.min(46,(290/(loops-1))*.31),rx=baseRx*(.84+rand()*.30),cx=loops===1?180:28+rx+li*(304-2*rx)/(loops-1),cy=96+rand()*168,maxRy=Math.max(28,Math.min(cy-42,318-cy)/1.28),ry=Math.min(rx*(1.08+rand()*.34),maxRy),lean=(rand()-.5)*.28,entryX=cx-rx,topY=cy-ry*1.22,bottomY=cy+ry*1.22,rightX=cx+rx;
+   d+=" C"+(lastX+18).toFixed(1)+" "+lastY.toFixed(1)+" "+(entryX-16).toFixed(1)+" "+cy.toFixed(1)+" "+entryX.toFixed(1)+" "+cy.toFixed(1);
+   d+=" C"+(entryX+rx*.42).toFixed(1)+" "+(topY+lean*ry).toFixed(1)+" "+(rightX-rx*.42).toFixed(1)+" "+(topY-lean*ry).toFixed(1)+" "+rightX.toFixed(1)+" "+cy.toFixed(1);
+   d+=" C"+(rightX-rx*.42).toFixed(1)+" "+(bottomY-lean*ry).toFixed(1)+" "+(entryX+rx*.42).toFixed(1)+" "+(bottomY+lean*ry).toFixed(1)+" "+entryX.toFixed(1)+" "+cy.toFixed(1);
    lastX=entryX;lastY=cy
   }
   return {title:title,chapter:regionName,d:d,regionGlow:region.color,loops:loops}
