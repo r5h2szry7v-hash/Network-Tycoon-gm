@@ -549,7 +549,7 @@ function animateColorRegionFill(index,hex){
   if(start===null)start=now;
   var t=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-t,3);
   windowRect.setAttribute("width",String(total*eased));
-  overlay.setAttribute("opacity",String(.25+.75*Math.min(1,t*2)));
+  overlay.setAttribute("opacity",String(t*t*(3-2*t)));
   if(t<1){entry.frame=requestAnimationFrame(tick)}
   else{original.style.fill=hex;entry.cleanup();colorFillAnimations.delete(index)}
  }
