@@ -9,7 +9,9 @@
 :root{color-scheme:dark;--bg:#080f20;--bg2:#101b32;--panel:#101a2c;--panel2:#15223a;--ink:#edf4ff;--muted:#a7b5ca;--line:#ffffff17;--trace:#72d7f2;--accent:#a7bdf7;--glow:#72d7f250;--shadow:#0008}
 *{box-sizing:border-box}
 html{min-height:100%;background:var(--bg)}
-body{margin:0;min-height:100vh;color:var(--ink);font-family:ui-rounded,"Avenir Next",Avenir,system-ui,sans-serif;background:radial-gradient(ellipse at 50% -18%,color-mix(in srgb,var(--trace) 14%,transparent),transparent 52%),radial-gradient(ellipse at 90% 80%,color-mix(in srgb,var(--accent) 7%,transparent),transparent 40%),linear-gradient(155deg,var(--bg),var(--bg2) 72%,var(--bg));}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:ui-rounded,"Avenir Next",Avenir,system-ui,sans-serif;background:radial-gradient(ellipse at 50% -18%,color-mix(in srgb,var(--trace) 14%,transparent),transparent 52%),radial-gradient(ellipse at 90% 80%,color-mix(in srgb,var(--accent) 7%,transparent),transparent 40%),linear-gradient(155deg,var(--bg),var(--bg2) 72%,var(--bg));overflow-x:hidden}
+.ambient-sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}.ambient-cloud{position:absolute;display:block;width:clamp(340px,66vw,920px);aspect-ratio:1;border-radius:50%;filter:blur(62px);mix-blend-mode:screen;will-change:transform,opacity}.ambient-cloud.one{top:-39%;left:-20%;background:radial-gradient(ellipse at 48% 52%,var(--trace) 0,transparent 68%);animation:cloud-drift-one 54s ease-in-out infinite alternate,cloud-throb-one 19s ease-in-out infinite}.ambient-cloud.two{right:-27%;bottom:-49%;width:clamp(300px,58vw,800px);background:radial-gradient(ellipse at 47% 48%,var(--accent) 0,transparent 69%);animation:cloud-drift-two 63s ease-in-out infinite alternate,cloud-throb-two 23s ease-in-out infinite}.ambient-cloud.three{top:24%;left:41%;width:clamp(250px,42vw,610px);background:radial-gradient(ellipse at 50% 50%,var(--trace) 0,transparent 67%);animation:cloud-drift-three 47s ease-in-out infinite alternate,cloud-throb-one 27s ease-in-out infinite reverse}.shell{position:relative;z-index:1}
+@keyframes cloud-drift-one{0%{transform:translate3d(-3%,0,0) rotate(-12deg) scale(.88)}100%{transform:translate3d(10%,9%,0) rotate(16deg) scale(1.12)}}@keyframes cloud-drift-two{0%{transform:translate3d(5%,5%,0) rotate(18deg) scale(1.08)}100%{transform:translate3d(-10%,-7%,0) rotate(-13deg) scale(.9)}}@keyframes cloud-drift-three{0%{transform:translate3d(-10%,8%,0) rotate(8deg) scale(.9)}100%{transform:translate3d(11%,-10%,0) rotate(-20deg) scale(1.1)}}@keyframes cloud-throb-one{0%,100%{opacity:.075}50%{opacity:.15}}@keyframes cloud-throb-two{0%,100%{opacity:.055}50%{opacity:.13}}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible{outline:3px solid var(--trace);outline-offset:3px}
 a{color:inherit}
@@ -88,6 +90,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 </script>
 </head>
 <body class="starlight-page">
+<div class="ambient-sky" aria-hidden="true"><i class="ambient-cloud one"></i><i class="ambient-cloud two"></i><i class="ambient-cloud three"></i></div>
 <div class="shell">
 <header class="topbar">
   <div class="brand"><div class="brand-mark" aria-hidden="true">✦</div><div><span class="brand-title">Starlight Tracer</span><span class="brand-sub">A little space to unwind</span></div></div>
