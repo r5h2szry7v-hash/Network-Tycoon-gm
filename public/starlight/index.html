@@ -41,7 +41,7 @@ a{color:inherit}
 .start-core,.finish-core{fill:#f1fbff;stroke:var(--trace);stroke-width:4;filter:drop-shadow(0 0 10px var(--trace));pointer-events:none}
 .finish-core{stroke:var(--accent)}
 .trail-star{fill:#fff;opacity:0;filter:drop-shadow(0 0 8px var(--trace));pointer-events:none}.board.has-progress .trail-star{opacity:.95}
-.finish-burst{fill:none;stroke:var(--trace);stroke-width:4;opacity:0;pointer-events:none}.board.finished .finish-burst{animation:finish-bloom .95s ease-out 1}
+.finish-burst{fill:none;stroke:var(--trace);stroke-width:4;opacity:0;pointer-events:none;transform-box:fill-box;transform-origin:center}.board.finished .finish-burst{animation:finish-bloom .95s ease-out 1}
 @keyframes finish-bloom{0%{opacity:.9;transform:scale(.55)}100%{opacity:0;transform:scale(4)}}
 .guide-start{fill:#d6fbff;font-size:11px;font-weight:900;letter-spacing:1px}
 .board-hint{z-index:2;position:absolute;left:50%;bottom:20px;transform:translateX(-50%);padding:8px 13px;border-radius:999px;color:#e6f4ff;background:#0a1425df;border:1px solid #ffffff1a;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none;box-shadow:0 7px 22px #0005}
