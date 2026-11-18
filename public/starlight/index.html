@@ -472,7 +472,12 @@ function showColorStudio(){
  document.getElementById("gameScreen").classList.remove("active");
  document.getElementById("gameScreen").setAttribute("aria-hidden","true");
  var studio=document.getElementById("colorStudio");studio.classList.add("active");studio.setAttribute("aria-hidden","false");
- renderColorScenes();renderColorPalette();renderColorArtwork();window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
+ if(colorStudioState.scene>=colorScenes.length){
+  document.getElementById("colorSceneGrid").textContent="Loading space scenes…";
+  document.getElementById("colorSceneTitle").textContent="Preparing your canvas";
+  colorArtworkReady.then(function(){if(!studio.classList.contains("active"))return;if(colorStudioState.scene>=colorScenes.length)colorStudioState.scene=0;renderColorScenes();renderColorPalette();renderColorArtwork()})
+ }else{renderColorScenes();renderColorPalette();renderColorArtwork()}
+ window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
  document.getElementById("colorBack").focus()
 }
 function hideColorStudio(){
