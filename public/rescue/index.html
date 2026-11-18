@@ -414,7 +414,7 @@ function reveal(index){
  }
  const connectedBefore=connectedTrailCells(),gateIndex=grid.findIndex(g=>g.gate),gateWasConnected=gateIndex>=0&&connectedBefore.has(gateIndex);
  hintTarget=null;scanCells=new Set();mode="reveal";ensureTimer();
- if(grid[index].hazard){playCue("hazard");grid[index].open=true;hitHazardIndex=index;ended=true;clearInterval(timerId);won=false;setStatus("A danger patch was found. Everyone is safe at camp.","bad");render(true);setTimeout(()=>{if(ended&&!hazardDialog.open)hazardDialog.showModal()},420);return}
+ if(grid[index].hazard){playCue("hazard");grid[index].open=true;hitHazardIndex=index;ended=true;clearInterval(timerId);won=false;setStatus("A danger patch was found. Everyone is safe at camp.","bad");render(true);setTimeout(()=>{if(ended&&!hazardDialog.open)hazardDialog.showModal()},3000);return}
  const rescueBefore=rescued.size,queue=[index],clearDistance=new Map([[index,0]]);let cursor=0;
  while(cursor<queue.length){
   const i=queue[cursor++];
