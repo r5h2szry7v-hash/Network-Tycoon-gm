@@ -81,6 +81,28 @@ html.pref-reduced-motion .space-splash.show{opacity:1;visibility:visible;animati
 .switch{position:relative;width:46px;height:27px;flex:none}.switch input{position:absolute;opacity:0;width:1px;height:1px}.switch span{display:block;width:46px;height:27px;border-radius:99px;background:#39465a;transition:background .2s;cursor:pointer}.switch span:after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#eaf1fa;transition:transform .2s}.switch input:checked+span{background:var(--trace)}.switch input:checked+span:after{transform:translateX(19px);background:#091222}.switch input:focus-visible+span{outline:3px solid var(--accent);outline-offset:3px}.music-btn[aria-pressed="true"]{border-color:color-mix(in srgb,var(--trace) 58%,transparent);background:color-mix(in srgb,var(--trace) 19%,#111a2c);box-shadow:0 0 18px var(--glow)}
 .map-summary{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.3px;margin:-3px 0 12px}.map-grid{display:grid;grid-template-columns:1fr;gap:9px}.map-region{border:1px solid var(--line);border-radius:14px;background:#ffffff04;overflow:hidden}.map-region>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;color:var(--ink);font-size:12px;font-weight:850;cursor:pointer;list-style:none}.map-region>summary::-webkit-details-marker{display:none}.map-region>summary:after{content:"⌄";color:var(--accent);margin-left:auto}.map-region>summary small{color:var(--muted);font-size:10px;font-weight:650}.map-region-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 9px 9px}.map-entry{display:flex;align-items:center;gap:10px;text-align:left;min-height:62px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#ffffff06}.map-entry:hover{border-color:color-mix(in srgb,var(--trace) 48%,transparent)}.map-entry.current{border-color:var(--trace);background:color-mix(in srgb,var(--trace) 10%,#111a2c)}.map-entry .map-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--trace) 14%,#101a2c);color:var(--trace);font-size:16px}.map-entry b{display:block;font-size:12px}.map-entry small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.map-entry .map-status{margin-left:auto;color:var(--accent);font-size:11px}.theme-choice.locked{opacity:.5;cursor:default}.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-12px);opacity:0;pointer-events:none;border:1px solid color-mix(in srgb,var(--trace) 35%,transparent);border-radius:99px;padding:9px 14px;background:#101a2cf2;color:var(--ink);font-size:12px;z-index:20;transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translate(-50%,0)}
 html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-motion *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}html.pref-reduced-motion .board.finished #finishCore{fill:var(--trace);stroke-width:6}html.pref-reduced-motion .board.finished #tracePath{filter:drop-shadow(0 0 14px var(--trace))}
+.game-screen{display:none}.game-screen.active{display:block}
+.landing-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:32px 0 42px}
+.landing-screen[hidden]{display:none}
+.landing-card{width:min(100%,560px);padding:clamp(24px,5vw,46px);border:1px solid color-mix(in srgb,var(--trace) 28%,#ffffff1a);border-radius:30px;background:linear-gradient(155deg,color-mix(in srgb,var(--bg2) 87%,#fff 3%),color-mix(in srgb,var(--bg) 94%,#101a2c));box-shadow:0 30px 100px #0008,inset 0 1px #ffffff0b;text-align:center;position:relative;overflow:hidden}
+.landing-card:before{content:"";position:absolute;width:270px;height:270px;top:-155px;left:calc(50% - 135px);border-radius:50%;background:var(--trace);filter:blur(80px);opacity:.12;pointer-events:none}
+.landing-emblem{width:80px;height:80px;margin:0 auto 18px;border-radius:28px;display:grid;place-items:center;position:relative;color:var(--trace);font-size:36px;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--trace) 26%,transparent),transparent 70%),linear-gradient(145deg,#ffffff0d,#ffffff03);border:1px solid color-mix(in srgb,var(--trace) 34%,transparent);box-shadow:0 0 38px var(--glow)}
+.landing-emblem i,.landing-emblem b{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}.landing-emblem i{top:12px;right:13px}.landing-emblem b{bottom:13px;left:14px;width:4px;height:4px}
+.landing-eyebrow{margin:0;color:var(--accent);font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.landing-card h1{font-size:clamp(32px,7vw,48px);line-height:1.05;letter-spacing:-1.5px;margin:9px 0}
+.landing-copy{max-width:390px;margin:0 auto 25px;color:var(--muted);font-size:14px;line-height:1.65}
+.landing-actions{display:grid;gap:10px;text-align:left}
+.landing-action{width:100%;min-height:70px;padding:13px 15px;display:flex;align-items:center;gap:13px;text-align:left;border:1px solid var(--line);border-radius:17px;background:#ffffff08;transition:transform .18s,border-color .18s,background .18s}
+.landing-action:hover:not(:disabled),.landing-secondary-action:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--trace) 55%,transparent);background:color-mix(in srgb,var(--trace) 10%,#111a2c)}
+.landing-primary{border-color:color-mix(in srgb,var(--trace) 53%,transparent);background:linear-gradient(120deg,color-mix(in srgb,var(--trace) 20%,#111a2c),color-mix(in srgb,var(--accent) 14%,#111a2c));box-shadow:0 8px 26px color-mix(in srgb,var(--trace) 10%,transparent)}
+.landing-action:disabled{opacity:.48;cursor:not-allowed}
+.landing-action-icon{width:39px;height:39px;flex:none;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--trace) 15%,transparent);color:var(--trace);font-size:21px}
+.landing-action b{display:block;font-size:14px}.landing-action small{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:4px}.landing-arrow{margin-left:auto;color:var(--trace);font-size:21px}
+.landing-secondary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+.landing-secondary-action{min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:14px;background:#ffffff06;font-size:12px;font-weight:800;transition:transform .18s,border-color .18s,background .18s}.landing-secondary-action span{color:var(--trace);font-size:15px}
+.shape-library-link{display:inline-flex;gap:7px;align-items:center;margin-top:21px;color:var(--muted);font-size:11px;text-decoration:none}.shape-library-link:hover{color:var(--trace)}
+.tutorial-steps{display:grid;gap:11px;margin:0 0 20px;padding:0;list-style:none}.tutorial-steps li{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#ffffff05}.tutorial-steps li>span{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;color:#08121e;background:var(--trace);font-size:13px;font-weight:900}.tutorial-steps b{display:block;font-size:13px}.tutorial-steps small{display:block;color:var(--muted);font-size:11px;line-height:1.45;margin-top:3px}.tutorial-start{justify-content:space-between}
+@media(max-width:600px){.landing-screen{min-height:calc(100svh - 36px);padding:18px 0 25px}.landing-card{border-radius:24px}.landing-emblem{width:66px;height:66px;border-radius:23px;margin-bottom:15px}.landing-copy{font-size:13px;margin-bottom:20px}.landing-action{min-height:66px}.landing-secondary-action{min-height:46px;font-size:11px}}
 @media(max-width:600px){.starlight-page .top-actions{gap:6px}.starlight-page .top-actions .cloud-account-button{width:36px;height:36px;min-height:36px;padding:0!important;display:grid;place-items:center}.starlight-page .top-actions .cloud-account-button [data-cloud-label]{font-size:0}.starlight-page .top-actions .cloud-account-button [data-cloud-label]::before{content:"☁";font-size:15px;line-height:1}.map-btn .label{display:none}.shell{padding:12px 14px 24px}.topbar{min-height:48px}.brand-mark{width:37px;height:37px;border-radius:13px}.brand-title{font-size:15px}.brand-sub{font-size:10px}.quiet-link{font-size:11px;padding:9px 10px}.settings-btn{font-size:12px;padding:9px 11px}.settings-btn .label{display:none}.main{padding:18px 0 4px}.subline{font-size:13px;margin-bottom:14px}.board{border-radius:20px;padding:10px}.board-hint{bottom:14px;font-size:11px;padding:7px 10px}.progress-row{margin-top:11px}.footer-note{margin-top:11px}}
 @media(max-width:370px){.topbar{gap:8px}.brand{gap:8px;min-width:0}.brand-mark{width:32px;height:32px}.brand-title{font-size:13px;white-space:nowrap}.brand-sub{display:none}.top-actions{gap:6px}.quiet-link{font-size:0;max-width:36px;width:36px;padding:9px 0;text-align:center}.quiet-link:before{content:"←";font-size:14px}.settings-btn{padding:9px 10px}.map-grid{grid-template-columns:1fr}.map-region-list{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.board-hint{bottom:10px}}
 @media(prefers-reduced-motion:reduce){html:not(.motion-override) *{scroll-behavior:auto}}
@@ -92,9 +114,27 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 <body class="starlight-page">
 <div class="ambient-sky" aria-hidden="true"><i class="ambient-cloud one"></i><i class="ambient-cloud two"></i><i class="ambient-cloud three"></i></div>
 <div class="shell">
+<section class="landing-screen" id="landingScreen" aria-labelledby="landingTitle">
+ <div class="landing-card">
+  <div class="landing-emblem" aria-hidden="true"><span>✦</span><i></i><b></b></div>
+  <p class="landing-eyebrow">A quiet place among the stars</p>
+  <h1 id="landingTitle">Starlight Tracer</h1>
+  <p class="landing-copy">Follow gentle curves through a sky of waves and spirals. No timer, no wrong turns, just a little room to unwind.</p>
+  <div class="landing-actions">
+   <button class="landing-action landing-primary" id="newGameBtn" type="button"><span class="landing-action-icon" aria-hidden="true">✧</span><span><b>Start a new game</b><small>Begin again with the first shape</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action" id="resumeBtn" type="button"><span class="landing-action-icon" aria-hidden="true">☾</span><span><b>Resume game</b><small id="resumeDescription">Continue your saved journey</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <div class="landing-secondary">
+    <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
+    <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
+   </div>
+  </div>
+  <a class="shape-library-link" href="./shape-library.svg" download="starlight-shape-library.svg">Browse the full shape library <span aria-hidden="true">↗</span></a>
+ </div>
+</section>
+<div class="game-screen" id="gameScreen" aria-hidden="true">
 <header class="topbar">
   <div class="brand"><div class="brand-mark" aria-hidden="true">✦</div><div><span class="brand-title">Starlight Tracer</span><span class="brand-sub">A little space to unwind</span></div></div>
-  <div class="top-actions"><a class="quiet-link" href="/" aria-label="Return to game home">← Games</a><button class="settings-btn map-btn" id="mapOpen" type="button"><span aria-hidden="true">✦</span><span class="label">Sky map</span></button><button class="settings-btn music-btn" id="musicButton" type="button" aria-pressed="false" aria-label="Turn ambient music on"><span aria-hidden="true">♫</span><span class="label">Music</span></button><button class="settings-btn" id="settingsOpen" type="button"><span aria-hidden="true">⚙</span><span class="label">Settings</span></button></div>
+  <div class="top-actions"><a class="quiet-link" href="/" aria-label="Return to game home">← Games</a><button class="settings-btn menu-btn" id="landingOpen" type="button" aria-label="Return to Starlight Tracer menu"><span aria-hidden="true">⌂</span><span class="label">Menu</span></button><button class="settings-btn map-btn" id="mapOpen" type="button"><span aria-hidden="true">✦</span><span class="label">Sky map</span></button><button class="settings-btn music-btn" id="musicButton" type="button" aria-pressed="false" aria-label="Turn ambient music on"><span aria-hidden="true">♫</span><span class="label">Music</span></button><button class="settings-btn" id="settingsOpen" type="button"><span aria-hidden="true">⚙</span><span class="label">Settings</span></button></div>
 </header>
 <main class="main">
   <div class="eyebrow" id="chapter">Drifting · 1</div>
@@ -122,6 +162,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   <p class="footer-note">No timer. No wrong turns. Just follow the glow.</p>
 </main>
 </div>
+</div>
 <div class="modal-cover" id="modalCover" aria-hidden="true">
   <section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="modal-head"><div><h2 id="settingsTitle">Make it yours</h2></div><button class="modal-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
@@ -129,6 +170,18 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
     <div class="settings-section"><h3 class="section-title">Space colors</h3><div class="theme-grid" id="themeGrid"></div></div>
     <div class="settings-section"><h3 class="section-title">Starfield</h3><div class="theme-grid" id="starStyleGrid"></div></div><div class="settings-section"><h3 class="section-title">Haptics</h3><div class="setting-row"><div class="setting-copy"><b>Trace feedback</b><small>Gentle pulses as you draw, with a burst when the constellation is complete.</small></div><label class="switch" aria-label="Enable haptic feedback"><input id="hapticToggle" type="checkbox"><span></span></label></div></div><div class="settings-section"><h3 class="section-title">Sound</h3><div class="setting-row"><div class="setting-copy"><b>Ambient music</b><small>A soft, looping synth soundscape. Playback begins after your first tap.</small></div><label class="switch" aria-label="Enable ambient music"><input id="musicToggle" type="checkbox"><span></span></label></div><div class="setting-row" style="margin-top:9px"><div class="setting-copy"><b>Completion chime</b><small>A soft two-note signal when a trace is complete. Sound starts off.</small></div><label class="switch" aria-label="Enable completion chime"><input id="soundToggle" type="checkbox"><span></span></label></div></div><div class="settings-section"><h3 class="section-title">Motion</h3><div class="setting-row"><div class="setting-copy"><b>Ignore device reduced-motion setting</b><small>By default, Starlight Tracer follows your device preference. Turn this on to restore the full effects.</small></div><label class="switch"><input id="motionToggle" type="checkbox"><span></span></label></div></div>
   </section>
+</div>
+<div class="modal-cover" id="tutorialCover" aria-hidden="true">
+ <section class="modal tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+  <div class="modal-head"><h2 id="tutorialTitle">A gentle first trace</h2><button class="modal-close" id="tutorialClose" type="button" aria-label="Close tutorial">×</button></div>
+  <p class="modal-intro">Take your time. The path is here to guide you, not to rush you.</p>
+  <ol class="tutorial-steps">
+   <li><span>1</span><div><b>Begin at the glowing star</b><small>Touch or click the cyan starting point.</small></div></li>
+   <li><span>2</span><div><b>Follow the curve</b><small>Trace along the soft guide line at any pace.</small></div></li>
+   <li><span>3</span><div><b>Reach the pale star</b><small>Watch the path glow, then continue whenever you’re ready.</small></div></li>
+  </ol>
+  <button class="landing-action landing-primary tutorial-start" id="tutorialStartBtn" type="button"><span><b>Start tracing</b><small>Pick up at your saved shape</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+ </section>
 </div>
 <div class="modal-cover" id="mapCover" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="mapTitle"><div class="modal-head"><h2 id="mapTitle">Your sky map</h2><button class="modal-close" id="mapClose" type="button" aria-label="Close sky map">×</button></div><p class="modal-intro">Return to any constellation you have found. Your journey will be right where you left it.</p><div class="map-summary" id="mapSummary"></div><div class="map-grid" id="mapGrid"></div></section></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -326,11 +379,51 @@ function renderMap(){var grid=document.getElementById("mapGrid");grid.innerHTML=
 function openMap(){renderMap();var c=document.getElementById("mapCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("mapClose").focus()}
 function closeMap(){var c=document.getElementById("mapCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");document.getElementById("mapOpen").focus()}
 function showToast(text){var t=document.getElementById("toast");t.textContent=text;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove("show")},1500)}
-function openSettings(){var c=document.getElementById("modalCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("motionToggle").checked=state.ignoreDeviceReducedMotion;document.getElementById("hapticToggle").checked=state.haptics;document.getElementById("musicToggle").checked=state.music;document.getElementById("soundToggle").checked=state.sound;renderThemes();renderStarStyles();document.getElementById("settingsClose").focus()}
-function closeSettings(){var c=document.getElementById("modalCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");document.getElementById("settingsOpen").focus()}
+
+var settingsReturnFocus=null,tutorialReturnFocus=null;
+function renderLanding(){
+ var hasSave=state.level>1||state.highestLevel>1,resume=document.getElementById("resumeBtn");
+ resume.disabled=!hasSave;
+ document.getElementById("resumeDescription").textContent=hasSave?"Continue at shape "+state.level:"Your saved journey will appear here";
+}
+function showLanding(){
+ renderLanding();
+ document.getElementById("landingScreen").hidden=false;
+ document.getElementById("gameScreen").classList.remove("active");
+ document.getElementById("gameScreen").setAttribute("aria-hidden","true");
+ window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
+ document.getElementById("newGameBtn").focus()
+}
+function showGame(){
+ document.getElementById("landingScreen").hidden=true;
+ document.getElementById("gameScreen").classList.add("active");
+ document.getElementById("gameScreen").setAttribute("aria-hidden","false");
+ window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
+ document.getElementById("landingOpen").focus()
+}
+function openTutorial(){
+ tutorialReturnFocus=document.activeElement;
+ var c=document.getElementById("tutorialCover");c.classList.add("open");c.setAttribute("aria-hidden","false");
+ document.getElementById("tutorialClose").focus()
+}
+function closeTutorial(){
+ var c=document.getElementById("tutorialCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");
+ if(tutorialReturnFocus&&tutorialReturnFocus.focus) tutorialReturnFocus.focus()
+}
+
+function openSettings(){settingsReturnFocus=document.activeElement;var c=document.getElementById("modalCover");c.classList.add("open");c.setAttribute("aria-hidden","false");document.getElementById("motionToggle").checked=state.ignoreDeviceReducedMotion;document.getElementById("hapticToggle").checked=state.haptics;document.getElementById("musicToggle").checked=state.music;document.getElementById("soundToggle").checked=state.sound;renderThemes();renderStarStyles();document.getElementById("settingsClose").focus()}
+function closeSettings(){var c=document.getElementById("modalCover");c.classList.remove("open");c.setAttribute("aria-hidden","true");if(settingsReturnFocus&&settingsReturnFocus.focus)settingsReturnFocus.focus();else document.getElementById("settingsOpen").focus()}
+document.getElementById("newGameBtn").addEventListener("click",function(){state.level=1;save();renderLevel();showGame()});
+document.getElementById("resumeBtn").addEventListener("click",function(){if(this.disabled)return;renderLevel();showGame()});
+document.getElementById("landingOpen").addEventListener("click",showLanding);
+document.getElementById("tutorialOpen").addEventListener("click",openTutorial);
+document.getElementById("landingSettingsOpen").addEventListener("click",openSettings);
+document.getElementById("tutorialClose").addEventListener("click",closeTutorial);
+document.getElementById("tutorialCover").addEventListener("click",function(e){if(e.target===this)closeTutorial()});
+document.getElementById("tutorialStartBtn").addEventListener("click",function(){closeTutorial();renderLevel();showGame()});
 document.getElementById("mapOpen").addEventListener("click",openMap);document.getElementById("mapClose").addEventListener("click",closeMap);document.getElementById("mapCover").addEventListener("click",function(e){if(e.target===this)closeMap()});document.getElementById("settingsOpen").addEventListener("click",openSettings);document.getElementById("settingsClose").addEventListener("click",closeSettings);
 document.getElementById("modalCover").addEventListener("click",function(e){if(e.target===this)closeSettings()});
-document.addEventListener("keydown",function(e){if(e.key==="Escape"&&document.getElementById("modalCover").classList.contains("open"))closeSettings();if(e.key==="Escape"&&document.getElementById("mapCover").classList.contains("open"))closeMap()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&document.getElementById("modalCover").classList.contains("open"))closeSettings();if(e.key==="Escape"&&document.getElementById("mapCover").classList.contains("open"))closeMap();if(e.key==="Escape"&&document.getElementById("tutorialCover").classList.contains("open"))closeTutorial()});
 document.getElementById("hapticToggle").addEventListener("change",function(){state.haptics=this.checked;save();showToast(this.checked?"Haptic feedback on":"Haptic feedback off")});document.getElementById("musicButton").addEventListener("click",function(){state.music=!state.music;save();syncMusicButton();if(state.music)startAmbientMusic();else stopAmbientMusic();showToast(state.music?"Ambient music on":"Ambient music off")});document.getElementById("musicToggle").addEventListener("change",function(){state.music=this.checked;save();syncMusicButton();if(state.music)startAmbientMusic();else stopAmbientMusic();showToast(state.music?"Ambient music on":"Ambient music off")});document.addEventListener("pointerdown",function(){if(state.music)startAmbientMusic()},{once:true});document.addEventListener("visibilitychange",function(){if(document.hidden)stopAmbientMusic();else if(state.music&&ambientMusic.started)startAmbientMusic()});
 document.getElementById("motionToggle").addEventListener("change",function(){state.ignoreDeviceReducedMotion=this.checked;save();applyMotion();showToast(this.checked?"Full motion enabled":"Device motion setting restored")});document.getElementById("soundToggle").addEventListener("change",function(){state.sound=this.checked;save();showToast(this.checked?"Completion chime enabled":"Sound off")});
 document.getElementById("restartBtn").addEventListener("click",restart);document.getElementById("nextBtn").addEventListener("click",nextLevel);
@@ -338,7 +431,7 @@ board.addEventListener("pointerdown",function(e){if(e.target.closest&&e.target.c
 board.addEventListener("pointermove",function(e){if(isTracing){e.preventDefault();moveTrace(e)}});
 board.addEventListener("pointerup",function(e){moveTrace(e,true);stopTrace()});board.addEventListener("pointercancel",stopTrace);board.addEventListener("lostpointercapture",stopTrace);
 if(motionQuery){if(motionQuery.addEventListener)motionQuery.addEventListener("change",applyMotion);else if(motionQuery.addListener)motionQuery.addListener(applyMotion)}
-applyMotion();applyPalette();syncMusicButton();renderLevel();
+applyMotion();applyPalette();syncMusicButton();renderLevel();showLanding();
 })();
 </script>
 <script type="module">import{startCloudSync}from"/cloud-save.js?v=starlight-account-1";startCloudSync("starlightTracer");</script>
