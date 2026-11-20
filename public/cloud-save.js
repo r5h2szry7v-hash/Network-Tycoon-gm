@@ -21,12 +21,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCge5Z0RN2A_DpqbUo9W_hIVmnm9ssUu1U",
-  authDomain: "network-tycoon-staging.firebaseapp.com",
-  projectId: "network-tycoon-staging",
-  storageBucket: "network-tycoon-staging.firebasestorage.app",
-  messagingSenderId: "149613072155",
-  appId: "1:149613072155:web:04c6adb4da935315904dbe"
+  apiKey: "AIzaSyBhsKlogLmtsL92MvrCWV8ER4IA4hJ-pKk",
+  authDomain: "network-tycoon-gm.web.app",
+  projectId: "network-tycoon-gm",
+  storageBucket: "network-tycoon-gm.firebasestorage.app",
+  messagingSenderId: "948292690047",
+  appId: "1:948292690047:web:88608b2a151682ca7f9f4a"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
