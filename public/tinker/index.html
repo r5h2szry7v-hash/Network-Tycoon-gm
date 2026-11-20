@@ -185,6 +185,13 @@ const LEVELS = [
     note: "The switch can send the marble down either open branch. The gear is a flexible junction.",
     start: 4, goal: 2, walls: [[4, 3], [3, 3], [2, 4]],
     stock: { belt: 3, spring: 1, ramp: 1, gear: 1, switch: 1 }
+  },
+  {
+    title: "Deliver the brass parcel",
+    copy: "Turn a spinning gear uphill, bend onto the upper lane, then leap the final gap.",
+    note: "The gear turns the marble. A ramp aims it east again. Rotate the spring if your final hop points the wrong way.",
+    start: 3, goal: 0, walls: [[3, 2], [0, 4]],
+    stock: { belt: 4, spring: 1, ramp: 1, gear: 1, switch: 0 }
   }
 ];
 const DIRS = ["E", "S", "W", "N"];
