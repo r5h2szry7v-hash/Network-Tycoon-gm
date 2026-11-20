@@ -168,7 +168,7 @@ export async function mountPortfolioShell(options = {}) {
   const publish = next => {
     current = normalizeSettings(next);
     applySettings(current, gameId, themes);
-    themeSelect.value = current.themeByGame[gameId] || themes[0]?.id || "";
+    themeSelect.value = themes.find(theme => theme.id === current.themeByGame[gameId])?.id || themes[0]?.id || "";
     modeSelect.value = current.appearance.colorMode;
     motionSelect.value = current.accessibility.motion;
     scaleSelect.value = String(current.accessibility.textScale);
