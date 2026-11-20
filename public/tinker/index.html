@@ -199,6 +199,7 @@ function render() {
   document.getElementById("hint").textContent = level.note;
   document.getElementById("control-copy").textContent = "Place one part in every station, then run your machine.";
   track.replaceChildren();
+  track.dataset.count = String(level.answer.length);
   track.classList.remove("is-running");
   level.hints.forEach((clue, i) => track.append(makeStation(i, clue)));
   const marble = document.createElement("span");
@@ -262,6 +263,9 @@ async function runMachine() {
   if (running || runButton.disabled) return;
   running = true;
   refreshStations();
+  track.querySelectorAll(".station-node").forEach(node => node.classList.remove("is-correct", "is-wrong", "is-active"));
+  track.classList.remove("is-running");
+  void track.offsetWidth;
   setStatus("Here comes the marble…");
   track.classList.add("is-running");
   const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
