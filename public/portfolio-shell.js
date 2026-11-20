@@ -1,7 +1,7 @@
 import { getApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
 import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
-import { registerCloudSaveGame, startCloudSync } from "./cloud-save.js?v=staging-auth-validation";
+import { registerCloudSaveGame, startCloudSync } from "./cloud-save.js";
 
 const SETTINGS_KEY = "portfolio.settings.v1";
 const SETTINGS_META_KEY = "portfolio.settings.meta.v1";
