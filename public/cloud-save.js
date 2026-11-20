@@ -21,7 +21,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCge5Z0RN2A_DpqbUo9W_hIVmnm9ssUu1",
+  apiKey: "AIzaSyCge5Z0RN2A_DpqbUo9W_hIVmnm9ssUu1U",
   authDomain: "network-tycoon-staging.firebaseapp.com",
   projectId: "network-tycoon-staging",
   storageBucket: "network-tycoon-staging.firebasestorage.app",
