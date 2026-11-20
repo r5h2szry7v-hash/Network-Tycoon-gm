@@ -291,10 +291,7 @@ function findPath() {
       if (output.dir === "E" && row === current.goal && col >= 5) return { success: true, path };
       if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
       if (output.jump === 1 && current.walls.some(wall => wall[0] === row && wall[1] === col)) continue;
-      if (output.jump > 1 && current.walls.some(wall => wall[0] === row && wall[1] >= state.col + vector[1] && wall[1] < col)) {
-        // The spring clears a gap or a marked obstruction in its flight lane.
-      }
-      const nextIndex = keyOf(row, col);
+        const nextIndex = keyOf(row, col);
       if (!placements[nextIndex]) {
         const partial = path.concat([{ row, col, missing: true }]);
         const score = Math.abs(row - current.goal) + Math.max(0, 4 - col);
@@ -482,6 +479,7 @@ async function runMachine() {
     solved = [...new Set([...solved, levelIndex])];
     saveGame();
     setStatus("It works! Your parts made a path from marble to bell.", "success");
+    document.querySelectorAll(".progress i")[levelIndex]?.classList.add("done");
     nextButton.hidden = levelIndex >= LEVELS.length - 1;
   } else {
     const blocked = result.path[result.path.length - 1];
