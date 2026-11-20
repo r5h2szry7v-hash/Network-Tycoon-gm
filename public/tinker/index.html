@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="description" content="Build a tiny machine, set the parts in motion, and solve playful chain-reaction puzzles.">
+<title>Tinker Factory</title>
+<style>
+:root{color-scheme:light;--game-accent:#c9753d;--game-accent-2:#387f74;--game-bg:#f3eee3;--game-surface:#fffdf8;--game-ink:#26342f;--game-muted:#6c7b73;--game-line:#dfd8c9;--game-shadow:0 18px 48px #41332214}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 8% 5%,#f6e8c9,transparent 35%),radial-gradient(ellipse at 92% 10%,#dcece4,transparent 34%),var(--game-bg);color:var(--game-ink);font:16px/1.45 ui-rounded,"Avenir Next",system-ui,sans-serif;min-height:100vh}
+#tinker-app{--scale:var(--portfolio-text-scale,1);font-size:calc(16px * var(--scale));width:min(1160px,100%);margin:auto;padding:clamp(20px,4vw,44px) clamp(14px,3.5vw,34px) 56px}
+html[data-portfolio-color-mode=dark] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}
+html[data-portfolio-color-mode=dark] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3px}
+.hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--game-accent-2);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:.94;letter-spacing:-.065em;margin:10px 0 12px}
+.hero p{max-width:610px;color:var(--game-muted);font-size:1.05em;margin:0}
+.level-chip{align-self:start;border:1px solid var(--game-line);background:var(--game-surface);border-radius:18px;padding:12px 16px;text-align:center;box-shadow:var(--game-shadow);min-width:112px}
+.level-chip strong{display:block;font-size:1.45em;line-height:1.1;color:var(--game-accent)}
+.level-chip span{font-size:.78em;color:var(--game-muted);font-weight:800}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.75fr);gap:18px;align-items:start}
+.panel{background:var(--game-surface);border:1px solid var(--game-line);border-radius:22px;box-shadow:var(--game-shadow)}
+.machine{padding:clamp(16px,3vw,26px)}
+.mission{display:flex;gap:13px;align-items:flex-start;border:1px solid #e8c98d;background:linear-gradient(110deg,#fff4d9,#fffaf0);border-radius:16px;padding:14px 16px;margin-bottom:20px}
+html[data-portfolio-color-mode=dark] .mission{background:linear-gradient(110deg,#393126,#2e2a22);border-color:#74603b}
+.mission-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;background:#f3d58b;color:#5c4923;font-size:23px}
+.mission strong{display:block;font-size:1em}.mission p{margin:3px 0 0;color:var(--game-muted);font-size:.91em}
+.machine-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 14px}
+.machine-head h2,.inventory h2{font-size:1.1em;margin:0;letter-spacing:-.02em}
+.machine-head span{color:var(--game-muted);font-size:.83em;font-weight:700}
+.track{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px 5px 10px;margin-bottom:20px}
+.track:before{content:"";position:absolute;top:50px;left:9%;right:9%;height:7px;border-radius:99px;background:repeating-linear-gradient(90deg,#c7a66d 0 24px,#e7d5ac 24px 38px);box-shadow:0 3px 0 #9d7d4e55}
+.track:after{content:"";position:absolute;left:0;top:4px;font-size:23px}
+.station{position:relative;z-index:1;min-width:0;text-align:center}
+.station-label{display:block;font-size:.72em;color:var(--game-muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
+.station-node{position:relative;display:grid;place-items:center;width:66px;height:66px;margin:0 auto 9px;border:3px solid #e4d6b9;border-radius:20px;background:#fffaf0;color:#685633;box-shadow:0 5px 0 #cbb78f;transition:transform .2s,box-shadow .2s}
+.station-node .part-icon{width:35px;height:35px}
+.station-node.is-empty{border-style:dashed;background:color-mix(in srgb,var(--game-surface) 80%,#e6dcc7);color:#9b927e;box-shadow:none}
+.station-node.is-active{transform:translateY(-7px);box-shadow:0 9px 0 #cbb78f,0 0 0 6px #f2d17c66}
+.station-node.is-correct{border-color:#65aa83;background:#ebf8ee;color:#286c4d;box-shadow:0 5px 0 #a0c5a7}
+.station-node.is-wrong{border-color:#d87762;background:#fff0e9;color:#a64e3c;box-shadow:0 5px 0 #d9a194}
+.station-node:focus-visible{outline:3px solid #487fce;outline-offset:4px}
+.station-hint{display:block;max-width:124px;min-height:34px;margin:auto;color:var(--game-muted);font-size:.78em;line-height:1.25}
+.station-hint strong{color:var(--game-ink)}
+.marble{position:absolute;z-index:2;top:36px;left:5%;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 9%,#f8d76b 12% 45%,#dc8e36 72%);box-shadow:0 3px 7px #6d441e55;opacity:0;pointer-events:none}
+.track.is-running .marble{opacity:1;animation:roll-across 2.1s ease-in-out forwards}
+@keyframes roll-across{0%{left:5%;top:35px}100%{left:91%;top:35px}}
+.inventory{border-top:1px solid var(--game-line);padding-top:17px}
+.inventory-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:11px}
+.inventory-top p{font-size:.8em;color:var(--game-muted);margin:0}
+.parts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.part{display:grid;justify-items:center;gap:5px;min-width:0;border:1px solid var(--game-line);background:var(--game-surface);border-radius:13px;padding:9px 5px;cursor:pointer;font-size:.76em;font-weight:850;transition:transform .15s,border-color .15s,background .15s}
+.part:hover{transform:translateY(-2px);border-color:var(--game-accent)}
+.part[aria-pressed=true]{border-color:var(--game-accent);background:color-mix(in srgb,var(--game-accent) 12%,var(--game-surface));box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 28%,transparent)}
+.part-icon{width:32px;height:32px;display:block;overflow:visible}
+.side{display:grid;gap:14px}
+.controls{padding:19px}
+.controls h2,.hint-card h2{margin:0 0 8px;font-size:1.05em}
+.controls p{margin:0 0 14px;color:var(--game-muted);font-size:.9em}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.button{min-height:46px;border:1px solid var(--game-line);border-radius:13px;padding:10px 13px;background:var(--game-surface);font-weight:900;cursor:pointer}
+.button:hover{border-color:var(--game-accent)}
+.button.primary{background:var(--game-accent);border-color:var(--game-accent);color:#fff}
+.button:disabled{opacity:.45;cursor:not-allowed}
+.button.wide{grid-column:1/-1}
+.status{min-height:48px;margin-top:13px;padding:11px 12px;border-radius:12px;background:#f1f4ed;color:#50665b;font-size:.86em;font-weight:700}
+html[data-portfolio-color-mode=dark] .status{background:#293b35;color:#c3e2ce}
+.status[data-kind=success]{background:#e6f4e7;color:#256542}
+.status[data-kind=error]{background:#fff0e9;color:#8f4434}
+.hint-card{padding:18px 19px;border:1px solid var(--game-line);border-radius:18px;background:color-mix(in srgb,var(--game-surface) 88%,var(--game-accent-2) 12%)}
+.hint-card p{margin:0;color:var(--game-muted);font-size:.9em}
+.progress{display:flex;gap:7px;margin-top:12px}
+.progress i{height:8px;flex:1;border-radius:99px;background:var(--game-line)}
+.progress i.done{background:var(--game-accent-2)}
+.footer-note{margin:20px 0 0;color:var(--game-muted);font-size:.8em;text-align:center}
+@media(max-width:790px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.hero{align-items:start}.track{gap:5px}.station-node{width:56px;height:56px}.track:before{top:48px}.marble{top:29px}}
+@media(max-width:540px){.hero{grid-template-columns:1fr auto;gap:8px}.hero p{font-size:.94em}.level-chip{min-width:84px;padding:9px 10px}.machine{padding:14px}.mission{padding:11px}.track{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;padding-inline:0}.station-node{width:48px;height:48px;border-radius:15px}.station-node .part-icon{width:29px;height:29px}.station-label{font-size:.64em}.station-hint{font-size:.68em;max-width:80px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.side{grid-template-columns:1fr}.track:before{top:45px}.marble{top:26px}.actions{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="tinker-app">
+  <header class="hero">
+    <div>
+      <span class="eyebrow">A pocket-sized machine puzzler</span>
+      <h1>Tinker<br>Factory</h1>
+      <p>Pick a few curious parts. Put them in the right order. See if your little machine can make the whole workshop sing.</p>
+    </div>
+    <div class="level-chip" aria-label="Current puzzle"><strong id="level-number">01</strong><span>PUZZLE</span></div>
+  </header>
+  <main class="layout">
+    <section class="panel machine" aria-label="Machine puzzle">
+      <div class="mission">
+        <div class="mission-icon" aria-hidden="true">⚙</div>
+        <div><strong id="mission-title">Wake the workshop bell</strong><p id="mission-copy">Build a chain reaction that carries the marble all the way to the bell.</p></div>
+      </div>
+      <div class="machine-head"><h2>Machine blueprint</h2><span id="machine-count">3 stations</span></div>
+      <div class="track" id="track" aria-label="Machine stations"></div>
+      <section class="inventory" aria-label="Parts tray">
+        <div class="inventory-top"><h2>Parts tray</h2><p id="selection-help" aria-live="polite">Choose a part, then choose a station.</p></div>
+        <div class="parts" id="parts"></div>
+      </section>
+    </section>
+    <aside class="side" aria-label="Puzzle controls and hints">
+      <section class="panel controls">
+        <h2>Ready to tinker?</h2>
+        <p id="control-copy">Place one part in every station, then run your machine.</p>
+        <div class="actions">
+          <button class="button primary wide" id="run-button" type="button">Run machine</button>
+          <button class="button" id="reset-button" type="button">Reset</button>
+          <button class="button" id="next-button" type="button" hidden>Next puzzle</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite">Your first machine is waiting for its parts.</div>
+      </section>
+      <section class="hint-card">
+        <h2>Workshop note</h2>
+        <p id="hint">Every good chain reaction starts with one small idea. Try a ramp to get the marble moving.</p>
+        <div class="progress" id="progress" aria-label="Puzzle progress"></div>
+      </section>
+    </aside>
+  </main>
+  <p class="footer-note">A tiny machine. A fresh idea. One more satisfying run.</p>
+</div>
+
+<script type="module">
+import { mountPortfolioShell } from "../portfolio-shell.js";
+
+const PARTS = {
+  ramp: { name: "Ramp", shape: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 31h28L9 10z" fill="#d49a45" stroke="#815c2a" stroke-width="2.5" stroke-linejoin="round"/><circle cx="13" cy="25" r="4" fill="#fff3cb" stroke="#815c2a" stroke-width="2"/></svg>' },
+  belt: { name: "Belt", shape: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="13" width="30" height="15" rx="7" fill="#7cc0ac" stroke="#327968" stroke-width="2.5"/><circle cx="11" cy="20.5" r="3" fill="#fff"/><circle cx="29" cy="20.5" r="3" fill="#fff"/><path d="M15 20h9m-3-3 3 3-3 3" fill="none" stroke="#327968" stroke-width="2"/></svg>' },
+  spring: { name: "Spring", shape: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 33V28l-8-4 16-6-16-6 8-4V5" fill="none" stroke="#cf7052" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 34h20" stroke="#76564d" stroke-width="3" stroke-linecap="round"/></svg>' },
+  gear: { name: "Gear", shape: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M17 3h6l1.3 4.5 3.5 1.5 4.1-2.2 4.2 4.2-2.2 4.1 1.5 3.5L40 20v6l-4.5 1.3-1.5 3.5 2.2 4.1-4.2 4.2-4.1-2.2-3.5 1.5L23 43h-6l-1.3-4.5-3.5-1.5-4.1 2.2-4.2-4.2 2.2-4.1-1.5-3.5L0 26v-6l4.5-1.3L6 15.2l-2.2-4.1L8 6.9l4.1 2.2 3.5-1.5z" transform="translate(2 -2) scale(.88)" fill="#a998d4" stroke="#63508e" stroke-width="2.2"/><circle cx="20" cy="20" r="5" fill="#f7f2ff" stroke="#63508e" stroke-width="2"/></svg>' },
+  switch: { name: "Switch", shape: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 28h26M12 27l6-13 7 4 5-9" fill="none" stroke="#4d8bc0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="29" r="4" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="30" cy="9" r="4" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/></svg>' }
+};
+
+const LEVELS = [
+  { title: "Wake the workshop bell", copy: "Build a chain reaction that carries the marble all the way to the bell.", hints: ["Give the marble a lift.", "Carry its momentum forward.", "Launch it to the bell."], answer: ["ramp", "belt", "spring"], note: "Start with a ramp, keep the belt moving, then let the spring ring the bell." },
+  { title: "Light the little lighthouse", copy: "Turn a loose spin into a bright signal across the workshop.", hints: ["Pass a turning force.", "Release stored energy.", "Raise the signal.", "Carry the spark along."], answer: ["gear", "switch", "ramp", "belt"], note: "Gears pass a turn. A switch releases energy, then lift and carry the spark." },
+  { title: "Deliver the brass parcel", copy: "Build a longer chain to send the parcel to the loading dock.", hints: ["Carry the parcel.", "Turn the wheel.", "Give it a lift.", "Release the latch.", "Launch the final hop."], answer: ["belt", "gear", "ramp", "switch", "spring"], note: "A belt carries, gears turn, ramps lift, switches release, springs launch." }
+];
+const app = document.getElementById("tinker-app");
+const track = document.getElementById("track");
+const partsNode = document.getElementById("parts");
+const statusNode = document.getElementById("status");
+const runButton = document.getElementById("run-button");
+const resetButton = document.getElementById("reset-button");
+const nextButton = document.getElementById("next-button");
+let selectedPart = "";
+let running = false;
+let solved = [];
+let levelIndex = 0;
+let placements = [];
+
+try {
+  const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
+  if (save?.schemaVersion === 1) {
+    solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0 && n < LEVELS.length) : [];
+    levelIndex = Math.min(LEVELS.length - 1, Math.max(0, Number(save.levelIndex) || 0));
+  }
+} catch {}
+
+function persist() {
+  try {
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 1, levelIndex, solved }));
+  } catch {}
+}
+function currentLevel() { return LEVELS[levelIndex]; }
+function setStatus(message, kind = "info") {
+  statusNode.textContent = message;
+  statusNode.dataset.kind = kind;
+}
+function makeStation(index, clue) {
+  const station = document.createElement("div");
+  station.className = "station";
+  const label = document.createElement("span");
+  label.className = "station-label";
+  label.textContent = "Station " + (index + 1);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "station-node is-empty";
+  button.dataset.station = String(index);
+  button.setAttribute("aria-label", "Station " + (index + 1) + ", empty. Choose a part to place here.");
+  const hint = document.createElement("span");
+  hint.className = "station-hint";
+  hint.textContent = clue;
+  station.append(label, button, hint);
+  return station;
+}
+function render() {
+  const level = currentLevel();
+  document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
+  document.getElementById("mission-title").textContent = level.title;
+  document.getElementById("mission-copy").textContent = level.copy;
+  document.getElementById("machine-count").textContent = level.answer.length + (level.answer.length === 1 ? " station" : " stations");
+  document.getElementById("hint").textContent = level.note;
+  document.getElementById("control-copy").textContent = "Place one part in every station, then run your machine.";
+  track.replaceChildren();
+  track.classList.remove("is-running");
+  level.hints.forEach((clue, i) => track.append(makeStation(i, clue)));
+  const marble = document.createElement("span");
+  marble.className = "marble";
+  marble.setAttribute("aria-hidden", "true");
+  track.append(marble);
+  partsNode.replaceChildren();
+  Object.entries(PARTS).forEach(([id, part]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "part";
+    button.dataset.part = id;
+    button.setAttribute("aria-pressed", String(selectedPart === id));
+    button.setAttribute("aria-label", part.name + ", select this part");
+    button.innerHTML = part.shape + "<span>" + part.name + "</span>";
+    partsNode.append(button);
+  });
+  document.getElementById("progress").replaceChildren(...LEVELS.map((_, i) => {
+    const dot = document.createElement("i");
+    if (solved.includes(i)) dot.className = "done";
+    dot.setAttribute("aria-hidden", "true");
+    return dot;
+  }));
+  nextButton.hidden = !solved.includes(levelIndex) || levelIndex >= LEVELS.length - 1;
+  runButton.disabled = false;
+  resetButton.disabled = false;
+  statusNode.dataset.kind = "info";
+  setStatus(solved.includes(levelIndex) ? "Machine complete. Tinker again or move to the next puzzle." : "Your machine is waiting for its parts.");
+}
+function refreshStations() {
+  track.querySelectorAll(".station-node").forEach(node => {
+    const index = Number(node.dataset.station);
+    const partId = placements[index];
+    node.classList.toggle("is-empty", !partId);
+    node.innerHTML = partId ? PARTS[partId].shape : '<span aria-hidden="true">＋</span>';
+    node.setAttribute("aria-label", "Station " + (index + 1) + (partId ? ", " + PARTS[partId].name : ", empty") + ". Activate to " + (selectedPart ? "place selected part" : "choose a part first") + ".");
+  });
+  document.querySelectorAll(".part").forEach(node => node.setAttribute("aria-pressed", String(node.dataset.part === selectedPart)));
+  document.getElementById("selection-help").textContent = selectedPart ? PARTS[selectedPart].name + " selected. Choose a station." : "Choose a part, then choose a station.";
+  runButton.disabled = placements.length !== currentLevel().answer.length || placements.some(item => !item) || running;
+  resetButton.disabled = running;
+}
+track.addEventListener("click", event => {
+  const target = event.target.closest(".station-node");
+  if (!target || running || !selectedPart) {
+    if (!selectedPart && !running && event.target.closest(".station-node")) setStatus("Choose a part from the tray first.");
+    return;
+  }
+  placements[Number(target.dataset.station)] = selectedPart;
+  selectedPart = "";
+  refreshStations();
+  setStatus("Part placed. Keep building or run the machine.");
+});
+partsNode.addEventListener("click", event => {
+  const target = event.target.closest(".part");
+  if (!target || running) return;
+  selectedPart = target.dataset.part;
+  refreshStations();
+});
+async function runMachine() {
+  if (running || runButton.disabled) return;
+  running = true;
+  refreshStations();
+  setStatus("Here comes the marble…");
+  track.classList.add("is-running");
+  const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
+  const delay = reduced ? 80 : 560;
+  const nodes = [...track.querySelectorAll(".station-node")];
+  let failedAt = -1;
+  for (let i = 0; i < nodes.length; i++) {
+    nodes[i].classList.add("is-active");
+    await new Promise(resolve => setTimeout(resolve, delay));
+    nodes[i].classList.remove("is-active");
+    if (placements[i] === currentLevel().answer[i]) {
+      nodes[i].classList.add("is-correct");
+    } else {
+      nodes[i].classList.add("is-wrong");
+      failedAt = i;
+      break;
+    }
+  }
+  running = false;
+  refreshStations();
+  runButton.disabled = false;
+  resetButton.disabled = false;
+  if (failedAt >= 0) {
+    nodes[failedAt].classList.add("is-wrong");
+    setStatus("Station " + (failedAt + 1) + " needs a different part. Check its workshop note and try again.", "error");
+    return;
+  }
+  solved = [...new Set([...solved, levelIndex])];
+  persist();
+  setStatus("Beautifully done! The chain reaction worked from start to finish.", "success");
+  document.getElementById("control-copy").textContent = "That machine is humming. Take a bow, then try the next one.";
+  nextButton.hidden = levelIndex >= LEVELS.length - 1;
+  document.querySelectorAll(".progress i")[levelIndex]?.classList.add("done");
+}
+runButton.addEventListener("click", runMachine);
+resetButton.addEventListener("click", () => {
+  if (running) return;
+  placements = Array(currentLevel().answer.length).fill("");
+  selectedPart = "";
+  render();
+});
+nextButton.addEventListener("click", () => {
+  if (levelIndex >= LEVELS.length - 1 || !solved.includes(levelIndex)) return;
+  levelIndex++;
+  placements = Array(currentLevel().answer.length).fill("");
+  selectedPart = "";
+  persist();
+  render();
+});
+placements = Array(currentLevel().answer.length).fill("");
+render();
+
+const themes = [
+  { id: "workshop", label: "Workshop", tokens: { "--game-accent": "#c9753d", "--game-accent-2": "#387f74" } },
+  { id: "orchard", label: "Copper & mint", tokens: { "--game-accent": "#a35f45", "--game-accent-2": "#387f74" } },
+  { id: "starlit", label: "Starlit violet", tokens: { "--game-accent": "#7764b4", "--game-accent-2": "#528c8d" } }
+];
+await mountPortfolioShell({
+  gameId: "tinkerFactory",
+  storageKeys: ["tinkerFactory"],
+  title: "Tinker Factory",
+  homeUrl: "/",
+  themes,
+  onSettingsChange() {}
+});
+</script>
+</body>
+</html>
