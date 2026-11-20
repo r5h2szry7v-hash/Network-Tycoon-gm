@@ -475,6 +475,10 @@ async function runMachine() {
   }
   running = false;
   render();
+  for (const point of result.path) {
+    const routeCell = board.querySelector('.cell[data-index="' + keyOf(point.row, point.col) + '"]');
+    if (routeCell) routeCell.classList.add(point.missing ? "is-missing" : "is-lit");
+  }
   if (result.success) {
     solved = [...new Set([...solved, levelIndex])];
     saveGame();
