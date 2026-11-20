@@ -93,10 +93,10 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .progress i{height:8px;flex:1;border-radius:99px;background:var(--game-line)}
 .progress i.done{background:var(--game-accent-2)}
 .footer-note{margin:20px 0 0;color:var(--game-muted);font-size:.8em;text-align:center}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.hero{align-items:start}}
+@media(max-width:850px){.layout{grid-template-columns:1fr;gap:0}.side{grid-template-columns:1fr;gap:9px;margin:12px 0 2px}.side .controls,.side .hint-card{padding:14px}.hero{align-items:start}}
 @media(max-width:760px){#mission-title{scroll-margin-top:112px}}
 @media(max-width:540px){
-.board-heading{align-items:flex-start}.board-heading-meta{font-size:.94em}.hero{grid-template-columns:1fr auto;gap:8px}.hero p{font-size:.94em}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.side{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
+.board-heading{align-items:flex-start}.board-heading-meta{font-size:.94em}.hero{grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}.hero h1{font-size:clamp(2rem,10vw,3.1rem);margin:8px 0}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px;margin-bottom:12px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.actions{grid-template-columns:1fr 1fr}}
 
 /* Settings cards follow the soft, rounded palette controls used across the portfolio. */
 .palette-setting{display:block}.palette-copy{font-weight:850}.palette-copy small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--game-line);color:var(--game-ink);font-weight:850;font-size:.9em}.setting-row>span:first-child{display:block;flex:1}.setting-row small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row select{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font-weight:800}.setting-toggle{position:relative;cursor:pointer}.setting-toggle input[type=checkbox]{position:absolute;width:1px;height:1px;margin:0;opacity:0}.switch-track{position:relative;display:block;flex:none;width:50px;height:30px;border-radius:99px;background:#aab2b1;transition:background .2s}.switch-track::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:transform .2s cubic-bezier(.2,.8,.25,1.2)}.setting-toggle input:checked+.switch-track{background:var(--game-accent-2)}.setting-toggle input:checked+.switch-track::after{transform:translateX(20px)}.setting-toggle input:focus-visible+.switch-track{outline:3px solid var(--game-accent);outline-offset:3px}.setting-toggle.disabled{opacity:.58}.setting-toggle input:disabled+.switch-track{cursor:not-allowed}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.theme-option{min-width:0;display:grid;gap:7px;text-align:left;padding:9px;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font:inherit;font-weight:850;font-size:.75em;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}.theme-option:hover{transform:translateY(-2px)}.theme-option[aria-pressed=true]{border:2px solid var(--game-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 22%,transparent)}.theme-swatch{height:18px;border-radius:99px;background:linear-gradient(100deg,var(--swatch-a) 0 52%,var(--swatch-b) 52%);box-shadow:inset 0 0 0 1px #00000015}.theme-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.preference-row{display:grid;gap:6px;font-weight:850}.pref-note{margin:12px 0;color:var(--game-muted);font-size:.82em;line-height:1.45}.hint-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.hint-tools .button{min-height:42px;padding:8px;font-size:.82em}.hint-credit{margin-top:10px;color:var(--game-muted);font-size:.8em;font-weight:850}.hint-credit strong{color:var(--game-accent)}.hint-target{z-index:4!important;animation:hintTarget 1s ease-in-out infinite alternate}.part.hint-target{border-color:var(--game-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--game-accent) 40%,transparent)}@keyframes hintTarget{to{box-shadow:0 0 0 7px color-mix(in srgb,var(--game-accent) 32%,transparent);filter:brightness(1.08)}}
@@ -191,7 +191,6 @@ html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface)
     <div>
       <span class="eyebrow">A pocket-sized machine puzzler</span>
       <h1>Tinker<br>Factory</h1>
-      <p>Place curious parts anywhere on the workbench. Rotate them, connect the chain, and see if your marble can make it to the bell.</p>
     </div>
     <div class="level-chip" aria-label="Current puzzle"><strong id="level-number">01</strong><span>PUZZLE</span></div>
   </header>
@@ -298,6 +297,16 @@ const app = document.getElementById("tinker-app");
 const board = document.getElementById("board");
 const partsNode = document.getElementById("parts");
 const statusNode = document.getElementById("status");
+const layout = document.querySelector(".layout");
+const boardWrap = document.querySelector(".board-wrap");
+const sidePanel = document.querySelector(".side");
+const mobileLayout = window.matchMedia("(max-width: 850px)");
+function placeHelpersForViewport() {
+  if (mobileLayout.matches) boardWrap.after(sidePanel);
+  else layout.append(sidePanel);
+}
+placeHelpersForViewport();
+mobileLayout.addEventListener("change", placeHelpersForViewport);
 const runButton = document.getElementById("run-button");
 const resetButton = document.getElementById("reset-button");
 const removeButton = document.getElementById("remove-button");
