@@ -1,6 +1,6 @@
 # Portfolio game shell
 
-The shared browser shell owns account access, Firebase cloud-save startup, portfolio preferences, and common game controls. New games provide their own gameplay engine, game ID, local save keys, title, theme tokens, and settings-change callback. Tinker Factory is the first consumer, with a playable three-puzzle workbench under public/tinker/: free placement, rotatable parts, inventory limits, a spring jump, ramp turns, switch routing, and a visible marble-to-bell route.
+The shared browser shell owns account access, Firebase cloud-save startup, portfolio preferences, and common game controls. New games provide their own gameplay engine, game ID, local save keys, title, theme tokens, and settings-change callback. Tinker Factory is the first consumer, with a playable four-puzzle workbench under public/tinker/: free placement, rotatable parts, inventory limits, a spring jump, ramp turns, switch routing, and a visible marble-to-bell route.
 
 ## Integration
 
