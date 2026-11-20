@@ -88,7 +88,7 @@ function installStyles() {
     ".portfolio-shell{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:color-mix(in srgb,Canvas 94%,transparent);color:CanvasText;border-bottom:1px solid color-mix(in srgb,CanvasText 14%,transparent);font:600 calc(14px * var(--portfolio-text-scale,1))/1.25 system-ui,sans-serif;backdrop-filter:blur(14px)}",
     ".portfolio-shell__brand{display:flex;align-items:center;gap:10px;min-width:0}.portfolio-shell__home{color:inherit;text-decoration:none;font-weight:800;white-space:nowrap}.portfolio-shell__title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.78}",
     ".portfolio-shell__actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.portfolio-shell select,.portfolio-shell button{min-height:38px;border:1px solid color-mix(in srgb,CanvasText 20%,transparent);border-radius:10px;padding:7px 10px;background:Canvas;color:CanvasText;font:inherit}",
-    ".portfolio-shell select:focus-visible,.portfolio-shell button:focus-visible,.portfolio-shell a:focus-visible{outline:3px solid #5b8def;outline-offset:2px}.portfolio-shell__setting{display:flex;align-items:center;gap:6px}.portfolio-shell__setting span{font-size:.85em}.portfolio-shell__status{font-size:.78em;opacity:.72;white-space:nowrap}",
+    ".portfolio-shell select:focus-visible,.portfolio-shell button:focus-visible,.portfolio-shell a:focus-visible{outline:3px solid #5b8def;outline-offset:2px}.portfolio-shell__setting{display:flex;align-items:center;gap:6px}.portfolio-shell__setting span{font-size:.85em}.portfolio-shell__game-settings{font-weight:800;white-space:nowrap}.portfolio-shell__status{font-size:.78em;opacity:.72;white-space:nowrap}",
     "html[data-portfolio-motion=reduce] *,html[data-portfolio-motion=reduce] *::before,html[data-portfolio-motion=reduce] *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}",
     "@media(max-width:760px){.portfolio-shell{align-items:flex-start;flex-direction:column}.portfolio-shell__actions{justify-content:flex-start;width:100%}.portfolio-shell__setting span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.portfolio-shell__status{margin-left:auto}}",
     "@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) *,html:not([data-portfolio-motion=full]) *::before,html:not([data-portfolio-motion=full]) *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}"
@@ -154,10 +154,13 @@ export async function mountPortfolioShell(options = {}) {
     return select;
   };
 
-  const themeSelect = addSelect("Theme", "Game theme", themes.map(theme => [theme.id, theme.label]));
-  const modeSelect = addSelect("Color", "Color mode", [["system", "Device color mode"], ["light", "Light"], ["dark", "Dark"]]);
-  const motionSelect = addSelect("Motion", "Motion preference", [["system", "Device motion"], ["reduce", "Reduce motion"], ["full", "Full motion"]]);
-  const scaleSelect = addSelect("Text", "Text size", [["0.9", "90%"], ["1", "100%"], ["1.1", "110%"], ["1.25", "125%"]]);
+  let themeSelect = null, modeSelect = null, motionSelect = null, scaleSelect = null;
+  if (options.inlineSettings !== false) {
+    themeSelect = addSelect("Theme", "Game theme", themes.map(theme => [theme.id, theme.label]));
+    modeSelect = addSelect("Color", "Color mode", [["system", "Device color mode"], ["light", "Light"], ["dark", "Dark"]]);
+    motionSelect = addSelect("Motion", "Motion preference", [["system", "Device motion"], ["reduce", "Reduce motion"], ["full", "Full motion"]]);
+    scaleSelect = addSelect("Text", "Text size", [["0.9", "90%"], ["1", "100%"], ["1.1", "110%"], ["1.25", "125%"]]);
+  }
   const status = element("span", { className: "portfolio-shell__status", role: "status", "aria-live": "polite" }, "Device settings");
   actions.append(status);
   shell.append(brand, actions);
@@ -168,10 +171,10 @@ export async function mountPortfolioShell(options = {}) {
   const publish = next => {
     current = normalizeSettings(next);
     applySettings(current, gameId, themes);
-    themeSelect.value = themes.find(theme => theme.id === current.themeByGame[gameId])?.id || themes[0]?.id || "";
-    modeSelect.value = current.appearance.colorMode;
-    motionSelect.value = current.accessibility.motion;
-    scaleSelect.value = String(current.accessibility.textScale);
+    if (themeSelect) themeSelect.value = themes.find(theme => theme.id === current.themeByGame[gameId])?.id || themes[0]?.id || "";
+    if (modeSelect) modeSelect.value = current.appearance.colorMode;
+    if (motionSelect) motionSelect.value = current.accessibility.motion;
+    if (scaleSelect) scaleSelect.value = String(current.accessibility.textScale);
     document.dispatchEvent(new CustomEvent("portfolio:settings", { detail: { gameId, settings: current } }));
     if (typeof options.onSettingsChange === "function") options.onSettingsChange(current);
   };
@@ -200,10 +203,10 @@ export async function mountPortfolioShell(options = {}) {
     return current;
   };
 
-  themeSelect.addEventListener("change", () => save({ themeByGame: { [gameId]: themeSelect.value } }));
-  modeSelect.addEventListener("change", () => save({ appearance: { colorMode: modeSelect.value } }));
-  motionSelect.addEventListener("change", () => save({ accessibility: { motion: motionSelect.value } }));
-  scaleSelect.addEventListener("change", () => save({ accessibility: { textScale: Number(scaleSelect.value) } }));
+  if (themeSelect) themeSelect.addEventListener("change", () => save({ themeByGame: { [gameId]: themeSelect.value } }));
+  if (modeSelect) modeSelect.addEventListener("change", () => save({ appearance: { colorMode: modeSelect.value } }));
+  if (motionSelect) motionSelect.addEventListener("change", () => save({ accessibility: { motion: motionSelect.value } }));
+  if (scaleSelect) scaleSelect.addEventListener("change", () => save({ accessibility: { textScale: Number(scaleSelect.value) } }));
   publish(current);
 
   const authUnsubscribe = onAuthStateChanged(AUTH, async user => {
@@ -240,3 +243,4 @@ export async function mountPortfolioShell(options = {}) {
     }
   };
 }
+
