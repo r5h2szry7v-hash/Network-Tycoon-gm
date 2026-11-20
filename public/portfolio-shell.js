@@ -8,6 +8,7 @@ const SETTINGS_META_KEY = "portfolio.settings.meta.v1";
 const APP = getApp();
 const AUTH = getAuth(APP);
 const DB = getFirestore(APP);
+let activeThemeTokens = new Set();
 
 const DEFAULT_SETTINGS = {
   schemaVersion: 1,
@@ -66,11 +67,14 @@ function applySettings(settings, gameId, themes) {
     (settings.accessibility.motion === "system" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
   root.dataset.portfolioMotion = reduce ? "reduce" : "full";
   root.style.setProperty("--portfolio-text-scale", String(settings.accessibility.textScale));
+  for (const name of activeThemeTokens) root.style.removeProperty(name);
+  activeThemeTokens = new Set();
   if (selectedTheme) {
     root.dataset.portfolioTheme = selectedTheme.id;
     for (const [name, value] of Object.entries(selectedTheme.tokens || {})) {
       if (/^--[a-z0-9-]+$/i.test(name) && typeof value === "string" && value.length <= 80) {
         root.style.setProperty(name, value);
+        activeThemeTokens.add(name);
       }
     }
   }
