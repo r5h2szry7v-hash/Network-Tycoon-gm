@@ -12,7 +12,7 @@
 body{margin:0;background:radial-gradient(ellipse at 8% 5%,#f6e8c9,transparent 35%),radial-gradient(ellipse at 92% 10%,#dcece4,transparent 34%),var(--game-bg);color:var(--game-ink);font:16px/1.45 ui-rounded,"Avenir Next",system-ui,sans-serif;min-height:100vh}
 #tinker-app{--scale:var(--portfolio-text-scale,1);font-size:calc(16px * var(--scale));width:min(1160px,100%);margin:auto;padding:clamp(20px,4vw,44px) clamp(14px,3.5vw,34px) 56px}
 html[data-portfolio-color-mode=dark] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}
-html[data-portfolio-color-mode=dark] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}
+html[data-portfolio-color-mode=dark] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}\n@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}html[data-portfolio-color-mode=system] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}html[data-portfolio-color-mode=system] .mission{background:linear-gradient(110deg,#393126,#2e2a22);border-color:#74603b}html[data-portfolio-color-mode=system] .status{background:#293b35;color:#c3e2ce}}
 button{font:inherit;color:inherit}
 a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3px}
 .hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
@@ -34,7 +34,7 @@ html[data-portfolio-color-mode=dark] .mission{background:linear-gradient(110deg,
 .machine-head span{color:var(--game-muted);font-size:.83em;font-weight:700}
 .track{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px 5px 10px;margin-bottom:20px}
 .track:before{content:"";position:absolute;top:50px;left:9%;right:9%;height:7px;border-radius:99px;background:repeating-linear-gradient(90deg,#c7a66d 0 24px,#e7d5ac 24px 38px);box-shadow:0 3px 0 #9d7d4e55}
-.track:after{content:"";position:absolute;left:0;top:4px;font-size:23px}
+.track[data-count="5"]{grid-template-columns:repeat(5,minmax(0,1fr))}.track:after{content:"";position:absolute;left:0;top:4px;font-size:23px}
 .station{position:relative;z-index:1;min-width:0;text-align:center}
 .station-label{display:block;font-size:.72em;color:var(--game-muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
 .station-node{position:relative;display:grid;place-items:center;width:66px;height:66px;margin:0 auto 9px;border:3px solid #e4d6b9;border-radius:20px;background:#fffaf0;color:#685633;box-shadow:0 5px 0 #cbb78f;transition:transform .2s,box-shadow .2s}
