@@ -9,6 +9,7 @@
 <style>
 :root{color-scheme:light;--game-accent:#c9753d;--game-accent-2:#387f74;--game-bg:#f3eee3;--game-surface:#fffdf8;--game-ink:#26342f;--game-muted:#6c7b73;--game-line:#dfd8c9;--game-shadow:0 18px 48px #41332214}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:radial-gradient(ellipse at 8% 5%,#f6e8c9,transparent 35%),radial-gradient(ellipse at 92% 10%,#dcece4,transparent 34%),var(--game-bg);color:var(--game-ink);font:16px/1.45 ui-rounded,"Avenir Next",system-ui,sans-serif;min-height:100vh}
 #tinker-app{font-size:calc(16px * var(--portfolio-text-scale,1));width:min(1160px,100%);margin:auto;padding:clamp(20px,4vw,44px) clamp(14px,3.5vw,34px) 56px}
 html[data-portfolio-color-mode=dark] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}
@@ -18,7 +19,7 @@ html[data-portfolio-color-mode=dark] .status{background:#293b35;color:#c3e2ce}
 @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}html[data-portfolio-color-mode=system] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}html[data-portfolio-color-mode=system] .mission{background:linear-gradient(110deg,#393126,#2e2a22);border-color:#74603b}html[data-portfolio-color-mode=system] .status{background:#293b35;color:#c3e2ce}}
 button{font:inherit;color:inherit}
 a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3px}
-.hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
+.home-screen{min-height:calc(100vh - 70px);display:grid;place-items:center;padding:28px 0}.home-card{width:min(720px,100%);padding:clamp(24px,5vw,52px);text-align:center;background:var(--game-surface);border:1px solid var(--game-line);border-radius:30px;box-shadow:var(--game-shadow)}.home-card .eyebrow{justify-content:center}.home-card h1{margin:14px 0;font-size:clamp(3rem,10vw,6rem)}.home-card p{max-width:530px;margin:0 auto 24px;color:var(--game-muted);font-size:1.08em}.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:11px;max-width:440px;margin:22px auto}.home-actions .button{min-height:52px}.home-actions .button.primary{box-shadow:0 7px 0 color-mix(in srgb,var(--game-accent) 65%,#000)}.home-sync{margin-top:10px}.home-sync button{border:1px solid var(--game-line);border-radius:999px;background:var(--game-surface);color:var(--game-ink);padding:10px 16px;font:inherit;font-weight:850;cursor:pointer}.home-sync button:hover{border-color:var(--game-accent)}.home-footnote{margin:25px 0 0!important;font-size:.8em!important}.home-modal[hidden]{display:none}.home-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:18px;background:#101918aa;backdrop-filter:blur(7px)}.home-dialog{width:min(520px,100%);max-height:min(85vh,720px);overflow:auto;padding:24px;background:var(--game-surface);color:var(--game-ink);border:1px solid var(--game-line);border-radius:24px;box-shadow:0 24px 70px #0005}.home-dialog-head{display:flex;align-items:start;justify-content:space-between;gap:14px;margin-bottom:16px}.home-dialog h2{margin:0;font-size:1.5em}.home-dialog p{color:var(--game-muted)}.home-dialog-close{width:42px;height:42px;flex:none;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);font-size:1.25em;cursor:pointer}.preference-list{display:grid;gap:12px}.preference-row{display:grid;gap:6px;font-weight:850}.preference-row select{min-height:46px;width:100%;padding:9px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font:inherit}.tutorial-steps{display:grid;gap:10px;padding:0;list-style:none;counter-reset:tip}.tutorial-steps li{counter-increment:tip;display:flex;gap:12px;align-items:start;padding:12px;border:1px solid var(--game-line);border-radius:14px;background:color-mix(in srgb,var(--game-surface) 88%,var(--game-accent-2) 12%)}.tutorial-steps li::before{content:counter(tip);display:grid;place-items:center;width:28px;height:28px;flex:none;border-radius:50%;background:var(--game-accent-2);color:#fff;font-weight:900}.hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--game-accent-2);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:.94;letter-spacing:-.065em;margin:10px 0 12px}
 .hero p{max-width:650px;color:var(--game-muted);font-size:1.05em;margin:0}
@@ -93,6 +94,46 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 </head>
 <body>
 <div id="tinker-app">
+  <section class="home-screen" id="home-screen" aria-labelledby="home-title">
+    <div class="home-card">
+      <span class="eyebrow">A pocket-sized machine puzzler</span>
+      <h1 id="home-title">Tinker<br>Factory</h1>
+      <p>Build a tiny chain-reaction machine, send a marble across the workbench, and ring the bell. Your workshop progress and preferences are saved for this game.</p>
+      <div class="home-actions">
+        <button class="button primary" id="new-game-button" type="button">New game</button>
+        <button class="button" id="resume-game-button" type="button" disabled>Resume game</button>
+        <button class="button" id="settings-button" type="button">Settings</button>
+        <button class="button" id="tutorial-button" type="button">Tutorial</button>
+      </div>
+      <div class="home-sync"><button type="button" data-cloud-login aria-label="Log in to sync your progress across devices"><span data-cloud-label>☁ Log in to sync</span></button></div>
+      <p class="home-footnote">One shared portfolio account. A separate Tinker Factory save and settings profile.</p>
+    </div>
+  </section>
+  <section class="home-modal" id="settings-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">Your workshop</span><h2 id="settings-title">Settings</h2></div><button class="home-dialog-close" type="button" data-close-modal="settings-modal" aria-label="Close settings">×</button></div>
+      <div class="preference-list">
+        <label class="preference-row">Game theme<select id="pref-theme" aria-label="Tinker Factory theme"><option value="workshop">Workshop</option><option value="orchard">Copper &amp; mint</option><option value="starlit">Starlit violet</option></select></label>
+        <label class="preference-row">Color mode<select id="pref-color"><option value="system">Use device setting</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+        <label class="preference-row">Motion<select id="pref-motion"><option value="system">Use device setting</option><option value="reduce">Reduce motion</option><option value="full">Full motion</option></select></label>
+        <label class="preference-row">Text size<select id="pref-scale"><option value="0.9">90%</option><option value="1">100%</option><option value="1.1">110%</option><option value="1.25">125%</option></select></label>
+      </div>
+      <p id="settings-sync-note" role="status" aria-live="polite">Settings save on this device and sync with your portfolio account when signed in.</p>
+      <button class="button primary wide" type="button" data-close-modal="settings-modal">Done</button>
+    </div>
+  </section>
+  <section class="home-modal" id="tutorial-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">Quick start</span><h2 id="tutorial-title">How to tinker</h2></div><button class="home-dialog-close" type="button" data-close-modal="tutorial-modal" aria-label="Close tutorial">×</button></div>
+      <ol class="tutorial-steps">
+        <li>Choose a part from the tray, then tap an empty workbench square to place it.</li>
+        <li>Tap a placed part to rotate it. Use Remove part to return pieces to your tray.</li>
+        <li>Connect the marble at the left to the bell on the right, then run the machine.</li>
+      </ol>
+      <button class="button primary wide" type="button" data-close-modal="tutorial-modal">Got it</button>
+    </div>
+  </section>
+  <div id="game-screen" hidden>
   <header class="hero">
     <div>
       <span class="eyebrow">A pocket-sized machine puzzler</span>
@@ -126,6 +167,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
           <button class="button" id="remove-button" type="button" aria-pressed="false">Remove part</button>
           <button class="button" id="reset-button" type="button">Reset board</button>
           <button class="button wide" id="next-button" type="button" hidden>Next puzzle</button>
+          <button class="button wide" id="home-button" type="button">Home screen</button>
         </div>
         <div class="status" id="status" role="status" aria-live="polite">Your workbench is ready. Place a part to begin.</div>
       </section>
@@ -137,6 +179,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
     </aside>
   </main>
   <p class="footer-note">Small parts. Big ideas. One more satisfying run.</p>
+  </div>
 </div>
 
 <script type="module">
@@ -185,13 +228,6 @@ const LEVELS = [
     note: "The switch can send the marble down either open branch. The gear is a flexible junction.",
     start: 4, goal: 2, walls: [[4, 3], [3, 3], [2, 4]],
     stock: { belt: 3, spring: 1, ramp: 1, gear: 1, switch: 1 }
-  },
-  {
-    title: "Deliver the brass parcel",
-    copy: "Turn a spinning gear uphill, bend onto the upper lane, then leap the final gap.",
-    note: "The gear turns the marble. A ramp aims it east again. Rotate the spring if your final hop points the wrong way.",
-    start: 3, goal: 0, walls: [[3, 2], [0, 4]],
-    stock: { belt: 4, spring: 1, ramp: 1, gear: 1, switch: 0 }
   }
 ];
 const DIRS = ["E", "S", "W", "N"];
@@ -212,10 +248,12 @@ let running = false;
 let solved = [];
 let levelIndex = 0;
 let placements = Array(25).fill(null);
+let hasSavedGame = false;
 
 try {
   const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
   if (save && Number.isInteger(save.levelIndex)) {
+    hasSavedGame = true;
     levelIndex = Math.min(LEVELS.length - 1, Math.max(0, save.levelIndex));
     solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0 && n < LEVELS.length) : [];
     const saved = save.layouts && save.layouts[levelIndex];
@@ -237,6 +275,7 @@ try {
 } catch {}
 
 function saveGame() {
+  hasSavedGame = true;
   const layout = {};
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
@@ -260,7 +299,6 @@ function portsFor(tile) {
   if (tile.type === "belt") return tile.rotation % 2 ? ["N", "S"] : ["E", "W"];
   if (tile.type === "ramp") return PARTS.ramp.ports.map(dir => rotate(dir, tile.rotation));
   if (tile.type === "switch") return PARTS.switch.ports.map(dir => rotate(dir, tile.rotation));
-  if (tile.type === "spring") return PARTS.spring.ports.map(dir => rotate(dir, tile.rotation));
   return PARTS[tile.type].ports;
 }
 function outputsFor(tile, travelDir) {
@@ -316,6 +354,7 @@ function iconFor(tile) {
   return '<span class="part-orientation" style="transform:rotate(' + (turn * 90) + 'deg)" aria-hidden="true">' + PARTS[tile.type].symbol + '</span>';
 }
 function render() {
+  document.getElementById("resume-game-button").disabled = !hasSavedGame;
   const current = level();
   document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
   document.getElementById("mission-title").textContent = current.title;
@@ -479,7 +518,7 @@ async function runMachine() {
       cell.classList.add(point.missing ? "is-missing" : "is-lit");
       if (point.missing) break;
     }
-    await wait(reduced ? 0 : 260);
+    await wait(reduced ? 45 : 260);
   }
   running = false;
   render();
@@ -509,6 +548,49 @@ resetButton.addEventListener("click", () => {
   render();
   setStatus("Workbench cleared. Build a new route.");
 });
+document.getElementById("home-button").addEventListener("click", () => {
+  if (running) return;
+  document.getElementById("game-screen").hidden = true;
+  document.getElementById("home-screen").hidden = false;
+  document.getElementById("resume-game-button").disabled = !hasSavedGame;
+  document.getElementById("new-game-button").focus();
+});
+function showGame() {
+  document.getElementById("home-screen").hidden = true;
+  document.getElementById("game-screen").hidden = false;
+  document.getElementById("run-button").focus();
+}
+function startNewGame() {
+  levelIndex = 0;
+  solved = [];
+  layouts = {};
+  placements = Array(25).fill(null);
+  selectedPart = "";
+  removeMode = false;
+  clearTrace();
+  saveGame();
+  render();
+  setStatus("Fresh workbench. Place a part to begin.");
+  showGame();
+}
+document.getElementById("new-game-button").addEventListener("click", startNewGame);
+document.getElementById("resume-game-button").addEventListener("click", () => { if (hasSavedGame) showGame(); });
+const modalFocus = new Map();
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modalFocus.set(id, document.activeElement);
+  modal.hidden = false;
+  modal.querySelector("button,select")?.focus();
+}
+function closeModal(id) {
+  document.getElementById(id).hidden = true;
+  modalFocus.get(id)?.focus?.();
+}
+document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
+document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
+document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", () => closeModal(button.dataset.closeModal)));
+document.querySelectorAll(".home-modal").forEach(modal => modal.addEventListener("click", event => { if (event.target === modal) closeModal(modal.id); }));
+document.addEventListener("keydown", event => { if (event.key === "Escape") { const open = document.querySelector(".home-modal:not([hidden])"); if (open) closeModal(open.id); } });
 nextButton.addEventListener("click", () => {
   if (levelIndex >= LEVELS.length - 1 || !solved.includes(levelIndex)) return;
   levelIndex++;
@@ -527,14 +609,27 @@ const themes = [
   { id: "orchard", label: "Copper & mint", tokens: { "--game-accent": "#a35f45", "--game-accent-2": "#387f74" } },
   { id: "starlit", label: "Starlit violet", tokens: { "--game-accent": "#7764b4", "--game-accent-2": "#528c8d" } }
 ];
-await mountPortfolioShell({
+const portfolioShell = await mountPortfolioShell({
   gameId: "tinkerFactory",
   storageKeys: ["tinkerFactory"],
   title: "Tinker Factory",
   homeUrl: "/",
   themes,
-  onSettingsChange() {}
+  onSettingsChange(settings) {
+    const theme = settings.themeByGame?.tinkerFactory || "workshop";
+    document.getElementById("pref-theme").value = themes.some(item => item.id === theme) ? theme : "workshop";
+    document.getElementById("pref-color").value = settings.appearance.colorMode;
+    document.getElementById("pref-motion").value = settings.accessibility.motion;
+    document.getElementById("pref-scale").value = String(settings.accessibility.textScale);
+  }
 });
+const preferenceBindings = [
+  ["pref-theme", value => ({ themeByGame: { tinkerFactory: value } })],
+  ["pref-color", value => ({ appearance: { colorMode: value } })],
+  ["pref-motion", value => ({ accessibility: { motion: value } })],
+  ["pref-scale", value => ({ accessibility: { textScale: Number(value) } })]
+];
+preferenceBindings.forEach(([id, patch]) => document.getElementById(id).addEventListener("change", event => portfolioShell.updateSettings(patch(event.target.value))));
 </script>
 </body>
 </html>
