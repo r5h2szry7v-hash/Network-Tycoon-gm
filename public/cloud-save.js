@@ -53,6 +53,13 @@ const gameStorage = {
     "critterRescue.palette"
   ]
 };
+function registerCloudSaveGame(id, keys) {
+  if (!/^[a-z][A-Za-z0-9-]{1,39}$/.test(String(id))) throw new Error("Invalid cloud-save game ID.");
+  const normalized = Array.isArray(keys) ? [...new Set(keys.filter(key =>
+    typeof key === "string" && key.length > 0 && key.length <= 160))] : [];
+  if (!normalized.length) throw new Error("At least one local storage key is required.");
+  gameStorage[id] = normalized;
+}
 const emailKey = "firebaseCloudPendingEmail";
 const pendingProviderKey = "firebaseCloudPendingProvider";
 const pendingProviderSignInKey = "firebaseCloudProviderSignIn";
@@ -503,6 +510,6 @@ async function startCloudSync(id) {
   });
   return auth.currentUser;
 }
-export { startCloudSync };
+export { startCloudSync, registerCloudSaveGame };
 
 
