@@ -10,6 +10,7 @@ Import mountPortfolioShell from ../portfolio-shell.js and call it during game st
       gameId: "tinkerFactory",
       title: "Tinker Factory",
       homeUrl: "/",
+      storageKeys: ["tinkerFactory"],
       themes: [
         { id: "workshop", label: "Workshop", tokens: { "--game-accent": "#d58a42" } },
         { id: "midnight", label: "Midnight", tokens: { "--game-accent": "#8b91e8" } }
