@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f3eee3">
+<meta name="color-scheme" content="light dark">
 <meta name="description" content="Build little chain-reaction machines in a playful workshop.">
 <title>Tinker Factory</title>
 <style>
@@ -33,7 +34,7 @@ h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:.94;letter-spacing:-.065em;mar
 .mission-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;background:#f3d58b;color:#5c4923;font-size:23px}
 .mission strong{display:block;font-size:1em}.mission p{margin:3px 0 0;color:var(--game-muted);font-size:.91em}
 .board-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 10px}
-.board-heading h2,.inventory h2{font-size:1.1em;margin:0;letter-spacing:-.02em}
+.board-heading h2,.inventory h2{font-size:1.1em;margin:0;letter-spacing:-.02em}.board-heading-meta{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.difficulty-tag{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;background:#7a4a9b;color:#fff;font-size:.72em;font-weight:950;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap}.difficulty-tag[data-level="Very Hard"]{background:#a24e43}.difficulty-tag[data-level="Extremely Hard"]{background:#791f34}
 .board-heading span{color:var(--game-muted);font-size:.82em;font-weight:750}
 .board-wrap{padding:14px 9px 12px;border:1px solid var(--game-line);border-radius:18px;background:linear-gradient(145deg,#f8f4e9,#f1ead8);overflow-x:auto}
 html[data-portfolio-color-mode=dark] .board-wrap{background:linear-gradient(145deg,#202b29,#29302a)}
@@ -44,6 +45,11 @@ html[data-portfolio-color-mode=dark] .board-wrap{background:linear-gradient(145d
 .row-label{font-size:.68em;font-weight:850;color:#958a72;text-align:center}
 .gate{display:grid;place-items:center;width:25px;height:25px;border-radius:9px;background:#fff6da;color:#805b20;font-size:15px}
 .gate.exit{background:#e2f3e6;color:#286847}
+@keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
+html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
+@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}}
+.gate.exit.is-ringing{position:relative;z-index:2;transform-origin:50% 12%;animation:bellRing .5s ease-in-out 4;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
+@keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
 .cell{position:relative;display:grid;place-items:center;aspect-ratio:1;min-width:0;border:1px solid #d5c7a8;border-radius:12px;background:#fffaf0;box-shadow:0 3px 0 #d9c8a4;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
 html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}
 @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}}
@@ -66,7 +72,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .part:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
 .part[aria-pressed=true]{border-color:var(--game-accent);background:color-mix(in srgb,var(--game-accent) 12%,var(--game-surface));box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 28%,transparent)}
 .part:disabled{opacity:.4;cursor:not-allowed}
-.part-icon{width:31px;height:31px;display:block;overflow:visible}.part-orientation{display:grid;place-items:center;width:100%;height:100%;pointer-events:none}
+.part-icon{width:31px;height:31px;display:block;overflow:visible}.part-orientation{display:grid;place-items:center;width:100%;height:100%;pointer-events:none}.parts-guide-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}.parts-guide-item{display:grid;grid-template-columns:58px 1fr;align-items:center;gap:12px;padding:12px;border:1px solid var(--game-line);border-radius:15px;background:color-mix(in srgb,var(--game-surface) 90%,var(--game-accent-2) 10%)}.parts-guide-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:15px;background:var(--game-surface);border:1px solid var(--game-line)}.parts-guide-icon .part-icon{width:40px;height:40px}.parts-guide-icon[data-part="belt"] .part-icon{animation:beltCarry .42s ease-in-out infinite alternate}.parts-guide-icon[data-part="ramp"] .part-icon{transform-origin:50% 80%;animation:rampRock 1.2s ease-in-out infinite alternate}.parts-guide-icon[data-part="gear"] .part-icon{animation:gearWhirr 1.6s linear infinite}.parts-guide-icon[data-part="switch"] .part-icon{animation:switchWiggle 1.2s ease-in-out infinite}.parts-guide-icon[data-part="spring"] .part-icon{animation:springBounce .55s ease-in-out infinite alternate}.parts-guide-copy strong{display:block;margin-bottom:3px}.parts-guide-copy p{margin:0;color:var(--game-muted);font-size:.87em}.tutorial-links{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--game-line)}.tutorial-links .button{width:100%}@keyframes rampRock{to{transform:rotate(9deg) translateY(-2px)}}@keyframes switchWiggle{0%,100%{transform:translateX(0)}50%{transform:translateX(2px) rotate(3deg)}}
 .part-count{position:absolute;top:4px;right:5px;min-width:17px;padding:1px 4px;border-radius:8px;background:#e8eee6;color:#496452;font-size:.82em}
 .side{display:grid;gap:14px}
 .controls{padding:19px}
@@ -89,10 +95,11 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .progress i.done{background:var(--game-accent-2)}
 .footer-note{margin:20px 0 0;color:var(--game-muted);font-size:.8em;text-align:center}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.hero{align-items:start}}
-@media(max-width:540px){.hero{grid-template-columns:1fr auto;gap:8px}.hero p{font-size:.94em}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.side{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){
+.board-heading{align-items:flex-start}.board-heading-meta{font-size:.94em}.hero{grid-template-columns:1fr auto;gap:8px}.hero p{font-size:.94em}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.side{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
 
 /* Settings cards follow the soft, rounded palette controls used across the portfolio. */
-.setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--game-line);color:var(--game-ink);font-weight:850;font-size:.9em}.setting-row>span:first-child{display:block;flex:1}.setting-row small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row select{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font-weight:800}.setting-toggle{position:relative;cursor:pointer}.setting-toggle input[type=checkbox]{position:absolute;width:1px;height:1px;margin:0;opacity:0}.switch-track{position:relative;display:block;flex:none;width:50px;height:30px;border-radius:99px;background:#aab2b1;transition:background .2s}.switch-track::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:transform .2s cubic-bezier(.2,.8,.25,1.2)}.setting-toggle input:checked+.switch-track{background:var(--game-accent-2)}.setting-toggle input:checked+.switch-track::after{transform:translateX(20px)}.setting-toggle input:focus-visible+.switch-track{outline:3px solid var(--game-accent);outline-offset:3px}.setting-toggle.disabled{opacity:.58}.setting-toggle input:disabled+.switch-track{cursor:not-allowed}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.theme-option{min-width:0;display:grid;gap:7px;text-align:left;padding:9px;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font:inherit;font-weight:850;font-size:.75em;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}.theme-option:hover{transform:translateY(-2px)}.theme-option[aria-pressed=true]{border:2px solid var(--game-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 22%,transparent)}.theme-swatch{height:18px;border-radius:99px;background:linear-gradient(100deg,var(--swatch-a) 0 52%,var(--swatch-b) 52%);box-shadow:inset 0 0 0 1px #00000015}.theme-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.preference-row{display:grid;gap:6px;font-weight:850}.pref-note{margin:12px 0;color:var(--game-muted);font-size:.82em;line-height:1.45}.hint-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.hint-tools .button{min-height:42px;padding:8px;font-size:.82em}.hint-credit{margin-top:10px;color:var(--game-muted);font-size:.8em;font-weight:850}.hint-credit strong{color:var(--game-accent)}.hint-target{z-index:4!important;animation:hintTarget 1s ease-in-out infinite alternate}.part.hint-target{border-color:var(--game-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--game-accent) 40%,transparent)}@keyframes hintTarget{to{box-shadow:0 0 0 7px color-mix(in srgb,var(--game-accent) 32%,transparent);filter:brightness(1.08)}}
+.palette-setting{display:block}.palette-copy{font-weight:850}.palette-copy small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--game-line);color:var(--game-ink);font-weight:850;font-size:.9em}.setting-row>span:first-child{display:block;flex:1}.setting-row small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row select{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font-weight:800}.setting-toggle{position:relative;cursor:pointer}.setting-toggle input[type=checkbox]{position:absolute;width:1px;height:1px;margin:0;opacity:0}.switch-track{position:relative;display:block;flex:none;width:50px;height:30px;border-radius:99px;background:#aab2b1;transition:background .2s}.switch-track::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:transform .2s cubic-bezier(.2,.8,.25,1.2)}.setting-toggle input:checked+.switch-track{background:var(--game-accent-2)}.setting-toggle input:checked+.switch-track::after{transform:translateX(20px)}.setting-toggle input:focus-visible+.switch-track{outline:3px solid var(--game-accent);outline-offset:3px}.setting-toggle.disabled{opacity:.58}.setting-toggle input:disabled+.switch-track{cursor:not-allowed}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.theme-option{min-width:0;display:grid;gap:7px;text-align:left;padding:9px;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font:inherit;font-weight:850;font-size:.75em;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}.theme-option:hover{transform:translateY(-2px)}.theme-option[aria-pressed=true]{border:2px solid var(--game-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 22%,transparent)}.theme-swatch{height:18px;border-radius:99px;background:linear-gradient(100deg,var(--swatch-a) 0 52%,var(--swatch-b) 52%);box-shadow:inset 0 0 0 1px #00000015}.theme-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.preference-row{display:grid;gap:6px;font-weight:850}.pref-note{margin:12px 0;color:var(--game-muted);font-size:.82em;line-height:1.45}.hint-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.hint-tools .button{min-height:42px;padding:8px;font-size:.82em}.hint-credit{margin-top:10px;color:var(--game-muted);font-size:.8em;font-weight:850}.hint-credit strong{color:var(--game-accent)}.hint-target{z-index:4!important;animation:hintTarget 1s ease-in-out infinite alternate}.part.hint-target{border-color:var(--game-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--game-accent) 40%,transparent)}@keyframes hintTarget{to{box-shadow:0 0 0 7px color-mix(in srgb,var(--game-accent) 32%,transparent);filter:brightness(1.08)}}
 .cell.tile-enter .part-orientation{animation:tileArrive .48s cubic-bezier(.2,1.4,.3,1) both}.cell.tile-turn .part-orientation{animation:tileTurn .42s cubic-bezier(.2,.8,.25,1.2) both}@keyframes tileArrive{0%{transform:scale(.2) rotate(-20deg);opacity:0}72%{transform:scale(1.18) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes tileTurn{0%{filter:brightness(1.8)}100%{filter:brightness(1)}}.tile-connector{position:absolute;z-index:3;display:block;background:var(--game-accent-2);box-shadow:0 0 7px color-mix(in srgb,var(--game-accent-2) 70%,transparent);pointer-events:none}.tile-connector.east{right:-7px;top:calc(50% - 2px);width:8px;height:4px}.tile-connector.south{left:calc(50% - 2px);bottom:-7px;width:4px;height:8px}.tile-connector::after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 5px #fff;animation:linkSpark .75s ease-in-out infinite alternate}.tile-connector.east::after{left:0;top:0}.tile-connector.south::after{left:0;top:0}@keyframes linkSpark{to{transform:translate(4px,0);opacity:.45}}.tile-connector.south::after{animation-name:linkSparkVertical}@keyframes linkSparkVertical{to{transform:translate(0,4px);opacity:.45}}.machine-running .cell[data-type=gear] .part-orientation{animation:gearWhirr .42s linear infinite}.machine-running .cell[data-type=belt] .part-orientation{animation:beltCarry .34s ease-in-out infinite alternate}.machine-running .cell[data-type=spring] .part-orientation{animation:springBounce .38s ease-in-out infinite alternate}@keyframes gearWhirr{to{rotate:90deg}}@keyframes beltCarry{to{translate:2px 0}}@keyframes springBounce{to{scale:1.12 .82}}.marble-traveler{position:absolute;z-index:6;left:50%;top:50%;width:clamp(14px,40%,24px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 28%,#fff8c9 0 16%,#ffc64e 45%,#e58431 100%);box-shadow:0 0 0 3px #fff6,0 0 18px #ffb537;pointer-events:none;animation:marblePulse .42s ease-in-out infinite alternate}.marble-traveler.hop{animation:marbleHop .5s cubic-bezier(.2,.7,.25,1.4) both}@keyframes marblePulse{to{scale:.82;box-shadow:0 0 0 6px #fff4,0 0 24px #ffbd43}}@keyframes marbleHop{0%{transform:translate(-50%,-50%) scale(.7)}55%{transform:translate(-50%,-85%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(1)}}
 .completion-modal{z-index:1200}.completion-card{position:relative;overflow:hidden;text-align:center;padding:28px 24px 22px}.completion-card h2{font-size:clamp(1.8em,7vw,2.6em);margin:8px 0 4px}.completion-card .reward-line{margin:0 0 17px;color:var(--game-accent-2);font-weight:900}.celebration-machine{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);height:102px;margin:8px 0 10px;overflow:hidden;border-radius:18px;background:linear-gradient(100deg,color-mix(in srgb,var(--game-accent) 12%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 14%,var(--game-surface)))}.celebration-part{display:grid;place-items:center;width:54px;height:54px;border-radius:16px;background:var(--game-surface);border:1px solid var(--game-line);font-size:28px;box-shadow:0 6px 14px #0001}.celebration-part.gear-demo{animation:gearWhirr .65s linear infinite}.celebration-part.spring-demo{animation:springBounce .4s ease-in-out infinite alternate}.celebration-track{position:absolute;left:9%;right:9%;top:50%;height:4px;border-radius:99px;background:color-mix(in srgb,var(--game-accent-2) 58%,transparent)}.celebration-marble{position:absolute;top:calc(50% - 8px);left:10%;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff8c9,#ffb333 70%,#e47a2f);box-shadow:0 0 13px #ffb333;animation:marbleDemo 1.6s ease-in-out infinite alternate}@keyframes marbleDemo{to{left:88%}}.confetti-layer{position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none}.confetti-piece{position:absolute;left:50%;top:47%;width:8px;height:12px;border-radius:2px;background:var(--confetti);opacity:0;animation:confettiBurst .95s cubic-bezier(.12,.65,.25,1) var(--delay) both}@keyframes confettiBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(.45) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--spin)) scale(.8)}}.win-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.win-actions .button{min-height:48px}.win-actions .wide{grid-column:1/-1}
 html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface);color:var(--game-ink);border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .setting-row{border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .theme-option{background:#263231;color:#edf2ea;border-color:#455550}html[data-portfolio-color-mode=dark] .status[data-kind=success]{background:#244333;color:#c5f0d0}html[data-portfolio-color-mode=dark] .status[data-kind=error]{background:#482c2c;color:#ffd9d0}
@@ -143,6 +150,14 @@ html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface)
       <button class="button primary wide" type="button" data-close-modal="settings-modal">Done</button>
     </div>
   </section>
+  <section class="home-modal" id="parts-guide-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="parts-guide-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">What each part can do</span><h2 id="parts-guide-title">Parts guide</h2></div><button class="home-dialog-close" type="button" data-close-modal="parts-guide-modal" aria-label="Close parts guide">×</button></div>
+      <ul class="parts-guide-list" id="parts-guide-list"></ul>
+      <div class="tutorial-links"><button class="button" id="parts-guide-tutorial" type="button">Open the tutorial</button></div>
+      <button class="button primary wide" type="button" data-close-modal="parts-guide-modal">Done</button>
+    </div>
+  </section>
   <section class="home-modal" id="tutorial-modal" hidden>
     <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
       <div class="home-dialog-head"><div><span class="eyebrow">Quick start</span><h2 id="tutorial-title">How to tinker</h2></div><button class="home-dialog-close" type="button" data-close-modal="tutorial-modal" aria-label="Close tutorial">×</button></div>
@@ -150,8 +165,10 @@ html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface)
         <li>Choose a part from the tray, then tap an empty workbench square to place it.</li>
         <li>Tap a placed part to rotate it. Use Remove part to return pieces to your tray.</li>
         <li>Connect the marble at the left to the bell on the right, then run the machine.</li>
-        <li>Belts carry straight. Ramps turn, switches branch, gears redirect, and springs jump a gap.</li>
-        <li>Clear a round to earn a hint for a later workbench.</li>
+        <li>Belt: carries the marble straight. Ramp: turns it through a right angle. Switch: offers two exit branches. Gear: redirects the marble according to its orientation. Spring: launches it straight across one square to the next part.</li>
+        <li>Place several parts of the selected type, rotate placed parts, or switch on Remove part to return one to the tray.</li>
+        <li>Clear a puzzle to earn a hint. Hints can point to the next part or the next rotation.</li>
+        <li>Use Parts guide from the workshop note whenever you want to review each part.</li>
       </ol>
       <button class="button primary wide" type="button" data-close-modal="tutorial-modal">Got it</button>
     </div>
@@ -184,7 +201,7 @@ html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface)
         <div class="mission-icon" aria-hidden="true">⚙</div>
         <div><strong id="mission-title">Bridge the little gap</strong><p id="mission-copy">Build a path across the workbench and send the marble to the bell.</p></div>
       </div>
-      <div class="board-heading"><h2>Workbench</h2><span id="board-size">5 × 5 grid</span></div>
+      <div class="board-heading"><h2>Workbench</h2><div class="board-heading-meta"><span class="difficulty-tag" id="difficulty-tag" hidden></span><span id="board-size">5 × 5 grid</span></div></div>
       <div class="board-wrap">
         <div class="board-grid" id="board" aria-label="Machine building grid"></div>
         <div class="board-caption"><span>▶ Marble starts here</span><span>🔔 Carry it to the bell</span></div>
@@ -225,23 +242,23 @@ import { mountPortfolioShell } from "../portfolio-shell.js";
 
 const PARTS = {
   belt: {
-    name: "Belt", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="12" width="32" height="16" rx="8" fill="#7cc0ac" stroke="#327968" stroke-width="2.5"/><circle cx="11" cy="20" r="3" fill="#fff"/><circle cx="29" cy="20" r="3" fill="#fff"/><path d="M15 20h9m-3-3 3 3-3 3" fill="none" stroke="#327968" stroke-width="2"/></svg>',
+    name: "Belt", capability: "Carries the marble straight. Rotate it to send the marble vertically.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="12" width="32" height="16" rx="8" fill="#7cc0ac" stroke="#327968" stroke-width="2.5"/><circle cx="11" cy="20" r="3" fill="#fff"/><circle cx="29" cy="20" r="3" fill="#fff"/><path d="M15 20h9m-3-3 3 3-3 3" fill="none" stroke="#327968" stroke-width="2"/></svg>',
     ports: ["E", "W"]
   },
   ramp: {
-    name: "Ramp", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 31h28L9 10z" fill="#d49a45" stroke="#815c2a" stroke-width="2.5" stroke-linejoin="round"/><circle cx="13" cy="25" r="4" fill="#fff3cb" stroke="#815c2a" stroke-width="2"/></svg>',
+    name: "Ramp", capability: "Turns the marble through a right angle. Rotate it to choose the turn.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 31h28L9 10z" fill="#d49a45" stroke="#815c2a" stroke-width="2.5" stroke-linejoin="round"/><circle cx="13" cy="25" r="4" fill="#fff3cb" stroke="#815c2a" stroke-width="2"/></svg>',
     ports: ["W", "N"]
   },
   gear: {
-    name: "Gear", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M17 3h6l1.3 4.5 3.5 1.5 4.1-2.2 4.2 4.2-2.2 4.1 1.5 3.5L40 20v6l-4.5 1.3-1.5 3.5 2.2 4.1-4.2 4.2-4.1-2.2-3.5 1.5L23 43h-6l-1.3-4.5-3.5-1.5-4.1 2.2-4.2-4.2 2.2-4.1-1.5-3.5L0 26v-6l4.5-1.3L6 15.2l-2.2-4.1L8 6.9l4.1 2.2 3.5-1.5z" transform="translate(2 -2) scale(.88)" fill="#a998d4" stroke="#63508e" stroke-width="2.2"/><circle cx="20" cy="20" r="5" fill="#f7f2ff" stroke="#63508e" stroke-width="2"/></svg>',
+    name: "Gear", capability: "Redirects the marble according to the gear’s orientation.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M17 3h6l1.3 4.5 3.5 1.5 4.1-2.2 4.2 4.2-2.2 4.1 1.5 3.5L40 20v6l-4.5 1.3-1.5 3.5 2.2 4.1-4.2 4.2-4.1-2.2-3.5 1.5L23 43h-6l-1.3-4.5-3.5-1.5-4.1 2.2-4.2-4.2 2.2-4.1-1.5-3.5L0 26v-6l4.5-1.3L6 15.2l-2.2-4.1L8 6.9l4.1 2.2 3.5-1.5z" transform="translate(2 -2) scale(.88)" fill="#a998d4" stroke="#63508e" stroke-width="2.2"/><circle cx="20" cy="20" r="5" fill="#f7f2ff" stroke="#63508e" stroke-width="2"/></svg>',
     ports: ["N", "E", "S", "W"]
   },
   switch: {
-    name: "Switch", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 29h12l10-18M19 29l10-18M19 29h14" fill="none" stroke="#4d8bc0" stroke-width="3.5" stroke-linecap="round"/><circle cx="7" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="29" cy="11" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="33" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/></svg>',
+    name: "Switch", capability: "Offers two exit branches after the marble enters.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 29h12l10-18M19 29l10-18M19 29h14" fill="none" stroke="#4d8bc0" stroke-width="3.5" stroke-linecap="round"/><circle cx="7" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="29" cy="11" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="33" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/></svg>',
     ports: ["W", "N", "E"]
   },
   spring: {
-    name: "Spring", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 20h6l4-8 6 16 6-16 4 8h6" fill="none" stroke="#cf7052" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12v16m32-16v16" stroke="#76564d" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    name: "Spring", capability: "Launches the marble straight across one square to the next part.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 20h6l4-8 6 16 6-16 4 8h6" fill="none" stroke="#cf7052" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12v16m32-16v16" stroke="#76564d" stroke-width="2.5" stroke-linecap="round"/></svg>',
     ports: ["E", "W"]
   }
 };
@@ -307,8 +324,8 @@ try {
     hintCredits = Number.isInteger(save.hintCredits) ? Math.max(0, Math.min(99, save.hintCredits)) : 0;
     hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
     soundEnabled = save.soundEnabled === true;
-    levelIndex = Math.min(LEVELS.length - 1, Math.max(0, save.levelIndex));
-    solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0 && n < LEVELS.length) : [];
+    levelIndex = Math.max(0, save.levelIndex);
+    solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0) : [];
     const saved = save.layouts && save.layouts[levelIndex];
     if (saved && typeof saved === "object") {
       for (const [key, tile] of Object.entries(saved)) {
@@ -336,7 +353,109 @@ function saveGame() {
     localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 3, levelIndex, solved, layouts, hintCredits, hintStepByLevel, soundEnabled }));
   } catch {}
 }
-function level() { return LEVELS[levelIndex]; }
+function seededRandom(seed) {
+  let state = (seed >>> 0) || 1;
+  return () => { state = (state + 0x6D2B79F5) >>> 0; let x = state; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+}
+function shuffleWith(items, random) {
+  const result = items.slice();
+  for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; }
+  return result;
+}
+function generatedPuzzle(index) {
+  const generatedNumber = index - LEVELS.length;
+  const random = seededRandom(0x71A9C3 + generatedNumber * 7919);
+  const breather = generatedNumber % 8 === 7;
+  const stage = Math.floor(generatedNumber / 8);
+  const minLength = breather ? 5 : Math.min(7 + stage * 2, 13);
+  const maxLength = breather ? 7 : Math.min(10 + stage * 3, 20);
+  const minTurns = breather ? 0 : Math.min(1 + stage, 5);
+  const maxTurns = breather ? 1 : Math.min(3 + stage, 8);
+  let route = null;
+  for (let attempt = 0; attempt < 18 && !route; attempt++) {
+    const start = Math.floor(random() * 5);
+    const goal = breather ? start : Math.floor(random() * 5);
+    const path = [{ row: start, col: 0 }];
+    const visited = new Set([start * 5]);
+    let budget = 3600;
+    function walk(previousDir, turns) {
+      if (--budget < 0) return false;
+      const at = path[path.length - 1];
+      if (at.col === 4 && at.row === goal) {
+        if (path.length >= minLength && path.length <= maxLength && turns >= minTurns && turns <= maxTurns) return true;
+        return false;
+      }
+      if (path.length >= maxLength) return false;
+      const options = shuffleWith(DIRS.map(dir => ({dir, vector: VECTORS[dir]})), random);
+      for (const option of options) {
+        if (path.length === 1 && option.dir !== "E") continue;
+        const row = at.row + option.vector[0], col = at.col + option.vector[1];
+        if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
+        const key = row * 5 + col;
+        if (visited.has(key)) continue;
+        if (row === goal && col === 4 && path.length + 1 < minLength) continue;
+        const nextTurns = turns + (option.dir === previousDir ? 0 : 1);
+        if (nextTurns > maxTurns) continue;
+        visited.add(key); path.push({row, col});
+        if (walk(option.dir, nextTurns)) return true;
+        path.pop(); visited.delete(key);
+      }
+      return false;
+    }
+    if (walk("E", 0)) route = path.map(point => ({...point}));
+  }
+  if (!route) {
+    const row = Math.floor(random() * 5);
+    route = Array.from({length:5}, (_, col) => ({row, col}));
+  }
+  const solution = [];
+  const counts = {belt:0, ramp:0, gear:0, switch:0, spring:0};
+  let turns = 0;
+  const directionBetween = (a, b) => DIRS.find(dir => { const v=VECTORS[dir]; return a.row+v[0]===b.row && a.col+v[1]===b.col; });
+  for (let i=0; i<route.length; i++) {
+    const incoming = i === 0 ? "E" : directionBetween(route[i-1], route[i]);
+    const outgoing = i === route.length-1 ? "E" : directionBetween(route[i], route[i+1]);
+    const indexAt = route[i].row * 5 + route[i].col;
+    let type, rotation;
+    if (incoming === outgoing) {
+      if (!breather && random() < Math.min(.08 + stage*.025, .18)) { type="gear"; rotation=1; }
+      else { type="belt"; rotation=(incoming === "N" || incoming === "S") ? 1 : 0; }
+    } else {
+      turns++;
+      const entry = opposite(incoming);
+      if (!breather && random() < .14) {
+        type="switch";
+        const possible=[];
+        for (let r=0; r<4; r++) { const ports=PARTS.switch.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) possible.push(r); }
+        rotation=possible[Math.floor(random()*possible.length)];
+      } else if (!breather && random() < .10) {
+        type="gear";
+        rotation=(DIRS.indexOf(outgoing)-DIRS.indexOf(incoming)+1+4)%4;
+      } else {
+        type="ramp";
+        for (let r=0; r<4; r++) { const ports=PARTS.ramp.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) { rotation=r; break; } }
+      }
+    }
+    solution.push({index:indexAt,type,rotation}); counts[type]++;
+  }
+  const routeSet = new Set(route.map(point=>point.row*5+point.col));
+  const empty = shuffleWith(Array.from({length:25},(_,i)=>i).filter(i=>!routeSet.has(i)), random);
+  const wallCount = breather ? 0 : Math.min(2 + stage*2 + Math.floor(generatedNumber%3), 9);
+  const walls = empty.slice(0,wallCount).map(i=>[Math.floor(i/5),i%5]);
+  const difficulty = route.length >= 15 && turns >= 5 ? "Extremely Hard" : route.length >= 11 && turns >= 3 ? "Very Hard" : route.length >= 8 || turns >= 2 ? "Hard" : "";
+  return {
+    title: breather ? "A lighter turn at the workbench" : ["Wind through the workshop", "Route around the clutter", "Build a clever chain", "Tangle and untangle"][Math.min(3,stage)],
+    copy: breather ? "A shorter route gives you room to experiment before the next challenge." : "Find a route through the blocked squares and carry the marble to the bell.",
+    note: breather ? "This is a shorter puzzle. Try a different part or route just for fun." : "Use the openings in the board. Rotate parts to match each turn; the parts guide explains their capabilities.",
+    start: route[0].row, goal: route[route.length-1].row, walls, stock: Object.fromEntries(Object.keys(counts).map(type=>[type, Math.max(counts[type], type==="belt"?3:0)])), solution, difficulty
+  };
+}
+const GENERATED_PUZZLE_CACHE = new Map();
+function level() {
+  if (LEVELS[levelIndex]) return LEVELS[levelIndex];
+  if (!GENERATED_PUZZLE_CACHE.has(levelIndex)) GENERATED_PUZZLE_CACHE.set(levelIndex, generatedPuzzle(levelIndex));
+  return GENERATED_PUZZLE_CACHE.get(levelIndex);
+}
 function keyOf(row, col) { return row * 5 + col; }
 function playTone(kind = "tap") {
   if (!soundEnabled) return;
@@ -431,11 +550,16 @@ function render() {
   document.getElementById("hint-button").textContent = hintCredits ? "Use hint · " + hintCredits : "Hint · earn one";
   document.getElementById("hint-count").textContent = String(hintCredits);
   document.getElementById("help-button").disabled = running;
+  document.getElementById("parts-guide-tutorial").disabled = running;
   const current = level();
   document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
   document.getElementById("mission-title").textContent = current.title;
   document.getElementById("mission-copy").textContent = current.copy;
   document.getElementById("hint").textContent = current.note;
+  const difficultyTag = document.getElementById("difficulty-tag");
+  difficultyTag.textContent = current.difficulty || "";
+  difficultyTag.dataset.level = current.difficulty || "";
+  difficultyTag.hidden = !current.difficulty;
   document.getElementById("board-size").textContent = "5 × 5 grid";
   board.replaceChildren();
   const header = document.createElement("div");
@@ -486,7 +610,7 @@ function render() {
     const exit = document.createElement("span");
     exit.className = "gate exit";
     exit.textContent = row === current.goal ? "🔔" : "";
-    if (row === current.goal) exit.setAttribute("aria-label", "Bell exit row");
+    if (row === current.goal) { exit.id = "bell-goal"; exit.setAttribute("aria-label", "Bell exit row"); }
     rowNode.append(exit);
     board.append(rowNode);
   }
@@ -523,13 +647,11 @@ function render() {
     partsNode.append(button);
   });
 
-  document.getElementById("progress").replaceChildren(...LEVELS.map((_, i) => {
-    const dot = document.createElement("i");
-    if (solved.includes(i)) dot.className = "done";
-    dot.setAttribute("aria-hidden", "true");
-    return dot;
-  }));
-  nextButton.hidden = !solved.includes(levelIndex) || levelIndex >= LEVELS.length - 1;
+  const progress = document.getElementById("progress");
+  progress.replaceChildren();
+  progress.textContent = solved.length + (solved.length === 1 ? " puzzle solved" : " puzzles solved");
+  progress.setAttribute("aria-label", progress.textContent);
+  nextButton.hidden = !solved.includes(levelIndex);
   runButton.disabled = running;
   resetButton.disabled = running;
   removeButton.disabled = running;
@@ -563,13 +685,24 @@ board.addEventListener("click", event => {
     setStatus(PARTS[existing.type].name + " returned to your tray.");
     return;
   }
+  if (existing) {
+    existing.rotation = (existing.rotation + 1) % 4;
+    hintCue = null;
+    visualChange = { index, kind: "turn" };
+    playTone("tap");
+    clearTrace();
+    saveGame();
+    render();
+    setStatus(PARTS[existing.type].name + " rotated. " + (selectedPart ? PARTS[selectedPart].name + " remains selected for placement." : "Run the machine when ready."));
+    return;
+  }
   if (selectedPart) {
-    if (!partAvailable(selectedPart, existing)) {
+    if (!partAvailable(selectedPart, null)) {
       setStatus("You have used every " + PARTS[selectedPart].name.toLowerCase() + ". Remove one from the board first.", "error");
       return;
     }
     const placingType = selectedPart;
-    placements[index] = { type: placingType, rotation: existing?.type === placingType ? existing.rotation : 0 };
+    placements[index] = { type: placingType, rotation: 0 };
     const remaining = (level().stock[placingType] || 0) - usedCount(placingType);
     if (remaining <= 0) selectedPart = "";
     hintCue = null;
@@ -581,17 +714,6 @@ board.addEventListener("click", event => {
     setStatus(remaining > 0
       ? PARTS[placingType].name + " placed. Tap another square to place more, or choose another part."
       : "Placed the last " + PARTS[placingType].name.toLowerCase() + ". Choose another part.");
-    return;
-  }
-  if (existing) {
-    existing.rotation = (existing.rotation + 1) % 4;
-    hintCue = null;
-    visualChange = { index, kind: "turn" };
-    playTone("tap");
-    clearTrace();
-    saveGame();
-    render();
-    setStatus(PARTS[existing.type].name + " rotated. Run the machine when ready.");
   } else {
     setStatus("Choose a part from the tray first.");
   }
@@ -639,8 +761,6 @@ async function runMachine() {
     await wait(reduced ? 50 : 310);
   }
   previousMarble?.remove();
-  running = false;
-  app.classList.remove("machine-running");
   const firstClear = result.success && !solved.includes(levelIndex);
   if (firstClear) {
     solved = [...solved, levelIndex];
@@ -653,10 +773,21 @@ async function runMachine() {
     if (routeCell) routeCell.classList.add(point.missing ? "is-missing" : "is-lit");
   }
   if (result.success) {
-    setStatus("It works!", "success");
+    const bell = document.getElementById("bell-goal");
+    bell?.classList.add("is-ringing");
+    setStatus("The bell is ringing!", "success");
     playTone("win");
+    await wait(2000);
+    bell?.classList.remove("is-ringing");
+    running = false;
+    app.classList.remove("machine-running");
+    render();
+    setStatus("It works!", "success");
     showVictorySplash(firstClear);
   } else {
+    running = false;
+    app.classList.remove("machine-running");
+    render();
     const blocked = result.path[result.path.length - 1];
     setStatus(blocked ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." : "The machine needs a connected route. Try starting at the marble entry.", "error");
   }
@@ -714,7 +845,7 @@ function closeModal(id) {
 }
 function applyHint() {
   if (running || hintCredits < 1) return;
-  const blueprint = HINT_BLUEPRINTS[levelIndex] || [];
+  const blueprint = HINT_BLUEPRINTS[levelIndex] || level().solution || [];
   let cursor = Math.max(0, Number(hintStepByLevel[levelIndex]) || 0);
   while (cursor < blueprint.length) {
     const step = blueprint[cursor];
@@ -745,8 +876,8 @@ function showVictorySplash(firstClear) {
   const modal = document.getElementById("win-modal");
   document.getElementById("win-reward").textContent = firstClear ? "✦ +1 hint" : "A clean run";
   const next = document.getElementById("win-next");
-  next.hidden = levelIndex >= LEVELS.length - 1;
-  next.classList.toggle("wide", levelIndex >= LEVELS.length - 1);
+  next.hidden = false;
+  next.classList.remove("wide");
   const layer = document.getElementById("confetti-layer");
   layer.replaceChildren();
   const colors = ["#f2a43a", "#4c9b7c", "#8671c8", "#e16e58", "#5b9ed0"];
@@ -766,8 +897,7 @@ function showVictorySplash(firstClear) {
   window.setTimeout(() => layer.replaceChildren(), 1400);
 }
 function advancePuzzle() {
-  if (levelIndex >= LEVELS.length - 1 || !solved.includes(levelIndex)) return;
-  const finishedLevel = levelIndex;
+  if (!solved.includes(levelIndex)) return;
   document.getElementById("win-modal").hidden = true;
   levelIndex++;
   placements = Array(25).fill(null);
@@ -788,7 +918,21 @@ function advancePuzzle() {
 document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
 document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
 document.getElementById("hint-button").addEventListener("click", applyHint);
-document.getElementById("help-button").addEventListener("click", () => openModal("tutorial-modal"));
+document.getElementById("help-button").addEventListener("click", () => openModal("parts-guide-modal"));
+document.getElementById("parts-guide-tutorial").addEventListener("click", () => { closeModal("parts-guide-modal"); openModal("tutorial-modal"); });
+function renderPartsGuide() {
+  const list=document.getElementById("parts-guide-list");
+  list.replaceChildren();
+  Object.entries(PARTS).forEach(([id,part])=>{
+    const item=document.createElement("li"); item.className="parts-guide-item";
+    const icon=document.createElement("span"); icon.className="parts-guide-icon"; icon.dataset.part=id; icon.setAttribute("aria-hidden","true"); icon.innerHTML=part.symbol;
+    const copy=document.createElement("div"); copy.className="parts-guide-copy";
+    const title=document.createElement("strong"); title.textContent=part.name;
+    const description=document.createElement("p"); description.textContent=part.capability;
+    copy.append(title,description); item.append(icon,copy); list.append(item);
+  });
+}
+renderPartsGuide();
 document.getElementById("win-close").addEventListener("click", () => closeModal("win-modal"));
 document.getElementById("win-next").addEventListener("click", advancePuzzle);
 document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", () => closeModal(button.dataset.closeModal)));
