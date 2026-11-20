@@ -253,6 +253,7 @@ function portsFor(tile) {
   if (tile.type === "belt") return tile.rotation % 2 ? ["N", "S"] : ["E", "W"];
   if (tile.type === "ramp") return PARTS.ramp.ports.map(dir => rotate(dir, tile.rotation));
   if (tile.type === "switch") return PARTS.switch.ports.map(dir => rotate(dir, tile.rotation));
+  if (tile.type === "spring") return PARTS.spring.ports.map(dir => rotate(dir, tile.rotation));
   return PARTS[tile.type].ports;
 }
 function outputsFor(tile, travelDir) {
@@ -471,7 +472,7 @@ async function runMachine() {
       cell.classList.add(point.missing ? "is-missing" : "is-lit");
       if (point.missing) break;
     }
-    await wait(reduced ? 45 : 260);
+    await wait(reduced ? 0 : 260);
   }
   running = false;
   render();
