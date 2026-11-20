@@ -998,8 +998,6 @@ portfolioShell = await mountPortfolioShell({
     const mode = settings.appearance.colorMode;
     document.getElementById("pref-follow-device").checked = mode === "system";
     document.getElementById("pref-dark-mode").checked = mode === "dark" || (mode === "system" && !!window.matchMedia?.("(prefers-color-scheme: dark)").matches);
-    document.getElementById("pref-dark-mode").disabled = mode === "system";
-    document.getElementById("dark-mode-row").classList.toggle("disabled", mode === "system");
     document.getElementById("pref-ignore-motion").checked = settings.accessibility.motion === "full";
     document.getElementById("pref-reduce-motion").checked = settings.accessibility.motion === "reduce";
     document.getElementById("pref-scale").value = String(settings.accessibility.textScale);
