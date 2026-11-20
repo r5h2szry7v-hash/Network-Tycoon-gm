@@ -1,7 +1,7 @@
 import { getApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
 import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
-import { startCloudSync } from "./cloud-save.js";
+import { registerCloudSaveGame, startCloudSync } from "./cloud-save.js";
 
 const SETTINGS_KEY = "portfolio.settings.v1";
 const SETTINGS_META_KEY = "portfolio.settings.meta.v1";
@@ -61,6 +61,7 @@ function applySettings(settings, gameId, themes) {
   const themeList = Array.isArray(themes) ? themes : [];
   const selectedTheme = themeList.find(theme => theme.id === settings.themeByGame[gameId]) || themeList[0] || null;
   root.dataset.portfolioColorMode = settings.appearance.colorMode;
+  root.style.colorScheme = settings.appearance.colorMode === "system" ? "light dark" : settings.appearance.colorMode;
   const reduce = settings.accessibility.motion === "reduce" ||
     (settings.accessibility.motion === "system" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
   root.dataset.portfolioMotion = reduce ? "reduce" : "full";
@@ -127,6 +128,7 @@ async function syncSettings(uid, local, publish) {
 export async function mountPortfolioShell(options = {}) {
   const gameId = String(options.gameId || "");
   if (!/^[a-z][A-Za-z0-9-]{1,39}$/.test(gameId)) throw new Error("A valid portfolio gameId is required.");
+  registerCloudSaveGame(gameId, options.storageKeys || [gameId]);
   const host = options.mount || document.body;
   const themes = Array.isArray(options.themes) ? options.themes.filter(theme =>
     theme && /^[a-z][a-z0-9-]{0,47}$/.test(theme.id) && typeof theme.label === "string") : [];
