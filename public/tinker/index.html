@@ -90,6 +90,14 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .footer-note{margin:20px 0 0;color:var(--game-muted);font-size:.8em;text-align:center}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.hero{align-items:start}}
 @media(max-width:540px){.hero{grid-template-columns:1fr auto;gap:8px}.hero p{font-size:.94em}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.side{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}}
+
+/* Settings cards follow the soft, rounded palette controls used across the portfolio. */
+.setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--game-line);color:var(--game-ink);font-weight:850;font-size:.9em}.setting-row>span:first-child{display:block;flex:1}.setting-row small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row select{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font-weight:800}.setting-toggle{position:relative;cursor:pointer}.setting-toggle input[type=checkbox]{position:absolute;width:1px;height:1px;margin:0;opacity:0}.switch-track{position:relative;display:block;flex:none;width:50px;height:30px;border-radius:99px;background:#aab2b1;transition:background .2s}.switch-track::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:transform .2s cubic-bezier(.2,.8,.25,1.2)}.setting-toggle input:checked+.switch-track{background:var(--game-accent-2)}.setting-toggle input:checked+.switch-track::after{transform:translateX(20px)}.setting-toggle input:focus-visible+.switch-track{outline:3px solid var(--game-accent);outline-offset:3px}.setting-toggle.disabled{opacity:.58}.setting-toggle input:disabled+.switch-track{cursor:not-allowed}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.theme-option{min-width:0;display:grid;gap:7px;text-align:left;padding:9px;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font:inherit;font-weight:850;font-size:.75em;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}.theme-option:hover{transform:translateY(-2px)}.theme-option[aria-pressed=true]{border:2px solid var(--game-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 22%,transparent)}.theme-swatch{height:18px;border-radius:99px;background:linear-gradient(100deg,var(--swatch-a) 0 52%,var(--swatch-b) 52%);box-shadow:inset 0 0 0 1px #00000015}.theme-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.preference-row{display:grid;gap:6px;font-weight:850}.pref-note{margin:12px 0;color:var(--game-muted);font-size:.82em;line-height:1.45}.hint-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.hint-tools .button{min-height:42px;padding:8px;font-size:.82em}.hint-credit{margin-top:10px;color:var(--game-muted);font-size:.8em;font-weight:850}.hint-credit strong{color:var(--game-accent)}.hint-target{z-index:4!important;animation:hintTarget 1s ease-in-out infinite alternate}.part.hint-target{border-color:var(--game-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--game-accent) 40%,transparent)}@keyframes hintTarget{to{box-shadow:0 0 0 7px color-mix(in srgb,var(--game-accent) 32%,transparent);filter:brightness(1.08)}}
+.cell.tile-enter .part-orientation{animation:tileArrive .48s cubic-bezier(.2,1.4,.3,1) both}.cell.tile-turn .part-orientation{animation:tileTurn .42s cubic-bezier(.2,.8,.25,1.2) both}@keyframes tileArrive{0%{transform:scale(.2) rotate(-20deg);opacity:0}72%{transform:scale(1.18) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes tileTurn{0%{filter:brightness(1.8)}100%{filter:brightness(1)}}.tile-connector{position:absolute;z-index:3;display:block;background:var(--game-accent-2);box-shadow:0 0 7px color-mix(in srgb,var(--game-accent-2) 70%,transparent);pointer-events:none}.tile-connector.east{right:-7px;top:calc(50% - 2px);width:8px;height:4px}.tile-connector.south{left:calc(50% - 2px);bottom:-7px;width:4px;height:8px}.tile-connector::after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 5px #fff;animation:linkSpark .75s ease-in-out infinite alternate}.tile-connector.east::after{left:0;top:0}.tile-connector.south::after{left:0;top:0}@keyframes linkSpark{to{transform:translate(4px,0);opacity:.45}}.tile-connector.south::after{animation-name:linkSparkVertical}@keyframes linkSparkVertical{to{transform:translate(0,4px);opacity:.45}}.machine-running .cell[data-type=gear] .part-orientation{animation:gearWhirr .42s linear infinite}.machine-running .cell[data-type=belt] .part-orientation{animation:beltCarry .34s ease-in-out infinite alternate}.machine-running .cell[data-type=spring] .part-orientation{animation:springBounce .38s ease-in-out infinite alternate}@keyframes gearWhirr{to{rotate:90deg}}@keyframes beltCarry{to{translate:2px 0}}@keyframes springBounce{to{scale:1.12 .82}}.marble-traveler{position:absolute;z-index:6;left:50%;top:50%;width:clamp(14px,40%,24px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 28%,#fff8c9 0 16%,#ffc64e 45%,#e58431 100%);box-shadow:0 0 0 3px #fff6,0 0 18px #ffb537;pointer-events:none;animation:marblePulse .42s ease-in-out infinite alternate}.marble-traveler.hop{animation:marbleHop .5s cubic-bezier(.2,.7,.25,1.4) both}@keyframes marblePulse{to{scale:.82;box-shadow:0 0 0 6px #fff4,0 0 24px #ffbd43}}@keyframes marbleHop{0%{transform:translate(-50%,-50%) scale(.7)}55%{transform:translate(-50%,-85%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(1)}}
+.completion-modal{z-index:1200}.completion-card{position:relative;overflow:hidden;text-align:center;padding:28px 24px 22px}.completion-card h2{font-size:clamp(1.8em,7vw,2.6em);margin:8px 0 4px}.completion-card .reward-line{margin:0 0 17px;color:var(--game-accent-2);font-weight:900}.celebration-machine{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);height:102px;margin:8px 0 10px;overflow:hidden;border-radius:18px;background:linear-gradient(100deg,color-mix(in srgb,var(--game-accent) 12%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 14%,var(--game-surface)))}.celebration-part{display:grid;place-items:center;width:54px;height:54px;border-radius:16px;background:var(--game-surface);border:1px solid var(--game-line);font-size:28px;box-shadow:0 6px 14px #0001}.celebration-part.gear-demo{animation:gearWhirr .65s linear infinite}.celebration-part.spring-demo{animation:springBounce .4s ease-in-out infinite alternate}.celebration-track{position:absolute;left:9%;right:9%;top:50%;height:4px;border-radius:99px;background:color-mix(in srgb,var(--game-accent-2) 58%,transparent)}.celebration-marble{position:absolute;top:calc(50% - 8px);left:10%;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff8c9,#ffb333 70%,#e47a2f);box-shadow:0 0 13px #ffb333;animation:marbleDemo 1.6s ease-in-out infinite alternate}@keyframes marbleDemo{to{left:88%}}.confetti-layer{position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none}.confetti-piece{position:absolute;left:50%;top:47%;width:8px;height:12px;border-radius:2px;background:var(--confetti);opacity:0;animation:confettiBurst .95s cubic-bezier(.12,.65,.25,1) var(--delay) both}@keyframes confettiBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(.45) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--spin)) scale(.8)}}.win-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.win-actions .button{min-height:48px}.win-actions .wide{grid-column:1/-1}
+html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface);color:var(--game-ink);border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .setting-row{border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .theme-option{background:#263231;color:#edf2ea;border-color:#455550}html[data-portfolio-color-mode=dark] .status[data-kind=success]{background:#244333;color:#c5f0d0}html[data-portfolio-color-mode=dark] .status[data-kind=error]{background:#482c2c;color:#ffd9d0}
+@media(max-width:540px){.home-dialog{padding:19px}.theme-grid{gap:6px}.theme-option{padding:7px;font-size:.68em}.setting-row{font-size:.84em}.completion-card{padding:23px 17px 18px}.celebration-machine{gap:6px;height:90px}.celebration-part{width:42px;height:46px;font-size:23px}.hint-tools{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -112,13 +120,26 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
   <section class="home-modal" id="settings-modal" hidden>
     <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="home-dialog-head"><div><span class="eyebrow">Your workshop</span><h2 id="settings-title">Settings</h2></div><button class="home-dialog-close" type="button" data-close-modal="settings-modal" aria-label="Close settings">×</button></div>
-      <div class="preference-list">
-        <label class="preference-row">Game theme<select id="pref-theme" aria-label="Tinker Factory theme"><option value="workshop">Workshop</option><option value="orchard">Copper &amp; mint</option><option value="starlit">Starlit violet</option></select></label>
-        <label class="preference-row">Color mode<select id="pref-color"><option value="system">Use device setting</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
-        <label class="preference-row">Motion<select id="pref-motion"><option value="system">Use device setting</option><option value="reduce">Reduce motion</option><option value="full">Full motion</option></select></label>
-        <label class="preference-row">Text size<select id="pref-scale"><option value="0.9">90%</option><option value="1">100%</option><option value="1.1">110%</option><option value="1.25">125%</option></select></label>
+      <div class="settings-choices">
+      <div class="setting-row palette-setting"><div class="palette-copy">Workshop colors<small>Choose a palette for gears, paths, and highlights.</small></div><div class="theme-grid" id="theme-grid" role="group" aria-label="Tinker Factory color theme">
+        <button class="theme-option" type="button" data-theme="workshop" aria-pressed="true"><span class="theme-swatch" style="--swatch-a:#c9753d;--swatch-b:#387f74" aria-hidden="true"></span><span class="theme-label">Workshop</span></button>
+        <button class="theme-option" type="button" data-theme="orchard" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#a35f45;--swatch-b:#597f62" aria-hidden="true"></span><span class="theme-label">Copper & mint</span></button>
+        <button class="theme-option" type="button" data-theme="starlit" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#7764b4;--swatch-b:#528c8d" aria-hidden="true"></span><span class="theme-label">Starlit violet</span></button>
+        <button class="theme-option" type="button" data-theme="ocean" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#2878ae;--swatch-b:#2e9f9c" aria-hidden="true"></span><span class="theme-label">Ocean current</span></button>
+        <button class="theme-option" type="button" data-theme="lemon" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#b98915;--swatch-b:#d86b4b" aria-hidden="true"></span><span class="theme-label">Lemon gear</span></button>
+        <button class="theme-option" type="button" data-theme="berry" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#a64f7b;--swatch-b:#7559b1" aria-hidden="true"></span><span class="theme-label">Berry jam</span></button>
+        <button class="theme-option" type="button" data-theme="meadow" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#548648;--swatch-b:#398c7d" aria-hidden="true"></span><span class="theme-label">Meadow moss</span></button>
+        <button class="theme-option" type="button" data-theme="skyline" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#3974bb;--swatch-b:#8270c6" aria-hidden="true"></span><span class="theme-label">Skyline</span></button>
+        <button class="theme-option" type="button" data-theme="ember" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#bf5540;--swatch-b:#d09334" aria-hidden="true"></span><span class="theme-label">Ember glow</span></button>
+      </div></div>
+        <label class="setting-row setting-toggle"><span>Follow device appearance<small>Keep Tinker Factory in sync with your phone or computer.</small></span><input id="pref-follow-device" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle" id="dark-mode-row"><span>Dark mode<small>Choose a darker workshop palette.</small></span><input id="pref-dark-mode" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Allow full motion<small>Ignore the device’s reduced-motion preference.</small></span><input id="pref-ignore-motion" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Reduce motion<small>Use shorter, quieter animations.</small></span><input id="pref-reduce-motion" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Sound effects<small>Soft clicks, gear ticks, and a little victory chime.</small></span><input id="pref-sound" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row preference-row"><span>Text size<small>Adjust labels and controls for comfortable reading.</small><select id="pref-scale" aria-label="Text size"><option value="0.9">90%</option><option value="1">100%</option><option value="1.1">110%</option><option value="1.25">125%</option></select></label>
       </div>
-      <p id="settings-sync-note" role="status" aria-live="polite">Settings save on this device and sync with your portfolio account when signed in.</p>
+      <p id="settings-sync-note" role="status" aria-live="polite">Settings sync across your portfolio when signed in.</p>
       <button class="button primary wide" type="button" data-close-modal="settings-modal">Done</button>
     </div>
   </section>
@@ -129,8 +150,23 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
         <li>Choose a part from the tray, then tap an empty workbench square to place it.</li>
         <li>Tap a placed part to rotate it. Use Remove part to return pieces to your tray.</li>
         <li>Connect the marble at the left to the bell on the right, then run the machine.</li>
+        <li>Belts carry straight. Ramps turn, switches branch, gears redirect, and springs jump a gap.</li>
+        <li>Clear a round to earn a hint for a later workbench.</li>
       </ol>
       <button class="button primary wide" type="button" data-close-modal="tutorial-modal">Got it</button>
+    </div>
+  </section>
+  <section class="home-modal completion-modal" id="win-modal" hidden>
+    <div class="home-dialog completion-card" role="dialog" aria-modal="true" aria-labelledby="win-title">
+      <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+      <span class="eyebrow" id="win-eyebrow">Machine complete</span>
+      <h2 id="win-title">It works!</h2>
+      <p class="reward-line" id="win-reward">✦ +1 hint</p>
+      <div class="celebration-machine" role="img" aria-label="A marble rolls through a moving machine">
+        <div class="celebration-track"></div><span class="celebration-marble"></span>
+        <span class="celebration-part">🧲</span><span class="celebration-part gear-demo">⚙</span><span class="celebration-part spring-demo">〰️</span><span class="celebration-part">🔔</span>
+      </div>
+      <div class="win-actions"><button class="button primary" id="win-next" type="button">Next puzzle</button><button class="button" id="win-close" type="button">Keep tinkering</button></div>
     </div>
   </section>
   <div id="game-screen" hidden>
@@ -174,6 +210,8 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
       <section class="hint-card">
         <h2>Workshop note</h2>
         <p id="hint">The spring can send a marble over one empty square.</p>
+        <div class="hint-tools"><button class="button" id="hint-button" type="button" disabled>Hint · earn one</button><button class="button" id="help-button" type="button">Parts guide</button></div>
+        <div class="hint-credit">✦ <strong id="hint-count">0</strong> earned hints</div>
         <div class="progress" id="progress" aria-label="Puzzle progress"></div>
       </section>
     </aside>
@@ -230,6 +268,11 @@ const LEVELS = [
     stock: { belt: 3, spring: 1, ramp: 1, gear: 1, switch: 1 }
   }
 ];
+const HINT_BLUEPRINTS = [
+  [{ index: 10, type: "belt", rotation: 0 }, { index: 11, type: "belt", rotation: 0 }, { index: 12, type: "spring", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
+  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
+  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "gear", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
+];
 const DIRS = ["E", "S", "W", "N"];
 const VECTORS = { E: [0, 1], S: [1, 0], W: [0, -1], N: [-1, 0] };
 const opposite = dir => DIRS[(DIRS.indexOf(dir) + 2) % 4];
@@ -249,11 +292,21 @@ let solved = [];
 let levelIndex = 0;
 let placements = Array(25).fill(null);
 let hasSavedGame = false;
+let hintCredits = 0;
+let hintStepByLevel = {};
+let soundEnabled = false;
+let visualChange = null;
+let audioContext = null;
+let hintCue = null;
+let portfolioShell = null;
 
 try {
   const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
   if (save && Number.isInteger(save.levelIndex)) {
     hasSavedGame = true;
+    hintCredits = Number.isInteger(save.hintCredits) ? Math.max(0, Math.min(99, save.hintCredits)) : 0;
+    hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
+    soundEnabled = save.soundEnabled === true;
     levelIndex = Math.min(LEVELS.length - 1, Math.max(0, save.levelIndex));
     solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0 && n < LEVELS.length) : [];
     const saved = save.layouts && save.layouts[levelIndex];
@@ -280,11 +333,30 @@ function saveGame() {
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
   try {
-    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 2, levelIndex, solved, layouts }));
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 3, levelIndex, solved, layouts, hintCredits, hintStepByLevel, soundEnabled }));
   } catch {}
 }
 function level() { return LEVELS[levelIndex]; }
 function keyOf(row, col) { return row * 5 + col; }
+function playTone(kind = "tap") {
+  if (!soundEnabled) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    audioContext ||= new AudioContextClass();
+    if (audioContext.state === "suspended") audioContext.resume();
+    const osc = audioContext.createOscillator(), gain = audioContext.createGain();
+    const now = audioContext.currentTime;
+    const tones = { tap: 440, place: 620, connect: 760, run: 360, hint: 520, win: 880 };
+    osc.type = kind === "win" ? "sine" : "triangle";
+    osc.frequency.setValueAtTime(tones[kind] || 440, now);
+    if (kind === "win") osc.frequency.exponentialRampToValueAtTime(1175, now + .16);
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(kind === "win" ? .08 : .035, now + .012);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + (kind === "win" ? .28 : .11));
+    osc.connect(gain); gain.connect(audioContext.destination); osc.start(now); osc.stop(now + (kind === "win" ? .3 : .12));
+  } catch {}
+}
 function usedCount(type) { return placements.filter(tile => tile?.type === type).length; }
 function partAvailable(type, replacing = null) {
   const stock = level().stock[type] || 0;
@@ -355,6 +427,10 @@ function iconFor(tile) {
 }
 function render() {
   document.getElementById("resume-game-button").disabled = !hasSavedGame;
+  document.getElementById("hint-button").disabled = running || hintCredits < 1;
+  document.getElementById("hint-button").textContent = hintCredits ? "Use hint · " + hintCredits : "Hint · earn one";
+  document.getElementById("hint-count").textContent = String(hintCredits);
+  document.getElementById("help-button").disabled = running;
   const current = level();
   document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
   document.getElementById("mission-title").textContent = current.title;
@@ -390,6 +466,8 @@ function render() {
       cell.dataset.index = String(index);
       const wall = current.walls.some(item => item[0] === row && item[1] === col);
       const tile = placements[index];
+      if (tile) { cell.dataset.type = tile.type; }
+      if (hintCue?.index === index) cell.classList.add("hint-target");
       if (wall) {
         cell.classList.add("wall");
         cell.disabled = true;
@@ -402,6 +480,7 @@ function render() {
       }
       if (row === current.start && col === 0) cell.classList.add("entry-cell");
       if (row === current.goal && col === 4) cell.classList.add("exit-cell");
+      if (visualChange?.index === index) cell.classList.add(visualChange.kind === "turn" ? "tile-turn" : "tile-enter");
       rowNode.append(cell);
     }
     const exit = document.createElement("span");
@@ -412,6 +491,22 @@ function render() {
     board.append(rowNode);
   }
 
+  for (let index = 0; index < placements.length; index++) {
+    const tile = placements[index];
+    if (!tile) continue;
+    const row = Math.floor(index / 5), col = index % 5;
+    for (const dir of ["E", "S"]) {
+      const nextRow = row + VECTORS[dir][0], nextCol = col + VECTORS[dir][1];
+      if (nextRow >= 5 || nextCol >= 5) continue;
+      const neighborIndex = keyOf(nextRow, nextCol), neighbor = placements[neighborIndex];
+      if (!neighbor || !portsFor(tile).includes(dir) || !portsFor(neighbor).includes(opposite(dir))) continue;
+      const link = document.createElement("span");
+      link.className = "tile-connector " + (dir === "E" ? "east" : "south");
+      link.setAttribute("aria-hidden", "true");
+      board.querySelector('.cell[data-index="' + index + '"]').append(link);
+    }
+  }
+  visualChange = null;
   partsNode.replaceChildren();
   Object.entries(PARTS).forEach(([id, part]) => {
     const button = document.createElement("button");
@@ -420,6 +515,7 @@ function render() {
     button.type = "button";
     button.className = "part";
     button.dataset.part = id;
+    if (hintCue?.type === id && hintCue.index == null) button.classList.add("hint-target");
     button.disabled = available <= 0 || running;
     button.setAttribute("aria-pressed", String(selectedPart === id));
     button.setAttribute("aria-label", part.name + ", " + Math.max(0, available) + " available");
@@ -459,6 +555,8 @@ board.addEventListener("click", event => {
   if (removeMode) {
     if (!existing) return;
     placements[index] = null;
+    hintCue = null;
+    visualChange = { index, kind: "remove" };
     clearTrace();
     saveGame();
     render();
@@ -471,6 +569,9 @@ board.addEventListener("click", event => {
       return;
     }
     placements[index] = { type: selectedPart, rotation: existing?.type === selectedPart ? existing.rotation : 0 };
+    hintCue = null;
+    visualChange = { index, kind: "place" };
+    playTone("place");
     selectedPart = "";
     clearTrace();
     saveGame();
@@ -480,6 +581,9 @@ board.addEventListener("click", event => {
   }
   if (existing) {
     existing.rotation = (existing.rotation + 1) % 4;
+    hintCue = null;
+    visualChange = { index, kind: "turn" };
+    playTone("tap");
     clearTrace();
     saveGame();
     render();
@@ -506,32 +610,48 @@ async function runMachine() {
   if (running) return;
   running = true;
   clearTrace();
+  app.classList.add("machine-running");
   render();
   setStatus("The marble is rolling…");
+  playTone("run");
   const result = findPath();
   const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
-  const cells = [...board.querySelectorAll(".cell")];
+  let previousMarble = null;
   for (let i = 0; i < result.path.length; i++) {
     const point = result.path[i];
-    const cell = cells.find(item => Number(item.dataset.index) === keyOf(point.row, point.col));
+    const index = keyOf(point.row, point.col);
+    const cell = board.querySelector('.cell[data-index="' + index + '"]');
     if (cell) {
       cell.classList.add(point.missing ? "is-missing" : "is-lit");
-      if (point.missing) break;
+      previousMarble?.remove();
+      const traveler = document.createElement("span");
+      traveler.className = "marble-traveler";
+      if (i && Math.abs(keyOf(result.path[i-1].row,result.path[i-1].col)-index)>1) traveler.classList.add("hop");
+      traveler.setAttribute("aria-hidden", "true");
+      cell.append(traveler);
+      previousMarble = traveler;
+      if (point.missing) { await wait(reduced ? 30 : 180); break; }
     }
-    await wait(reduced ? 45 : 260);
+    await wait(reduced ? 50 : 310);
   }
+  previousMarble?.remove();
   running = false;
+  app.classList.remove("machine-running");
+  const firstClear = result.success && !solved.includes(levelIndex);
+  if (firstClear) {
+    solved = [...solved, levelIndex];
+    hintCredits++;
+  }
+  saveGame();
   render();
   for (const point of result.path) {
     const routeCell = board.querySelector('.cell[data-index="' + keyOf(point.row, point.col) + '"]');
     if (routeCell) routeCell.classList.add(point.missing ? "is-missing" : "is-lit");
   }
   if (result.success) {
-    solved = [...new Set([...solved, levelIndex])];
-    saveGame();
-    setStatus("It works! Your parts made a path from marble to bell.", "success");
-    document.querySelectorAll(".progress i")[levelIndex]?.classList.add("done");
-    nextButton.hidden = levelIndex >= LEVELS.length - 1;
+    setStatus("It works!", "success");
+    playTone("win");
+    showVictorySplash(firstClear);
   } else {
     const blocked = result.path[result.path.length - 1];
     setStatus(blocked ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." : "The machine needs a connected route. Try starting at the marble entry.", "error");
@@ -563,6 +683,8 @@ function showGame() {
 function startNewGame() {
   levelIndex = 0;
   solved = [];
+  hintCredits = 0;
+  hintStepByLevel = {};
   layouts = {};
   placements = Array(25).fill(null);
   selectedPart = "";
@@ -586,50 +708,150 @@ function closeModal(id) {
   document.getElementById(id).hidden = true;
   modalFocus.get(id)?.focus?.();
 }
-document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
-document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
-document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", () => closeModal(button.dataset.closeModal)));
-document.querySelectorAll(".home-modal").forEach(modal => modal.addEventListener("click", event => { if (event.target === modal) closeModal(modal.id); }));
-document.addEventListener("keydown", event => { if (event.key === "Escape") { const open = document.querySelector(".home-modal:not([hidden])"); if (open) closeModal(open.id); } });
-nextButton.addEventListener("click", () => {
+function applyHint() {
+  if (running || hintCredits < 1) return;
+  const blueprint = HINT_BLUEPRINTS[levelIndex] || [];
+  let cursor = Math.max(0, Number(hintStepByLevel[levelIndex]) || 0);
+  while (cursor < blueprint.length) {
+    const step = blueprint[cursor];
+    const existing = placements[step.index];
+    if (existing?.type === step.type && existing.rotation === step.rotation) { cursor++; continue; }
+    hintStepByLevel[levelIndex] = cursor + 1;
+    hintCredits--;
+    selectedPart = "";
+    removeMode = false;
+    if (existing?.type === step.type) {
+      const turns = (step.rotation - existing.rotation + 4) % 4;
+      hintCue = { index: step.index, type: step.type };
+      render();
+      setStatus("Turn the " + PARTS[step.type].name.toLowerCase() + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + " clockwise " + (turns === 1 ? "once" : turns + " times") + ".");
+    } else {
+      hintCue = { index: step.index, type: step.type };
+      selectedPart = step.type;
+      render();
+      setStatus((existing ? "Replace the part" : "Place the " + PARTS[step.type].name.toLowerCase()) + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + ".");
+    }
+    saveGame();
+    playTone("hint");
+    return;
+  }
+  setStatus("No more hints are mapped for this workbench. Try the parts guide.");
+}
+function showVictorySplash(firstClear) {
+  const modal = document.getElementById("win-modal");
+  document.getElementById("win-reward").textContent = firstClear ? "✦ +1 hint" : "A clean run";
+  const next = document.getElementById("win-next");
+  next.hidden = levelIndex >= LEVELS.length - 1;
+  next.classList.toggle("wide", levelIndex >= LEVELS.length - 1);
+  const layer = document.getElementById("confetti-layer");
+  layer.replaceChildren();
+  const colors = ["#f2a43a", "#4c9b7c", "#8671c8", "#e16e58", "#5b9ed0"];
+  for (let i = 0; i < 34; i++) {
+    const piece = document.createElement("i");
+    piece.className = "confetti-piece";
+    piece.style.setProperty("--confetti", colors[i % colors.length]);
+    piece.style.setProperty("--dx", ((Math.random() - .5) * 480) + "px");
+    piece.style.setProperty("--dy", ((Math.random() - .5) * 280) + "px");
+    piece.style.setProperty("--spin", ((Math.random() - .5) * 900) + "deg");
+    piece.style.setProperty("--delay", (Math.random() * .13) + "s");
+    layer.append(piece);
+  }
+  modalFocus.set("win-modal", document.activeElement);
+  modal.hidden = false;
+  document.getElementById("win-close").focus();
+  window.setTimeout(() => layer.replaceChildren(), 1400);
+}
+function advancePuzzle() {
   if (levelIndex >= LEVELS.length - 1 || !solved.includes(levelIndex)) return;
+  const finishedLevel = levelIndex;
+  document.getElementById("win-modal").hidden = true;
   levelIndex++;
   placements = Array(25).fill(null);
+  const saved = layouts[levelIndex];
+  if (saved && typeof saved === "object") for (const [key, tile] of Object.entries(saved)) {
+    const index = Number(key);
+    if (Number.isInteger(index) && index >= 0 && index < 25 && tile && PARTS[tile.type]) placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
+  }
   selectedPart = "";
   removeMode = false;
+  hintCue = null;
   clearTrace();
   saveGame();
   render();
   setStatus("A new workbench is ready. Take a look at the workshop note.");
+  document.getElementById("run-button").focus();
+}
+document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
+document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
+document.getElementById("hint-button").addEventListener("click", applyHint);
+document.getElementById("help-button").addEventListener("click", () => openModal("tutorial-modal"));
+document.getElementById("win-close").addEventListener("click", () => closeModal("win-modal"));
+document.getElementById("win-next").addEventListener("click", advancePuzzle);
+document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", () => closeModal(button.dataset.closeModal)));
+document.querySelectorAll(".home-modal").forEach(modal => modal.addEventListener("click", event => { if (event.target === modal) closeModal(modal.id); }));
+document.addEventListener("keydown", event => { if (event.key === "Escape") { const open = document.querySelector(".home-modal:not([hidden])"); if (open) closeModal(open.id); } });
+nextButton.addEventListener("click", advancePuzzle);
+document.getElementById("pref-follow-device").addEventListener("change", event => {
+  portfolioShell.updateSettings({ appearance: { colorMode: event.target.checked ? "system" : (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light") } });
 });
+document.getElementById("pref-dark-mode").addEventListener("change", event => {
+  portfolioShell.updateSettings({ appearance: { colorMode: event.target.checked ? "dark" : "light" } });
+});
+document.getElementById("pref-ignore-motion").addEventListener("change", event => {
+  document.getElementById("pref-reduce-motion").checked = false;
+  portfolioShell.updateSettings({ accessibility: { motion: event.target.checked ? "full" : "system" } });
+});
+document.getElementById("pref-reduce-motion").addEventListener("change", event => {
+  document.getElementById("pref-ignore-motion").checked = false;
+  portfolioShell.updateSettings({ accessibility: { motion: event.target.checked ? "reduce" : "system" } });
+});
+document.getElementById("pref-sound").addEventListener("change", event => {
+  soundEnabled = event.target.checked;
+  saveGame();
+  if (soundEnabled) playTone("tap");
+});
+document.getElementById("pref-scale").addEventListener("change", event => portfolioShell.updateSettings({ accessibility: { textScale: Number(event.target.value) } }));
+document.querySelectorAll(".theme-option").forEach(button => button.addEventListener("click", () => portfolioShell.updateSettings({ themeByGame: { tinkerFactory: button.dataset.theme } })));
 render();
 
 const themes = [
   { id: "workshop", label: "Workshop", tokens: { "--game-accent": "#c9753d", "--game-accent-2": "#387f74" } },
-  { id: "orchard", label: "Copper & mint", tokens: { "--game-accent": "#a35f45", "--game-accent-2": "#387f74" } },
-  { id: "starlit", label: "Starlit violet", tokens: { "--game-accent": "#7764b4", "--game-accent-2": "#528c8d" } }
+  { id: "orchard", label: "Copper & mint", tokens: { "--game-accent": "#a35f45", "--game-accent-2": "#597f62" } },
+  { id: "starlit", label: "Starlit violet", tokens: { "--game-accent": "#7764b4", "--game-accent-2": "#528c8d" } },
+  { id: "ocean", label: "Ocean current", tokens: { "--game-accent": "#2878ae", "--game-accent-2": "#2e9f9c" } },
+  { id: "lemon", label: "Lemon gear", tokens: { "--game-accent": "#b98915", "--game-accent-2": "#d86b4b" } },
+  { id: "berry", label: "Berry jam", tokens: { "--game-accent": "#a64f7b", "--game-accent-2": "#7559b1" } },
+  { id: "meadow", label: "Meadow moss", tokens: { "--game-accent": "#548648", "--game-accent-2": "#398c7d" } },
+  { id: "skyline", label: "Skyline", tokens: { "--game-accent": "#3974bb", "--game-accent-2": "#8270c6" } },
+  { id: "ember", label: "Ember glow", tokens: { "--game-accent": "#bf5540", "--game-accent-2": "#d09334" } }
 ];
-const portfolioShell = await mountPortfolioShell({
+portfolioShell = await mountPortfolioShell({
   gameId: "tinkerFactory",
   storageKeys: ["tinkerFactory"],
   title: "Tinker Factory",
   homeUrl: "/",
   themes,
+  inlineSettings: false,
   onSettingsChange(settings) {
     const theme = settings.themeByGame?.tinkerFactory || "workshop";
-    document.getElementById("pref-theme").value = themes.some(item => item.id === theme) ? theme : "workshop";
-    document.getElementById("pref-color").value = settings.appearance.colorMode;
-    document.getElementById("pref-motion").value = settings.accessibility.motion;
+    document.querySelectorAll(".theme-option").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === theme)));
+    const mode = settings.appearance.colorMode;
+    document.getElementById("pref-follow-device").checked = mode === "system";
+    document.getElementById("pref-dark-mode").checked = mode === "dark" || (mode === "system" && !!window.matchMedia?.("(prefers-color-scheme: dark)").matches);
+    document.getElementById("pref-dark-mode").disabled = mode === "system";
+    document.getElementById("dark-mode-row").classList.toggle("disabled", mode === "system");
+    document.getElementById("pref-ignore-motion").checked = settings.accessibility.motion === "full";
+    document.getElementById("pref-reduce-motion").checked = settings.accessibility.motion === "reduce";
     document.getElementById("pref-scale").value = String(settings.accessibility.textScale);
+    document.getElementById("pref-sound").checked = soundEnabled;
   }
 });
-const preferenceBindings = [
-  ["pref-theme", value => ({ themeByGame: { tinkerFactory: value } })],
-  ["pref-color", value => ({ appearance: { colorMode: value } })],
-  ["pref-motion", value => ({ accessibility: { motion: value } })],
-  ["pref-scale", value => ({ accessibility: { textScale: Number(value) } })]
-];
-preferenceBindings.forEach(([id, patch]) => document.getElementById(id).addEventListener("change", event => portfolioShell.updateSettings(patch(event.target.value))));
+const shellSettingsButton = document.createElement("button");
+shellSettingsButton.className = "portfolio-shell__game-settings";
+shellSettingsButton.type = "button";
+shellSettingsButton.textContent = "Settings";
+shellSettingsButton.addEventListener("click", () => openModal("settings-modal"));
+document.querySelector(".top-actions")?.prepend(shellSettingsButton);
 </script>
 </body>
 </html>
