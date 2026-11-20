@@ -537,7 +537,7 @@ function render() {
   removeButton.setAttribute("aria-pressed", String(removeMode));
   removeButton.textContent = removeMode ? "Remove mode on" : "Remove part";
   document.getElementById("selection-help").textContent = removeMode ? "Choose a placed part to return it to the tray." :
-    selectedPart ? PARTS[selectedPart].name + " selected. Choose a grid square." : "Tap a part to place it. Tap a placed part to rotate.";
+    selectedPart ? PARTS[selectedPart].name + " selected. Tap squares to place more; tap it again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
   board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("is-lit", "is-missing"));
@@ -568,15 +568,19 @@ board.addEventListener("click", event => {
       setStatus("You have used every " + PARTS[selectedPart].name.toLowerCase() + ". Remove one from the board first.", "error");
       return;
     }
-    placements[index] = { type: selectedPart, rotation: existing?.type === selectedPart ? existing.rotation : 0 };
+    const placingType = selectedPart;
+    placements[index] = { type: placingType, rotation: existing?.type === placingType ? existing.rotation : 0 };
+    const remaining = (level().stock[placingType] || 0) - usedCount(placingType);
+    if (remaining <= 0) selectedPart = "";
     hintCue = null;
     visualChange = { index, kind: "place" };
     playTone("place");
-    selectedPart = "";
     clearTrace();
     saveGame();
     render();
-    setStatus("Part placed. Rotate it or add another piece.");
+    setStatus(remaining > 0
+      ? PARTS[placingType].name + " placed. Tap another square to place more, or choose another part."
+      : "Placed the last " + PARTS[placingType].name.toLowerCase() + ". Choose another part.");
     return;
   }
   if (existing) {
@@ -595,7 +599,7 @@ board.addEventListener("click", event => {
 partsNode.addEventListener("click", event => {
   const button = event.target.closest(".part");
   if (!button || button.disabled || running) return;
-  selectedPart = button.dataset.part;
+  selectedPart = selectedPart === button.dataset.part ? "" : button.dataset.part;
   removeMode = false;
   render();
 });
