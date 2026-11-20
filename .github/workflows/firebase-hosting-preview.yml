@@ -55,6 +55,7 @@ jobs:
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
           projectId: network-tycoon-gm
+          channelId: portfolio-game-shell
           expires: 7d
           disableComment: true
       - name: Add preview URL to workflow summary
