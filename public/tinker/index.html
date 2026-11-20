@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3eee3">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Build little chain-reaction machines in a playful workshop.">
+<title>Tinker Factory</title>
+<style>
+:root{color-scheme:light;--game-accent:#c9753d;--game-accent-2:#387f74;--game-bg:#f3eee3;--game-surface:#fffdf8;--game-ink:#26342f;--game-muted:#6c7b73;--game-line:#dfd8c9;--game-shadow:0 18px 48px #41332214}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(ellipse at 8% 5%,#f6e8c9,transparent 35%),radial-gradient(ellipse at 92% 10%,#dcece4,transparent 34%),var(--game-bg);color:var(--game-ink);font:16px/1.45 ui-rounded,"Avenir Next",system-ui,sans-serif;min-height:100vh}
+#tinker-app{font-size:calc(16px * var(--portfolio-text-scale,1));width:min(1160px,100%);margin:auto;padding:clamp(20px,4vw,44px) clamp(14px,3.5vw,34px) 56px}
+html[data-portfolio-color-mode=dark] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}
+html[data-portfolio-color-mode=dark] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}
+html[data-portfolio-color-mode=dark] .mission{background:linear-gradient(110deg,#393126,#2e2a22);border-color:#74603b}
+html[data-portfolio-color-mode=dark] .status{background:#293b35;color:#c3e2ce}
+@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] body{background:radial-gradient(ellipse at 8% 5%,#34302a,transparent 38%),radial-gradient(ellipse at 92% 10%,#1b3634,transparent 38%),#141b1c;color:#edf2ea}html[data-portfolio-color-mode=system] #tinker-app{--game-bg:#141b1c;--game-surface:#202a2a;--game-ink:#edf2ea;--game-muted:#aab9b0;--game-line:#3c4c48;--game-shadow:0 18px 48px #0005}html[data-portfolio-color-mode=system] .mission{background:linear-gradient(110deg,#393126,#2e2a22);border-color:#74603b}html[data-portfolio-color-mode=system] .status{background:#293b35;color:#c3e2ce}}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3px}
+.home-screen{min-height:calc(100vh - 70px);display:grid;place-items:center;padding:28px 0}.home-card{width:min(720px,100%);padding:clamp(24px,5vw,52px);text-align:center;background:var(--game-surface);border:1px solid var(--game-line);border-radius:30px;box-shadow:var(--game-shadow)}.home-card .eyebrow{justify-content:center}.home-card h1{margin:14px 0;font-size:clamp(3rem,10vw,6rem)}.home-card p{max-width:530px;margin:0 auto 24px;color:var(--game-muted);font-size:1.08em}.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:11px;max-width:440px;margin:22px auto}.home-actions .button{min-height:52px}.home-actions .button.primary{box-shadow:0 7px 0 color-mix(in srgb,var(--game-accent) 65%,#000)}.home-sync{margin-top:10px}.home-sync button{border:1px solid var(--game-line);border-radius:999px;background:var(--game-surface);color:var(--game-ink);padding:10px 16px;font:inherit;font-weight:850;cursor:pointer}.home-sync button:hover{border-color:var(--game-accent)}.home-footnote{margin:25px 0 0!important;font-size:.8em!important}.home-modal[hidden]{display:none}.home-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:18px;background:#101918aa;backdrop-filter:blur(7px)}.home-dialog{width:min(520px,100%);max-height:min(85vh,720px);overflow:auto;padding:24px;background:var(--game-surface);color:var(--game-ink);border:1px solid var(--game-line);border-radius:24px;box-shadow:0 24px 70px #0005}.home-dialog-head{display:flex;align-items:start;justify-content:space-between;gap:14px;margin-bottom:16px}.home-dialog h2{margin:0;font-size:1.5em}.home-dialog p{color:var(--game-muted)}.home-dialog-close{width:42px;height:42px;flex:none;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);font-size:1.25em;cursor:pointer}.preference-list{display:grid;gap:12px}.preference-row{display:grid;gap:6px;font-weight:850}.preference-row select{min-height:46px;width:100%;padding:9px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font:inherit}.tutorial-steps{display:grid;gap:10px;padding:0;list-style:none;counter-reset:tip}.tutorial-steps li{counter-increment:tip;display:flex;gap:12px;align-items:start;padding:12px;border:1px solid var(--game-line);border-radius:14px;background:color-mix(in srgb,var(--game-surface) 88%,var(--game-accent-2) 12%)}.tutorial-steps li::before{content:counter(tip);display:grid;place-items:center;width:28px;height:28px;flex:none;border-radius:50%;background:var(--game-accent-2);color:#fff;font-weight:900}.hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--game-accent-2);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:.94;letter-spacing:-.065em;margin:10px 0 12px}
+.hero p{max-width:650px;color:var(--game-muted);font-size:1.05em;margin:0}
+.level-chip{align-self:start;border:1px solid var(--game-line);background:var(--game-surface);border-radius:18px;padding:12px 16px;text-align:center;box-shadow:var(--game-shadow);min-width:112px}
+.level-chip strong{display:block;font-size:1.45em;line-height:1.1;color:var(--game-accent)}
+.level-chip span{font-size:.78em;color:var(--game-muted);font-weight:800}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.75fr);gap:18px;align-items:start}
+.panel{background:var(--game-surface);border:1px solid var(--game-line);border-radius:22px;box-shadow:var(--game-shadow)}
+.workbench{padding:clamp(15px,3vw,25px)}
+.mission{display:flex;gap:13px;align-items:flex-start;border:1px solid #e8c98d;background:linear-gradient(110deg,#fff4d9,#fffaf0);border-radius:16px;padding:14px 16px;margin-bottom:18px}
+.mission-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;background:#f3d58b;color:#5c4923;font-size:23px}
+.mission strong{display:block;font-size:1em}.mission p{margin:3px 0 0;color:var(--game-muted);font-size:.91em}
+.board-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 10px}
+.board-heading h2,.inventory h2{font-size:1.1em;margin:0;letter-spacing:-.02em}.board-heading-meta{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.difficulty-tag{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;background:#7a4a9b;color:#fff;font-size:.72em;font-weight:950;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap}.difficulty-tag[data-level="Very Hard"]{background:#a24e43}.difficulty-tag[data-level="Extremely Hard"]{background:#791f34}
+.board-heading span{color:var(--game-muted);font-size:.82em;font-weight:750}
+.board-wrap{padding:14px 9px 12px;border:1px solid var(--game-line);border-radius:18px;background:linear-gradient(145deg,#f8f4e9,#f1ead8);overflow-x:auto}
+html[data-portfolio-color-mode=dark] .board-wrap{background:linear-gradient(145deg,#202b29,#29302a)}
+@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .board-wrap{background:linear-gradient(145deg,#202b29,#29302a)}}
+.board-grid{display:grid;gap:6px;width:min(100%,480px);margin:auto}
+.board-head,.board-row{display:grid;grid-template-columns:26px repeat(5,minmax(0,1fr)) 26px;gap:6px;align-items:center}
+.column-label{font-size:.68em;font-weight:850;color:#958a72;text-align:center}
+.row-label{font-size:.68em;font-weight:850;color:#958a72;text-align:center}
+.gate{display:grid;place-items:center;width:25px;height:25px;border-radius:9px;background:#fff6da;color:#805b20;font-size:15px}
+.gate.exit{background:#e2f3e6;color:#286847}
+html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
+@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}}
+.gate.exit.is-ringing{position:relative;z-index:2;transform-origin:50% 12%;animation:bellRing .5s ease-in-out 4;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
+@keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
+.cell{position:relative;display:grid;place-items:center;aspect-ratio:1;min-width:0;border:1px solid #d5c7a8;border-radius:12px;background:#fffaf0;box-shadow:0 3px 0 #d9c8a4;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
+html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}
+@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}}
+.cell:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
+.cell:disabled{cursor:not-allowed;opacity:.82}
+.cell.wall{background:repeating-linear-gradient(135deg,#e8dfcc 0 6px,#d6cbb5 6px 12px);box-shadow:none;border-style:dashed}
+.cell.entry-cell{border-color:#dfaa4b;box-shadow:0 0 0 2px #dfaa4b55}
+.cell.exit-cell{border-color:#65a884;box-shadow:0 0 0 2px #65a88455}
+.cell.is-lit{background:#f8e9b8;border-color:#e0a94e;box-shadow:0 0 0 4px #efc55f44,0 4px 0 #d9ad5d}
+.cell.is-missing{background:#ffede3;border-color:#d47a5f;box-shadow:0 0 0 4px #db816c33}
+.cell-icon{width:72%;height:72%;pointer-events:none}
+.ball-dot{position:absolute;right:3px;top:3px;width:10px;height:10px;border-radius:50%;background:#ffd45b;box-shadow:0 0 10px #f6a92c}
+.board-caption{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;color:var(--game-muted);font-size:.75em;font-weight:800;margin:11px 0 0}
+.board-caption span{display:inline-flex;align-items:center;gap:5px}
+.inventory{border-top:1px solid var(--game-line);padding-top:16px;margin-top:16px}
+.inventory-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.inventory-top p{font-size:.8em;color:var(--game-muted);margin:0}
+.parts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.part{position:relative;display:grid;justify-items:center;gap:4px;min-width:0;border:1px solid var(--game-line);background:var(--game-surface);border-radius:13px;padding:9px 5px 8px;cursor:pointer;font-size:.73em;font-weight:850;transition:transform .15s,border-color .15s,background .15s}
+.part:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
+.part[aria-pressed=true]{border-color:var(--game-accent);background:color-mix(in srgb,var(--game-accent) 12%,var(--game-surface));box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 28%,transparent)}
+.part:disabled{opacity:.4;cursor:not-allowed}
+.part-icon{width:31px;height:31px;display:block;overflow:visible}.part-orientation{display:grid;place-items:center;width:100%;height:100%;pointer-events:none}.parts-guide-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}.parts-guide-item{display:grid;grid-template-columns:58px 1fr;align-items:center;gap:12px;padding:12px;border:1px solid var(--game-line);border-radius:15px;background:color-mix(in srgb,var(--game-surface) 90%,var(--game-accent-2) 10%)}.parts-guide-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:15px;background:var(--game-surface);border:1px solid var(--game-line)}.parts-guide-icon .part-icon{width:40px;height:40px}.parts-guide-icon[data-part="belt"] .part-icon{animation:beltCarry .42s ease-in-out infinite alternate}.parts-guide-icon[data-part="ramp"] .part-icon{transform-origin:50% 80%;animation:rampRock 1.2s ease-in-out infinite alternate}.parts-guide-icon[data-part="gear"] .part-icon{animation:gearWhirr 1.6s linear infinite}.parts-guide-icon[data-part="switch"] .part-icon{animation:switchWiggle 1.2s ease-in-out infinite}.parts-guide-icon[data-part="spring"] .part-icon{animation:springBounce .55s ease-in-out infinite alternate}.parts-guide-copy strong{display:block;margin-bottom:3px}.parts-guide-copy p{margin:0;color:var(--game-muted);font-size:.87em}.tutorial-links{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--game-line)}.tutorial-links .button{width:100%}@keyframes rampRock{to{transform:rotate(9deg) translateY(-2px)}}@keyframes switchWiggle{0%,100%{transform:translateX(0)}50%{transform:translateX(2px) rotate(3deg)}}
+.part-count{position:absolute;top:4px;right:5px;min-width:17px;padding:1px 4px;border-radius:8px;background:#e8eee6;color:#496452;font-size:.82em}
+.side{display:grid;gap:14px}
+.controls{padding:19px}
+.controls h2,.hint-card h2{margin:0 0 8px;font-size:1.05em}
+.controls p{margin:0 0 14px;color:var(--game-muted);font-size:.9em}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.button{min-height:44px;border:1px solid var(--game-line);border-radius:13px;padding:9px 12px;background:var(--game-surface);font-weight:900;cursor:pointer}
+.button:hover:not(:disabled){border-color:var(--game-accent)}
+.button.primary{background:var(--game-accent);border-color:var(--game-accent);color:#fff}
+.button[aria-pressed=true]{border-color:#bd7651;background:#fff0db}
+.button:disabled{opacity:.48;cursor:not-allowed}
+.button.wide{grid-column:1/-1}
+.status{min-height:48px;margin-top:13px;padding:11px 12px;border-radius:12px;background:#f1f4ed;color:#50665b;font-size:.86em;font-weight:700}
+.status[data-kind=success]{background:#e6f4e7;color:#256542}
+.status[data-kind=error]{background:#fff0e9;color:#8f4434}
+.hint-card{padding:18px 19px;border:1px solid var(--game-line);border-radius:18px;background:color-mix(in srgb,var(--game-surface) 88%,var(--game-accent-2) 12%)}
+.hint-card p{margin:0;color:var(--game-muted);font-size:.9em}
+.progress{display:flex;gap:7px;margin-top:12px}
+.progress i{height:8px;flex:1;border-radius:99px;background:var(--game-line)}
+.progress i.done{background:var(--game-accent-2)}
+.footer-note{margin:20px 0 0;color:var(--game-muted);font-size:.8em;text-align:center}
+@media(max-width:850px){.layout{grid-template-columns:1fr;gap:0}.side{grid-template-columns:1fr;gap:9px;margin:12px 0 2px}.side .controls,.side .hint-card{padding:14px}.hero{align-items:start}}
+@media(max-width:760px){#mission-title{scroll-margin-top:112px}}
+@media(max-width:540px){
+.board-heading{align-items:flex-start}.board-heading-meta{font-size:.94em}.hero{grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}.hero h1{font-size:clamp(2rem,10vw,3.1rem);margin:8px 0}.level-chip{min-width:84px;padding:9px 10px}.workbench{padding:12px}.mission{padding:11px;margin-bottom:12px}.board-wrap{padding:10px 4px}.board-grid{gap:4px}.board-head,.board-row{grid-template-columns:22px repeat(5,minmax(0,1fr)) 22px;gap:4px}.cell{border-radius:9px}.parts{grid-template-columns:repeat(3,minmax(0,1fr))}.part{font-size:.72em}.actions{grid-template-columns:1fr 1fr}}
+
+/* Settings cards follow the soft, rounded palette controls used across the portfolio. */
+.palette-setting{display:block}.palette-copy{font-weight:850}.palette-copy small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--game-line);color:var(--game-ink);font-weight:850;font-size:.9em}.setting-row>span:first-child{display:block;flex:1}.setting-row small{display:block;color:var(--game-muted);font-weight:500;line-height:1.4;margin-top:3px}.setting-row select{display:block;width:100%;margin-top:7px;padding:10px 12px;border:1px solid var(--game-line);border-radius:12px;background:var(--game-surface);color:var(--game-ink);font-weight:800}.setting-toggle{position:relative;cursor:pointer}.setting-toggle input[type=checkbox]{position:absolute;width:1px;height:1px;margin:0;opacity:0}.switch-track{position:relative;display:block;flex:none;width:50px;height:30px;border-radius:99px;background:#aab2b1;transition:background .2s}.switch-track::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0003;transition:transform .2s cubic-bezier(.2,.8,.25,1.2)}.setting-toggle input:checked+.switch-track{background:var(--game-accent-2)}.setting-toggle input:checked+.switch-track::after{transform:translateX(20px)}.setting-toggle input:focus-visible+.switch-track{outline:3px solid var(--game-accent);outline-offset:3px}.setting-toggle.disabled{opacity:.58}.setting-toggle input:disabled+.switch-track{cursor:not-allowed}.theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.theme-option{min-width:0;display:grid;gap:7px;text-align:left;padding:9px;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font:inherit;font-weight:850;font-size:.75em;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}.theme-option:hover{transform:translateY(-2px)}.theme-option[aria-pressed=true]{border:2px solid var(--game-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 22%,transparent)}.theme-swatch{height:18px;border-radius:99px;background:linear-gradient(100deg,var(--swatch-a) 0 52%,var(--swatch-b) 52%);box-shadow:inset 0 0 0 1px #00000015}.theme-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.preference-row{display:grid;gap:6px;font-weight:850}.pref-note{margin:12px 0;color:var(--game-muted);font-size:.82em;line-height:1.45}.hint-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.hint-tools .button{min-height:42px;padding:8px;font-size:.82em}.hint-credit{margin-top:10px;color:var(--game-muted);font-size:.8em;font-weight:850}.hint-credit strong{color:var(--game-accent)}.hint-target{z-index:4!important;animation:hintTarget 1s ease-in-out infinite alternate}.part.hint-target{border-color:var(--game-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--game-accent) 40%,transparent)}@keyframes hintTarget{to{box-shadow:0 0 0 7px color-mix(in srgb,var(--game-accent) 32%,transparent);filter:brightness(1.08)}}
+.cell.tile-enter .part-orientation{animation:tileArrive .48s cubic-bezier(.2,1.4,.3,1) both}.cell.tile-turn .part-orientation{animation:tileTurn .42s cubic-bezier(.2,.8,.25,1.2) both}@keyframes tileArrive{0%{transform:scale(.2) rotate(-20deg);opacity:0}72%{transform:scale(1.18) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes tileTurn{0%{filter:brightness(1.8)}100%{filter:brightness(1)}}.tile-connector{position:absolute;z-index:3;display:block;background:var(--game-accent-2);box-shadow:0 0 7px color-mix(in srgb,var(--game-accent-2) 70%,transparent);pointer-events:none}.tile-connector.east{right:-7px;top:calc(50% - 2px);width:8px;height:4px}.tile-connector.south{left:calc(50% - 2px);bottom:-7px;width:4px;height:8px}.tile-connector::after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 5px #fff;animation:linkSpark .75s ease-in-out infinite alternate}.tile-connector.east::after{left:0;top:0}.tile-connector.south::after{left:0;top:0}@keyframes linkSpark{to{transform:translate(4px,0);opacity:.45}}.tile-connector.south::after{animation-name:linkSparkVertical}@keyframes linkSparkVertical{to{transform:translate(0,4px);opacity:.45}}.machine-running .cell[data-type=gear] .part-orientation{animation:gearWhirr .42s linear infinite}.machine-running .cell[data-type=belt] .part-orientation{animation:beltCarry .34s ease-in-out infinite alternate}.machine-running .cell[data-type=spring] .part-orientation{animation:springBounce .38s ease-in-out infinite alternate}@keyframes gearWhirr{to{rotate:90deg}}@keyframes beltCarry{to{translate:2px 0}}@keyframes springBounce{to{scale:1.12 .82}}.marble-traveler{position:absolute;z-index:6;left:50%;top:50%;width:clamp(14px,40%,24px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 28%,#fff8c9 0 16%,#ffc64e 45%,#e58431 100%);box-shadow:0 0 0 3px #fff6,0 0 18px #ffb537;pointer-events:none;animation:marblePulse .42s ease-in-out infinite alternate}.marble-traveler.hop{animation:marbleHop .5s cubic-bezier(.2,.7,.25,1.4) both}@keyframes marblePulse{to{scale:.82;box-shadow:0 0 0 6px #fff4,0 0 24px #ffbd43}}@keyframes marbleHop{0%{transform:translate(-50%,-50%) scale(.7)}55%{transform:translate(-50%,-85%) scale(1.2)}100%{transform:translate(-50%,-50%) scale(1)}}
+.completion-modal{z-index:1200}.completion-card{position:relative;overflow:hidden;text-align:center;padding:28px 24px 22px}.completion-card h2{font-size:clamp(1.8em,7vw,2.6em);margin:8px 0 4px}.completion-card .reward-line{margin:0 0 17px;color:var(--game-accent-2);font-weight:900}.celebration-machine{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,18px);height:102px;margin:8px 0 10px;overflow:hidden;border-radius:18px;background:linear-gradient(100deg,color-mix(in srgb,var(--game-accent) 12%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 14%,var(--game-surface)))}.celebration-part{display:grid;place-items:center;width:54px;height:54px;border-radius:16px;background:var(--game-surface);border:1px solid var(--game-line);font-size:28px;box-shadow:0 6px 14px #0001}.celebration-part.gear-demo{animation:gearWhirr .65s linear infinite}.celebration-part.spring-demo{animation:springBounce .4s ease-in-out infinite alternate}.celebration-track{position:absolute;left:9%;right:9%;top:50%;height:4px;border-radius:99px;background:color-mix(in srgb,var(--game-accent-2) 58%,transparent)}.celebration-marble{position:absolute;top:calc(50% - 8px);left:10%;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff8c9,#ffb333 70%,#e47a2f);box-shadow:0 0 13px #ffb333;animation:marbleDemo 1.6s ease-in-out infinite alternate}@keyframes marbleDemo{to{left:88%}}.confetti-layer{position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none}.confetti-piece{position:absolute;left:50%;top:47%;width:8px;height:12px;border-radius:2px;background:var(--confetti);opacity:0;animation:confettiBurst .95s cubic-bezier(.12,.65,.25,1) var(--delay) both}@keyframes confettiBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(.45) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--spin)) scale(.8)}}.win-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.win-actions .button{min-height:48px}.win-actions .wide{grid-column:1/-1}
+html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface);color:var(--game-ink);border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .setting-row{border-color:var(--game-line)}html[data-portfolio-color-mode=dark] .theme-option{background:#263231;color:#edf2ea;border-color:#455550}html[data-portfolio-color-mode=dark] .status[data-kind=success]{background:#244333;color:#c5f0d0}html[data-portfolio-color-mode=dark] .status[data-kind=error]{background:#482c2c;color:#ffd9d0}
+@media(max-width:540px){.home-dialog{padding:19px}.theme-grid{gap:6px}.theme-option{padding:7px;font-size:.68em}.setting-row{font-size:.84em}.completion-card{padding:23px 17px 18px}.celebration-machine{gap:6px;height:90px}.celebration-part{width:42px;height:46px;font-size:23px}.hint-tools{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div id="tinker-app">
+  <section class="home-screen" id="home-screen" aria-labelledby="home-title">
+    <div class="home-card">
+      <span class="eyebrow">A pocket-sized machine puzzler</span>
+      <h1 id="home-title">Tinker<br>Factory</h1>
+      <p>Build a tiny chain-reaction machine, send a marble across the workbench, and ring the bell. Your workshop progress and preferences are saved for this game.</p>
+      <div class="home-actions">
+        <button class="button primary" id="new-game-button" type="button">New game</button>
+        <button class="button" id="resume-game-button" type="button" disabled>Resume game</button>
+        <button class="button" id="settings-button" type="button">Settings</button>
+        <button class="button" id="tutorial-button" type="button">Tutorial</button>
+      </div>
+      <div class="home-sync"><button type="button" data-cloud-login aria-label="Log in to sync your progress across devices"><span data-cloud-label>☁ Log in to sync</span></button></div>
+      <p class="home-footnote">One shared portfolio account. A separate Tinker Factory save and settings profile.</p>
+    </div>
+  </section>
+  <section class="home-modal" id="settings-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">Your workshop</span><h2 id="settings-title">Settings</h2></div><button class="home-dialog-close" type="button" data-close-modal="settings-modal" aria-label="Close settings">×</button></div>
+      <div class="settings-choices">
+      <div class="setting-row palette-setting"><div class="palette-copy">Workshop colors<small>Choose a palette for gears, paths, and highlights.</small></div><div class="theme-grid" id="theme-grid" role="group" aria-label="Tinker Factory color theme">
+        <button class="theme-option" type="button" data-theme="workshop" aria-pressed="true"><span class="theme-swatch" style="--swatch-a:#c9753d;--swatch-b:#387f74" aria-hidden="true"></span><span class="theme-label">Workshop</span></button>
+        <button class="theme-option" type="button" data-theme="orchard" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#a35f45;--swatch-b:#597f62" aria-hidden="true"></span><span class="theme-label">Copper & mint</span></button>
+        <button class="theme-option" type="button" data-theme="starlit" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#7764b4;--swatch-b:#528c8d" aria-hidden="true"></span><span class="theme-label">Starlit violet</span></button>
+        <button class="theme-option" type="button" data-theme="ocean" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#2878ae;--swatch-b:#2e9f9c" aria-hidden="true"></span><span class="theme-label">Ocean current</span></button>
+        <button class="theme-option" type="button" data-theme="lemon" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#b98915;--swatch-b:#d86b4b" aria-hidden="true"></span><span class="theme-label">Lemon gear</span></button>
+        <button class="theme-option" type="button" data-theme="berry" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#a64f7b;--swatch-b:#7559b1" aria-hidden="true"></span><span class="theme-label">Berry jam</span></button>
+        <button class="theme-option" type="button" data-theme="meadow" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#548648;--swatch-b:#398c7d" aria-hidden="true"></span><span class="theme-label">Meadow moss</span></button>
+        <button class="theme-option" type="button" data-theme="skyline" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#3974bb;--swatch-b:#8270c6" aria-hidden="true"></span><span class="theme-label">Skyline</span></button>
+        <button class="theme-option" type="button" data-theme="ember" aria-pressed="false"><span class="theme-swatch" style="--swatch-a:#bf5540;--swatch-b:#d09334" aria-hidden="true"></span><span class="theme-label">Ember glow</span></button>
+      </div></div>
+        <label class="setting-row setting-toggle"><span>Follow device appearance<small>Keep Tinker Factory in sync with your phone or computer.</small></span><input id="pref-follow-device" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle" id="dark-mode-row"><span>Dark mode<small>Choose a darker workshop palette.</small></span><input id="pref-dark-mode" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Allow full motion<small>Ignore the device’s reduced-motion preference.</small></span><input id="pref-ignore-motion" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Reduce motion<small>Use shorter, quieter animations.</small></span><input id="pref-reduce-motion" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row setting-toggle"><span>Sound effects<small>Soft clicks, gear ticks, and a little victory chime.</small></span><input id="pref-sound" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span></label>
+        <label class="setting-row preference-row"><span>Text size<small>Adjust labels and controls for comfortable reading.</small><select id="pref-scale" aria-label="Text size"><option value="0.9">90%</option><option value="1">100%</option><option value="1.1">110%</option><option value="1.25">125%</option></select></label>
+      </div>
+      <p id="settings-sync-note" role="status" aria-live="polite">Settings sync across your portfolio when signed in.</p>
+      <button class="button primary wide" type="button" data-close-modal="settings-modal">Done</button>
+    </div>
+  </section>
+  <section class="home-modal" id="parts-guide-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="parts-guide-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">What each part can do</span><h2 id="parts-guide-title">Parts guide</h2></div><button class="home-dialog-close" type="button" data-close-modal="parts-guide-modal" aria-label="Close parts guide">×</button></div>
+      <ul class="parts-guide-list" id="parts-guide-list"></ul>
+      <div class="tutorial-links"><button class="button" id="parts-guide-tutorial" type="button">Open the tutorial</button></div>
+      <button class="button primary wide" type="button" data-close-modal="parts-guide-modal">Done</button>
+    </div>
+  </section>
+  <section class="home-modal" id="tutorial-modal" hidden>
+    <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="home-dialog-head"><div><span class="eyebrow">Quick start</span><h2 id="tutorial-title">How to tinker</h2></div><button class="home-dialog-close" type="button" data-close-modal="tutorial-modal" aria-label="Close tutorial">×</button></div>
+      <ol class="tutorial-steps">
+        <li>Choose a part from the tray, then tap an empty workbench square to place it.</li>
+        <li>Tap a placed part to rotate it. Use Remove part to return pieces to your tray.</li>
+        <li>Connect the marble at the left to the bell on the right, then run the machine.</li>
+        <li>Belt: carries the marble straight. Ramp: turns it through a right angle. Switch: offers two exit branches. Gear: redirects the marble according to its orientation. Spring: launches it straight across one square to the next part.</li>
+        <li>Place several parts of the selected type, rotate placed parts, or switch on Remove part to return one to the tray.</li>
+        <li>Clear a puzzle to earn a hint. Hints can point to the next part or the next rotation.</li>
+        <li>Use Parts guide from the workshop note whenever you want to review each part.</li>
+      </ol>
+      <button class="button primary wide" type="button" data-close-modal="tutorial-modal">Got it</button>
+    </div>
+  </section>
+  <section class="home-modal completion-modal" id="win-modal" hidden>
+    <div class="home-dialog completion-card" role="dialog" aria-modal="true" aria-labelledby="win-title">
+      <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+      <span class="eyebrow" id="win-eyebrow">Machine complete</span>
+      <h2 id="win-title">It works!</h2>
+      <p class="reward-line" id="win-reward">✦ +1 hint</p>
+      <div class="celebration-machine" role="img" aria-label="A marble rolls through a moving machine">
+        <div class="celebration-track"></div><span class="celebration-marble"></span>
+        <span class="celebration-part">🧲</span><span class="celebration-part gear-demo">⚙</span><span class="celebration-part spring-demo">〰️</span><span class="celebration-part">🔔</span>
+      </div>
+      <div class="win-actions"><button class="button primary" id="win-next" type="button">Next puzzle</button><button class="button" id="win-close" type="button">Keep tinkering</button></div>
+    </div>
+  </section>
+  <div id="game-screen" hidden>
+  <header class="hero">
+    <div>
+      <span class="eyebrow">A pocket-sized machine puzzler</span>
+      <h1>Tinker<br>Factory</h1>
+    </div>
+    <div class="level-chip" aria-label="Current puzzle"><strong id="level-number">01</strong><span>PUZZLE</span></div>
+  </header>
+  <main class="layout">
+    <section class="panel workbench" aria-label="Machine workbench">
+      <div class="mission">
+        <div class="mission-icon" aria-hidden="true">⚙</div>
+        <div><strong id="mission-title" tabindex="-1">Bridge the little gap</strong><p id="mission-copy">Build a path across the workbench and send the marble to the bell.</p></div>
+      </div>
+      <div class="board-heading"><h2>Workbench</h2><div class="board-heading-meta"><span class="difficulty-tag" id="difficulty-tag" hidden></span><span id="board-size">5 × 5 grid</span></div></div>
+      <div class="board-wrap">
+        <div class="board-grid" id="board" aria-label="Machine building grid"></div>
+        <div class="board-caption"><span>▶ Marble starts here</span><span>🔔 Carry it to the bell</span></div>
+      </div>
+      <section class="inventory" aria-label="Parts tray">
+        <div class="inventory-top"><h2>Parts tray</h2><p id="selection-help" aria-live="polite">Choose a part, then place it on the grid.</p></div>
+        <div class="parts" id="parts"></div>
+      </section>
+    </section>
+    <aside class="side" aria-label="Puzzle controls and workshop note">
+      <section class="panel controls">
+        <h2>Make it move</h2>
+        <p id="control-copy">Build a connected route from the marble to the bell.</p>
+        <div class="actions">
+          <button class="button primary wide" id="run-button" type="button">Run machine</button>
+          <button class="button" id="remove-button" type="button" aria-pressed="false">Remove part</button>
+          <button class="button" id="reset-button" type="button">Reset board</button>
+          <button class="button wide" id="next-button" type="button" hidden>Next puzzle</button>
+          <button class="button wide" id="home-button" type="button">Home screen</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite">Your workbench is ready. Place a part to begin.</div>
+      </section>
+      <section class="hint-card">
+        <h2>Workshop note</h2>
+        <p id="hint">The spring can send a marble over one empty square.</p>
+        <div class="hint-tools"><button class="button" id="hint-button" type="button" disabled>Hint · earn one</button><button class="button" id="help-button" type="button">Parts guide</button></div>
+        <div class="hint-credit">✦ <strong id="hint-count">0</strong> earned hints</div>
+        <div class="progress" id="progress" aria-label="Puzzle progress"></div>
+      </section>
+    </aside>
+  </main>
+  <p class="footer-note">Small parts. Big ideas. One more satisfying run.</p>
+  </div>
+</div>
+
+<script type="module">
+import { mountPortfolioShell } from "../portfolio-shell.js";
+
+const PARTS = {
+  belt: {
+    name: "Belt", capability: "Carries the marble straight. Rotate it to send the marble vertically.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="12" width="32" height="16" rx="8" fill="#7cc0ac" stroke="#327968" stroke-width="2.5"/><circle cx="11" cy="20" r="3" fill="#fff"/><circle cx="29" cy="20" r="3" fill="#fff"/><path d="M15 20h9m-3-3 3 3-3 3" fill="none" stroke="#327968" stroke-width="2"/></svg>',
+    ports: ["E", "W"]
+  },
+  ramp: {
+    name: "Ramp", capability: "Turns the marble through a right angle. Rotate it to choose the turn.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 31h28L9 10z" fill="#d49a45" stroke="#815c2a" stroke-width="2.5" stroke-linejoin="round"/><circle cx="13" cy="25" r="4" fill="#fff3cb" stroke="#815c2a" stroke-width="2"/></svg>',
+    ports: ["W", "N"]
+  },
+  gear: {
+    name: "Gear", capability: "Redirects the marble according to the gear’s orientation.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M17 3h6l1.3 4.5 3.5 1.5 4.1-2.2 4.2 4.2-2.2 4.1 1.5 3.5L40 20v6l-4.5 1.3-1.5 3.5 2.2 4.1-4.2 4.2-4.1-2.2-3.5 1.5L23 43h-6l-1.3-4.5-3.5-1.5-4.1 2.2-4.2-4.2 2.2-4.1-1.5-3.5L0 26v-6l4.5-1.3L6 15.2l-2.2-4.1L8 6.9l4.1 2.2 3.5-1.5z" transform="translate(2 -2) scale(.88)" fill="#a998d4" stroke="#63508e" stroke-width="2.2"/><circle cx="20" cy="20" r="5" fill="#f7f2ff" stroke="#63508e" stroke-width="2"/></svg>',
+    ports: ["N", "E", "S", "W"]
+  },
+  switch: {
+    name: "Switch", capability: "Offers two exit branches after the marble enters.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 29h12l10-18M19 29l10-18M19 29h14" fill="none" stroke="#4d8bc0" stroke-width="3.5" stroke-linecap="round"/><circle cx="7" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="29" cy="11" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="33" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/></svg>',
+    ports: ["W", "N", "E"]
+  },
+  spring: {
+    name: "Spring", capability: "Launches the marble straight across one square to the next part.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 20h6l4-8 6 16 6-16 4 8h6" fill="none" stroke="#cf7052" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12v16m32-16v16" stroke="#76564d" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    ports: ["E", "W"]
+  }
+};
+const LEVELS = [
+  {
+    title: "Bridge the little gap",
+    copy: "Connect the marble to the bell. The spring can leap over one empty square.",
+    note: "Belts carry straight. Place the spring on the open lane and it will jump one cell.",
+    start: 2, goal: 2, walls: [[2, 3]],
+    stock: { belt: 3, spring: 1, ramp: 0, gear: 0, switch: 0 }
+  },
+  {
+    title: "Climb to the upper dock",
+    copy: "Build a route up from the lower entrance, then turn toward the bell.",
+    note: "A ramp joins two sides at a right angle. Tap a placed part to rotate it.",
+    start: 4, goal: 2, walls: [[4, 3], [3, 3], [3, 4]],
+    stock: { belt: 5, spring: 0, ramp: 2, gear: 0, switch: 0 }
+  },
+  {
+    title: "Send a signal upstairs",
+    copy: "Use the switch to turn the marble north, then spring it to the bell.",
+    note: "The switch can send the marble down either open branch. The gear is a flexible junction.",
+    start: 4, goal: 2, walls: [[4, 3], [3, 3], [2, 4]],
+    stock: { belt: 3, spring: 1, ramp: 1, gear: 1, switch: 1 }
+  }
+];
+const HINT_BLUEPRINTS = [
+  [{ index: 10, type: "belt", rotation: 0 }, { index: 11, type: "belt", rotation: 0 }, { index: 12, type: "spring", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
+  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
+  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "gear", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
+];
+const DIRS = ["E", "S", "W", "N"];
+const VECTORS = { E: [0, 1], S: [1, 0], W: [0, -1], N: [-1, 0] };
+const opposite = dir => DIRS[(DIRS.indexOf(dir) + 2) % 4];
+const rotate = (dir, turns) => DIRS[(DIRS.indexOf(dir) + turns + 8) % 4];
+const app = document.getElementById("tinker-app");
+const board = document.getElementById("board");
+const partsNode = document.getElementById("parts");
+const statusNode = document.getElementById("status");
+const layout = document.querySelector(".layout");
+const boardWrap = document.querySelector(".board-wrap");
+const sidePanel = document.querySelector(".side");
+const mobileLayout = window.matchMedia("(max-width: 850px)");
+function placeHelpersForViewport() {
+  if (mobileLayout.matches) boardWrap.after(sidePanel);
+  else layout.append(sidePanel);
+}
+placeHelpersForViewport();
+mobileLayout.addEventListener("change", placeHelpersForViewport);
+const runButton = document.getElementById("run-button");
+const resetButton = document.getElementById("reset-button");
+const removeButton = document.getElementById("remove-button");
+const nextButton = document.getElementById("next-button");
+let selectedPart = "";
+let removeMode = false;
+let running = false;
+let solved = [];
+let levelIndex = 0;
+let placements = Array(25).fill(null);
+let hasSavedGame = false;
+let hintCredits = 0;
+let hintStepByLevel = {};
+let soundEnabled = false;
+let visualChange = null;
+let audioContext = null;
+let hintCue = null;
+let portfolioShell = null;
+
+try {
+  const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
+  if (save && Number.isInteger(save.levelIndex)) {
+    hasSavedGame = true;
+    hintCredits = Number.isInteger(save.hintCredits) ? Math.max(0, Math.min(99, save.hintCredits)) : 0;
+    hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
+    soundEnabled = save.soundEnabled === true;
+    levelIndex = Math.max(0, save.levelIndex);
+    solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0) : [];
+    const saved = save.layouts && save.layouts[levelIndex];
+    if (saved && typeof saved === "object") {
+      for (const [key, tile] of Object.entries(saved)) {
+        const index = Number(key);
+        if (Number.isInteger(index) && index >= 0 && index < 25 && tile && PARTS[tile.type]) {
+          placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
+        }
+      }
+    }
+  }
+} catch {}
+
+let layouts = {};
+try {
+  const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
+  if (save?.layouts && typeof save.layouts === "object") layouts = save.layouts;
+} catch {}
+
+function saveGame() {
+  hasSavedGame = true;
+  const layout = {};
+  placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
+  layouts[levelIndex] = layout;
+  try {
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 3, levelIndex, solved, layouts, hintCredits, hintStepByLevel, soundEnabled }));
+  } catch {}
+}
+function seededRandom(seed) {
+  let state = (seed >>> 0) || 1;
+  return () => { state = (state + 0x6D2B79F5) >>> 0; let x = state; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+}
+function shuffleWith(items, random) {
+  const result = items.slice();
+  for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; }
+  return result;
+}
+function generatedPuzzle(index) {
+  const generatedNumber = index - LEVELS.length;
+  const random = seededRandom(0x71A9C3 + generatedNumber * 7919);
+  const breather = generatedNumber % 8 === 7;
+  const stage = Math.floor(generatedNumber / 8);
+  const minLength = breather ? 5 : Math.min(7 + stage * 2, 13);
+  const maxLength = breather ? 7 : Math.min(10 + stage * 3, 20);
+  const minTurns = breather ? 0 : Math.min(1 + stage, 5);
+  const maxTurns = breather ? 1 : Math.min(3 + stage, 8);
+  let route = null;
+  for (let attempt = 0; attempt < 18 && !route; attempt++) {
+    const start = Math.floor(random() * 5);
+    const goal = breather ? start : Math.floor(random() * 5);
+    const path = [{ row: start, col: 0 }];
+    const visited = new Set([start * 5]);
+    let budget = 3600;
+    function walk(previousDir, turns) {
+      if (--budget < 0) return false;
+      const at = path[path.length - 1];
+      if (at.col === 4 && at.row === goal) {
+        if (path.length >= minLength && path.length <= maxLength && turns >= minTurns && turns <= maxTurns) return true;
+        return false;
+      }
+      if (path.length >= maxLength) return false;
+      const options = shuffleWith(DIRS.map(dir => ({dir, vector: VECTORS[dir]})), random);
+      for (const option of options) {
+        if (path.length === 1 && option.dir !== "E") continue;
+        const row = at.row + option.vector[0], col = at.col + option.vector[1];
+        if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
+        const key = row * 5 + col;
+        if (visited.has(key)) continue;
+        if (row === goal && col === 4 && path.length + 1 < minLength) continue;
+        const nextTurns = turns + (option.dir === previousDir ? 0 : 1);
+        if (nextTurns > maxTurns) continue;
+        visited.add(key); path.push({row, col});
+        if (walk(option.dir, nextTurns)) return true;
+        path.pop(); visited.delete(key);
+      }
+      return false;
+    }
+    if (walk("E", 0)) route = path.map(point => ({...point}));
+  }
+  if (!route) {
+    const row = Math.floor(random() * 5);
+    route = Array.from({length:5}, (_, col) => ({row, col}));
+  }
+  const solution = [];
+  const counts = {belt:0, ramp:0, gear:0, switch:0, spring:0};
+  let turns = 0;
+  const directionBetween = (a, b) => DIRS.find(dir => { const v=VECTORS[dir]; return a.row+v[0]===b.row && a.col+v[1]===b.col; });
+  for (let i=0; i<route.length; i++) {
+    const incoming = i === 0 ? "E" : directionBetween(route[i-1], route[i]);
+    const outgoing = i === route.length-1 ? "E" : directionBetween(route[i], route[i+1]);
+    const indexAt = route[i].row * 5 + route[i].col;
+    let type, rotation;
+    if (incoming === outgoing) {
+      if (!breather && random() < Math.min(.08 + stage*.025, .18)) { type="gear"; rotation=1; }
+      else { type="belt"; rotation=(incoming === "N" || incoming === "S") ? 1 : 0; }
+    } else {
+      turns++;
+      const entry = opposite(incoming);
+      if (!breather && random() < .14) {
+        type="switch";
+        const possible=[];
+        for (let r=0; r<4; r++) { const ports=PARTS.switch.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) possible.push(r); }
+        rotation=possible[Math.floor(random()*possible.length)];
+      } else if (!breather && random() < .10) {
+        type="gear";
+        rotation=(DIRS.indexOf(outgoing)-DIRS.indexOf(incoming)+1+4)%4;
+      } else {
+        type="ramp";
+        for (let r=0; r<4; r++) { const ports=PARTS.ramp.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) { rotation=r; break; } }
+      }
+    }
+    solution.push({index:indexAt,type,rotation}); counts[type]++;
+  }
+  const routeSet = new Set(route.map(point=>point.row*5+point.col));
+  const empty = shuffleWith(Array.from({length:25},(_,i)=>i).filter(i=>!routeSet.has(i)), random);
+  const wallCount = breather ? 0 : Math.min(2 + stage*2 + Math.floor(generatedNumber%3), 9);
+  const walls = empty.slice(0,wallCount).map(i=>[Math.floor(i/5),i%5]);
+  const difficulty = route.length >= 15 && turns >= 5 ? "Extremely Hard" : route.length >= 11 && turns >= 3 ? "Very Hard" : route.length >= 8 || turns >= 2 ? "Hard" : "";
+  return {
+    title: breather ? "A lighter turn at the workbench" : ["Wind through the workshop", "Route around the clutter", "Build a clever chain", "Tangle and untangle"][Math.min(3,stage)],
+    copy: breather ? "A shorter route gives you room to experiment before the next challenge." : "Find a route through the blocked squares and carry the marble to the bell.",
+    note: breather ? "This is a shorter puzzle. Try a different part or route just for fun." : "Use the openings in the board. Rotate parts to match each turn; the parts guide explains their capabilities.",
+    start: route[0].row, goal: route[route.length-1].row, walls, stock: Object.fromEntries(Object.keys(counts).map(type=>[type, Math.max(counts[type], type==="belt"?3:0)])), solution, difficulty
+  };
+}
+const GENERATED_PUZZLE_CACHE = new Map();
+function level() {
+  if (LEVELS[levelIndex]) return LEVELS[levelIndex];
+  if (!GENERATED_PUZZLE_CACHE.has(levelIndex)) GENERATED_PUZZLE_CACHE.set(levelIndex, generatedPuzzle(levelIndex));
+  return GENERATED_PUZZLE_CACHE.get(levelIndex);
+}
+function keyOf(row, col) { return row * 5 + col; }
+function playTone(kind = "tap") {
+  if (!soundEnabled) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    audioContext ||= new AudioContextClass();
+    if (audioContext.state === "suspended") audioContext.resume();
+    const osc = audioContext.createOscillator(), gain = audioContext.createGain();
+    const now = audioContext.currentTime;
+    const tones = { tap: 440, place: 620, connect: 760, run: 360, hint: 520, win: 880 };
+    osc.type = kind === "win" ? "sine" : "triangle";
+    osc.frequency.setValueAtTime(tones[kind] || 440, now);
+    if (kind === "win") osc.frequency.exponentialRampToValueAtTime(1175, now + .16);
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(kind === "win" ? .08 : .035, now + .012);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + (kind === "win" ? .28 : .11));
+    osc.connect(gain); gain.connect(audioContext.destination); osc.start(now); osc.stop(now + (kind === "win" ? .3 : .12));
+  } catch {}
+}
+function usedCount(type) { return placements.filter(tile => tile?.type === type).length; }
+function partAvailable(type, replacing = null) {
+  const stock = level().stock[type] || 0;
+  const returned = replacing?.type === type ? 1 : 0;
+  return stock - usedCount(type) + returned > 0;
+}
+function setStatus(message, kind = "info") {
+  statusNode.textContent = message;
+  statusNode.dataset.kind = kind;
+}
+function portsFor(tile) {
+  if (tile.type === "belt") return tile.rotation % 2 ? ["N", "S"] : ["E", "W"];
+  if (tile.type === "ramp") return PARTS.ramp.ports.map(dir => rotate(dir, tile.rotation));
+  if (tile.type === "switch") return PARTS.switch.ports.map(dir => rotate(dir, tile.rotation));
+  return PARTS[tile.type].ports;
+}
+function outputsFor(tile, travelDir) {
+  const entrySide = opposite(travelDir);
+  if (tile.type === "spring") {
+    const ports = portsFor(tile);
+    return ports.includes(entrySide) ? [{ dir: travelDir, jump: 2 }] : [];
+  }
+  if (tile.type === "gear") return [{ dir: rotate(travelDir, (tile.rotation + 3) % 4), jump: 1 }];
+  const ports = portsFor(tile);
+  if (!ports.includes(entrySide)) return [];
+  return ports.filter(side => side !== entrySide).map(dir => ({ dir, jump: 1 }));
+}
+function findPath() {
+  const current = level();
+  const queue = [{ row: current.start, col: 0, dir: "E", path: [] }];
+  const seen = new Set();
+  let best = { path: [], score: Infinity };
+  for (let q = 0; q < queue.length && q < 500; q++) {
+    const state = queue[q];
+    const signature = state.row + "," + state.col + "," + state.dir;
+    if (seen.has(signature)) continue;
+    seen.add(signature);
+    const index = keyOf(state.row, state.col);
+    const tile = placements[index];
+    const path = state.path.concat([{ row: state.row, col: state.col, missing: !tile }]);
+    if (!tile) {
+      const score = Math.abs(state.row - current.goal) + (4 - state.col);
+      if (score < best.score) best = { path, score };
+      continue;
+    }
+    for (const output of outputsFor(tile, state.dir)) {
+      const vector = VECTORS[output.dir];
+      const row = state.row + vector[0] * output.jump;
+      const col = state.col + vector[1] * output.jump;
+      if (output.dir === "E" && row === current.goal && col >= 5) return { success: true, path };
+      if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
+      if (output.jump === 1 && current.walls.some(wall => wall[0] === row && wall[1] === col)) continue;
+        const nextIndex = keyOf(row, col);
+      if (!placements[nextIndex]) {
+        const partial = path.concat([{ row, col, missing: true }]);
+        const score = Math.abs(row - current.goal) + Math.max(0, 4 - col);
+        if (score < best.score) best = { path: partial, score };
+        continue;
+      }
+      queue.push({ row, col, dir: output.dir, path });
+    }
+  }
+  return { success: false, path: best.path };
+}
+function iconFor(tile) {
+  const turn = tile.type === "gear" ? (tile.rotation + 3) % 4 : tile.rotation;
+  return '<span class="part-orientation" style="transform:rotate(' + (turn * 90) + 'deg)" aria-hidden="true">' + PARTS[tile.type].symbol + '</span>';
+}
+function render() {
+  document.getElementById("resume-game-button").disabled = !hasSavedGame;
+  document.getElementById("hint-button").disabled = running || hintCredits < 1;
+  document.getElementById("hint-button").textContent = hintCredits ? "Use hint · " + hintCredits : "Hint · earn one";
+  document.getElementById("hint-count").textContent = String(hintCredits);
+  document.getElementById("help-button").disabled = running;
+  document.getElementById("parts-guide-tutorial").disabled = running;
+  const current = level();
+  document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
+  document.getElementById("mission-title").textContent = current.title;
+  document.getElementById("mission-copy").textContent = current.copy;
+  document.getElementById("hint").textContent = current.note;
+  const difficultyTag = document.getElementById("difficulty-tag");
+  difficultyTag.textContent = current.difficulty || "";
+  difficultyTag.dataset.level = current.difficulty || "";
+  difficultyTag.hidden = !current.difficulty;
+  document.getElementById("board-size").textContent = "5 × 5 grid";
+  board.replaceChildren();
+  const header = document.createElement("div");
+  header.className = "board-head";
+  header.append(document.createElement("span"));
+  for (let col = 0; col < 5; col++) {
+    const label = document.createElement("span");
+    label.className = "column-label";
+    label.textContent = String(col + 1);
+    header.append(label);
+  }
+  header.append(document.createElement("span"));
+  board.append(header);
+
+  for (let row = 0; row < 5; row++) {
+    const rowNode = document.createElement("div");
+    rowNode.className = "board-row";
+    const source = document.createElement("span");
+    source.className = "gate";
+    source.textContent = row === current.start ? "▶" : "";
+    if (row === current.start) source.setAttribute("aria-label", "Marble entry row");
+    rowNode.append(source);
+    for (let col = 0; col < 5; col++) {
+      const index = keyOf(row, col);
+      const cell = document.createElement("button");
+      cell.type = "button";
+      cell.className = "cell";
+      cell.dataset.index = String(index);
+      const wall = current.walls.some(item => item[0] === row && item[1] === col);
+      const tile = placements[index];
+      if (tile) { cell.dataset.type = tile.type; }
+      if (hintCue?.index === index) cell.classList.add("hint-target");
+      if (wall) {
+        cell.classList.add("wall");
+        cell.disabled = true;
+        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", blocked gap");
+      } else if (tile) {
+        cell.innerHTML = iconFor(tile);
+        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", " + PARTS[tile.type].name + ". Activate to rotate clockwise.");
+      } else {
+        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", empty");
+      }
+      if (row === current.start && col === 0) cell.classList.add("entry-cell");
+      if (row === current.goal && col === 4) cell.classList.add("exit-cell");
+      if (visualChange?.index === index) cell.classList.add(visualChange.kind === "turn" ? "tile-turn" : "tile-enter");
+      rowNode.append(cell);
+    }
+    const exit = document.createElement("span");
+    exit.className = "gate exit";
+    exit.textContent = row === current.goal ? "🔔" : "";
+    if (row === current.goal) { exit.id = "bell-goal"; exit.setAttribute("aria-label", "Bell exit row"); }
+    rowNode.append(exit);
+    board.append(rowNode);
+  }
+
+  for (let index = 0; index < placements.length; index++) {
+    const tile = placements[index];
+    if (!tile) continue;
+    const row = Math.floor(index / 5), col = index % 5;
+    for (const dir of ["E", "S"]) {
+      const nextRow = row + VECTORS[dir][0], nextCol = col + VECTORS[dir][1];
+      if (nextRow >= 5 || nextCol >= 5) continue;
+      const neighborIndex = keyOf(nextRow, nextCol), neighbor = placements[neighborIndex];
+      if (!neighbor || !portsFor(tile).includes(dir) || !portsFor(neighbor).includes(opposite(dir))) continue;
+      const link = document.createElement("span");
+      link.className = "tile-connector " + (dir === "E" ? "east" : "south");
+      link.setAttribute("aria-hidden", "true");
+      board.querySelector('.cell[data-index="' + index + '"]').append(link);
+    }
+  }
+  visualChange = null;
+  partsNode.replaceChildren();
+  Object.entries(PARTS).forEach(([id, part]) => {
+    const button = document.createElement("button");
+    const count = current.stock[id] || 0;
+    const available = count - usedCount(id);
+    button.type = "button";
+    button.className = "part";
+    button.dataset.part = id;
+    if (hintCue?.type === id && hintCue.index == null) button.classList.add("hint-target");
+    button.disabled = available <= 0 || running;
+    button.setAttribute("aria-pressed", String(selectedPart === id));
+    button.setAttribute("aria-label", part.name + ", " + Math.max(0, available) + " available");
+    button.innerHTML = part.symbol + '<span>' + part.name + '</span><span class="part-count">' + Math.max(0, available) + '</span>';
+    partsNode.append(button);
+  });
+
+  const progress = document.getElementById("progress");
+  progress.replaceChildren();
+  progress.textContent = solved.length + (solved.length === 1 ? " puzzle solved" : " puzzles solved");
+  progress.setAttribute("aria-label", progress.textContent);
+  nextButton.hidden = !solved.includes(levelIndex);
+  runButton.disabled = running;
+  resetButton.disabled = running;
+  removeButton.disabled = running;
+  nextButton.disabled = running;
+  removeButton.setAttribute("aria-pressed", String(removeMode));
+  removeButton.textContent = removeMode ? "Remove mode on" : "Remove part";
+  document.getElementById("selection-help").textContent = removeMode ? "Choose a placed part to return it to the tray." :
+    selectedPart ? PARTS[selectedPart].name + " selected. Tap empty squares to place more; tap placed parts to rotate; tap this part again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
+}
+function clearTrace() {
+  board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("is-lit", "is-missing"));
+}
+function storePlacement(index, tile) {
+  placements[index] = tile;
+  saveGame();
+  render();
+}
+board.addEventListener("click", event => {
+  const cell = event.target.closest(".cell");
+  if (!cell || cell.disabled || running) return;
+  const index = Number(cell.dataset.index);
+  const existing = placements[index];
+  if (removeMode) {
+    if (!existing) return;
+    placements[index] = null;
+    hintCue = null;
+    visualChange = { index, kind: "remove" };
+    clearTrace();
+    saveGame();
+    render();
+    setStatus(PARTS[existing.type].name + " returned to your tray.");
+    return;
+  }
+  if (existing) {
+    existing.rotation = (existing.rotation + 1) % 4;
+    hintCue = null;
+    visualChange = { index, kind: "turn" };
+    playTone("tap");
+    clearTrace();
+    saveGame();
+    render();
+    setStatus(PARTS[existing.type].name + " rotated. " + (selectedPart ? PARTS[selectedPart].name + " remains selected for placement." : "Run the machine when ready."));
+    return;
+  }
+  if (selectedPart) {
+    if (!partAvailable(selectedPart, null)) {
+      setStatus("You have used every " + PARTS[selectedPart].name.toLowerCase() + ". Remove one from the board first.", "error");
+      return;
+    }
+    const placingType = selectedPart;
+    placements[index] = { type: placingType, rotation: 0 };
+    const remaining = (level().stock[placingType] || 0) - usedCount(placingType);
+    if (remaining <= 0) selectedPart = "";
+    hintCue = null;
+    visualChange = { index, kind: "place" };
+    playTone("place");
+    clearTrace();
+    saveGame();
+    render();
+    setStatus(remaining > 0
+      ? PARTS[placingType].name + " placed. Tap another square to place more, or choose another part."
+      : "Placed the last " + PARTS[placingType].name.toLowerCase() + ". Choose another part.");
+  } else {
+    setStatus("Choose a part from the tray first.");
+  }
+});
+partsNode.addEventListener("click", event => {
+  const button = event.target.closest(".part");
+  if (!button || button.disabled || running) return;
+  selectedPart = selectedPart === button.dataset.part ? "" : button.dataset.part;
+  removeMode = false;
+  render();
+});
+removeButton.addEventListener("click", () => {
+  if (running) return;
+  removeMode = !removeMode;
+  selectedPart = "";
+  render();
+});
+function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+async function runMachine() {
+  if (running) return;
+  running = true;
+  clearTrace();
+  app.classList.add("machine-running");
+  render();
+  setStatus("The marble is rolling…");
+  playTone("run");
+  const result = findPath();
+  const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
+  let previousMarble = null;
+  for (let i = 0; i < result.path.length; i++) {
+    const point = result.path[i];
+    const index = keyOf(point.row, point.col);
+    const cell = board.querySelector('.cell[data-index="' + index + '"]');
+    if (cell) {
+      cell.classList.add(point.missing ? "is-missing" : "is-lit");
+      previousMarble?.remove();
+      const traveler = document.createElement("span");
+      traveler.className = "marble-traveler";
+      if (i && Math.abs(keyOf(result.path[i-1].row,result.path[i-1].col)-index)>1) traveler.classList.add("hop");
+      traveler.setAttribute("aria-hidden", "true");
+      cell.append(traveler);
+      previousMarble = traveler;
+      if (point.missing) { await wait(reduced ? 30 : 180); break; }
+    }
+    await wait(reduced ? 50 : 310);
+  }
+  previousMarble?.remove();
+  const firstClear = result.success && !solved.includes(levelIndex);
+  if (firstClear) {
+    solved = [...solved, levelIndex];
+    hintCredits++;
+  }
+  saveGame();
+  render();
+  for (const point of result.path) {
+    const routeCell = board.querySelector('.cell[data-index="' + keyOf(point.row, point.col) + '"]');
+    if (routeCell) routeCell.classList.add(point.missing ? "is-missing" : "is-lit");
+  }
+  if (result.success) {
+    const bell = document.getElementById("bell-goal");
+    bell?.classList.add("is-ringing");
+    setStatus("The bell is ringing!", "success");
+    playTone("win");
+    await wait(2000);
+    bell?.classList.remove("is-ringing");
+    running = false;
+    app.classList.remove("machine-running");
+    render();
+    setStatus("It works!", "success");
+    showVictorySplash(firstClear);
+  } else {
+    running = false;
+    app.classList.remove("machine-running");
+    render();
+    const blocked = result.path[result.path.length - 1];
+    setStatus(blocked ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." : "The machine needs a connected route. Try starting at the marble entry.", "error");
+  }
+}
+runButton.addEventListener("click", runMachine);
+resetButton.addEventListener("click", () => {
+  if (running) return;
+  placements = Array(25).fill(null);
+  selectedPart = "";
+  removeMode = false;
+  clearTrace();
+  saveGame();
+  render();
+  setStatus("Workbench cleared. Build a new route.");
+});
+document.getElementById("home-button").addEventListener("click", () => {
+  if (running) return;
+  document.getElementById("game-screen").hidden = true;
+  document.getElementById("home-screen").hidden = false;
+  document.getElementById("resume-game-button").disabled = !hasSavedGame;
+  document.getElementById("new-game-button").focus();
+});
+function showGame() {
+  document.getElementById("home-screen").hidden = true;
+  document.getElementById("game-screen").hidden = false;
+  document.getElementById("mission-title").focus();
+}
+function startNewGame() {
+  levelIndex = 0;
+  solved = [];
+  hintCredits = 0;
+  hintStepByLevel = {};
+  layouts = {};
+  placements = Array(25).fill(null);
+  selectedPart = "";
+  removeMode = false;
+  clearTrace();
+  saveGame();
+  render();
+  setStatus("Fresh workbench. Place a part to begin.");
+  showGame();
+}
+document.getElementById("new-game-button").addEventListener("click", startNewGame);
+document.getElementById("resume-game-button").addEventListener("click", () => { if (hasSavedGame) showGame(); });
+const modalFocus = new Map();
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modalFocus.set(id, document.activeElement);
+  modal.hidden = false;
+  modal.querySelector("button,select")?.focus();
+}
+function closeModal(id) {
+  document.getElementById(id).hidden = true;
+  modalFocus.get(id)?.focus?.();
+}
+function applyHint() {
+  if (running || hintCredits < 1) return;
+  const blueprint = HINT_BLUEPRINTS[levelIndex] || level().solution || [];
+  let cursor = Math.max(0, Number(hintStepByLevel[levelIndex]) || 0);
+  while (cursor < blueprint.length) {
+    const step = blueprint[cursor];
+    const existing = placements[step.index];
+    if (existing?.type === step.type && existing.rotation === step.rotation) { cursor++; continue; }
+    hintStepByLevel[levelIndex] = cursor + 1;
+    hintCredits--;
+    selectedPart = "";
+    removeMode = false;
+    if (existing?.type === step.type) {
+      const turns = (step.rotation - existing.rotation + 4) % 4;
+      hintCue = { index: step.index, type: step.type };
+      render();
+      setStatus("Turn the " + PARTS[step.type].name.toLowerCase() + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + " clockwise " + (turns === 1 ? "once" : turns + " times") + ".");
+    } else {
+      hintCue = { index: step.index, type: step.type };
+      selectedPart = step.type;
+      render();
+      setStatus((existing ? "Replace the part" : "Place the " + PARTS[step.type].name.toLowerCase()) + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + ".");
+    }
+    saveGame();
+    playTone("hint");
+    return;
+  }
+  setStatus("No more hints are mapped for this workbench. Try the parts guide.");
+}
+function showVictorySplash(firstClear) {
+  const modal = document.getElementById("win-modal");
+  document.getElementById("win-reward").textContent = firstClear ? "✦ +1 hint" : "A clean run";
+  const next = document.getElementById("win-next");
+  next.hidden = false;
+  next.classList.remove("wide");
+  const layer = document.getElementById("confetti-layer");
+  layer.replaceChildren();
+  const colors = ["#f2a43a", "#4c9b7c", "#8671c8", "#e16e58", "#5b9ed0"];
+  for (let i = 0; i < 34; i++) {
+    const piece = document.createElement("i");
+    piece.className = "confetti-piece";
+    piece.style.setProperty("--confetti", colors[i % colors.length]);
+    piece.style.setProperty("--dx", ((Math.random() - .5) * 480) + "px");
+    piece.style.setProperty("--dy", ((Math.random() - .5) * 280) + "px");
+    piece.style.setProperty("--spin", ((Math.random() - .5) * 900) + "deg");
+    piece.style.setProperty("--delay", (Math.random() * .13) + "s");
+    layer.append(piece);
+  }
+  modalFocus.set("win-modal", document.activeElement);
+  modal.hidden = false;
+  document.getElementById("win-close").focus();
+  window.setTimeout(() => layer.replaceChildren(), 1400);
+}
+function advancePuzzle() {
+  if (!solved.includes(levelIndex)) return;
+  document.getElementById("win-modal").hidden = true;
+  levelIndex++;
+  placements = Array(25).fill(null);
+  const saved = layouts[levelIndex];
+  if (saved && typeof saved === "object") for (const [key, tile] of Object.entries(saved)) {
+    const index = Number(key);
+    if (Number.isInteger(index) && index >= 0 && index < 25 && tile && PARTS[tile.type]) placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
+  }
+  selectedPart = "";
+  removeMode = false;
+  hintCue = null;
+  clearTrace();
+  saveGame();
+  render();
+  setStatus("A new workbench is ready. Take a look at the workshop note.");
+  document.getElementById("mission-title").focus();
+}
+document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
+document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
+document.getElementById("hint-button").addEventListener("click", applyHint);
+document.getElementById("help-button").addEventListener("click", () => openModal("parts-guide-modal"));
+document.getElementById("parts-guide-tutorial").addEventListener("click", () => { closeModal("parts-guide-modal"); openModal("tutorial-modal"); });
+function renderPartsGuide() {
+  const list=document.getElementById("parts-guide-list");
+  list.replaceChildren();
+  Object.entries(PARTS).forEach(([id,part])=>{
+    const item=document.createElement("li"); item.className="parts-guide-item";
+    const icon=document.createElement("span"); icon.className="parts-guide-icon"; icon.dataset.part=id; icon.setAttribute("aria-hidden","true"); icon.innerHTML=part.symbol;
+    const copy=document.createElement("div"); copy.className="parts-guide-copy";
+    const title=document.createElement("strong"); title.textContent=part.name;
+    const description=document.createElement("p"); description.textContent=part.capability;
+    copy.append(title,description); item.append(icon,copy); list.append(item);
+  });
+}
+renderPartsGuide();
+document.getElementById("win-close").addEventListener("click", () => closeModal("win-modal"));
+document.getElementById("win-next").addEventListener("click", advancePuzzle);
+document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", () => closeModal(button.dataset.closeModal)));
+document.querySelectorAll(".home-modal").forEach(modal => modal.addEventListener("click", event => { if (event.target === modal) closeModal(modal.id); }));
+document.addEventListener("keydown", event => { if (event.key === "Escape") { const open = document.querySelector(".home-modal:not([hidden])"); if (open) closeModal(open.id); } });
+nextButton.addEventListener("click", advancePuzzle);
+document.getElementById("pref-follow-device").addEventListener("change", event => {
+  portfolioShell.updateSettings({ appearance: { colorMode: event.target.checked ? "system" : (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light") } });
+});
+document.getElementById("pref-dark-mode").addEventListener("change", event => {
+  portfolioShell.updateSettings({ appearance: { colorMode: event.target.checked ? "dark" : "light" } });
+});
+document.getElementById("pref-ignore-motion").addEventListener("change", event => {
+  document.getElementById("pref-reduce-motion").checked = false;
+  portfolioShell.updateSettings({ accessibility: { motion: event.target.checked ? "full" : "system" } });
+});
+document.getElementById("pref-reduce-motion").addEventListener("change", event => {
+  document.getElementById("pref-ignore-motion").checked = false;
+  portfolioShell.updateSettings({ accessibility: { motion: event.target.checked ? "reduce" : "system" } });
+});
+document.getElementById("pref-sound").addEventListener("change", event => {
+  soundEnabled = event.target.checked;
+  saveGame();
+  if (soundEnabled) playTone("tap");
+});
+document.getElementById("pref-scale").addEventListener("change", event => portfolioShell.updateSettings({ accessibility: { textScale: Number(event.target.value) } }));
+document.querySelectorAll(".theme-option").forEach(button => button.addEventListener("click", () => portfolioShell.updateSettings({ themeByGame: { tinkerFactory: button.dataset.theme } })));
+render();
+
+const themes = [
+  { id: "workshop", label: "Workshop", tokens: { "--game-accent": "#c9753d", "--game-accent-2": "#387f74" } },
+  { id: "orchard", label: "Copper & mint", tokens: { "--game-accent": "#a35f45", "--game-accent-2": "#597f62" } },
+  { id: "starlit", label: "Starlit violet", tokens: { "--game-accent": "#7764b4", "--game-accent-2": "#528c8d" } },
+  { id: "ocean", label: "Ocean current", tokens: { "--game-accent": "#2878ae", "--game-accent-2": "#2e9f9c" } },
+  { id: "lemon", label: "Lemon gear", tokens: { "--game-accent": "#b98915", "--game-accent-2": "#d86b4b" } },
+  { id: "berry", label: "Berry jam", tokens: { "--game-accent": "#a64f7b", "--game-accent-2": "#7559b1" } },
+  { id: "meadow", label: "Meadow moss", tokens: { "--game-accent": "#548648", "--game-accent-2": "#398c7d" } },
+  { id: "skyline", label: "Skyline", tokens: { "--game-accent": "#3974bb", "--game-accent-2": "#8270c6" } },
+  { id: "ember", label: "Ember glow", tokens: { "--game-accent": "#bf5540", "--game-accent-2": "#d09334" } }
+];
+portfolioShell = await mountPortfolioShell({
+  gameId: "tinkerFactory",
+  storageKeys: ["tinkerFactory"],
+  title: "Tinker Factory",
+  homeUrl: "/",
+  themes,
+  inlineSettings: false,
+  onSettingsChange(settings) {
+    const theme = settings.themeByGame?.tinkerFactory || "workshop";
+    document.querySelectorAll(".theme-option").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === theme)));
+    const mode = settings.appearance.colorMode;
+    document.getElementById("pref-follow-device").checked = mode === "system";
+    document.getElementById("pref-dark-mode").checked = mode === "dark" || (mode === "system" && !!window.matchMedia?.("(prefers-color-scheme: dark)").matches);
+    document.getElementById("pref-dark-mode").disabled = mode === "system";
+    document.getElementById("dark-mode-row").classList.toggle("disabled", mode === "system");
+    document.getElementById("pref-ignore-motion").checked = settings.accessibility.motion === "full";
+    document.getElementById("pref-reduce-motion").checked = settings.accessibility.motion === "reduce";
+    document.getElementById("pref-scale").value = String(settings.accessibility.textScale);
+    document.getElementById("pref-sound").checked = soundEnabled;
+  }
+});
+const shellSettingsButton = document.createElement("button");
+shellSettingsButton.className = "portfolio-shell__game-settings";
+shellSettingsButton.type = "button";
+shellSettingsButton.textContent = "Settings";
+shellSettingsButton.addEventListener("click", () => openModal("settings-modal"));
+document.querySelector(".top-actions")?.prepend(shellSettingsButton);
+</script>
+</body>
+</html>

@@ -9,7 +9,7 @@ service cloud.firestore {
       allow get: if isOwner();
       allow list: if false;
       allow create, update: if isOwner()
-        && gameId in ['networkTycoon', 'matchGarden', 'critterRescue']
+        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory']
         && request.resource.data.keys().hasOnly([
           'schemaVersion', 'gameId', 'payload', 'updatedAtMs', 'updatedAt'
         ])
@@ -18,7 +18,25 @@ service cloud.firestore {
         && request.resource.data.payload is map
         && request.resource.data.updatedAtMs is int;
       allow delete: if isOwner()
-        && gameId in ['networkTycoon', 'matchGarden', 'critterRescue'];
+        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory'];
+    }
+
+    match /users/{uid}/settings/{settingsId} {
+      function isOwner() {
+        return request.auth != null && request.auth.uid == uid;
+      }
+
+      allow get: if isOwner();
+      allow list: if false;
+      allow create, update: if isOwner()
+        && settingsId == 'portfolio'
+        && request.resource.data.keys().hasOnly([
+          'schemaVersion', 'settings', 'updatedAtMs', 'updatedAt'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.settings is map
+        && request.resource.data.updatedAtMs is int;
+      allow delete: if isOwner() && settingsId == 'portfolio';
     }
   }
 }
