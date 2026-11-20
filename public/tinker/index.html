@@ -65,7 +65,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .part:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
 .part[aria-pressed=true]{border-color:var(--game-accent);background:color-mix(in srgb,var(--game-accent) 12%,var(--game-surface));box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 28%,transparent)}
 .part:disabled{opacity:.4;cursor:not-allowed}
-.part-icon{width:31px;height:31px;display:block;overflow:visible}
+.part-icon{width:31px;height:31px;display:block;overflow:visible}.part-orientation{display:grid;place-items:center;width:100%;height:100%;pointer-events:none}
 .part-count{position:absolute;top:4px;right:5px;min-width:17px;padding:1px 4px;border-radius:8px;background:#e8eee6;color:#496452;font-size:.82em}
 .side{display:grid;gap:14px}
 .controls{padding:19px}
@@ -308,7 +308,7 @@ function findPath() {
 }
 function iconFor(tile) {
   const turn = tile.type === "gear" ? (tile.rotation + 3) % 4 : tile.rotation;
-  return '<span class="part-orientation" style="--turn:' + turn + '" aria-hidden="true">' + PARTS[tile.type].symbol + '</span>';
+  return '<span class="part-orientation" style="transform:rotate(' + (turn * 90) + 'deg)" aria-hidden="true">' + PARTS[tile.type].symbol + '</span>';
 }
 function render() {
   const current = level();
@@ -390,10 +390,14 @@ function render() {
     return dot;
   }));
   nextButton.hidden = !solved.includes(levelIndex) || levelIndex >= LEVELS.length - 1;
+  runButton.disabled = running;
+  resetButton.disabled = running;
+  removeButton.disabled = running;
+  nextButton.disabled = running;
   removeButton.setAttribute("aria-pressed", String(removeMode));
   removeButton.textContent = removeMode ? "Remove mode on" : "Remove part";
   document.getElementById("selection-help").textContent = removeMode ? "Choose a placed part to return it to the tray." :
-    selectedPart ? PARTS[selectedPart].name + " selected. Choose a grid square." : "Choose a part, then place it on the grid.";
+    selectedPart ? PARTS[selectedPart].name + " selected. Choose a grid square." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
   board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("is-lit", "is-missing"));
