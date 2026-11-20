@@ -1848,6 +1848,19 @@ html.dark-mode .crisis-mini-intro,html.dark-mode .crisis-mini-adjusted,html.dark
 html.dark-mode .crisis-mini-intro strong,html.dark-mode .crisis-mini-adjusted strong,html.dark-mode .crisis-mini-adjusted span,html.dark-mode .crisis-mini-role-card strong,html.dark-mode .crisis-mini-role-card small{color:#d1dfe4!important}
 html.dark-mode .win-card,html.dark-mode .celebration-card{background:#182832!important;background-image:none!important;color:#f2f7f8!important;border-color:#45616b!important}
 html.dark-mode .win-card h2,html.dark-mode .win-card p,html.dark-mode .celebration-card h2,html.dark-mode .celebration-card p{color:inherit!important}
+/* Dark-mode pop-out contrast coverage for custom nested cards and readouts. */
+html.dark-mode .modal :is([class*="card"],[class*="panel"],[class*="event"],[class*="choice"],[class*="option"],[class*="report"],[class*="result"],[class*="summary"],[class*="detail"],[class*="intro"],[class*="item"],[class*="note"],[class*="stat"],[class*="row"],[class*="badge"],[class*="hero"],[class*="readout"],[class*="funding"],[class*="cash"],[class*="loan"],[class*="capital"],[class*="offer"],[class*="metric"],[class*="risk"],[class*="impact"],[class*="list"],[class*="mix"]){background-color:#203640!important;background-image:none!important;color:#edf4f6!important;border-color:#45616b!important;box-shadow:none}
+html.dark-mode .modal :is(p,small,strong,span,label,li){color:#d1dfe4!important}
+html.dark-mode .modal :is(h1,h2,h3,h4){color:#f2f7f8!important}
+html.dark-mode .modal :is(.positive,.success,.earned){color:#83e6ba!important}
+html.dark-mode .modal :is(.negative,.danger,.critical){color:#ffaaa0!important}
+html.dark-mode :is(.available-capital,.cashflow-readout>div,.loan-amount,.opportunity-funding){background-color:#203640!important;background-image:none!important;color:#edf4f6!important;border-color:#45616b!important}
+html.dark-mode :is(.available-capital-label span,.available-capital-label small,.cashflow-readout small,.opportunity-funding-head small,.opportunity-funding-foot small,.opportunity-funding-note){color:#c1d5db!important}
+html.dark-mode :is(.available-capital strong,.cashflow-readout strong,.opportunity-funding-values b){color:#f2f7f8!important}
+html.dark-mode :is(.available-capital strong.negative,.cashflow-readout strong.negative,.opportunity-funding-note){color:#ffaaa0!important}
+html.dark-mode .opportunity-funding-values,html.dark-mode .opportunity-funding-foot{color:#d1dfe4!important}
+html.dark-mode .opportunity-funding-foot b{color:#ffd08c!important}
+
 </style><script>(()=>{const q=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');let reduce=!!(q&&q.matches);try{const p=JSON.parse(localStorage.getItem('network-tycoon-player-preferences-v1')||'{}');if(p.darkMode)document.documentElement.classList.add('dark-mode');reduce=!!p.reducedMotion||(reduce&&!p.ignoreSystemReducedMotion)}catch{}if(reduce)document.documentElement.classList.add('pref-reduced-motion')})();</script></head>
 <body>
   <main id="app">
