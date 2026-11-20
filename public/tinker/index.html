@@ -198,7 +198,7 @@ html[data-portfolio-color-mode=dark] .home-dialog{background:var(--game-surface)
     <section class="panel workbench" aria-label="Machine workbench">
       <div class="mission">
         <div class="mission-icon" aria-hidden="true">⚙</div>
-        <div><strong id="mission-title">Bridge the little gap</strong><p id="mission-copy">Build a path across the workbench and send the marble to the bell.</p></div>
+        <div><strong id="mission-title" tabindex="-1">Bridge the little gap</strong><p id="mission-copy">Build a path across the workbench and send the marble to the bell.</p></div>
       </div>
       <div class="board-heading"><h2>Workbench</h2><div class="board-heading-meta"><span class="difficulty-tag" id="difficulty-tag" hidden></span><span id="board-size">5 × 5 grid</span></div></div>
       <div class="board-wrap">
@@ -812,7 +812,7 @@ document.getElementById("home-button").addEventListener("click", () => {
 function showGame() {
   document.getElementById("home-screen").hidden = true;
   document.getElementById("game-screen").hidden = false;
-  document.getElementById("run-button").focus();
+  document.getElementById("mission-title").focus();
 }
 function startNewGame() {
   levelIndex = 0;
@@ -912,7 +912,7 @@ function advancePuzzle() {
   saveGame();
   render();
   setStatus("A new workbench is ready. Take a look at the workshop note.");
-  document.getElementById("run-button").focus();
+  document.getElementById("mission-title").focus();
 }
 document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
 document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
