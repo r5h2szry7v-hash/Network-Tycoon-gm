@@ -45,7 +45,6 @@ html[data-portfolio-color-mode=dark] .board-wrap{background:linear-gradient(145d
 .row-label{font-size:.68em;font-weight:850;color:#958a72;text-align:center}
 .gate{display:grid;place-items:center;width:25px;height:25px;border-radius:9px;background:#fff6da;color:#805b20;font-size:15px}
 .gate.exit{background:#e2f3e6;color:#286847}
-@keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
 html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
 @media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}}
 .gate.exit.is-ringing{position:relative;z-index:2;transform-origin:50% 12%;animation:bellRing .5s ease-in-out 4;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
@@ -659,7 +658,7 @@ function render() {
   removeButton.setAttribute("aria-pressed", String(removeMode));
   removeButton.textContent = removeMode ? "Remove mode on" : "Remove part";
   document.getElementById("selection-help").textContent = removeMode ? "Choose a placed part to return it to the tray." :
-    selectedPart ? PARTS[selectedPart].name + " selected. Tap squares to place more; tap it again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
+    selectedPart ? PARTS[selectedPart].name + " selected. Tap empty squares to place more; tap placed parts to rotate; tap this part again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
   board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("is-lit", "is-missing"));
