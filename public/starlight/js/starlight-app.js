@@ -10,9 +10,23 @@
   {id:"comet-tether",name:"Comet Tether",icon:"☄",desc:"Pull a comet and let it spring back",button:"cometTetherOpen",screen:"cometTetherScreen"},
   {id:"stardust-rake",name:"Stardust Rake",icon:"✧",desc:"Sweep glowing grains that settle softly",button:"stardustRakeOpen",screen:"stardustRakeScreen"}
  ];
+ var currentActivityId=null;
+ function hideActivityScreens(){
+  activities.forEach(function(activity){
+   var screen=document.getElementById(activity.screen);
+   if(!screen)return;
+   screen.classList.remove("active");
+   screen.setAttribute("aria-hidden","true");
+   if(activity.screen==="gameScreen"||activity.screen==="colorStudio")return;
+   screen.hidden=true;
+  });
+ }
  function openActivity(id){
   var activity=activities.find(function(item){return item.id===id});
   if(!activity)return false;
+  hideActivityScreens();
+  var landing=document.getElementById("landingScreen");
+  if(landing)landing.hidden=true;
   var selector=document.getElementById("playgroundScreen");
   if(selector)selector.hidden=true;
   var buttonId=activity.button;
@@ -21,16 +35,21 @@
    if(resume&&resume.disabled)buttonId="newGameBtn";
   }
   var button=document.getElementById(buttonId);
-  if(button){button.click();return true}
+  if(button){currentActivityId=activity.id;button.click();return true}
   return false;
  }
  function returnToPlayground(){
+  hideActivityScreens();
+  currentActivityId=null;
+  var landing=document.getElementById("landingScreen");
+  if(landing)landing.hidden=true;
   var entry=document.getElementById("playgroundOpen");
   if(entry)entry.click();
  }
  window.StarlightApp=Object.freeze({
   activities:Object.freeze(activities.map(function(item){return Object.freeze(item)})),
   openActivity:openActivity,
-  returnToPlayground:returnToPlayground
+  returnToPlayground:returnToPlayground,
+  get currentActivityId(){return currentActivityId}
  });
 })();
