@@ -16,9 +16,9 @@ Map prizes have distinct effects: zoomies briefly increase movement speed, a squ
 
 - Use the existing tan and dark dog assets as selectable heroes.
 - Use the three matching cat illustrations as the pursuing characters.
-- Keep a gentle idle bob on the home page and an energetic hop on maze movement. Cats get their own shorter, cheekier chase bounce; stun pickups pause them with orbiting sparkles.
-- Celebrate treats, boosts, cat encounters, and completed mazes with small visual reactions. Respect the portfolio reduced-motion preference throughout.
-- Later animation polish can add blink, tail swish, startled reactions, and a short dog-and-cat victory scene without changing the established character art.
+- Keep a gentle idle bob on the home page and an energetic hop on maze movement. Cats get distinct direct-pounce, intercept-scamper, and wandering animations; stun pickups pause them with orbiting sparkles.
+- Celebrate pickups, cat encounters, and completed mazes with visual reactions. Both dogs join the level-end scene, and the caught scene gives the cats a playful reveal. Respect the portfolio reduced-motion preference throughout.
+- Later polish can add blink and tail-swish details without changing the established character art.
 
 ## Home page and tutorial
 
@@ -37,11 +37,11 @@ The game uses `pawprintPursuit` as its cloud-save game ID, the shared portfolio 
 ## Roadmap
 
 1. **Playable foundation:** game home page, four-step tutorial, selectable dogs, six color palettes, generated maze, movement controls, three rotating goals, three cat characters, and three prizes. Keep cloud save and shared settings connected from the start.
-2. **Character animation pass:** tune the dog run and cat chase cycles, add clear pickup and stun reactions, and design win/caught poses. Preserve reduced-motion behavior.
+2. **Character animation pass:** add distinct idle and movement cycles, pickup bursts, cat stun motion, startled dog reactions, and animated win/caught scenes. Preserve reduced-motion behavior. First pass implemented; tune during play review.
 3. **Maze and opponent tuning:** review maze reachability, spawn fairness, objective pacing, cat pursuit speed, and level sizing across the early progression.
 4. **Presentation polish:** add level transitions, sound toggle and sound cues, stronger celebration moments, and small-screen layout refinements.
 5. **Release review:** review mobile and desktop behavior, dark and light palettes, cloud save continuity, and offline assets before publishing to the portfolio.
 
 ## Current implementation slice
 
-The first slice is in progress on `feat/pawprint-pursuit-prototype`. It includes the page shell, home and tutorial screens, generated maze gameplay, animated dog and cat art, the three objectives and prizes, shared shell mounting, cloud-save rules, and portfolio navigation. It has not been published to the production game selector.
+The playable foundation and first animation pass are in progress on `feat/pawprint-pursuit-prototype`. The draft change includes the page shell, home and tutorial screens, generated maze gameplay, animated dog and cat art, the three objectives and prizes, shared shell mounting, cloud-save rules, and portfolio navigation. It has not been published to the production game selector. The next step is a gameplay pass over maze reachability, spawn fairness, goal pacing, and pursuit difficulty.
