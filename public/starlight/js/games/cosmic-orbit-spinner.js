@@ -1,3 +1,4 @@
+/* Starlight Playground activity module */
 
 (function(){
  var screen=document.getElementById("orbitSpinnerScreen"),open=document.getElementById("orbitSpinnerOpen"),back=document.getElementById("orbitSpinnerBack"),stage=document.getElementById("orbitSpinnerStage"),rotor=document.getElementById("orbitSpinnerRotor"),starfield=document.getElementById("orbitStarfield"),spin=document.getElementById("orbitSpinnerSpin"),hint=document.getElementById("orbitSpinnerHint");
@@ -13,7 +14,7 @@
  function ensureFrame(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
  function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
  function openSpinner(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
- function closeSpinner(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ function closeSpinner(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;window.StarlightApp.returnToPlayground()}
  open.addEventListener("click",openSpinner);back.addEventListener("click",closeSpinner);
  stage.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()});
  stage.addEventListener("pointermove",function(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=delta;velocity=delta/dt*1000;lastPointerAngle=a;lastTime=now;render()});
