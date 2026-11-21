@@ -1,0 +1,17 @@
+/* Disable accidental long-press text selection and iOS callouts across portfolio games. */
+html, body, body * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+input, textarea, select, option,
+[contenteditable]:not([contenteditable="false"]),
+[role="textbox"],
+input *, textarea *, select *, option *,
+[contenteditable]:not([contenteditable="false"]) *,
+[role="textbox"] * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+}

@@ -247,6 +247,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
 </script>
+<link rel="stylesheet" href="/disable-text-selection.css">
 </head>
 <body class="starlight-page">
 <div class="ambient-sky" aria-hidden="true"><i class="ambient-cloud one"></i><i class="ambient-cloud two"></i><i class="ambient-cloud three"></i></div>

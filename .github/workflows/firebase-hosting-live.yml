@@ -21,6 +21,14 @@ jobs:
           from pathlib import Path
           page = Path("public/tycoon/index.html")
           html = page.read_text()
+          link = '<link rel="stylesheet" href="/disable-text-selection.css">'
+          if link not in html:
+              page.write_text(html.replace("</head>", link + "</head>", 1))
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path("public/tycoon/index.html")
+          html = page.read_text()
           nav_css = """<style>
           .cross-game-links{display:flex;justify-content:flex-end;gap:8px;margin:0 0 10px}
           .cross-game-links a,.setup-nav a{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid #cfe0d8;border-radius:10px;background:#f7fffb;color:#267568;text-decoration:none;font:800 12px system-ui,sans-serif}

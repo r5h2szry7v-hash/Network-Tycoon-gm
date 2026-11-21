@@ -13,6 +13,7 @@ const CORE_FILES = [
   "/offline.html",
   "/version.json",
   "/cloud-save.js",
+  "/disable-text-selection.css",
   "/portfolio-shell.js",
   "/manifest.webmanifest",
   "/favicon.svg",
