@@ -1,3 +1,4 @@
+/* Starlight Playground activity module */
 
 (function(){
  var screen=document.getElementById("orbitingOrbsScreen"),open=document.getElementById("orbitingOrbsOpen"),back=document.getElementById("orbitingOrbsBack"),stage=document.getElementById("orbitingOrbsStage"),hint=document.getElementById("orbitingOrbsHint"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
@@ -12,7 +13,7 @@
  function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
  function pointerRadius(e){var r=stage.getBoundingClientRect();return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))/(Math.min(r.width,r.height)/360)}
  function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");["orbitSpinnerScreen","ripplePoolScreen"].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
- function hide(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ function hide(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;window.StarlightApp.returnToPlayground()}
  function begin(e){if(e.button!==undefined&&e.button!==0)return;var r=pointerRadius(e),i=0;radii.forEach(function(v,n){if(Math.abs(v-r)<Math.abs(radii[i]-r))i=n});choose(i);dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()}
  function move(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angles[selected]+=delta;velocity=Math.max(-900,Math.min(900,delta/dt*1000));lastPointerAngle=a;lastTime=now;render()}
  function end(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else startMotion()}
