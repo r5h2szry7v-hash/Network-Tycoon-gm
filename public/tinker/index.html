@@ -843,12 +843,14 @@ document.getElementById("home-button").addEventListener("click", () => {
   if (running) return;
   document.getElementById("game-screen").hidden = true;
   document.getElementById("home-screen").hidden = false;
+  document.getElementById("home-button").hidden = true;
   document.getElementById("resume-game-button").disabled = !hasSavedGame;
   document.getElementById("new-game-button").focus();
 });
 function showGame() {
   document.getElementById("home-screen").hidden = true;
   document.getElementById("game-screen").hidden = false;
+  document.getElementById("home-button").hidden = false;
   document.getElementById("mission-title").focus();
 }
 function startNewGame() {
@@ -1033,7 +1035,16 @@ shellSettingsButton.className = "portfolio-shell__game-settings";
 shellSettingsButton.type = "button";
 shellSettingsButton.textContent = "Settings";
 shellSettingsButton.addEventListener("click", () => openModal("settings-modal"));
-document.querySelector(".top-actions")?.prepend(shellSettingsButton);
+const topActions = document.querySelector(".top-actions");
+const homeScreenButton = document.getElementById("home-button");
+homeScreenButton.className = "portfolio-shell__game-settings";
+homeScreenButton.textContent = "Home Screen";
+homeScreenButton.setAttribute("aria-label", "Return to Tinker Factory home screen");
+homeScreenButton.hidden = true;
+if (topActions) {
+  topActions.prepend(shellSettingsButton);
+  topActions.insertBefore(homeScreenButton, shellSettingsButton.nextSibling);
+}
 </script>
 </body>
 </html>
