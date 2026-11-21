@@ -281,7 +281,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
 .compass-wheel:before{display:none!important}
 .carousel-core{display:none!important}
 .carousel-track{z-index:2}
-.carousel-card:not(.is-selected) small{opacity:0}
+.carousel-card:not(.is-selected) small{opacity:0}.carousel-card:not(.is-selected){background:transparent;border-color:transparent;box-shadow:none}.carousel-card:not(.is-selected) .carousel-icon{opacity:.72}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
