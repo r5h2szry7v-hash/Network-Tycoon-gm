@@ -141,6 +141,32 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 @media(max-width:600px){.starlight-page .top-actions{gap:6px}.starlight-page .top-actions .cloud-account-button{width:36px;height:36px;min-height:36px;padding:0!important;display:grid;place-items:center}.starlight-page .top-actions .cloud-account-button [data-cloud-label]{font-size:0}.starlight-page .top-actions .cloud-account-button [data-cloud-label]::before{content:"☁";font-size:15px;line-height:1}.map-btn .label{display:none}.shell{padding:12px 14px 24px}.topbar{min-height:48px}.brand-mark{width:37px;height:37px;border-radius:13px}.brand-title{font-size:15px}.brand-sub{font-size:10px}.quiet-link{font-size:11px;padding:9px 10px}.settings-btn{font-size:12px;padding:9px 11px}.settings-btn .label{display:none}.main{padding:18px 0 4px}.subline{font-size:13px;margin-bottom:14px}.board{border-radius:20px;padding:10px}.board-hint{bottom:14px;font-size:11px;padding:7px 10px}.progress-row{margin-top:11px}.footer-note{margin-top:11px}}
 @media(max-width:370px){.topbar{gap:8px}.brand{gap:8px;min-width:0}.brand-mark{width:32px;height:32px}.brand-title{font-size:13px;white-space:nowrap}.brand-sub{display:none}.top-actions{gap:6px}.quiet-link{font-size:0;max-width:36px;width:36px;padding:9px 0;text-align:center}.quiet-link:before{content:"←";font-size:14px}.settings-btn{padding:9px 10px}.map-grid{grid-template-columns:1fr}.map-region-list{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.board-hint{bottom:10px}}
 @media(prefers-reduced-motion:reduce){html:not(.motion-override) *{scroll-behavior:auto}}
+
+/* Cosmic Orbit Spinner */
+.orbit-spinner-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:20px 0 34px}
+.orbit-spinner-screen[hidden]{display:none}
+.orbit-spinner-card{width:min(100%,680px);padding:clamp(20px,4vw,34px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 28%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007;position:relative;overflow:hidden}
+.orbit-spinner-card:before{content:"";position:absolute;width:300px;height:300px;top:-210px;left:calc(50% - 150px);border-radius:50%;background:var(--trace);filter:blur(85px);opacity:.15;pointer-events:none}
+.orbit-spinner-card h2{position:relative;margin:8px 0 5px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}
+.orbit-spinner-card p{position:relative;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.orbit-spinner-stage{width:min(100%,min(68svh,440px));aspect-ratio:1;margin:14px auto 14px;display:grid;place-items:center;position:relative;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;border-radius:50%;outline:none}
+.orbit-spinner-stage:active{cursor:grabbing}
+.orbit-spinner-stage:focus-visible{outline:3px solid var(--trace);outline-offset:3px}
+.orbit-spinner-svg{width:100%;height:100%;overflow:visible}
+.orbit-spinner-halo{fill:none;stroke:var(--trace);stroke-width:1;opacity:.12}
+.orbit-spinner-track{fill:none;stroke:#ffffff19;stroke-width:1.5;stroke-dasharray:3 10}
+.orbit-spinner-ring{fill:none;stroke:url(#orbitGradient);stroke-width:6;stroke-linecap:round;opacity:.8}
+.orbit-spinner-arm{stroke:url(#orbitGradient);stroke-width:7;stroke-linecap:round;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--trace) 70%,transparent))}
+.orbit-spinner-bead{fill:var(--trace);stroke:#f1fcff;stroke-width:2;filter:drop-shadow(0 0 10px var(--trace))}
+.orbit-spinner-core{fill:#111e35;stroke:var(--trace);stroke-width:3;filter:drop-shadow(0 0 16px color-mix(in srgb,var(--trace) 60%,transparent))}
+.orbit-spinner-star{fill:var(--ink);filter:drop-shadow(0 0 8px var(--trace))}
+.orbit-spinner-controls{position:relative;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.orbit-spinner-controls button{min-height:46px;padding:0 18px;border:1px solid color-mix(in srgb,var(--trace) 40%,transparent);border-radius:15px;background:color-mix(in srgb,var(--trace) 14%,#101a2c);font-size:14px;font-weight:800}
+.orbit-spinner-controls button:hover{background:color-mix(in srgb,var(--trace) 23%,#101a2c)}
+.orbit-spinner-controls .orbit-back{background:#ffffff08;border-color:var(--line)}
+.orbit-spinner-hint{display:block;margin-top:12px;color:var(--muted);font-size:12px}
+@media(max-width:600px){.orbit-spinner-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.orbit-spinner-card{border-radius:23px}.orbit-spinner-stage{width:min(100%,min(55svh,390px));margin:10px auto}.orbit-spinner-hint{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.orbit-spinner-bead,.orbit-spinner-core{filter:none}}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -159,6 +185,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    <button class="landing-action landing-primary" id="newGameBtn" type="button"><span class="landing-action-icon" aria-hidden="true">✧</span><span><b>Start a new game</b><small>Begin again with the first shape</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="resumeBtn" type="button"><span class="landing-action-icon" aria-hidden="true">☾</span><span><b>Resume game</b><small id="resumeDescription">Continue your saved journey</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action color-launch-action" id="colorStudioOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✿</span><span><b>Cosmic Color Studio</b><small>Color a space scene at your own pace</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
@@ -195,6 +222,33 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   </aside>
  </div>
  <div class="color-footer-note"><span aria-hidden="true">✧</span> No timer. No wrong colors. Just make it yours.</div>
+</section>
+<section class="orbit-spinner-screen" id="orbitSpinnerScreen" aria-labelledby="orbitSpinnerTitle" hidden>
+ <div class="orbit-spinner-card">
+  <p class="landing-eyebrow">A quiet fidget among the stars</p>
+  <h2 id="orbitSpinnerTitle">Cosmic Orbit Spinner</h2>
+  <p>Drag the rings or give them a flick. Let the comets drift to rest.</p>
+  <div class="orbit-spinner-stage" id="orbitSpinnerStage" role="application" tabindex="0" aria-label="Cosmic orbit spinner. Drag in a circle to spin the comet rings.">
+   <svg class="orbit-spinner-svg" viewBox="0 0 360 360" aria-hidden="true">
+    <defs><linearGradient id="orbitGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--trace)"/><stop offset="1" stop-color="var(--accent)"/></linearGradient></defs>
+    <circle class="orbit-spinner-halo" cx="180" cy="180" r="151"/>
+    <circle class="orbit-spinner-track" cx="180" cy="180" r="118"/>
+    <g id="orbitSpinnerRotor">
+     <circle class="orbit-spinner-ring" cx="180" cy="180" r="118"/>
+     <path class="orbit-spinner-arm" d="M180 180V62"/>
+     <path class="orbit-spinner-arm" d="M180 180 282 239"/>
+     <path class="orbit-spinner-arm" d="M180 180 78 239"/>
+     <circle class="orbit-spinner-bead" cx="180" cy="62" r="14"/>
+     <circle class="orbit-spinner-bead" cx="282" cy="239" r="14"/>
+     <circle class="orbit-spinner-bead" cx="78" cy="239" r="14"/>
+    </g>
+    <circle class="orbit-spinner-core" cx="180" cy="180" r="25"/>
+    <path class="orbit-spinner-star" d="m180 165 4.3 10.7L195 180l-10.7 4.3L180 195l-4.3-10.7L165 180l10.7-4.3z"/>
+   </svg>
+  </div>
+  <div class="orbit-spinner-controls"><button id="orbitSpinnerSpin" type="button">Give it a spin</button><button class="orbit-back" id="orbitSpinnerBack" type="button">Back to Starlight</button></div>
+  <small class="orbit-spinner-hint" id="orbitSpinnerHint" aria-live="polite">Drag around the star, then release to send it spinning.</small>
+ </div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
 <header class="topbar">
@@ -776,6 +830,31 @@ applyMotion();applyPalette();syncMusicButton();renderLevel();showLanding();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
 }
+</script>
+<script>
+(function(){
+ var screen=document.getElementById("orbitSpinnerScreen"),open=document.getElementById("orbitSpinnerOpen"),back=document.getElementById("orbitSpinnerBack"),stage=document.getElementById("orbitSpinnerStage"),rotor=document.getElementById("orbitSpinnerRotor"),spin=document.getElementById("orbitSpinnerSpin"),hint=document.getElementById("orbitSpinnerHint");
+ if(!screen||!open||!stage||!rotor)return;
+ var angle=0,velocity=0,frame=0,lastFrame=0,dragging=false,lastPointerAngle=0,lastTime=0,reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ function render(){rotor.setAttribute("transform","rotate("+angle+" 180 180)")}
+ function animate(now){
+  if(!lastFrame)lastFrame=now;
+  var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;
+  if(!dragging){angle+=velocity*dt;velocity*=Math.exp(-1.35*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}
+  render();frame=requestAnimationFrame(animate)
+ }
+ function ensureFrame(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
+ function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
+ function openSpinner(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
+ function closeSpinner(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ open.addEventListener("click",openSpinner);back.addEventListener("click",closeSpinner);
+ stage.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()});
+ stage.addEventListener("pointermove",function(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=delta;velocity=delta/dt*1000;lastPointerAngle=a;lastTime=now;render()});
+ function release(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else ensureFrame()}
+ stage.addEventListener("pointerup",release);stage.addEventListener("pointercancel",release);
+ spin.addEventListener("click",function(){if(reduced){hint.textContent="Reduced motion is on. Drag the rings to turn them at your own pace.";return}velocity=480;ensureFrame();hint.textContent="The comet rings are drifting freely."});
+ stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angle+=12;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angle-=12;velocity=0;render();e.preventDefault()}});
+})();
 </script>
 </body>
 </html>
