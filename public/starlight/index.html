@@ -208,6 +208,30 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .orbiting-orbs-hint{display:block;margin-top:10px;color:var(--muted);font-size:12px}
 @media(max-width:600px){.orbiting-orbs-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.orbiting-orbs-card{border-radius:23px}.orbiting-orbs-stage{width:min(100%,min(50svh,380px));margin:10px auto}}
 @media(prefers-reduced-motion:reduce){.orbit-star{transition:none;filter:none}.orbit-bead{transition:none;filter:none}}
+
+/* Starlight Playground celestial compass */
+#newGameBtn,#resumeBtn,#colorStudioOpen,#orbitSpinnerOpen,#ripplePoolOpen,#orbitingOrbsOpen{display:none!important}
+.playground-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:18px 0 32px}
+.playground-screen[hidden]{display:none}
+.playground-card{width:min(100%,720px);padding:clamp(18px,4vw,32px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 30%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007;position:relative;overflow:hidden}
+.playground-card h2{margin:7px 0 4px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}.playground-card>p:not(.landing-eyebrow){margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.compass-wrap{width:min(100%,min(52svh,420px));aspect-ratio:1;margin:14px auto 10px;position:relative;touch-action:none;user-select:none;-webkit-user-select:none}
+.compass-wheel{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);background:conic-gradient(from -36deg,color-mix(in srgb,var(--trace) 30%,#14223b) 0deg 70deg,#ffffff52 70deg 72deg,color-mix(in srgb,var(--accent) 27%,#14223b) 72deg 142deg,#ffffff52 142deg 144deg,color-mix(in srgb,#c69afa 25%,#14223b) 144deg 214deg,#ffffff52 214deg 216deg,color-mix(in srgb,#79d9c9 24%,#14223b) 216deg 286deg,#ffffff52 286deg 288deg,color-mix(in srgb,#f5c889 24%,#14223b) 288deg 358deg,#ffffff52 358deg 360deg);box-shadow:inset 0 0 48px #72d7f21c,0 0 32px color-mix(in srgb,var(--trace) 12%,transparent);will-change:transform}
+.compass-wheel:before{content:"";position:absolute;inset:8%;border:1px solid #ffffff22;border-radius:50%;pointer-events:none}
+.compass-notch{position:absolute;z-index:4;top:-7px;left:50%;width:0;height:0;transform:translateX(-50%);border-left:12px solid transparent;border-right:12px solid transparent;border-top:22px solid var(--trace);filter:drop-shadow(0 0 8px var(--trace));pointer-events:none}
+.compass-hub{position:absolute;z-index:3;left:50%;top:50%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 60%,transparent);background:radial-gradient(circle,#192b48,#0b1426);box-shadow:0 0 26px color-mix(in srgb,var(--trace) 28%,transparent);color:var(--trace);font-size:clamp(23px,5vw,38px);pointer-events:none}
+.compass-label{position:absolute;z-index:2;width:clamp(78px,25%,102px);min-height:52px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid #ffffff22;border-radius:13px;background:#091326e8;color:var(--muted);font:700 10px/1.12 ui-rounded,"Avenir Next",system-ui,sans-serif;text-align:center;white-space:normal;pointer-events:none;transition:color .12s,border-color .12s,box-shadow .12s}
+.compass-label span{font-size:17px;line-height:1;color:var(--trace)}
+.compass-label.selected{color:var(--ink);border-color:var(--trace);box-shadow:0 0 20px color-mix(in srgb,var(--trace) 30%,transparent),inset 0 0 15px color-mix(in srgb,var(--trace) 12%,transparent)}
+.compass-wheel:focus-visible{outline:3px solid var(--trace);outline-offset:5px}
+.playground-current{min-height:22px;margin:6px 0 10px;color:var(--accent);font-size:13px;font-weight:750}
+.playground-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.playground-controls button{min-height:46px;padding:0 16px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font-size:14px;font-weight:800}
+.playground-controls button:hover{border-color:color-mix(in srgb,var(--trace) 52%,transparent);background:color-mix(in srgb,var(--trace) 13%,#101a2c)}
+.playground-controls .play-selected{border-color:color-mix(in srgb,var(--trace) 58%,transparent);background:linear-gradient(120deg,color-mix(in srgb,var(--trace) 21%,#101a2c),color-mix(in srgb,var(--accent) 13%,#101a2c))}
+.playground-hint{display:block;margin-top:11px;color:var(--muted);font-size:12px}
+@media(max-width:600px){.playground-screen{min-height:calc(100svh - 36px);padding:8px 0 17px}.playground-card{border-radius:23px}.compass-wrap{width:min(100%,min(42svh,355px));margin:12px auto 8px}.compass-label{min-height:48px;font-size:9px}.playground-controls button{min-height:44px;padding:0 11px;font-size:12px}}
+html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{transition:none!important}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -226,7 +250,8 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    <button class="landing-action landing-primary" id="newGameBtn" type="button"><span class="landing-action-icon" aria-hidden="true">✧</span><span><b>Start a new game</b><small>Begin again with the first shape</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="resumeBtn" type="button"><span class="landing-action-icon" aria-hidden="true">☾</span><span><b>Resume game</b><small id="resumeDescription">Continue your saved journey</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action color-launch-action" id="colorStudioOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✿</span><span><b>Cosmic Color Studio</b><small>Color a space scene at your own pace</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
-   <button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+      <button class="landing-action landing-primary" id="playgroundOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Starlight Playground</b><small>Browse all activities or let the wheel choose</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+<button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="ripplePoolOpen" type="button"><span class="landing-action-icon" aria-hidden="true">◉</span><span><b>Ripple Pool</b><small>Touch the still water and watch light ripple</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="orbitingOrbsOpen" type="button"><span class="landing-action-icon" aria-hidden="true">☼</span><span><b>Orbiting Orbs</b><small>Guide glowing beads along gentle curved paths</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <div class="landing-secondary">
@@ -321,6 +346,20 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    </svg>
   </div>
   <div class="orbiting-orbs-controls"><button id="orbitingOrbsBack" type="button">Back to Starlight</button></div><small class="orbiting-orbs-hint" id="orbitingOrbsHint" aria-live="polite">Drag any bead, or select one and use the arrow keys.</small>
+ </div>
+</section>
+<section class="playground-screen" id="playgroundScreen" aria-labelledby="playgroundTitle" hidden>
+ <div class="playground-card">
+  <p class="landing-eyebrow">A little space to play</p><h2 id="playgroundTitle">Starlight Playground</h2><p>Swipe the compass to browse, or let it choose an activity for you.</p>
+  <div class="compass-wrap" id="compassWrap">
+   <div class="compass-wheel" id="compassWheel" role="application" tabindex="0" aria-label="Celestial compass. Swipe or use arrow keys to choose an activity."></div>
+   <div class="compass-notch" aria-hidden="true"></div>
+   <div class="compass-label" data-sector="0"><span>✧</span>Starlight<br>Tracer</div><div class="compass-label" data-sector="1"><span>✿</span>Paint by<br>Number</div><div class="compass-label" data-sector="2"><span>✦</span>Cosmic Orbit<br>Spinner</div><div class="compass-label" data-sector="3"><span>◉</span>Ripple Pool</div><div class="compass-label" data-sector="4"><span>☼</span>Orbiting Orbs</div>
+   <div class="compass-hub" aria-hidden="true">✦</div>
+  </div>
+  <div class="playground-current" id="playgroundCurrent" aria-live="polite">Selected: Starlight Tracer</div>
+  <div class="playground-controls"><button class="play-selected" id="playSelected" type="button">Play Starlight Tracer</button><button id="surpriseMe" type="button">Surprise me</button><button id="playgroundBack" type="button">Back to Starlight</button></div>
+  <small class="playground-hint">Drag slowly to choose, flick to coast, or use arrow keys for small turns.</small>
  </div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
@@ -965,6 +1004,29 @@ if ("serviceWorker" in navigator) {
  open.addEventListener("click",show);back.addEventListener("click",hide);selectors.forEach(function(b){b.addEventListener("click",function(){choose(Number(b.dataset.orb))})});stage.addEventListener("pointerdown",begin);stage.addEventListener("pointermove",move);stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
  stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angles[selected]+=8;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angles[selected]-=8;velocity=0;render();e.preventDefault()}else if(e.key==="1"||e.key==="2"||e.key==="3"){choose(Number(e.key)-1);e.preventDefault()}});
  buildStarfield();render();;
+})();
+</script>
+<script>
+(function(){
+ var open=document.getElementById("playgroundOpen"),screen=document.getElementById("playgroundScreen"),wheel=document.getElementById("compassWheel"),wrap=document.getElementById("compassWrap"),current=document.getElementById("playgroundCurrent"),play=document.getElementById("playSelected"),surprise=document.getElementById("surpriseMe"),back=document.getElementById("playgroundBack"),labels=Array.from(document.querySelectorAll(".compass-label")),reduced=document.documentElement.classList.contains("pref-reduced-motion");
+ if(!open||!screen||!wheel)return;
+ var games=[{name:"Starlight Tracer",button:"resumeBtn"},{name:"Paint by Number",button:"colorStudioOpen"},{name:"Cosmic Orbit Spinner",button:"orbitSpinnerOpen"},{name:"Ripple Pool",button:"ripplePoolOpen"},{name:"Orbiting Orbs",button:"orbitingOrbsOpen"}],angle=0,velocity=0,selected=0,dragging=false,lastPointer=0,lastTime=0,frame=0,lastFrame=0,randomTarget=null,randomFrom=0,randomStart=0,randomEnd=0,randomDuration=0;
+ function mod(n,m){return((n%m)+m)%m}
+ function selectFromAngle(){selected=mod(Math.round(-angle/72),games.length)}
+ function render(){wheel.style.transform="rotate("+angle+"deg)";selectFromAngle();var rect=wrap.getBoundingClientRect(),rad=rect.width*.31;labels.forEach(function(el,i){var a=(-90+i*72+angle)*Math.PI/180,x=rect.width/2+Math.cos(a)*rad,y=rect.height/2+Math.sin(a)*rad;el.style.left=x+"px";el.style.top=y+"px";el.style.transform="translate(-50%,-50%)";el.classList.toggle("selected",i===selected)});current.textContent="Selected: "+games[selected].name;play.textContent="Play "+games[selected].name}
+ function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});render();wheel.focus()}
+ function stopMotion(){velocity=0;randomTarget=null;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0}
+ function hide(){stopMotion();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ function launch(){stopMotion();var button=games[selected].button;if(button==="resumeBtn"&&document.getElementById(button).disabled)button="newGameBtn";screen.hidden=true;document.getElementById(button).click()}
+ function animate(now){if(randomTarget!==null){var t=Math.min(1,(now-randomStart)/randomDuration),ease=1-Math.pow(1-t,5);angle=randomFrom+(randomEnd-randomFrom)*ease;render();if(t>=1){angle=randomEnd;selected=randomTarget;randomTarget=null;velocity=0;frame=0;lastFrame=0;render();return}frame=requestAnimationFrame(animate);return}if(!lastFrame)lastFrame=now;var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;if(!dragging){angle+=velocity*dt;velocity*=Math.exp(-1.15*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}render();frame=requestAnimationFrame(animate)}
+ function start(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
+ function pAngle(e){var r=wrap.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
+ function down(e){if(e.button!==undefined&&e.button!==0)return;stopMotion();dragging=true;lastPointer=pAngle(e);lastTime=performance.now();wheel.setPointerCapture(e.pointerId);e.preventDefault()}
+ function move(e){if(!dragging)return;var a=pAngle(e),d=((a-lastPointer+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=d;velocity=Math.max(-1000,Math.min(1000,d/dt*1000));lastPointer=a;lastTime=now;render()}
+ function up(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else start()}
+ function pickRandom(){stopMotion();var idx=Math.floor(Math.random()*games.length);if(reduced){angle=-idx*72;render();return}randomTarget=idx;randomFrom=angle;randomEnd=angle+5*360+mod(-idx*72-angle,360);randomStart=performance.now();randomDuration=3600;start()}
+ open.addEventListener("click",show);back.addEventListener("click",hide);play.addEventListener("click",launch);surprise.addEventListener("click",pickRandom);wheel.addEventListener("pointerdown",down);wheel.addEventListener("pointermove",move);wheel.addEventListener("pointerup",up);wheel.addEventListener("pointercancel",up);
+ wheel.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowDown"){stopMotion();angle-=5;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){stopMotion();angle+=5;render();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){launch();e.preventDefault()}});window.addEventListener("resize",render);render();
 })();
 </script>
 </body>
