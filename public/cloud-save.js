@@ -73,6 +73,7 @@ let syncQueue = Promise.resolve();
 let button = null;
 let modal = null;
 let statusText = "";
+let onlineRetryInstalled = false;
 
 const metaKey = id => "__firebaseCloudMeta_" + id;
 const saveRef = (uid, id) => doc(db, "users", uid, "saves", id);
@@ -453,6 +454,21 @@ async function sendEmailLink() {
 }
 async function startCloudSync(id) {
   gameId = gameStorage[id] ? id : null;
+  if (!onlineRetryInstalled) {
+    onlineRetryInstalled = true;
+    window.addEventListener("online", async () => {
+      if (!ready || auth.currentUser || !gameId) return;
+      try {
+        const user = (await signInAnonymously(auth)).user;
+        activeUid = user?.uid || null;
+        if (user) await syncGame(user.uid, gameId);
+        updateButton();
+      } catch (error) {
+        console.warn("Cloud sync could not resume after reconnecting:", error);
+        setStatus("Local progress is safe. Cloud sync will retry when available.");
+      }
+    });
+  }
   ensureButton();
   installStorageWatcher();
   let redirectResult = null;
