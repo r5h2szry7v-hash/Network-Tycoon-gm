@@ -49,6 +49,28 @@ jobs:
               html = html.replace("</body>", tag + "</body>", 1)
               page.write_text(html)
           PY
+      - name: Prepare shared PWA release
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          version = "${{ github.sha }}"
+          Path("public/version.json").write_text(json.dumps({"version": version}) + "\\n")
+          worker = Path("public/service-worker.js")
+          source = worker.read_text()
+          if "__DEPLOYMENT_VERSION__" not in source:
+              raise SystemExit("Service worker deployment version token is missing.")
+          worker.write_text(source.replace("__DEPLOYMENT_VERSION__", version))
+          script = '<script src="/update-manager.js" defer></script>'
+          for page in Path("public").rglob("*.html"):
+              html = page.read_text()
+              if script not in html:
+                  if "</head>" not in html.lower():
+                      raise SystemExit(f"Page has no head close tag: {page}")
+                  offset = html.lower().rfind("</head>")
+                  html = html[:offset] + script + html[offset:]
+                  page.write_text(html)
+          PY
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
