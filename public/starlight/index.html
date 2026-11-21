@@ -276,6 +276,12 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
 .stardust-rake-back{min-height:46px;padding:0 17px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font:800 14px ui-rounded,"Avenir Next",system-ui,sans-serif;color:var(--ink);cursor:pointer}
 .stardust-rake-back:hover{border-color:color-mix(in srgb,var(--trace) 52%,transparent);background:color-mix(in srgb,var(--trace) 13%,#101a2c)}
 @media(max-width:600px){.stardust-rake-screen{min-height:calc(100svh - 36px);padding:8px 0 17px}.stardust-rake-card{border-radius:23px}.stardust-rake-surface{width:min(100%,min(50svh,380px));margin:14px auto}}
+/* Final orbital carousel overrides */
+.compass-wheel{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:24px!important}
+.compass-wheel:before{display:none!important}
+.carousel-core{display:none!important}
+.carousel-track{z-index:2}
+.carousel-card:not(.is-selected) small{opacity:0}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
