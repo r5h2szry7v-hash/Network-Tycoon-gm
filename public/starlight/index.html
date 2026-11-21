@@ -282,6 +282,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
 .carousel-core{display:none!important}
 .carousel-track{z-index:2}
 .carousel-card:not(.is-selected) small{opacity:0}.carousel-card:not(.is-selected){background:transparent;border-color:transparent;box-shadow:none}.carousel-card:not(.is-selected) .carousel-icon{opacity:.72}
+.landing-action[hidden]{display:none!important}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -307,7 +308,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
    <button class="landing-action" id="orbitingOrbsOpen" type="button"><span class="landing-action-icon" aria-hidden="true">☼</span><span><b>Orbiting Orbs</b><small>Guide glowing beads along gentle curved paths</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="liquidNebulaOpen" type="button" tabindex="-1" aria-hidden="true">Liquid Nebula</button>
    <button class="landing-action" id="cometTetherOpen" type="button" tabindex="-1" aria-hidden="true">Comet Tether</button>
-   <button class="landing-action" id="stardustRakeOpen" type="button" tabindex="-1" aria-hidden="true">Stardust Rake</button>
+   <button class="landing-action" id="stardustRakeOpen" type="button" tabindex="-1" aria-hidden="true" hidden>Stardust Rake</button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
