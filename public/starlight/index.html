@@ -168,6 +168,23 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .orbit-spinner-hint{display:block;margin-top:12px;color:var(--muted);font-size:12px}
 @media(max-width:600px){.orbit-spinner-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.orbit-spinner-card{border-radius:23px}.orbit-spinner-stage{width:min(100%,min(55svh,390px));margin:10px auto}.orbit-spinner-hint{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.orbit-spinner-bead,.orbit-spinner-core{filter:none}}
+
+/* Ripple Pool */
+.ripple-pool-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:20px 0 34px}
+.ripple-pool-screen[hidden]{display:none}
+.ripple-pool-card{width:min(100%,700px);padding:clamp(20px,4vw,34px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 28%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007;position:relative;overflow:hidden}
+.ripple-pool-card h2{margin:8px 0 5px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}.ripple-pool-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.ripple-pool-surface{width:min(100%,min(58svh,430px));aspect-ratio:1;margin:18px auto;position:relative;overflow:hidden;isolation:isolate;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);background:radial-gradient(ellipse at 32% 25%,color-mix(in srgb,var(--trace) 22%,transparent),transparent 40%),radial-gradient(ellipse at 72% 76%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 44%),radial-gradient(circle at 50% 50%,#101b30 0,#091327 75%);box-shadow:inset 0 0 55px #72d7f21a,0 0 34px color-mix(in srgb,var(--trace) 12%,transparent);touch-action:none;cursor:crosshair;outline:none}
+.ripple-pool-surface:before,.ripple-pool-surface:after{content:"";position:absolute;inset:-25%;z-index:-1;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at 34% 36%,#ffffff12,transparent 26%);transform:rotate(-24deg)}
+.ripple-pool-surface:after{inset:8%;opacity:.45;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 31px,#ffffff06 32px 33px);transform:none}
+.ripple-pool-surface:focus-visible{outline:3px solid var(--trace);outline-offset:4px}
+.ripple-pool-star{position:absolute;width:3px;height:3px;border-radius:50%;background:#e7f7ff;opacity:.56;box-shadow:0 0 9px var(--trace);pointer-events:none}
+.ripple-wave{position:absolute;width:54px;height:54px;margin:-27px 0 0 -27px;border:1.5px solid color-mix(in srgb,var(--trace) 80%,white);border-radius:50%;pointer-events:none;opacity:0;will-change:transform,opacity;animation:ripple-expand 2.4s cubic-bezier(.14,.48,.25,1) forwards}
+.ripple-wave:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--accent) 63%,transparent);border-radius:50%;opacity:.7}
+.ripple-wave.soft{animation-duration:2.8s}.ripple-pool-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.ripple-pool-controls button{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font-size:14px;font-weight:800}.ripple-pool-controls button:hover{border-color:color-mix(in srgb,var(--trace) 50%,transparent);background:color-mix(in srgb,var(--trace) 12%,#101a2c)}
+@keyframes ripple-expand{0%{transform:scale(.22);opacity:.78}20%{opacity:.56}100%{transform:scale(4.8);opacity:0}}
+@media(max-width:600px){.ripple-pool-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.ripple-pool-card{border-radius:23px}.ripple-pool-surface{width:min(100%,min(50svh,380px));margin:14px auto}}
+@media(prefers-reduced-motion:reduce){.ripple-wave{animation:none;opacity:.36;transform:scale(1.5)}}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -187,6 +204,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    <button class="landing-action" id="resumeBtn" type="button"><span class="landing-action-icon" aria-hidden="true">☾</span><span><b>Resume game</b><small id="resumeDescription">Continue your saved journey</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action color-launch-action" id="colorStudioOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✿</span><span><b>Cosmic Color Studio</b><small>Color a space scene at your own pace</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action" id="ripplePoolOpen" type="button"><span class="landing-action-icon" aria-hidden="true">◉</span><span><b>Ripple Pool</b><small>Touch the still water and watch light ripple</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
@@ -253,6 +271,15 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   </div>
   <div class="orbit-spinner-controls"><button id="orbitSpinnerSpin" type="button">Give it a spin</button><button class="orbit-back" id="orbitSpinnerBack" type="button">Back to Starlight</button></div>
   <small class="orbit-spinner-hint" id="orbitSpinnerHint" aria-live="polite">Drag around the star, then release to send it spinning.</small>
+ </div>
+</section>
+<section class="ripple-pool-screen" id="ripplePoolScreen" aria-labelledby="ripplePoolTitle" hidden>
+ <div class="ripple-pool-card">
+  <p class="landing-eyebrow">A small moment of stillness</p><h2 id="ripplePoolTitle">Ripple Pool</h2><p>Tap or sweep across the water to send out rings of starlight.</p>
+  <div class="ripple-pool-surface" id="ripplePoolSurface" role="application" tabindex="0" aria-label="Reflective ripple pool. Tap, drag, or press Enter to make ripples.">
+   <i class="ripple-pool-star" style="left:21%;top:26%"></i><i class="ripple-pool-star" style="left:70%;top:19%"></i><i class="ripple-pool-star" style="left:79%;top:63%"></i><i class="ripple-pool-star" style="left:33%;top:77%"></i><i class="ripple-pool-star" style="left:52%;top:37%"></i><i class="ripple-pool-star" style="left:16%;top:57%"></i>
+  </div>
+  <div class="ripple-pool-controls"><button id="ripplePoolBack" type="button">Back to Starlight</button></div>
  </div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
@@ -859,6 +886,21 @@ if ("serviceWorker" in navigator) {
  stage.addEventListener("pointerup",release);stage.addEventListener("pointercancel",release);
  spin.addEventListener("click",function(){if(reduced){hint.textContent="Reduced motion is on. Drag the rings to turn them at your own pace.";return}velocity=480;ensureFrame();hint.textContent="The comet rings are drifting freely."});
  stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angle+=12;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angle-=12;velocity=0;render();e.preventDefault()}});
+})();
+</script>
+<script>
+(function(){
+ var screen=document.getElementById("ripplePoolScreen"),open=document.getElementById("ripplePoolOpen"),back=document.getElementById("ripplePoolBack"),surface=document.getElementById("ripplePoolSurface"),reduced=document.documentElement.classList.contains("pref-reduced-motion"),lastPoint=null,lastSpawn=0;
+ if(!screen||!open||!surface)return;
+ function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");var spinner=document.getElementById("orbitSpinnerScreen");if(spinner)spinner.hidden=true;screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});surface.focus()}
+ function hide(){screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ function ripple(x,y){var w=document.createElement("i");w.className="ripple-wave"+(Math.random()>.55?" soft":"");w.style.left=x+"px";w.style.top=y+"px";surface.appendChild(w);w.addEventListener("animationend",function(){w.remove()},{once:true});if(reduced)setTimeout(function(){if(w.isConnected)w.remove()},250);else setTimeout(function(){if(w.isConnected)w.remove()},3200)}
+ function point(e){var r=surface.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+ open.addEventListener("click",show);back.addEventListener("click",hide);
+ surface.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;surface.setPointerCapture(e.pointerId);lastPoint=point(e);lastSpawn=performance.now();ripple(lastPoint.x,lastPoint.y);e.preventDefault()});
+ surface.addEventListener("pointermove",function(e){if(!lastPoint)return;var p=point(e),dx=p.x-lastPoint.x,dy=p.y-lastPoint.y,dist=Math.hypot(dx,dy),now=performance.now();if(dist>34&&now-lastSpawn>38){ripple(p.x,p.y);lastPoint=p;lastSpawn=now}});
+ function end(){lastPoint=null}surface.addEventListener("pointerup",end);surface.addEventListener("pointercancel",end);
+ surface.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var r=surface.getBoundingClientRect();ripple(r.width/2,r.height/2);e.preventDefault()}});
 })();
 </script>
 </body>
