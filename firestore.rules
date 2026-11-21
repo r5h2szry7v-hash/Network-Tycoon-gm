@@ -9,7 +9,7 @@ service cloud.firestore {
       allow get: if isOwner();
       allow list: if false;
       allow create, update: if isOwner()
-        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory']
+        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory', 'pawprintPursuit']
         && request.resource.data.keys().hasOnly([
           'schemaVersion', 'gameId', 'payload', 'updatedAtMs', 'updatedAt'
         ])
@@ -18,7 +18,7 @@ service cloud.firestore {
         && request.resource.data.payload is map
         && request.resource.data.updatedAtMs is int;
       allow delete: if isOwner()
-        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory'];
+        && gameId in ['networkTycoon', 'matchGarden', 'starlightTracer', 'critterRescue', 'tinkerFactory', 'pawprintPursuit'];
     }
 
     match /users/{uid}/settings/{settingsId} {
