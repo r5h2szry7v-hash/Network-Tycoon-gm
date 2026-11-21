@@ -210,17 +210,17 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 @media(prefers-reduced-motion:reduce){.orbit-star{transition:none;filter:none}.orbit-bead{transition:none;filter:none}}
 
 /* Starlight Playground celestial compass */
-#newGameBtn,#resumeBtn,#colorStudioOpen,#orbitSpinnerOpen,#ripplePoolOpen,#orbitingOrbsOpen{display:none!important}
+#newGameBtn,#resumeBtn,#colorStudioOpen,#orbitSpinnerOpen,#ripplePoolOpen,#orbitingOrbsOpen,#liquidNebulaOpen{display:none!important}
 .playground-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:18px 0 32px}
 .playground-screen[hidden]{display:none}
 .playground-card{width:min(100%,720px);padding:clamp(18px,4vw,32px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 30%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007;position:relative;overflow:hidden}
 .playground-card h2{margin:7px 0 4px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}.playground-card>p:not(.landing-eyebrow){margin:0;color:var(--muted);font-size:14px;line-height:1.55}
 .compass-wrap{width:min(100%,min(52svh,420px));aspect-ratio:1;margin:14px auto 10px;position:relative;touch-action:none;user-select:none;-webkit-user-select:none}
-.compass-wheel{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);background:conic-gradient(from -36deg,color-mix(in srgb,var(--trace) 30%,#14223b) 0deg 70deg,#ffffff52 70deg 72deg,color-mix(in srgb,var(--accent) 27%,#14223b) 72deg 142deg,#ffffff52 142deg 144deg,color-mix(in srgb,#c69afa 25%,#14223b) 144deg 214deg,#ffffff52 214deg 216deg,color-mix(in srgb,#79d9c9 24%,#14223b) 216deg 286deg,#ffffff52 286deg 288deg,color-mix(in srgb,#f5c889 24%,#14223b) 288deg 358deg,#ffffff52 358deg 360deg);box-shadow:inset 0 0 48px #72d7f21c,0 0 32px color-mix(in srgb,var(--trace) 12%,transparent);will-change:transform}
+.compass-wheel{position:absolute;inset:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);background:conic-gradient(from -30deg,color-mix(in srgb,var(--trace) 30%,#14223b) 0deg 58deg,#ffffff52 58deg 60deg,color-mix(in srgb,var(--accent) 27%,#14223b) 60deg 118deg,#ffffff52 118deg 120deg,color-mix(in srgb,#c69afa 25%,#14223b) 120deg 178deg,#ffffff52 178deg 180deg,color-mix(in srgb,#79d9c9 24%,#14223b) 180deg 238deg,#ffffff52 238deg 240deg,color-mix(in srgb,#f5c889 24%,#14223b) 240deg 298deg,#ffffff52 298deg 300deg,color-mix(in srgb,#8bb8f4 25%,#14223b) 300deg 358deg,#ffffff52 358deg 360deg);box-shadow:inset 0 0 48px #72d7f21c,0 0 32px color-mix(in srgb,var(--trace) 12%,transparent);will-change:transform}
 .compass-wheel:before{content:"";position:absolute;inset:8%;border:1px solid #ffffff22;border-radius:50%;pointer-events:none}
 .compass-notch{position:absolute;z-index:4;top:-7px;left:50%;width:0;height:0;transform:translateX(-50%);border-left:12px solid transparent;border-right:12px solid transparent;border-top:22px solid var(--trace);filter:drop-shadow(0 0 8px var(--trace));pointer-events:none}
 .compass-hub{position:absolute;z-index:3;left:50%;top:50%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 60%,transparent);background:radial-gradient(circle,#192b48,#0b1426);box-shadow:0 0 26px color-mix(in srgb,var(--trace) 28%,transparent);color:var(--trace);font-size:clamp(23px,5vw,38px);pointer-events:none}
-.compass-label{position:absolute;z-index:2;width:clamp(78px,25%,102px);min-height:52px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid #ffffff22;border-radius:13px;background:#091326e8;color:var(--muted);font:700 10px/1.12 ui-rounded,"Avenir Next",system-ui,sans-serif;text-align:center;white-space:normal;pointer-events:none;transition:color .12s,border-color .12s,box-shadow .12s}
+.compass-label{position:absolute;z-index:2;width:clamp(72px,23%,94px);min-height:50px;padding:5px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid #ffffff22;border-radius:13px;background:#091326e8;color:var(--muted);font:700 10px/1.12 ui-rounded,"Avenir Next",system-ui,sans-serif;text-align:center;white-space:normal;pointer-events:none;transition:color .12s,border-color .12s,box-shadow .12s}
 .compass-label span{font-size:17px;line-height:1;color:var(--trace)}
 .compass-label.selected{color:var(--ink);border-color:var(--trace);box-shadow:0 0 20px color-mix(in srgb,var(--trace) 30%,transparent),inset 0 0 15px color-mix(in srgb,var(--trace) 12%,transparent)}
 .compass-wheel:focus-visible{outline:3px solid var(--trace);outline-offset:5px}
@@ -232,6 +232,17 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .playground-hint{display:block;margin-top:11px;color:var(--muted);font-size:12px}
 @media(max-width:600px){.playground-screen{min-height:calc(100svh - 36px);padding:8px 0 17px}.playground-card{border-radius:23px}.compass-wrap{width:min(100%,min(42svh,355px));margin:12px auto 8px}.compass-label{min-height:48px;font-size:9px}.playground-controls button{min-height:44px;padding:0 11px;font-size:12px}}
 html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{transition:none!important}
+
+/* Liquid Nebula fidget */
+.liquid-nebula-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:18px 0 32px}
+.liquid-nebula-screen[hidden]{display:none}
+.liquid-nebula-card{width:min(100%,720px);padding:clamp(18px,4vw,32px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 30%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007}
+.liquid-nebula-card h2{margin:7px 0 4px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}.liquid-nebula-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.liquid-nebula-surface{display:block;width:min(100%,min(58svh,440px));aspect-ratio:1;margin:18px auto;border-radius:50%;border:1px solid color-mix(in srgb,var(--trace) 38%,transparent);box-shadow:inset 0 0 46px #72d7f21e,0 0 34px color-mix(in srgb,var(--trace) 14%,transparent);touch-action:none;cursor:crosshair;outline:none}
+.liquid-nebula-surface:focus-visible{outline:3px solid var(--trace);outline-offset:5px}
+.liquid-nebula-back{min-height:46px;padding:0 17px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font:800 14px ui-rounded,"Avenir Next",system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.liquid-nebula-back:hover{border-color:color-mix(in srgb,var(--trace) 52%,transparent);background:color-mix(in srgb,var(--trace) 13%,#101a2c)}
+@media(max-width:600px){.liquid-nebula-screen{min-height:calc(100svh - 36px);padding:8px 0 17px}.liquid-nebula-card{border-radius:23px}.liquid-nebula-surface{width:min(100%,min(50svh,380px));margin:14px auto}}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -254,6 +265,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
 <button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="ripplePoolOpen" type="button"><span class="landing-action-icon" aria-hidden="true">◉</span><span><b>Ripple Pool</b><small>Touch the still water and watch light ripple</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="orbitingOrbsOpen" type="button"><span class="landing-action-icon" aria-hidden="true">☼</span><span><b>Orbiting Orbs</b><small>Guide glowing beads along gentle curved paths</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action" id="liquidNebulaOpen" type="button" tabindex="-1" aria-hidden="true">Liquid Nebula</button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
@@ -355,11 +367,18 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
    <div class="compass-wheel" id="compassWheel" role="application" tabindex="0" aria-label="Celestial compass. Swipe or use arrow keys to choose an activity."></div>
    <div class="compass-notch" aria-hidden="true"></div>
    <div class="compass-label" data-sector="0"><span>✧</span>Starlight<br>Tracer</div><div class="compass-label" data-sector="1"><span>✿</span>Paint by<br>Number</div><div class="compass-label" data-sector="2"><span>✦</span>Cosmic Orbit<br>Spinner</div><div class="compass-label" data-sector="3"><span>◉</span>Ripple Pool</div><div class="compass-label" data-sector="4"><span>☼</span>Orbiting Orbs</div>
-   <div class="compass-hub" aria-hidden="true">✦</div>
+   <div class="compass-label" data-sector="5"><span>✺</span>Liquid<br>Nebula</div><div class="compass-hub" aria-hidden="true">✦</div>
   </div>
   <div class="playground-current" id="playgroundCurrent" aria-live="polite">Selected: Starlight Tracer</div>
   <div class="playground-controls"><button class="play-selected" id="playSelected" type="button">Play Starlight Tracer</button><button id="surpriseMe" type="button">Surprise me</button><button id="playgroundBack" type="button">Back to Starlight</button></div>
   <small class="playground-hint">Drag slowly to choose, flick to coast, or use arrow keys for small turns.</small>
+ </div>
+</section>
+<section class="liquid-nebula-screen" id="liquidNebulaScreen" aria-labelledby="liquidNebulaTitle" hidden>
+ <div class="liquid-nebula-card">
+  <p class="landing-eyebrow">A soft cloud of color</p><h2 id="liquidNebulaTitle">Liquid Nebula</h2><p>Sweep through the clouds of light. They’ll drift back together when you let go.</p>
+  <canvas class="liquid-nebula-surface" id="liquidNebulaCanvas" role="application" tabindex="0" aria-label="Liquid Nebula. Drag or sweep to part the glowing clouds. Use arrow keys to move the cloud opening."></canvas>
+  <button class="liquid-nebula-back" id="liquidNebulaBack" type="button">Back to Starlight Playground</button>
  </div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
@@ -1010,10 +1029,10 @@ if ("serviceWorker" in navigator) {
 (function(){
  var open=document.getElementById("playgroundOpen"),screen=document.getElementById("playgroundScreen"),wheel=document.getElementById("compassWheel"),wrap=document.getElementById("compassWrap"),current=document.getElementById("playgroundCurrent"),play=document.getElementById("playSelected"),surprise=document.getElementById("surpriseMe"),back=document.getElementById("playgroundBack"),labels=Array.from(document.querySelectorAll(".compass-label")),reduced=document.documentElement.classList.contains("pref-reduced-motion");
  if(!open||!screen||!wheel)return;
- var games=[{name:"Starlight Tracer",button:"resumeBtn"},{name:"Paint by Number",button:"colorStudioOpen"},{name:"Cosmic Orbit Spinner",button:"orbitSpinnerOpen"},{name:"Ripple Pool",button:"ripplePoolOpen"},{name:"Orbiting Orbs",button:"orbitingOrbsOpen"}],angle=0,velocity=0,selected=0,dragging=false,lastPointer=0,lastTime=0,frame=0,lastFrame=0,randomTarget=null,randomFrom=0,randomStart=0,randomEnd=0,randomDuration=0;
+ var games=[{name:"Starlight Tracer",button:"resumeBtn"},{name:"Paint by Number",button:"colorStudioOpen"},{name:"Cosmic Orbit Spinner",button:"orbitSpinnerOpen"},{name:"Ripple Pool",button:"ripplePoolOpen"},{name:"Orbiting Orbs",button:"orbitingOrbsOpen"},{name:"Liquid Nebula",button:"liquidNebulaOpen"}],angle=0,velocity=0,selected=0,dragging=false,lastPointer=0,lastTime=0,frame=0,lastFrame=0,randomTarget=null,randomFrom=0,randomStart=0,randomEnd=0,randomDuration=0;
  function mod(n,m){return((n%m)+m)%m}
- function selectFromAngle(){selected=mod(Math.round(-angle/72),games.length)}
- function render(){wheel.style.transform="rotate("+angle+"deg)";selectFromAngle();var rect=wrap.getBoundingClientRect(),rad=rect.width*.31;labels.forEach(function(el,i){var a=(-90+i*72+angle)*Math.PI/180,x=rect.width/2+Math.cos(a)*rad,y=rect.height/2+Math.sin(a)*rad;el.style.left=x+"px";el.style.top=y+"px";el.style.transform="translate(-50%,-50%)";el.classList.toggle("selected",i===selected)});current.textContent="Selected: "+games[selected].name;play.textContent="Play "+games[selected].name}
+ function selectFromAngle(){selected=mod(Math.round(-angle/60),games.length)}
+ function render(){wheel.style.transform="rotate("+angle+"deg)";selectFromAngle();var rect=wrap.getBoundingClientRect(),rad=rect.width*.31;labels.forEach(function(el,i){var a=(-90+i*60+angle)*Math.PI/180,x=rect.width/2+Math.cos(a)*rad,y=rect.height/2+Math.sin(a)*rad;el.style.left=x+"px";el.style.top=y+"px";el.style.transform="translate(-50%,-50%)";el.classList.toggle("selected",i===selected)});current.textContent="Selected: "+games[selected].name;play.textContent="Play "+games[selected].name}
  function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});render();wheel.focus()}
  function stopMotion(){velocity=0;randomTarget=null;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0}
  function hide(){stopMotion();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
@@ -1024,9 +1043,32 @@ if ("serviceWorker" in navigator) {
  function down(e){if(e.button!==undefined&&e.button!==0)return;stopMotion();dragging=true;lastPointer=pAngle(e);lastTime=performance.now();wheel.setPointerCapture(e.pointerId);e.preventDefault()}
  function move(e){if(!dragging)return;var a=pAngle(e),d=((a-lastPointer+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=d;velocity=Math.max(-1000,Math.min(1000,d/dt*1000));lastPointer=a;lastTime=now;render()}
  function up(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else start()}
- function pickRandom(){stopMotion();var idx=Math.floor(Math.random()*games.length);if(reduced){angle=-idx*72;render();return}randomTarget=idx;randomFrom=angle;randomEnd=angle+5*360+mod(-idx*72-angle,360);randomStart=performance.now();randomDuration=3600;start()}
+ function pickRandom(){stopMotion();var idx=Math.floor(Math.random()*games.length);if(reduced){angle=-idx*60;render();return}randomTarget=idx;randomFrom=angle;randomEnd=angle+5*360+mod(-idx*72-angle,360);randomStart=performance.now();randomDuration=3600;start()}
  open.addEventListener("click",show);back.addEventListener("click",hide);play.addEventListener("click",launch);surprise.addEventListener("click",pickRandom);wheel.addEventListener("pointerdown",down);wheel.addEventListener("pointermove",move);wheel.addEventListener("pointerup",up);wheel.addEventListener("pointercancel",up);
  wheel.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowDown"){stopMotion();angle-=5;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){stopMotion();angle+=5;render();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){launch();e.preventDefault()}});window.addEventListener("resize",render);render();
+})();
+</script>
+<script>
+(function(){
+ var screen=document.getElementById("liquidNebulaScreen"),open=document.getElementById("liquidNebulaOpen"),back=document.getElementById("liquidNebulaBack"),canvas=document.getElementById("liquidNebulaCanvas"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
+ if(!screen||!open||!canvas)return;var ctx=canvas.getContext("2d");if(!ctx)return;
+ var width=0,height=0,dpr=1,active=false,pointer={x:0,y:0},clouds=[],frame=0,running=false,lastTime=0,keyTimer=0;
+ function rgb(color,fallback){var m=color.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);if(!m)return fallback;var h=m[1];if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]}
+ function rgba(c,a){return"rgba("+c[0]+","+c[1]+","+c[2]+","+a+")"}
+ function resize(){var r=canvas.getBoundingClientRect();if(!r.width)return;width=r.width;height=r.height;dpr=Math.min(window.devicePixelRatio||1,1.6);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw(performance.now())}
+ function makeClouds(){var style=getComputedStyle(document.documentElement),trace=rgb(style.getPropertyValue("--trace").trim(),[114,215,242]),accent=rgb(style.getPropertyValue("--accent").trim(),[167,189,247]),colors=[trace,accent,[151,126,255],[91,194,225],[126,139,255],[104,213,198],[181,134,230],[95,163,228]];clouds=[{x:.2,y:.28,r:.34,p:.2},{x:.5,y:.2,r:.32,p:1.3},{x:.79,y:.3,r:.36,p:2.5},{x:.28,y:.52,r:.37,p:3.8},{x:.68,y:.53,r:.4,p:5.1},{x:.18,y:.77,r:.34,p:2.1},{x:.49,y:.8,r:.36,p:4.2},{x:.82,y:.75,r:.35,p:.9}].map(function(c,i){return Object.assign(c,{color:colors[i],dx:0,dy:0,tx:0,ty:0})})}
+ function draw(time){if(!ctx||!width)return;ctx.clearRect(0,0,width,height);ctx.fillStyle="#081326";ctx.fillRect(0,0,width,height);var min=Math.min(width,height),cx=width/2,cy=height/2;
+  clouds.forEach(function(c){var drift=reduced?0:Math.sin(time*.00024+c.p)*2.5,x=c.x*width+c.dx+drift,y=c.y*height+c.dy+Math.cos(time*.00021+c.p)*(!reduced?2.5:0),r=c.r*min,g=ctx.createRadialGradient(x-r*.12,y-r*.16,r*.04,x,y,r);g.addColorStop(0,rgba(c.color,.54));g.addColorStop(.28,rgba(c.color,.3));g.addColorStop(.62,rgba(c.color,.13));g.addColorStop(1,rgba(c.color,0));ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)});
+  for(var i=0;i<32;i++){var a=i*2.39996,rr=(.17+(i%7)*.105)*min,sx=cx+Math.cos(a)*rr,sy=cy+Math.sin(a)*rr,twinkle=.28+(.5+.5*Math.sin(time*.0014+i*4.1))*.45;ctx.beginPath();ctx.arc(sx,sy,i%9===0?1.35:.75,0,Math.PI*2);ctx.fillStyle="rgba(220,240,255,"+twinkle+")";ctx.fill()}
+  if(active){var hole=ctx.createRadialGradient(pointer.x,pointer.y,2,pointer.x,pointer.y,min*.28);hole.addColorStop(0,"rgba(5,12,28,.58)");hole.addColorStop(.42,"rgba(5,12,28,.25)");hole.addColorStop(1,"rgba(5,12,28,0)");ctx.fillStyle=hole;ctx.fillRect(0,0,width,height)}
+ }
+ function settle(){if(!active)clouds.forEach(function(c){c.tx=0;c.ty=0});if(reduced){clouds.forEach(function(c){c.dx=c.tx;c.dy=c.ty});draw(performance.now());return}if(!running){running=true;lastTime=performance.now();frame=requestAnimationFrame(tick)}}
+ function tick(now){var dt=Math.min((now-lastTime)/16.67,2.5);lastTime=now,remaining=0;clouds.forEach(function(c){if(active){var dx=c.x*width-pointer.x,dy=c.y*height-pointer.y,d=Math.hypot(dx,dy),push=Math.max(0,1-d/(Math.min(width,height)*.48))*Math.min(width,height)*.17;if(d<1){dx=Math.cos(c.p);dy=Math.sin(c.p);d=1}c.tx=dx/d*push;c.ty=dy/d*push}var ease=1-Math.pow(.91,dt);c.dx+=(c.tx-c.dx)*ease;c.dy+=(c.ty-c.dy)*ease;if(Math.abs(c.dx-c.tx)+Math.abs(c.dy-c.ty)>.35)remaining++});draw(now);if(remaining||active){frame=requestAnimationFrame(tick)}else{running=false;frame=0;draw(now)}}
+ function position(e){var r=canvas.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;active=true;settle()}
+ function end(){active=false;settle()}
+ function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");["colorStudio","orbitSpinnerScreen","ripplePoolScreen","orbitingOrbsScreen","playgroundScreen"].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove("active");el.setAttribute("aria-hidden","true");el.hidden=true}});screen.hidden=false;resize();canvas.focus();window.scrollTo({top:0,behavior:reduced?"auto":"smooth"})}
+ function hide(){active=false;settle();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});document.getElementById("playgroundOpen").focus()}
+ open.addEventListener("click",show);back.addEventListener("click",hide);canvas.addEventListener("pointerdown",function(e){canvas.setPointerCapture(e.pointerId);position(e);e.preventDefault()});canvas.addEventListener("pointermove",function(e){if(e.buttons||e.pointerType==="touch")position(e)});canvas.addEventListener("pointerup",end);canvas.addEventListener("pointercancel",end);canvas.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse"&&!e.buttons)end()});canvas.addEventListener("keydown",function(e){if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){var step=Math.min(width,height)*.055;if(e.key==="ArrowLeft")pointer.x=Math.max(0,pointer.x-step);if(e.key==="ArrowRight")pointer.x=Math.min(width,pointer.x+step);if(e.key==="ArrowUp")pointer.y=Math.max(0,pointer.y-step);if(e.key==="ArrowDown")pointer.y=Math.min(height,pointer.y+step);active=true;settle();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){pointer.x=width/2;pointer.y=height/2;active=true;settle();clearTimeout(keyTimer);keyTimer=setTimeout(end,650);e.preventDefault()}});canvas.addEventListener("keyup",function(e){if(e.key.startsWith("Arrow"))end()});window.addEventListener("resize",resize);makeClouds();resize();
 })();
 </script>
 </body>
