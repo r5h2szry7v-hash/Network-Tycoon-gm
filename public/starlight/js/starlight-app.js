@@ -29,6 +29,8 @@
   if(landing)landing.hidden=true;
   var selector=document.getElementById("playgroundScreen");
   if(selector)selector.hidden=true;
+  var targetScreen=document.getElementById(activity.screen);
+  if(targetScreen)targetScreen.setAttribute("aria-hidden","false");
   var buttonId=activity.button;
   if(buttonId==="resumeBtn"){
    var resume=document.getElementById(buttonId);
