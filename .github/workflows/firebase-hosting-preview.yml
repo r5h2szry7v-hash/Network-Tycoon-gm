@@ -5,6 +5,7 @@ on:
     branches:
       - feature/portfolio-game-shell
       - feature/shared-pwa-update-manager
+      - feature/tinker-parts-store
 
 permissions:
   contents: read
