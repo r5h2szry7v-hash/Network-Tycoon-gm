@@ -165,6 +165,7 @@ html[data-portfolio-motion=reduce] .cell[data-type=gear] .part-orientation{anima
 .store-balance-line{margin:0!important;padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--game-accent) 10%,var(--game-surface));font-size:.92em;font-weight:800}.store-balance-line strong{color:var(--game-accent)}
 .store-note,.store-status{font-size:.84em;line-height:1.4}.store-status{min-height:1.4em;margin:10px 0;color:var(--game-accent-2);font-weight:800}
 @media(max-width:540px){.hint-tools{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.hint-tools .button{min-width:0;padding:5px 4px;font-size:.7em}.parts-store-item{grid-template-columns:38px minmax(0,1fr) auto;gap:7px;padding:8px}.parts-store-item .parts-guide-icon{width:38px;height:38px;border-radius:11px}.parts-store-item .parts-guide-icon .part-icon{width:28px;height:28px}.parts-store-item .store-buy{min-width:78px;font-size:.72em}}
+.hero-badges{display:flex;align-items:stretch;gap:9px}.bolt-chip{align-self:start;display:grid;justify-items:center;min-width:112px;padding:12px 16px;border:1px solid var(--game-line);border-radius:18px;background:var(--game-surface);box-shadow:var(--game-shadow)}.bolt-chip strong{font-size:1.45em;line-height:1.1;color:var(--game-accent)}.bolt-chip span{font-size:.78em;color:var(--game-muted);font-weight:800}.storefront-icon{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.hint-tools #store-button{display:flex;align-items:center;justify-content:center;gap:6px}.home-destination-select{appearance:none;min-width:138px;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 14px) 50%,calc(100% - 9px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}.home-destination-select option{color:#26342f;background:#fffdf8}
 </style>
 </head>
 <body>
@@ -282,7 +283,7 @@ html[data-portfolio-motion=reduce] .cell[data-type=gear] .part-orientation{anima
       <span class="eyebrow">A pocket-sized machine puzzler</span>
       <h1>Tinker<br>Factory</h1>
     </div>
-    <div class="level-chip" aria-label="Current puzzle"><strong id="level-number">01</strong><span>PUZZLE</span></div>
+    <div class="hero-badges"><div class="level-chip" aria-label="Current puzzle"><strong id="level-number">01</strong><span>PUZZLE</span></div><div class="bolt-chip" aria-label="Workshop bolt balance"><strong id="header-bolt-count">0</strong><span>🔩 BOLTS</span></div></div>
   </header>
   <main class="layout">
     <section class="panel workbench" aria-label="Machine workbench">
@@ -309,10 +310,10 @@ html[data-portfolio-motion=reduce] .cell[data-type=gear] .part-orientation{anima
           <button class="button" id="remove-button" type="button" aria-pressed="false">Remove part</button>
           <button class="button" id="reset-button" type="button">Reset board</button>
           <button class="button wide" id="next-button" type="button" hidden>Next puzzle</button>
-          <button class="button wide" id="home-button" type="button">Home screen</button>
+          <select class="button wide home-destination-select" id="home-button" aria-label="Choose where to go"><option value="">Home…</option><option value="tinker">Tinker Factory home</option><option value="/">Game selector home</option></select>
         </div>
         <div class="status" id="status" role="status" aria-live="polite">Your workbench is ready. Place a part to begin.</div>
-        <div class="hint-tools" aria-label="Puzzle helpers"><button class="button" id="hint-button" type="button" disabled>Hint · earn one</button><button class="button" id="store-button" type="button" aria-label="Parts store">Parts store <span id="store-button-balance">0 🔩</span></button><button class="button" id="help-button" type="button">Parts guide</button></div>
+        <div class="hint-tools" aria-label="Puzzle helpers"><button class="button" id="hint-button" type="button" disabled>Hint · earn one</button><button class="button" id="store-button" type="button" aria-label="Open parts store"><svg class="storefront-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.2 4.7 4h14.6l1.7 6.2v1.1a2.5 2.5 0 0 1-2.5 2.5 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.5 2.5 0 0 1-2.5-2.5v-1.1ZM5 14.1V21h14v-6.9M9 21v-5h6v5M4.7 4h14.6"/></svg><span>Store</span><span id="store-button-balance">0 🔩</span></button><button class="button" id="help-button" type="button">Parts guide</button></div>
       </section>
       <section class="hint-card">
         <h2>Workshop note</h2>
@@ -383,7 +384,7 @@ const HINT_BLUEPRINTS = [
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "gear", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
 ];
-const PART_PRICES = { belt: 4, spring: 5, ramp: 6, gear: 8, switch: 8 };
+const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16 };
 const BOLTS_PER_FIRST_WIN = 5;
 const DIRS = ["E", "S", "W", "N"];
 const VECTORS = { E: [0, 1], S: [1, 0], W: [0, -1], N: [-1, 0] };
@@ -689,6 +690,7 @@ function render() {
   document.getElementById("hint-button").textContent = hintCredits ? "Use hint · " + hintCredits : "Hint · earn one";
   document.getElementById("hint-count").textContent = String(hintCredits);
   document.getElementById("bolt-count").textContent = String(bolts);
+  document.getElementById("header-bolt-count").textContent = String(bolts);
   document.getElementById("store-button-balance").textContent = bolts + " 🔩";
   document.getElementById("store-button").disabled = running || solved.includes(levelIndex);
   renderPartsStore();
@@ -965,11 +967,15 @@ resetButton.addEventListener("click", () => {
   render();
   setStatus("Workbench cleared. Build a new route.");
 });
-document.getElementById("home-button").addEventListener("click", () => {
-  if (running) return;
+document.getElementById("home-button").addEventListener("change", event => {
+  const destination = event.currentTarget.value;
+  if (!destination) return;
+  if (destination === "/") { window.location.assign("/"); return; }
+  if (running) { event.currentTarget.value = ""; return; }
   document.getElementById("game-screen").hidden = true;
   document.getElementById("home-screen").hidden = false;
   document.getElementById("home-button").hidden = true;
+  event.currentTarget.value = "";
   document.getElementById("resume-game-button").disabled = !hasSavedGame;
   document.getElementById("new-game-button").focus();
 });
@@ -1232,9 +1238,8 @@ shellSettingsButton.textContent = "Settings";
 shellSettingsButton.addEventListener("click", () => openModal("settings-modal"));
 const topActions = document.querySelector(".top-actions");
 const homeScreenButton = document.getElementById("home-button");
-homeScreenButton.className = "portfolio-shell__game-settings";
-homeScreenButton.textContent = "Home Screen";
-homeScreenButton.setAttribute("aria-label", "Return to Tinker Factory home screen");
+homeScreenButton.className = "portfolio-shell__game-settings home-destination-select";
+homeScreenButton.setAttribute("aria-label", "Choose Tinker Factory home or game selector home");
 homeScreenButton.hidden = true;
 if (topActions) {
   topActions.prepend(shellSettingsButton);
