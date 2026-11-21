@@ -198,7 +198,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .orbit-track.selected{stroke:color-mix(in srgb,var(--trace) 48%,transparent);stroke-width:2;stroke-dasharray:none}
 .orbit-bead{fill:var(--trace);stroke:#f2fcff;stroke-width:2;filter:drop-shadow(0 0 9px var(--trace));transition:r .2s}
 .orbit-bead.middle{fill:var(--accent)}.orbit-bead.outer{fill:#d0aaff}
-.orbit-star{fill:var(--ink);opacity:.24;filter:drop-shadow(0 0 5px var(--trace));transition:opacity .14s,filter .14s}
+.orbit-star{fill:var(--trace);opacity:.16;transition:opacity .1s,r .1s;pointer-events:none}
 .orbit-center{fill:#ffffff14;stroke:#ffffff2a;stroke-width:1}.orbit-center-star{fill:var(--trace);filter:drop-shadow(0 0 10px var(--trace))}
 .orbit-orb-selectors{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 auto 10px}
 .orbit-orb-selectors button{min-height:42px;padding:0 13px;border:1px solid var(--line);border-radius:14px;background:#ffffff08;font-size:13px;font-weight:750}
@@ -313,9 +313,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
   <div class="orbiting-orbs-stage" id="orbitingOrbsStage" role="application" tabindex="0" aria-label="Orbiting Orbs. Drag a bead around its circular track. Use arrow keys to move the selected bead.">
    <svg class="orbiting-orbs-svg" viewBox="0 0 360 360" aria-hidden="true">
     <circle class="orbit-track" data-track="0" cx="180" cy="180" r="63"/><circle class="orbit-track selected" data-track="1" cx="180" cy="180" r="105"/><circle class="orbit-track" data-track="2" cx="180" cy="180" r="146"/>
-    <g id="orbitStars">
-     <circle class="orbit-star" cx="70" cy="76" r="1.8"/><circle class="orbit-star" cx="128" cy="39" r="1.3"/><circle class="orbit-star" cx="244" cy="53" r="1.7"/><circle class="orbit-star" cx="300" cy="105" r="1.4"/><circle class="orbit-star" cx="318" cy="214" r="1.7"/><circle class="orbit-star" cx="263" cy="296" r="1.5"/><circle class="orbit-star" cx="174" cy="322" r="1.8"/><circle class="orbit-star" cx="78" cy="278" r="1.4"/><circle class="orbit-star" cx="40" cy="180" r="1.8"/><circle class="orbit-star" cx="111" cy="226" r="1.4"/><circle class="orbit-star" cx="244" cy="218" r="1.8"/><circle class="orbit-star" cx="140" cy="136" r="1.5"/>
-    </g>
+    <g id="orbitStars"></g>
     <g id="orbitBead0" transform="rotate(0 180 180)"><circle class="orbit-bead" cx="180" cy="117" r="9"/></g>
     <g id="orbitBead1" transform="rotate(130 180 180)"><circle class="orbit-bead middle" cx="180" cy="75" r="11"/></g>
     <g id="orbitBead2" transform="rotate(245 180 180)"><circle class="orbit-bead outer" cx="180" cy="34" r="10"/></g>
@@ -951,8 +949,9 @@ if ("serviceWorker" in navigator) {
  var screen=document.getElementById("orbitingOrbsScreen"),open=document.getElementById("orbitingOrbsOpen"),back=document.getElementById("orbitingOrbsBack"),stage=document.getElementById("orbitingOrbsStage"),hint=document.getElementById("orbitingOrbsHint"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
  if(!screen||!open||!stage)return;
  var radii=[63,105,146],angles=[0,130,245],selected=1,dragging=false,lastPointerAngle=0,lastTime=0,velocity=0,frame=0,lastFrame=0;
- var beads=[0,1,2].map(function(i){return document.getElementById("orbitBead"+i)}),stars=Array.from(document.querySelectorAll("#orbitStars .orbit-star")),selectors=Array.from(document.querySelectorAll(".orbit-orb-selectors button")),tracks=Array.from(document.querySelectorAll(".orbit-track"));
- function render(){beads.forEach(function(b,i){b.setAttribute("transform","rotate("+angles[i]+" 180 180)")});var a=angles[selected]*Math.PI/180,x=180+Math.cos(a)*radii[selected],y=180+Math.sin(a)*radii[selected];stars.forEach(function(star){var dx=Number(star.getAttribute("cx"))-x,dy=Number(star.getAttribute("cy"))-y,d=Math.hypot(dx,dy),glow=Math.max(0,1-d/62);star.style.opacity=String(.22+glow*.76);star.style.filter=glow>.08?"drop-shadow(0 0 "+(3+glow*9)+"px var(--trace))":""})}
+ var beads=[0,1,2].map(function(i){return document.getElementById("orbitBead"+i)}),starGroup=document.getElementById("orbitStars"),stars=[],selectors=Array.from(document.querySelectorAll(".orbit-orb-selectors button")),tracks=Array.from(document.querySelectorAll(".orbit-track"));
+ function buildStarfield(){var seed=72931;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}for(var i=0;i<108;i++){var x,y,tries=0;do{x=22+rand()*316;y=22+rand()*316;tries++}while((Math.hypot(x-180,y-180)>158||Math.hypot(x-180,y-180)<21)&&tries<30);var c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("class","orbit-star");c.setAttribute("cx",x.toFixed(1));c.setAttribute("cy",y.toFixed(1));var radius=.55+rand()*1.15;c.dataset.base=radius.toFixed(2);c.setAttribute("r",radius.toFixed(2));c.style.fill=rand()>.68?"var(--accent)":"var(--trace)";c.style.opacity=".18";starGroup.appendChild(c);stars.push(c)}}
+ function render(){beads.forEach(function(b,i){b.setAttribute("transform","rotate("+angles[i]+" 180 180)")});var positions=angles.map(function(a,i){a=a*Math.PI/180;return{x:180+Math.cos(a)*radii[i],y:180+Math.sin(a)*radii[i]}});stars.forEach(function(star){var sx=Number(star.getAttribute("cx")),sy=Number(star.getAttribute("cy")),glow=0;positions.forEach(function(p){glow=Math.max(glow,Math.max(0,1-Math.hypot(sx-p.x,sy-p.y)/48))});star.style.opacity=String(.16+glow*.8);star.setAttribute("r",(Number(star.dataset.base)+glow*1.65).toFixed(2));star.style.filter=glow>.08?"drop-shadow(0 0 "+(2+glow*8)+"px var(--trace))":""})}
  function choose(i){if(i!==selected){velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0}selected=i;selectors.forEach(function(b){b.setAttribute("aria-pressed",String(Number(b.dataset.orb)===i))});tracks.forEach(function(t){t.classList.toggle("selected",Number(t.dataset.track)===i)});render()}
  function animate(now){if(!lastFrame)lastFrame=now;var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;if(!dragging){angles[selected]+=velocity*dt;velocity*=Math.exp(-1.45*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}render();frame=requestAnimationFrame(animate)}
  function startMotion(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
@@ -965,7 +964,7 @@ if ("serviceWorker" in navigator) {
  function end(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else startMotion()}
  open.addEventListener("click",show);back.addEventListener("click",hide);selectors.forEach(function(b){b.addEventListener("click",function(){choose(Number(b.dataset.orb))})});stage.addEventListener("pointerdown",begin);stage.addEventListener("pointermove",move);stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
  stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angles[selected]+=8;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angles[selected]-=8;velocity=0;render();e.preventDefault()}else if(e.key==="1"||e.key==="2"||e.key==="3"){choose(Number(e.key)-1);e.preventDefault()}});
- render();
+ buildStarfield();render();;
 })();
 </script>
 </body>
