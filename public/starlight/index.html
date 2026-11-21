@@ -185,6 +185,29 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 @keyframes ripple-expand{0%{transform:scale(.22);opacity:.78}20%{opacity:.56}100%{transform:scale(4.8);opacity:0}}
 @media(max-width:600px){.ripple-pool-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.ripple-pool-card{border-radius:23px}.ripple-pool-surface{width:min(100%,min(50svh,380px));margin:14px auto}}
 @media(prefers-reduced-motion:reduce){.ripple-wave{animation:none;opacity:.36;transform:scale(1.5)}}
+
+/* Orbiting Orbs */
+.orbiting-orbs-screen{min-height:calc(100svh - 52px);display:flex;align-items:center;justify-content:center;padding:20px 0 34px}
+.orbiting-orbs-screen[hidden]{display:none}
+.orbiting-orbs-card{width:min(100%,700px);padding:clamp(20px,4vw,34px);text-align:center;border:1px solid color-mix(in srgb,var(--trace) 28%,#ffffff1a);border-radius:28px;background:linear-gradient(150deg,#101b30ed,#0b1426f2);box-shadow:0 22px 65px #0007;position:relative;overflow:hidden}
+.orbiting-orbs-card h2{margin:8px 0 5px;font-size:clamp(25px,5vw,34px);letter-spacing:-.7px}.orbiting-orbs-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.orbiting-orbs-stage{width:min(100%,min(58svh,430px));aspect-ratio:1;margin:14px auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;outline:none}
+.orbiting-orbs-stage:active{cursor:grabbing}.orbiting-orbs-stage:focus-visible{outline:3px solid var(--trace);outline-offset:4px;border-radius:50%}
+.orbiting-orbs-svg{width:100%;height:100%;overflow:visible}
+.orbit-track{fill:none;stroke:#ffffff16;stroke-width:1.3;stroke-dasharray:2 9}
+.orbit-track.selected{stroke:color-mix(in srgb,var(--trace) 48%,transparent);stroke-width:2;stroke-dasharray:none}
+.orbit-bead{fill:var(--trace);stroke:#f2fcff;stroke-width:2;filter:drop-shadow(0 0 9px var(--trace));transition:r .2s}
+.orbit-bead.middle{fill:var(--accent)}.orbit-bead.outer{fill:#d0aaff}
+.orbit-star{fill:var(--ink);opacity:.24;filter:drop-shadow(0 0 5px var(--trace));transition:opacity .14s,filter .14s}
+.orbit-center{fill:#ffffff14;stroke:#ffffff2a;stroke-width:1}.orbit-center-star{fill:var(--trace);filter:drop-shadow(0 0 10px var(--trace))}
+.orbit-orb-selectors{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 auto 10px}
+.orbit-orb-selectors button{min-height:42px;padding:0 13px;border:1px solid var(--line);border-radius:14px;background:#ffffff08;font-size:13px;font-weight:750}
+.orbit-orb-selectors button[aria-pressed=true]{border-color:color-mix(in srgb,var(--trace) 62%,transparent);background:color-mix(in srgb,var(--trace) 15%,#101a2c);box-shadow:0 0 16px color-mix(in srgb,var(--trace) 12%,transparent)}
+.orbiting-orbs-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.orbiting-orbs-controls button{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font-size:14px;font-weight:800}
+.orbiting-orbs-controls button:hover,.orbit-orb-selectors button:hover{border-color:color-mix(in srgb,var(--trace) 50%,transparent);background:color-mix(in srgb,var(--trace) 12%,#101a2c)}
+.orbiting-orbs-hint{display:block;margin-top:10px;color:var(--muted);font-size:12px}
+@media(max-width:600px){.orbiting-orbs-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.orbiting-orbs-card{border-radius:23px}.orbiting-orbs-stage{width:min(100%,min(50svh,380px));margin:10px auto}}
+@media(prefers-reduced-motion:reduce){.orbit-star{transition:none;filter:none}.orbit-bead{transition:none;filter:none}}
 </style>
 <script>
 (function(){var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)");var state={};try{state=JSON.parse(localStorage.getItem("starlightTracer")||"{}")}catch(e){}if(reduced&&reduced.matches&&!state.ignoreDeviceReducedMotion)document.documentElement.classList.add("pref-reduced-motion")})();
@@ -205,6 +228,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    <button class="landing-action color-launch-action" id="colorStudioOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✿</span><span><b>Cosmic Color Studio</b><small>Color a space scene at your own pace</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="orbitSpinnerOpen" type="button"><span class="landing-action-icon" aria-hidden="true">✦</span><span><b>Cosmic Orbit Spinner</b><small>Flick glowing comet rings and watch them coast</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <button class="landing-action" id="ripplePoolOpen" type="button"><span class="landing-action-icon" aria-hidden="true">◉</span><span><b>Ripple Pool</b><small>Touch the still water and watch light ripple</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
+   <button class="landing-action" id="orbitingOrbsOpen" type="button"><span class="landing-action-icon" aria-hidden="true">☼</span><span><b>Orbiting Orbs</b><small>Guide glowing beads along gentle curved paths</small></span><span class="landing-arrow" aria-hidden="true">→</span></button>
    <div class="landing-secondary">
     <button class="landing-secondary-action" id="tutorialOpen" type="button"><span aria-hidden="true">ⓘ</span> View tutorial</button>
     <button class="landing-secondary-action" id="landingSettingsOpen" type="button"><span aria-hidden="true">⚙</span> Adjust settings</button>
@@ -280,6 +304,25 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
    <i class="ripple-pool-star" style="left:21%;top:26%"></i><i class="ripple-pool-star" style="left:70%;top:19%"></i><i class="ripple-pool-star" style="left:79%;top:63%"></i><i class="ripple-pool-star" style="left:33%;top:77%"></i><i class="ripple-pool-star" style="left:52%;top:37%"></i><i class="ripple-pool-star" style="left:16%;top:57%"></i>
   </div>
   <div class="ripple-pool-controls"><button id="ripplePoolBack" type="button">Back to Starlight</button></div>
+ </div>
+</section>
+<section class="orbiting-orbs-screen" id="orbitingOrbsScreen" aria-labelledby="orbitingOrbsTitle" hidden>
+ <div class="orbiting-orbs-card">
+  <p class="landing-eyebrow">Follow a gentle path through space</p><h2 id="orbitingOrbsTitle">Orbiting Orbs</h2><p>Choose an orb, guide it around its track, then let it coast.</p>
+  <div class="orbit-orb-selectors" role="group" aria-label="Choose an orb"><button type="button" data-orb="0" aria-pressed="false">Inner</button><button type="button" data-orb="1" aria-pressed="true">Middle</button><button type="button" data-orb="2" aria-pressed="false">Outer</button></div>
+  <div class="orbiting-orbs-stage" id="orbitingOrbsStage" role="application" tabindex="0" aria-label="Orbiting Orbs. Drag a bead around its circular track. Use arrow keys to move the selected bead.">
+   <svg class="orbiting-orbs-svg" viewBox="0 0 360 360" aria-hidden="true">
+    <circle class="orbit-track" data-track="0" cx="180" cy="180" r="63"/><circle class="orbit-track selected" data-track="1" cx="180" cy="180" r="105"/><circle class="orbit-track" data-track="2" cx="180" cy="180" r="146"/>
+    <g id="orbitStars">
+     <circle class="orbit-star" cx="70" cy="76" r="1.8"/><circle class="orbit-star" cx="128" cy="39" r="1.3"/><circle class="orbit-star" cx="244" cy="53" r="1.7"/><circle class="orbit-star" cx="300" cy="105" r="1.4"/><circle class="orbit-star" cx="318" cy="214" r="1.7"/><circle class="orbit-star" cx="263" cy="296" r="1.5"/><circle class="orbit-star" cx="174" cy="322" r="1.8"/><circle class="orbit-star" cx="78" cy="278" r="1.4"/><circle class="orbit-star" cx="40" cy="180" r="1.8"/><circle class="orbit-star" cx="111" cy="226" r="1.4"/><circle class="orbit-star" cx="244" cy="218" r="1.8"/><circle class="orbit-star" cx="140" cy="136" r="1.5"/>
+    </g>
+    <g id="orbitBead0" transform="rotate(0 180 180)"><circle class="orbit-bead" cx="180" cy="117" r="9"/></g>
+    <g id="orbitBead1" transform="rotate(130 180 180)"><circle class="orbit-bead middle" cx="180" cy="75" r="11"/></g>
+    <g id="orbitBead2" transform="rotate(245 180 180)"><circle class="orbit-bead outer" cx="180" cy="34" r="10"/></g>
+    <circle class="orbit-center" cx="180" cy="180" r="16"/><path class="orbit-center-star" d="m180 168 3.5 8.5L192 180l-8.5 3.5L180 192l-3.5-8.5L168 180l8.5-3.5z"/>
+   </svg>
+  </div>
+  <div class="orbiting-orbs-controls"><button id="orbitingOrbsBack" type="button">Back to Starlight</button></div><small class="orbiting-orbs-hint" id="orbitingOrbsHint" aria-live="polite">Drag any bead, or select one and use the arrow keys.</small>
  </div>
 </section>
 <div class="game-screen" id="gameScreen" aria-hidden="true">
@@ -901,6 +944,28 @@ if ("serviceWorker" in navigator) {
  surface.addEventListener("pointermove",function(e){if(!lastPoint)return;var p=point(e),dx=p.x-lastPoint.x,dy=p.y-lastPoint.y,dist=Math.hypot(dx,dy),now=performance.now();if(dist>34&&now-lastSpawn>38){ripple(p.x,p.y);lastPoint=p;lastSpawn=now}});
  function end(){lastPoint=null}surface.addEventListener("pointerup",end);surface.addEventListener("pointercancel",end);
  surface.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var r=surface.getBoundingClientRect();ripple(r.width/2,r.height/2);e.preventDefault()}});
+})();
+</script>
+<script>
+(function(){
+ var screen=document.getElementById("orbitingOrbsScreen"),open=document.getElementById("orbitingOrbsOpen"),back=document.getElementById("orbitingOrbsBack"),stage=document.getElementById("orbitingOrbsStage"),hint=document.getElementById("orbitingOrbsHint"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
+ if(!screen||!open||!stage)return;
+ var radii=[63,105,146],angles=[0,130,245],selected=1,dragging=false,lastPointerAngle=0,lastTime=0,velocity=0,frame=0,lastFrame=0;
+ var beads=[0,1,2].map(function(i){return document.getElementById("orbitBead"+i)}),stars=Array.from(document.querySelectorAll("#orbitStars .orbit-star")),selectors=Array.from(document.querySelectorAll(".orbit-orb-selectors button")),tracks=Array.from(document.querySelectorAll(".orbit-track"));
+ function render(){beads.forEach(function(b,i){b.setAttribute("transform","rotate("+angles[i]+" 180 180)")});var a=angles[selected]*Math.PI/180,x=180+Math.cos(a)*radii[selected],y=180+Math.sin(a)*radii[selected];stars.forEach(function(star){var dx=Number(star.getAttribute("cx"))-x,dy=Number(star.getAttribute("cy"))-y,d=Math.hypot(dx,dy),glow=Math.max(0,1-d/62);star.style.opacity=String(.22+glow*.76);star.style.filter=glow>.08?"drop-shadow(0 0 "+(3+glow*9)+"px var(--trace))":""})}
+ function choose(i){selected=i;selectors.forEach(function(b){b.setAttribute("aria-pressed",String(Number(b.dataset.orb)===i))});tracks.forEach(function(t){t.classList.toggle("selected",Number(t.dataset.track)===i)});render()}
+ function animate(now){if(!lastFrame)lastFrame=now;var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;if(!dragging){angles[selected]+=velocity*dt;velocity*=Math.exp(-1.45*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}render();frame=requestAnimationFrame(animate)}
+ function startMotion(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
+ function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
+ function pointerRadius(e){var r=stage.getBoundingClientRect();return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))/(Math.min(r.width,r.height)/360)}
+ function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");["orbitSpinnerScreen","ripplePoolScreen"].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
+ function hide(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
+ function begin(e){if(e.button!==undefined&&e.button!==0)return;var r=pointerRadius(e),i=0;radii.forEach(function(v,n){if(Math.abs(v-r)<Math.abs(radii[i]-r))i=n});choose(i);dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()}
+ function move(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angles[selected]+=delta;velocity=Math.max(-900,Math.min(900,delta/dt*1000));lastPointerAngle=a;lastTime=now;render()}
+ function end(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else startMotion()}
+ open.addEventListener("click",show);back.addEventListener("click",hide);selectors.forEach(function(b){b.addEventListener("click",function(){choose(Number(b.dataset.orb))})});stage.addEventListener("pointerdown",begin);stage.addEventListener("pointermove",move);stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
+ stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angles[selected]+=8;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angles[selected]-=8;velocity=0;render();e.preventDefault()}else if(e.key==="1"||e.key==="2"||e.key==="3"){choose(Number(e.key)-1);e.preventDefault()}});
+ render();
 })();
 </script>
 </body>
