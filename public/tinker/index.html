@@ -57,7 +57,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3p
 @keyframes tutorialPoint{to{transform:translateY(4px)}}
 @keyframes tutorialMarble{50%{transform:scale(1.12);box-shadow:0 0 0 5px #77b8d530,0 2px 5px #193d5150}}
 @media(max-width:560px){.home-dialog.tutorial-dialog{padding:16px}.tutorial-flow{gap:3px}.tutorial-flow-step{gap:4px;min-height:36px;padding:5px 3px;font-size:.76em}.tutorial-flow-step b{width:18px;height:18px}.tutorial-workbench{padding:9px}.tutorial-route{gap:2px}.tutorial-route-cell{border-radius:9px}.tutorial-route-arrow{font-size:1.05em}.tutorial-tray{gap:6px;min-height:42px;padding:4px 6px}.tutorial-tray-part{width:32px;height:32px}.tutorial-tray-part svg{width:26px;height:26px}.tutorial-capabilities{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.tutorial-capability{min-height:76px;padding:6px 3px}.tutorial-capability-use{font-size:.66em}}
-@media(prefers-reduced-motion:reduce){.tutorial-marble,.tutorial-tray-pointer{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.tutorial-marble,.tutorial-tray-pointer,.broken-circuit{animation:none!important}}
 .hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--game-accent-2);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:.94;letter-spacing:-.065em;margin:10px 0 12px}
@@ -88,11 +88,11 @@ html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shad
 .gate.exit.is-ringing{position:relative;z-index:2;transform-origin:50% 12%;animation:bellRing .5s ease-in-out 4;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
 @keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
 .cell{position:relative;display:grid;place-items:center;aspect-ratio:1;min-width:0;border:1px solid #d5c7a8;border-radius:12px;background:#fffaf0;box-shadow:0 3px 0 #d9c8a4;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
-html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}
-@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}}
+html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=dark] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=dark] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=dark] .broken-circuit .circuit-break{stroke:#d99568}
+@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=system] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=system] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=system] .broken-circuit .circuit-break{stroke:#d99568}}
 .cell:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
 .cell:disabled{cursor:not-allowed;opacity:.82}
-.cell.wall{background:repeating-linear-gradient(135deg,#e8dfcc 0 6px,#d6cbb5 6px 12px);box-shadow:none;border-style:dashed}
+.cell.wall{position:relative;background:repeating-linear-gradient(135deg,#e8dfcc 0 6px,#d6cbb5 6px 12px);box-shadow:none;border-style:dashed;overflow:hidden}.broken-circuit{position:absolute;inset:12%;width:76%;height:76%;overflow:visible;opacity:.27;animation:circuitBreath 5.8s ease-in-out infinite;pointer-events:none}.broken-circuit path{fill:none;stroke:#746b5b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.broken-circuit circle{fill:#8a806d;stroke:none}.broken-circuit .circuit-break{stroke:#c9753d;stroke-width:2.8;opacity:.76}html[data-portfolio-motion=reduce] .broken-circuit{animation:none}@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .broken-circuit{animation:none}}@keyframes circuitBreath{0%,100%{opacity:.2}50%{opacity:.34}}
 .cell.entry-cell{border-color:#dfaa4b;box-shadow:0 0 0 2px #dfaa4b55}
 .cell.exit-cell{border-color:#65a884;box-shadow:0 0 0 2px #65a88455}
 .cell.is-lit{background:#f8e9b8;border-color:#e0a94e;box-shadow:0 0 0 4px #efc55f44,0 4px 0 #d9ad5d}
@@ -387,7 +387,18 @@ let removeMode = false;
 let running = false;
 let solved = [];
 let levelIndex = 0;
-let placements = Array(25).fill(null);
+function gridSizeForLevel(index) { return index < 5 ? 5 : index < 12 ? 6 : 7; }
+function migrateLegacyLayout(layout, size) {
+  if (!layout || size <= 5 || typeof layout !== "object") return layout;
+  const migrated = {};
+  for (const [key, tile] of Object.entries(layout)) {
+    const oldIndex = Number(key);
+    if (!Number.isInteger(oldIndex) || oldIndex < 0 || oldIndex >= 25) continue;
+    migrated[Math.floor(oldIndex / 5) * size + oldIndex % 5] = tile;
+  }
+  return migrated;
+}
+let placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
 let hasSavedGame = false;
 let hintCredits = 0;
 let hintStepByLevel = {};
@@ -405,12 +416,14 @@ try {
     hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
     soundEnabled = save.soundEnabled === true;
     levelIndex = Math.max(0, save.levelIndex);
+    placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
     solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0) : [];
     const saved = save.layouts && save.layouts[levelIndex];
-    if (saved && typeof saved === "object") {
-      for (const [key, tile] of Object.entries(saved)) {
+    const activeLayout = save.schemaVersion < 4 ? migrateLegacyLayout(saved, gridSizeForLevel(levelIndex)) : saved;
+    if (activeLayout && typeof activeLayout === "object") {
+      for (const [key, tile] of Object.entries(activeLayout)) {
         const index = Number(key);
-        if (Number.isInteger(index) && index >= 0 && index < 25 && tile && PARTS[tile.type]) {
+        if (Number.isInteger(index) && index >= 0 && index < placements.length && tile && PARTS[tile.type]) {
           placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
         }
       }
@@ -421,7 +434,15 @@ try {
 let layouts = {};
 try {
   const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
-  if (save?.layouts && typeof save.layouts === "object") layouts = save.layouts;
+  if (save?.layouts && typeof save.layouts === "object") {
+    layouts = save.layouts;
+    if (save.schemaVersion < 4) {
+      for (const [key, savedLayout] of Object.entries(layouts)) {
+        const level = Number(key);
+        if (Number.isInteger(level) && level >= 0) layouts[level] = migrateLegacyLayout(savedLayout, gridSizeForLevel(level));
+      }
+    }
+  }
 } catch {}
 
 function saveGame() {
@@ -430,7 +451,7 @@ function saveGame() {
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
   try {
-    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 3, levelIndex, solved, layouts, hintCredits, hintStepByLevel, soundEnabled }));
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 4, levelIndex, solved, layouts, hintCredits, hintStepByLevel, soundEnabled }));
   } catch {}
 }
 function seededRandom(seed) {
@@ -444,24 +465,25 @@ function shuffleWith(items, random) {
 }
 function generatedPuzzle(index) {
   const generatedNumber = index - LEVELS.length;
+  const size = gridSizeForLevel(index);
   const random = seededRandom(0x71A9C3 + generatedNumber * 7919);
   const breather = generatedNumber % 8 === 7;
-  const stage = Math.floor(generatedNumber / 8);
-  const minLength = breather ? 5 : Math.min(7 + stage * 2, 13);
-  const maxLength = breather ? 7 : Math.min(10 + stage * 3, 20);
+  const stage = Math.floor(Math.max(0, index - 5) / 7);
+  const minLength = breather ? size : Math.min(size + 2 + stage * 2, size * size - 2);
+  const maxLength = breather ? size + 2 : Math.min(size * 2 + stage * 3, size * size - 1);
   const minTurns = breather ? 0 : Math.min(1 + stage, 5);
   const maxTurns = breather ? 1 : Math.min(3 + stage, 8);
   let route = null;
   for (let attempt = 0; attempt < 18 && !route; attempt++) {
-    const start = Math.floor(random() * 5);
-    const goal = breather ? start : Math.floor(random() * 5);
+    const start = Math.floor(random() * size);
+    const goal = breather ? start : Math.floor(random() * size);
     const path = [{ row: start, col: 0 }];
-    const visited = new Set([start * 5]);
-    let budget = 3600;
+    const visited = new Set([start * size]);
+    let budget = 6000;
     function walk(previousDir, turns) {
       if (--budget < 0) return false;
       const at = path[path.length - 1];
-      if (at.col === 4 && at.row === goal) {
+      if (at.col === size - 1 && at.row === goal) {
         if (path.length >= minLength && path.length <= maxLength && turns >= minTurns && turns <= maxTurns) return true;
         return false;
       }
@@ -470,10 +492,10 @@ function generatedPuzzle(index) {
       for (const option of options) {
         if (path.length === 1 && option.dir !== "E") continue;
         const row = at.row + option.vector[0], col = at.col + option.vector[1];
-        if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
-        const key = row * 5 + col;
+        if (row < 0 || row >= size || col < 0 || col >= size) continue;
+        const key = row * size + col;
         if (visited.has(key)) continue;
-        if (row === goal && col === 4 && path.length + 1 < minLength) continue;
+        if (row === goal && col === size - 1 && path.length + 1 < minLength) continue;
         const nextTurns = turns + (option.dir === previousDir ? 0 : 1);
         if (nextTurns > maxTurns) continue;
         visited.add(key); path.push({row, col});
@@ -485,8 +507,8 @@ function generatedPuzzle(index) {
     if (walk("E", 0)) route = path.map(point => ({...point}));
   }
   if (!route) {
-    const row = Math.floor(random() * 5);
-    route = Array.from({length:5}, (_, col) => ({row, col}));
+    const row = Math.floor(random() * size);
+    route = Array.from({length:size}, (_, col) => ({row, col}));
   }
   const solution = [];
   const counts = {belt:0, ramp:0, gear:0, switch:0, spring:0};
@@ -495,7 +517,7 @@ function generatedPuzzle(index) {
   for (let i=0; i<route.length; i++) {
     const incoming = i === 0 ? "E" : directionBetween(route[i-1], route[i]);
     const outgoing = i === route.length-1 ? "E" : directionBetween(route[i], route[i+1]);
-    const indexAt = route[i].row * 5 + route[i].col;
+    const indexAt = route[i].row * size + route[i].col;
     let type, rotation;
     if (incoming === outgoing) {
       if (!breather && random() < Math.min(.08 + stage*.025, .18)) { type="gear"; rotation=1; }
@@ -518,12 +540,13 @@ function generatedPuzzle(index) {
     }
     solution.push({index:indexAt,type,rotation}); counts[type]++;
   }
-  const routeSet = new Set(route.map(point=>point.row*5+point.col));
-  const empty = shuffleWith(Array.from({length:25},(_,i)=>i).filter(i=>!routeSet.has(i)), random);
-  const wallCount = breather ? 0 : Math.min(2 + stage*2 + Math.floor(generatedNumber%3), 9);
-  const walls = empty.slice(0,wallCount).map(i=>[Math.floor(i/5),i%5]);
-  const difficulty = route.length >= 15 && turns >= 5 ? "Extremely Hard" : route.length >= 11 && turns >= 3 ? "Very Hard" : route.length >= 8 || turns >= 2 ? "Hard" : "";
+  const routeSet = new Set(route.map(point=>point.row*size+point.col));
+  const empty = shuffleWith(Array.from({length:size*size},(_,i)=>i).filter(i=>!routeSet.has(i)), random);
+  const wallCount = breather ? 0 : Math.min(Math.floor(size*.7) + stage*2 + Math.floor(generatedNumber%3), Math.floor(size*1.5), empty.length);
+  const walls = empty.slice(0,wallCount).map(i=>[Math.floor(i/size),i%size]);
+  const difficulty = route.length >= size*2.5 && turns >= 5 ? "Extremely Hard" : route.length >= size*1.8 && turns >= 3 ? "Very Hard" : route.length >= size+2 || turns >= 2 ? "Hard" : "";
   return {
+    size,
     title: breather ? "A lighter turn at the workbench" : ["Wind through the workshop", "Route around the clutter", "Build a clever chain", "Tangle and untangle"][Math.min(3,stage)],
     copy: breather ? "A shorter route gives you room to experiment before the next challenge." : "Find a route through the blocked squares and carry the marble to the bell.",
     note: breather ? "This is a shorter puzzle. Try a different part or route just for fun." : "Use the openings in the board. Rotate parts to match each turn; the parts guide explains their capabilities.",
@@ -536,7 +559,7 @@ function level() {
   if (!GENERATED_PUZZLE_CACHE.has(levelIndex)) GENERATED_PUZZLE_CACHE.set(levelIndex, generatedPuzzle(levelIndex));
   return GENERATED_PUZZLE_CACHE.get(levelIndex);
 }
-function keyOf(row, col) { return row * 5 + col; }
+function keyOf(row, col) { return row * gridSizeForLevel(levelIndex) + col; }
 function playTone(kind = "tap") {
   if (!soundEnabled) return;
   try {
@@ -588,6 +611,7 @@ function outputsFor(tile, travelDir, spinDirection = 0) {
 }
 function findPath() {
   const current = level();
+  const size = current.size || gridSizeForLevel(levelIndex);
   const queue = [{ row: current.start, col: 0, dir: "E", gearSpin: 0, path: [] }];
   const seen = new Set();
   let best = { path: [], score: Infinity };
@@ -603,7 +627,7 @@ function findPath() {
       : state.gearSpin;
     const path = state.path.concat([{ row: state.row, col: state.col, missing: !tile, spinDirection: tile?.type === "gear" ? spin : 0 }]);
     if (!tile) {
-      const score = Math.abs(state.row - current.goal) + (4 - state.col);
+      const score = Math.abs(state.row - current.goal) + (size - 1 - state.col);
       if (score < best.score) best = { path, score };
       continue;
     }
@@ -611,13 +635,13 @@ function findPath() {
       const vector = VECTORS[output.dir];
       const row = state.row + vector[0] * output.jump;
       const col = state.col + vector[1] * output.jump;
-      if (output.dir === "E" && row === current.goal && col >= 5) return { success: true, path };
-      if (row < 0 || row >= 5 || col < 0 || col >= 5) continue;
+      if (output.dir === "E" && row === current.goal && col >= size) return { success: true, path };
+      if (row < 0 || row >= size || col < 0 || col >= size) continue;
       if (output.jump === 1 && current.walls.some(wall => wall[0] === row && wall[1] === col)) continue;
       const nextIndex = keyOf(row, col);
       if (!placements[nextIndex]) {
         const partial = path.concat([{ row, col, missing: true, spinDirection: 0 }]);
-        const score = Math.abs(row - current.goal) + Math.max(0, 4 - col);
+        const score = Math.abs(row - current.goal) + Math.max(0, size - 1 - col);
         if (score < best.score) best = { path: partial, score };
         continue;
       }
@@ -646,12 +670,14 @@ function render() {
   difficultyTag.textContent = current.difficulty || "";
   difficultyTag.dataset.level = current.difficulty || "";
   difficultyTag.hidden = !current.difficulty;
-  document.getElementById("board-size").textContent = "5 × 5 grid";
+  const size = current.size || gridSizeForLevel(levelIndex);
+  document.getElementById("board-size").textContent = size + " × " + size + " grid";
   board.replaceChildren();
   const header = document.createElement("div");
   header.className = "board-head";
   header.append(document.createElement("span"));
-  for (let col = 0; col < 5; col++) {
+  header.style.gridTemplateColumns = `26px repeat(${size}, minmax(0, 1fr)) 26px`;
+  for (let col = 0; col < size; col++) {
     const label = document.createElement("span");
     label.className = "column-label";
     label.textContent = String(col + 1);
@@ -660,15 +686,16 @@ function render() {
   header.append(document.createElement("span"));
   board.append(header);
 
-  for (let row = 0; row < 5; row++) {
+  for (let row = 0; row < size; row++) {
     const rowNode = document.createElement("div");
     rowNode.className = "board-row";
+    rowNode.style.gridTemplateColumns = `26px repeat(${size}, minmax(0, 1fr)) 26px`;
     const source = document.createElement("span");
     source.className = "gate";
     source.textContent = row === current.start ? "▶" : "";
     if (row === current.start) source.setAttribute("aria-label", "Marble entry row");
     rowNode.append(source);
-    for (let col = 0; col < 5; col++) {
+    for (let col = 0; col < size; col++) {
       const index = keyOf(row, col);
       const cell = document.createElement("button");
       cell.type = "button";
@@ -680,6 +707,7 @@ function render() {
       if (hintCue?.index === index) cell.classList.add("hint-target");
       if (wall) {
         cell.classList.add("wall");
+        cell.innerHTML = '<svg class="broken-circuit" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14h9l5 5m12 0 6-5h2M8 34h7l5-5m12 0 7 5h3M24 7v8m0 18v8"/><circle cx="8" cy="14" r="2"/><circle cx="42" cy="14" r="2"/><circle cx="8" cy="34" r="2"/><circle cx="42" cy="34" r="2"/><path class="circuit-break" d="m20 21 3 3-2 3 4 3 3-4-2-3 3-3"/></svg>';
         cell.disabled = true;
         cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", blocked gap");
       } else if (tile) {
@@ -689,7 +717,7 @@ function render() {
         cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", empty");
       }
       if (row === current.start && col === 0) cell.classList.add("entry-cell");
-      if (row === current.goal && col === 4) cell.classList.add("exit-cell");
+      if (row === current.goal && col === size - 1) cell.classList.add("exit-cell");
       if (visualChange?.index === index) cell.classList.add(visualChange.kind === "turn" ? "tile-turn" : "tile-enter");
       rowNode.append(cell);
     }
@@ -704,10 +732,10 @@ function render() {
   for (let index = 0; index < placements.length; index++) {
     const tile = placements[index];
     if (!tile) continue;
-    const row = Math.floor(index / 5), col = index % 5;
+    const row = Math.floor(index / size), col = index % size;
     for (const dir of ["E", "S"]) {
       const nextRow = row + VECTORS[dir][0], nextCol = col + VECTORS[dir][1];
-      if (nextRow >= 5 || nextCol >= 5) continue;
+      if (nextRow >= size || nextCol >= size) continue;
       const neighborIndex = keyOf(nextRow, nextCol), neighbor = placements[neighborIndex];
       if (!neighbor || !portsFor(tile).includes(dir) || !portsFor(neighbor).includes(opposite(dir))) continue;
       const link = document.createElement("span");
@@ -893,7 +921,7 @@ async function runMachine() {
 runButton.addEventListener("click", runMachine);
 resetButton.addEventListener("click", () => {
   if (running) return;
-  placements = Array(25).fill(null);
+  placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
   selectedPart = "";
   removeMode = false;
   clearTrace();
@@ -921,7 +949,7 @@ function startNewGame() {
   hintCredits = 0;
   hintStepByLevel = {};
   layouts = {};
-  placements = Array(25).fill(null);
+  placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
   selectedPart = "";
   removeMode = false;
   clearTrace();
@@ -946,6 +974,7 @@ function closeModal(id) {
 function applyHint() {
   if (running || hintCredits < 1) return;
   const blueprint = HINT_BLUEPRINTS[levelIndex] || level().solution || [];
+  const size = gridSizeForLevel(levelIndex);
   let cursor = Math.max(0, Number(hintStepByLevel[levelIndex]) || 0);
   while (cursor < blueprint.length) {
     const step = blueprint[cursor];
@@ -959,12 +988,12 @@ function applyHint() {
       const turns = (step.rotation - existing.rotation + 4) % 4;
       hintCue = { index: step.index, type: step.type };
       render();
-      setStatus("Turn the " + PARTS[step.type].name.toLowerCase() + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + " clockwise " + (turns === 1 ? "once" : turns + " times") + ".");
+      setStatus("Turn the " + PARTS[step.type].name.toLowerCase() + " at row " + (Math.floor(step.index / size) + 1) + ", column " + (step.index % size + 1) + " clockwise " + (turns === 1 ? "once" : turns + " times") + ".");
     } else {
       hintCue = { index: step.index, type: step.type };
       selectedPart = step.type;
       render();
-      setStatus((existing ? "Replace the part" : "Place the " + PARTS[step.type].name.toLowerCase()) + " at row " + (Math.floor(step.index / 5) + 1) + ", column " + (step.index % 5 + 1) + ".");
+      setStatus((existing ? "Replace the part" : "Place the " + PARTS[step.type].name.toLowerCase()) + " at row " + (Math.floor(step.index / size) + 1) + ", column " + (step.index % size + 1) + ".");
     }
     saveGame();
     playTone("hint");
@@ -1000,11 +1029,11 @@ function advancePuzzle() {
   if (!solved.includes(levelIndex)) return;
   document.getElementById("win-modal").hidden = true;
   levelIndex++;
-  placements = Array(25).fill(null);
+  placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
   const saved = layouts[levelIndex];
   if (saved && typeof saved === "object") for (const [key, tile] of Object.entries(saved)) {
     const index = Number(key);
-    if (Number.isInteger(index) && index >= 0 && index < 25 && tile && PARTS[tile.type]) placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
+    if (Number.isInteger(index) && index >= 0 && index < placements.length && tile && PARTS[tile.type]) placements[index] = { type: tile.type, rotation: ((Number(tile.rotation) || 0) % 4 + 4) % 4 };
   }
   selectedPart = "";
   removeMode = false;
