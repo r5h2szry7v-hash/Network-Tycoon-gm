@@ -835,7 +835,7 @@ if ("serviceWorker" in navigator) {
 (function(){
  var screen=document.getElementById("orbitSpinnerScreen"),open=document.getElementById("orbitSpinnerOpen"),back=document.getElementById("orbitSpinnerBack"),stage=document.getElementById("orbitSpinnerStage"),rotor=document.getElementById("orbitSpinnerRotor"),spin=document.getElementById("orbitSpinnerSpin"),hint=document.getElementById("orbitSpinnerHint");
  if(!screen||!open||!stage||!rotor)return;
- var angle=0,velocity=0,frame=0,lastFrame=0,dragging=false,lastPointerAngle=0,lastTime=0,reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ var angle=0,velocity=0,frame=0,lastFrame=0,dragging=false,lastPointerAngle=0,lastTime=0,reduced=document.documentElement.classList.contains("pref-reduced-motion");
  function render(){rotor.setAttribute("transform","rotate("+angle+" 180 180)")}
  function animate(now){
   if(!lastFrame)lastFrame=now;
