@@ -11,6 +11,8 @@ const CORE_FILES = [
   "/tinker/",
   "/offline.html",
   "/version.json",
+  "/cloud-save.js",
+  "/portfolio-shell.js",
   "/manifest.webmanifest",
   "/favicon.svg",
   "/icons/network-tycoon-192.png",
