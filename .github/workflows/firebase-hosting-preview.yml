@@ -7,6 +7,7 @@ on:
       - feature/shared-pwa-update-manager
       - feature/tinker-parts-store
       - feat/pawprint-pursuit-prototype
+      - feat/pawprint-reactions
 
 permissions:
   contents: read
