@@ -6,6 +6,7 @@ on:
       - feature/portfolio-game-shell
       - feature/shared-pwa-update-manager
       - feature/tinker-parts-store
+      - feat/pawprint-pursuit-prototype
 
 permissions:
   contents: read

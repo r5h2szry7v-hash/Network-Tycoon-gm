@@ -1,13 +1,36 @@
-import { getApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
-import { doc, getDoc, getFirestore, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
-import { registerCloudSaveGame, startCloudSync } from "./cloud-save.js";
-
 const SETTINGS_KEY = "portfolio.settings.v1";
 const SETTINGS_META_KEY = "portfolio.settings.meta.v1";
-const APP = getApp();
-const AUTH = getAuth(APP);
-const DB = getFirestore(APP);
+let CLOUD = null;
+let cloudPromise = null;
+
+function loadCloudServices() {
+  if (CLOUD) return Promise.resolve(CLOUD);
+  if (cloudPromise) return cloudPromise;
+  cloudPromise = Promise.all([
+    import("https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js"),
+    import("https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js"),
+    import("./cloud-save.js")
+  ]).then(([appSdk, authSdk, storeSdk, saveSdk]) => {
+    const app = appSdk.getApp();
+    CLOUD = {
+      AUTH: authSdk.getAuth(app),
+      DB: storeSdk.getFirestore(app),
+      doc: storeSdk.doc,
+      getDoc: storeSdk.getDoc,
+      serverTimestamp: storeSdk.serverTimestamp,
+      setDoc: storeSdk.setDoc,
+      onAuthStateChanged: authSdk.onAuthStateChanged,
+      registerCloudSaveGame: saveSdk.registerCloudSaveGame,
+      startCloudSync: saveSdk.startCloudSync
+    };
+    return CLOUD;
+  }).catch(error => {
+    cloudPromise = null;
+    throw error;
+  });
+  return cloudPromise;
+}
 let activeThemeTokens = new Set();
 
 const DEFAULT_SETTINGS = {
@@ -54,7 +77,7 @@ function writeLocalSettings(settings, ownerUid, updatedAtMs) {
 }
 
 function settingsRef(uid) {
-  return doc(DB, "users", uid, "settings", "portfolio");
+  return CLOUD.doc(CLOUD.DB, "users", uid, "settings", "portfolio");
 }
 
 function applySettings(settings, gameId, themes) {
@@ -110,10 +133,10 @@ function element(tag, attrs = {}, text = "") {
 async function syncSettings(uid, local, publish) {
   if (!uid) return;
   const ref = settingsRef(uid);
-  const snap = await getDoc(ref);
+  const snap = await CLOUD.getDoc(ref);
   if (!snap.exists()) {
     if (local.exists) {
-      await setDoc(ref, { schemaVersion: 1, settings: local.settings, updatedAtMs: local.updatedAtMs || Date.now(), updatedAt: serverTimestamp() });
+      await CLOUD.setDoc(ref, { schemaVersion: 1, settings: local.settings, updatedAtMs: local.updatedAtMs || Date.now(), updatedAt: CLOUD.serverTimestamp() });
     }
     publish(local.settings);
     return;
@@ -124,7 +147,7 @@ async function syncSettings(uid, local, publish) {
   if (!local.exists || local.ownerUid !== uid || remoteTime >= local.updatedAtMs) {
     publish(writeLocalSettings(remoteSettings, uid, remoteTime));
   } else {
-    await setDoc(ref, { schemaVersion: 1, settings: local.settings, updatedAtMs: local.updatedAtMs, updatedAt: serverTimestamp() });
+    await CLOUD.setDoc(ref, { schemaVersion: 1, settings: local.settings, updatedAtMs: local.updatedAtMs, updatedAt: CLOUD.serverTimestamp() });
     publish(local.settings);
   }
 }
@@ -132,7 +155,6 @@ async function syncSettings(uid, local, publish) {
 export async function mountPortfolioShell(options = {}) {
   const gameId = String(options.gameId || "");
   if (!/^[a-z][A-Za-z0-9-]{1,39}$/.test(gameId)) throw new Error("A valid portfolio gameId is required.");
-  registerCloudSaveGame(gameId, options.storageKeys || [gameId]);
   const host = options.mount || document.body;
   const themes = Array.isArray(options.themes) ? options.themes.filter(theme =>
     theme && /^[a-z][a-z0-9-]{0,47}$/.test(theme.id) && typeof theme.label === "string") : [];
@@ -168,6 +190,9 @@ export async function mountPortfolioShell(options = {}) {
 
   let current = readLocalSettings().settings;
   let disposed = false;
+  let authUnsubscribe = () => {};
+  let cloudConnected = false;
+  let cloudConnectPromise = null;
   const publish = next => {
     current = normalizeSettings(next);
     applySettings(current, gameId, themes);
@@ -188,12 +213,12 @@ export async function mountPortfolioShell(options = {}) {
       accessibility: { ...current.accessibility, ...(patch.accessibility || {}) }
     });
     const updatedAtMs = Date.now();
-    current = writeLocalSettings(next, AUTH.currentUser?.uid || null, updatedAtMs);
+    const user = CLOUD?.AUTH.currentUser || null;
+    current = writeLocalSettings(next, user?.uid || null, updatedAtMs);
     publish(current);
-    const user = AUTH.currentUser;
-    if (!user) { status.textContent = "Saved on this device"; return current; }
+    if (!CLOUD || !user) { status.textContent = navigator.onLine === false ? "Saved offline; sync resumes online" : "Saved on this device"; return current; }
     try {
-      await setDoc(settingsRef(user.uid), { schemaVersion: 1, settings: current, updatedAtMs, updatedAt: serverTimestamp() });
+      await CLOUD.setDoc(settingsRef(user.uid), { schemaVersion: 1, settings: current, updatedAtMs, updatedAt: CLOUD.serverTimestamp() });
       localStorage.setItem(SETTINGS_META_KEY, JSON.stringify({ ownerUid: user.uid, updatedAtMs }));
       status.textContent = user.isAnonymous ? "Saved to this guest session" : "Settings synced";
     } catch (error) {
@@ -209,22 +234,36 @@ export async function mountPortfolioShell(options = {}) {
   if (scaleSelect) scaleSelect.addEventListener("change", () => save({ accessibility: { textScale: Number(scaleSelect.value) } }));
   publish(current);
 
-  const authUnsubscribe = onAuthStateChanged(AUTH, async user => {
-    if (!user || disposed) return;
-    status.textContent = "Syncing settings…";
-    try {
-      await syncSettings(user.uid, readLocalSettings(), publish);
-      if (!disposed) status.textContent = user.isAnonymous ? "Guest settings saved" : "Settings synced";
-    } catch (error) {
-      if (!disposed) status.textContent = "Settings stay on this device";
-      console.warn("Portfolio settings could not load:", error);
-    }
-  });
-
-  startCloudSync(gameId).catch(error => {
-    status.textContent = "Local play is ready; cloud sync is unavailable";
-    console.warn("Portfolio account setup could not start:", error);
-  });
+  const connectCloud = () => {
+    if (disposed || cloudConnected) return Promise.resolve();
+    if (cloudConnectPromise) return cloudConnectPromise;
+    cloudConnectPromise = (async () => {
+      const cloud = await loadCloudServices();
+      cloud.registerCloudSaveGame(gameId, options.storageKeys || [gameId]);
+      await cloud.startCloudSync(gameId);
+      if (disposed) return;
+      cloudConnected = true;
+      authUnsubscribe = cloud.onAuthStateChanged(cloud.AUTH, async user => {
+        if (!user || disposed) return;
+        status.textContent = "Syncing settings…";
+        try {
+          await syncSettings(user.uid, readLocalSettings(), publish);
+          if (!disposed) status.textContent = user.isAnonymous ? "Guest settings saved" : "Settings synced";
+        } catch (error) {
+          if (!disposed) status.textContent = "Settings stay on this device";
+          console.warn("Portfolio settings could not load:", error);
+        }
+      });
+    })().catch(error => {
+      cloudConnectPromise = null;
+      if (!disposed) status.textContent = navigator.onLine === false ? "Offline play ready; sync resumes online" : "Local play is ready; cloud sync is unavailable";
+      console.warn("Portfolio cloud services could not start:", error);
+    });
+    return cloudConnectPromise;
+  };
+  const onlineHandler = () => { void connectCloud(); };
+  window.addEventListener("online", onlineHandler);
+  void connectCloud();
 
   const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
   const mediaHandler = () => {
@@ -238,6 +277,7 @@ export async function mountPortfolioShell(options = {}) {
     dispose() {
       disposed = true;
       authUnsubscribe();
+      window.removeEventListener("online", onlineHandler);
       media?.removeEventListener?.("change", mediaHandler);
       shell.remove();
     }

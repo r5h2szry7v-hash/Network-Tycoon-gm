@@ -9,6 +9,7 @@ const CORE_FILES = [
   "/rescue/",
   "/starlight/",
   "/tinker/",
+  "/paws/",
   "/offline.html",
   "/version.json",
   "/cloud-save.js",
@@ -20,7 +21,10 @@ const CORE_FILES = [
   "/icons/network-tycoon-maskable-512.png",
   "/icons/apple-touch-icon.png",
   "/images/dog-dark.webp",
-  "/images/dog-tan.webp"
+  "/images/dog-tan.webp",
+  "/paws/images/cat-black-sleek.webp",
+  "/paws/images/cat-black-fluffy.webp",
+  "/paws/images/cat-gray.webp"
 ];
 
 self.addEventListener("install", event => {
