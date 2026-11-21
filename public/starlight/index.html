@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Network Tycoon">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080f20">
@@ -767,5 +772,10 @@ applyMotion();applyPalette();syncMusicButton();renderLevel();showLanding();
 })();
 </script>
 <script type="module">import{startCloudSync}from"/cloud-save.js?v=starlight-account-1";startCloudSync("starlightTracer");</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
+}
+</script>
 </body>
 </html>
