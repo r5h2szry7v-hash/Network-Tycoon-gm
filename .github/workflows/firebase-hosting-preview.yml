@@ -56,7 +56,7 @@ jobs:
           from pathlib import Path
           import json
           version = "${{ github.sha }}"
-          Path("public/version.json").write_text(json.dumps({"version": version}) + "\\n")
+          Path("public/version.json").write_text(json.dumps({"version": version}) + "\n")
           worker = Path("public/service-worker.js")
           source = worker.read_text()
           if "__DEPLOYMENT_VERSION__" not in source:
@@ -71,6 +71,26 @@ jobs:
                   offset = html.lower().rfind("</head>")
                   html = html[:offset] + script + html[offset:]
                   page.write_text(html)
+          PY
+      - name: Validate PWA release artifacts
+        run: |
+          node --check public/update-manager.js
+          node --check public/service-worker.js
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          config = json.loads(Path("firebase.json").read_text())
+          version = json.loads(Path("public/version.json").read_text())
+          assert version["version"] and len(version["version"]) >= 7
+          worker = Path("public/service-worker.js").read_text()
+          assert "__DEPLOYMENT_VERSION__" not in worker
+          assert version["version"] in worker
+          pages = list(Path("public").rglob("*.html"))
+          assert pages, "No portfolio pages found"
+          missing = [str(page) for page in pages if '<script src="/update-manager.js" defer></script>' not in page.read_text()]
+          assert not missing, "Update manager missing from: " + ", ".join(missing)
+          assert any(header.get("source") == "service-worker.js" for header in config["hosting"]["headers"])
+          print(f"Validated {len(pages)} portfolio pages for release {version['version']}.")
           PY
       - name: Deploy temporary Firebase Hosting preview
         id: deploy_preview
