@@ -8,6 +8,7 @@ on:
       - feature/tinker-parts-store
       - feat/pawprint-pursuit-prototype
       - feat/pawprint-reactions
+      - feat/pawprint-prize-feedback
 
 permissions:
   contents: read
