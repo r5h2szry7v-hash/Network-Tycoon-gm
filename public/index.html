@@ -101,6 +101,11 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 .splash-impact{position:absolute;left:50%;top:44%;width:clamp(30px,6vw,70px);aspect-ratio:1;border-radius:50%;background:#e6f6ff;filter:blur(4px);opacity:0;transform:translate(-50%,-50%) scale(.1);animation:splash-impact-flash .55s ease-out 3.53s both}
 .splash-games{position:absolute;z-index:3;left:50%;top:55%;margin:0;color:#b9e2ff;font:900 clamp(2rem,6vw,4.4rem)/1 Outfit,system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase;text-shadow:0 4px 0 #5087aa66,0 12px 28px #54220e60;transform:translate(-50%,100vh) scale(.25);animation:splash-games-slam .72s cubic-bezier(.12,.84,.22,1) 4.22s forwards}
 .splash-hint{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);margin:0;color:#ffe3ce;font:600 .8rem 'DM Sans',system-ui,sans-serif;letter-spacing:.08em;opacity:0;animation:splash-hint-show .35s ease 5.05s forwards}
+.splash-dog{position:absolute;z-index:3;bottom:max(-30px,calc(env(safe-area-inset-bottom) - 24px));width:clamp(180px,24vw,350px);max-height:38vh;object-fit:contain;opacity:0;filter:drop-shadow(0 12px 18px #52220f72);will-change:transform,opacity;pointer-events:none}
+.splash-dog--left{left:0;transform:translateX(-118%) rotate(-8deg);animation:splash-dog-peek-left 1.75s cubic-bezier(.18,.8,.2,1) 6s both}
+.splash-dog--right{right:0;transform:translateX(118%) scaleX(-1) rotate(-8deg);animation:splash-dog-peek-right 1.75s cubic-bezier(.18,.8,.2,1) 6s both}
+@keyframes splash-dog-peek-left{0%,16%{transform:translateX(-118%) rotate(-8deg);opacity:0}38%{transform:translateX(-45%) rotate(3deg);opacity:1}52%,76%{transform:translateX(-45%) rotate(0);opacity:1}100%{transform:translateX(-118%) rotate(-8deg);opacity:0}}
+@keyframes splash-dog-peek-right{0%,16%{transform:translateX(118%) scaleX(-1) rotate(-8deg);opacity:0}38%{transform:translateX(45%) scaleX(-1) rotate(3deg);opacity:1}52%,76%{transform:translateX(45%) scaleX(-1) rotate(0);opacity:1}100%{transform:translateX(118%) scaleX(-1) rotate(-8deg);opacity:0}}
 .splash-overlay.is-leaving{animation:splash-fade-away .48s ease forwards}
 @keyframes splash-orbit-collapse{0%{transform:scale(1) rotate(0);opacity:1}76%{transform:scale(.58) rotate(310deg);opacity:1}100%{transform:scale(.43) rotate(360deg);opacity:.8}}
 @keyframes splash-scatter{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--scatter-x),var(--scatter-y)) scale(.3) rotate(300deg);opacity:0}}
@@ -112,7 +117,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 @keyframes splash-games-slam{0%{transform:translate(-50%,100vh) scale(.25);opacity:0}68%{transform:translate(-50%,-8%) scale(1.12);opacity:1}84%{transform:translate(-50%,4%) scale(.96)}100%{transform:translate(-50%,0) scale(1);opacity:1}}
 @keyframes splash-hint-show{to{opacity:.75}}
 @keyframes splash-fade-away{to{opacity:0;visibility:hidden}}
-@media(max-width:520px){.splash-brand{top:39%;font-size:clamp(2.85rem,14.5vw,4.4rem);letter-spacing:-.09em}.splash-games{top:54%;font-size:clamp(2rem,8vw,2.8rem)}.splash-orbit{width:min(78vw,68vh,430px)}}
+@media(max-width:520px){.splash-brand{top:39%;font-size:clamp(2.85rem,14.5vw,4.4rem);letter-spacing:-.09em}.splash-games{top:54%;font-size:clamp(2rem,8vw,2.8rem)}.splash-dog{width:clamp(140px,42vw,210px);max-height:32vh;bottom:max(-18px,calc(env(safe-area-inset-bottom) - 22px))}.splash-orbit{width:min(78vw,68vh,430px)}}
 @media(prefers-reduced-motion:reduce){.splash-overlay{display:none!important}}
 </style>
 </head>
@@ -123,7 +128,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
       <span class="splash-logo">🏙️</span><span class="splash-logo">🌼</span><span class="splash-logo">🦊</span><span class="splash-logo">🌌</span><span class="splash-logo">⚙️</span>
     </div>
     <div class="splash-brand"><span class="splash-word splash-word--left">Networ<span class="splash-k">k</span></span><span class="splash-word splash-word--right"><span class="splash-t">T</span>ycoon</span></div>
-    <span class="splash-impact"></span><p class="splash-games">Games</p>
+    <span class="splash-impact"></span><p class="splash-games">Games</p><img class="splash-dog splash-dog--left" src="/images/dog-dark.webp" alt="" aria-hidden="true" width="600" height="548"><img class="splash-dog splash-dog--right" src="/images/dog-tan.webp" alt="" aria-hidden="true" width="600" height="548">
   </div>
   <p class="splash-hint" aria-hidden="true">A little world of play</p>
 </div>

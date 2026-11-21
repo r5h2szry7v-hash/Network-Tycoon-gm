@@ -1,5 +1,5 @@
-const CACHE_NAME = "network-tycoon-shell-v1";
-const CORE_FILES = ["/","/offline.html","/manifest.webmanifest","/favicon.svg","/icons/network-tycoon-192.png","/icons/network-tycoon-512.png","/icons/network-tycoon-maskable-512.png","/icons/apple-touch-icon.png"];
+const CACHE_NAME = "network-tycoon-shell-v2";
+const CORE_FILES = ["/","/offline.html","/manifest.webmanifest","/favicon.svg","/icons/network-tycoon-192.png","/icons/network-tycoon-512.png","/icons/network-tycoon-maskable-512.png","/icons/apple-touch-icon.png","/images/dog-dark.webp","/images/dog-tan.webp"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_FILES)).then(() => self.skipWaiting())));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith("network-tycoon-shell-") && key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", event => {
