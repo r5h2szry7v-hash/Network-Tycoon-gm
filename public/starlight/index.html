@@ -318,9 +318,9 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
   <a class="shape-library-link" href="./shape-library.svg" download="starlight-shape-library.svg">Browse the full shape library <span aria-hidden="true">↗</span></a>
  </div>
 </section>
-<section class="color-studio" id="colorStudio" aria-labelledby="colorStudioTitle" aria-hidden="true">
+<section class="color-studio" id="colorStudio" data-activity-id="paint-by-number" aria-labelledby="colorStudioTitle" aria-hidden="true">
  <header class="color-topbar">
-  <button class="studio-nav-btn" id="colorBack" type="button"><span aria-hidden="true">←</span> Menu</button>
+  <button class="studio-nav-btn" id="colorBack" type="button"><span aria-hidden="true">←</span> Playground</button>
   <div class="color-brand"><span class="color-brand-mark" aria-hidden="true">✦</span><span>Cosmic Color Studio</span></div>
   <button class="studio-nav-btn studio-settings" id="colorSettings" type="button" aria-label="Open settings">⚙</button>
  </header>
@@ -347,7 +347,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
  </div>
  <div class="color-footer-note"><span aria-hidden="true">✧</span> No timer. No wrong colors. Just make it yours.</div>
 </section>
-<section class="orbit-spinner-screen" id="orbitSpinnerScreen" aria-labelledby="orbitSpinnerTitle" hidden>
+<section class="orbit-spinner-screen" id="orbitSpinnerScreen" data-activity-id="cosmic-orbit-spinner" aria-labelledby="orbitSpinnerTitle" hidden>
  <div class="orbit-spinner-card">
   <p class="landing-eyebrow">A quiet fidget among the stars</p>
   <h2 id="orbitSpinnerTitle">Cosmic Orbit Spinner</h2>
@@ -374,20 +374,20 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
     <path class="orbit-spinner-star" d="m180 165 4.3 10.7L195 180l-10.7 4.3L180 195l-4.3-10.7L165 180l10.7-4.3z"/>
    </svg>
   </div>
-  <div class="orbit-spinner-controls"><button id="orbitSpinnerSpin" type="button">Give it a spin</button><button class="orbit-back" id="orbitSpinnerBack" type="button">Back to Starlight</button></div>
+  <div class="orbit-spinner-controls"><button id="orbitSpinnerSpin" type="button">Give it a spin</button><button class="orbit-back" id="orbitSpinnerBack" type="button">Back to Playground</button></div>
   <small class="orbit-spinner-hint" id="orbitSpinnerHint" aria-live="polite">Drag around the star, then release to send it spinning.</small>
  </div>
 </section>
-<section class="ripple-pool-screen" id="ripplePoolScreen" aria-labelledby="ripplePoolTitle" hidden>
+<section class="ripple-pool-screen" id="ripplePoolScreen" data-activity-id="ripple-pool" aria-labelledby="ripplePoolTitle" hidden>
  <div class="ripple-pool-card">
   <p class="landing-eyebrow">A small moment of stillness</p><h2 id="ripplePoolTitle">Ripple Pool</h2><p>Tap or sweep across the water to send out rings of starlight.</p>
   <div class="ripple-pool-surface" id="ripplePoolSurface" role="application" tabindex="0" aria-label="Reflective ripple pool. Tap, drag, or press Enter to make ripples.">
    <i class="ripple-pool-star" style="left:21%;top:26%"></i><i class="ripple-pool-star" style="left:70%;top:19%"></i><i class="ripple-pool-star" style="left:79%;top:63%"></i><i class="ripple-pool-star" style="left:33%;top:77%"></i><i class="ripple-pool-star" style="left:52%;top:37%"></i><i class="ripple-pool-star" style="left:16%;top:57%"></i>
   </div>
-  <div class="ripple-pool-controls"><button id="ripplePoolBack" type="button">Back to Starlight</button></div>
+  <div class="ripple-pool-controls"><button id="ripplePoolBack" type="button">Back to Playground</button></div>
  </div>
 </section>
-<section class="orbiting-orbs-screen" id="orbitingOrbsScreen" aria-labelledby="orbitingOrbsTitle" hidden>
+<section class="orbiting-orbs-screen" id="orbitingOrbsScreen" data-activity-id="orbiting-orbs" aria-labelledby="orbitingOrbsTitle" hidden>
  <div class="orbiting-orbs-card">
   <p class="landing-eyebrow">Follow a gentle path through space</p><h2 id="orbitingOrbsTitle">Orbiting Orbs</h2><p>Choose an orb, guide it around its track, then let it coast.</p>
   <div class="orbit-orb-selectors" role="group" aria-label="Choose an orb"><button type="button" data-orb="0" aria-pressed="false">Inner</button><button type="button" data-orb="1" aria-pressed="true">Middle</button><button type="button" data-orb="2" aria-pressed="false">Outer</button></div>
@@ -401,7 +401,7 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
     <circle class="orbit-center" cx="180" cy="180" r="16"/><path class="orbit-center-star" d="m180 168 3.5 8.5L192 180l-8.5 3.5L180 192l-3.5-8.5L168 180l8.5-3.5z"/>
    </svg>
   </div>
-  <div class="orbiting-orbs-controls"><button id="orbitingOrbsBack" type="button">Back to Starlight</button></div><small class="orbiting-orbs-hint" id="orbitingOrbsHint" aria-live="polite">Drag any bead, or select one and use the arrow keys.</small>
+  <div class="orbiting-orbs-controls"><button id="orbitingOrbsBack" type="button">Back to Playground</button></div><small class="orbiting-orbs-hint" id="orbitingOrbsHint" aria-live="polite">Drag any bead, or select one and use the arrow keys.</small>
  </div>
 </section>
 <section class="playground-screen" id="playgroundScreen" aria-labelledby="playgroundTitle" hidden>
@@ -420,31 +420,31 @@ html.pref-reduced-motion .compass-wheel,html.pref-reduced-motion .compass-label{
   <small class="playground-hint">Swipe or turn slowly to browse. Flick to coast, or spin for a random pick.</small>
  </div>
 </section>
-<section class="liquid-nebula-screen" id="liquidNebulaScreen" aria-labelledby="liquidNebulaTitle" hidden>
+<section class="liquid-nebula-screen" id="liquidNebulaScreen" data-activity-id="liquid-nebula" aria-labelledby="liquidNebulaTitle" hidden>
  <div class="liquid-nebula-card">
   <p class="landing-eyebrow">A soft cloud of color</p><h2 id="liquidNebulaTitle">Liquid Nebula</h2><p>Sweep through the clouds of light. They’ll drift back together when you let go.</p>
   <canvas class="liquid-nebula-surface" id="liquidNebulaCanvas" role="application" tabindex="0" aria-label="Liquid Nebula. Drag or sweep to part the glowing clouds. Use arrow keys to move the cloud opening."></canvas>
-  <button class="liquid-nebula-back" id="liquidNebulaBack" type="button">Back to Starlight Playground</button>
+  <button class="liquid-nebula-back" id="liquidNebulaBack" type="button">Back to Playground</button>
  </div>
 </section>
-<section class="comet-tether-screen" id="cometTetherScreen" aria-labelledby="cometTetherTitle" hidden>
+<section class="comet-tether-screen" id="cometTetherScreen" data-activity-id="comet-tether" aria-labelledby="cometTetherTitle" hidden>
  <div class="comet-tether-card">
   <p class="landing-eyebrow">Pull a little light through space</p><h2 id="cometTetherTitle">Comet Tether</h2><p>Pull the comet away from its star, then let it spring gently back.</p>
   <canvas class="comet-tether-surface" id="cometTetherCanvas" role="application" tabindex="0" aria-label="Comet Tether. Drag the glowing comet outward and release it to spring back. Use arrow keys to pull it."></canvas>
-  <button class="comet-tether-back" id="cometTetherBack" type="button">Back to Starlight Playground</button>
+  <button class="comet-tether-back" id="cometTetherBack" type="button">Back to Playground</button>
  </div>
 </section>
-<section class="stardust-rake-screen" id="stardustRakeScreen" aria-labelledby="stardustRakeTitle" hidden>
+<section class="stardust-rake-screen" id="stardustRakeScreen" data-activity-id="stardust-rake" aria-labelledby="stardustRakeTitle" hidden>
  <div class="stardust-rake-card">
   <p class="landing-eyebrow">A soft sweep of starlight</p><h2 id="stardustRakeTitle">Stardust Rake</h2><p>Brush through the glowing grains and watch them drift gently back.</p>
   <canvas class="stardust-rake-surface" id="stardustRakeCanvas" role="application" tabindex="0" aria-label="Stardust Rake. Drag or sweep to move the glowing grains. Use arrow keys to brush across the field."></canvas>
-  <button class="stardust-rake-back" id="stardustRakeBack" type="button">Back to Starlight Playground</button>
+  <button class="stardust-rake-back" id="stardustRakeBack" type="button">Back to Playground</button>
  </div>
 </section>
-<div class="game-screen" id="gameScreen" aria-hidden="true">
+<div class="game-screen" id="gameScreen" data-activity-id="tracer" aria-hidden="true">
 <header class="topbar">
   <div class="brand"><div class="brand-mark" aria-hidden="true">✦</div><div><span class="brand-title">Starlight Tracer</span><span class="brand-sub">A little space to unwind</span></div></div>
-  <div class="top-actions"><a class="quiet-link" href="/" aria-label="Return to game home">← Games</a><button class="settings-btn menu-btn" id="landingOpen" type="button" aria-label="Return to Starlight Tracer menu"><span aria-hidden="true">⌂</span><span class="label">Menu</span></button><button class="settings-btn map-btn" id="mapOpen" type="button"><span aria-hidden="true">✦</span><span class="label">Sky map</span></button><button class="settings-btn music-btn" id="musicButton" type="button" aria-pressed="false" aria-label="Turn ambient music on"><span aria-hidden="true">♫</span><span class="label">Music</span></button><button class="settings-btn" id="settingsOpen" type="button"><span aria-hidden="true">⚙</span><span class="label">Settings</span></button></div>
+  <div class="top-actions"><a class="quiet-link" href="/" aria-label="Return to game home">← Games</a><button class="settings-btn menu-btn" id="landingOpen" type="button" aria-label="Return to Starlight Playground"><span aria-hidden="true">⌂</span><span class="label">Playground</span></button><button class="settings-btn map-btn" id="mapOpen" type="button"><span aria-hidden="true">✦</span><span class="label">Sky map</span></button><button class="settings-btn music-btn" id="musicButton" type="button" aria-pressed="false" aria-label="Turn ambient music on"><span aria-hidden="true">♫</span><span class="label">Music</span></button><button class="settings-btn" id="settingsOpen" type="button"><span aria-hidden="true">⚙</span><span class="label">Settings</span></button></div>
 </header>
 <main class="main">
   <div class="eyebrow" id="chapter">Drifting · 1</div>
@@ -730,9 +730,7 @@ function showColorStudio(){
  window.scrollTo({top:0,behavior:reduced()?"auto":"smooth"});
  document.getElementById("colorBack").focus()
 }
-function hideColorStudio(){
- var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");showLanding()
-}
+function hideColorStudio(){window.StarlightApp.returnToPlayground()}
 function svgElement(tag,attrs){
  var el=document.createElementNS(colorSvgNS,tag);
  Object.keys(attrs||{}).forEach(function(key){el.setAttribute(key,attrs[key])});
@@ -997,7 +995,7 @@ document.getElementById("colorUndo").addEventListener("click",undoColor);
 document.getElementById("colorReset").addEventListener("click",clearColorScene);
 document.getElementById("newGameBtn").addEventListener("click",function(){state.level=1;save();renderLevel();showGame()});
 document.getElementById("resumeBtn").addEventListener("click",function(){if(this.disabled)return;renderLevel();showGame()});
-document.getElementById("landingOpen").addEventListener("click",showLanding);
+document.getElementById("landingOpen").addEventListener("click",function(){window.StarlightApp.returnToPlayground()});
 document.getElementById("tutorialOpen").addEventListener("click",openTutorial);
 document.getElementById("landingSettingsOpen").addEventListener("click",openSettings);
 document.getElementById("tutorialClose").addEventListener("click",closeTutorial);
@@ -1022,161 +1020,13 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
 }
 </script>
-<script>
-(function(){
- var screen=document.getElementById("orbitSpinnerScreen"),open=document.getElementById("orbitSpinnerOpen"),back=document.getElementById("orbitSpinnerBack"),stage=document.getElementById("orbitSpinnerStage"),rotor=document.getElementById("orbitSpinnerRotor"),starfield=document.getElementById("orbitStarfield"),spin=document.getElementById("orbitSpinnerSpin"),hint=document.getElementById("orbitSpinnerHint");
- if(!screen||!open||!stage||!rotor)return;
- var angle=0,velocity=0,frame=0,lastFrame=0,dragging=false,lastPointerAngle=0,lastTime=0,reduced=document.documentElement.classList.contains("pref-reduced-motion");
- function render(){rotor.setAttribute("transform","rotate("+angle+" 180 180)");if(starfield){starfield.setAttribute("transform","rotate("+(-angle*.28)+" 180 180)");starfield.style.opacity=String(.42+Math.min(Math.abs(velocity)/900,.42))}}
- function animate(now){
-  if(!lastFrame)lastFrame=now;
-  var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;
-  if(!dragging){angle+=velocity*dt;velocity*=Math.exp(-1.35*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}
-  render();frame=requestAnimationFrame(animate)
- }
- function ensureFrame(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
- function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
- function openSpinner(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
- function closeSpinner(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
- open.addEventListener("click",openSpinner);back.addEventListener("click",closeSpinner);
- stage.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()});
- stage.addEventListener("pointermove",function(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=delta;velocity=delta/dt*1000;lastPointerAngle=a;lastTime=now;render()});
- function release(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else ensureFrame()}
- stage.addEventListener("pointerup",release);stage.addEventListener("pointercancel",release);
- spin.addEventListener("click",function(){if(reduced){hint.textContent="Reduced motion is on. Drag the rings to turn them at your own pace.";return}velocity=480;ensureFrame();hint.textContent="The comet rings are drifting freely."});
- stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angle+=12;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angle-=12;velocity=0;render();e.preventDefault()}});
-})();
-</script>
-<script>
-(function(){
- var screen=document.getElementById("ripplePoolScreen"),open=document.getElementById("ripplePoolOpen"),back=document.getElementById("ripplePoolBack"),surface=document.getElementById("ripplePoolSurface"),reduced=document.documentElement.classList.contains("pref-reduced-motion"),lastPoint=null,lastSpawn=0;
- if(!screen||!open||!surface)return;
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");var spinner=document.getElementById("orbitSpinnerScreen");if(spinner)spinner.hidden=true;screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});surface.focus()}
- function hide(){screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
- function ripple(x,y){var w=document.createElement("i");w.className="ripple-wave"+(Math.random()>.55?" soft":"");w.style.left=x+"px";w.style.top=y+"px";surface.appendChild(w);w.addEventListener("animationend",function(){w.remove()},{once:true});if(reduced)setTimeout(function(){if(w.isConnected)w.remove()},250);else setTimeout(function(){if(w.isConnected)w.remove()},3200)}
- function point(e){var r=surface.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
- open.addEventListener("click",show);back.addEventListener("click",hide);
- surface.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;surface.setPointerCapture(e.pointerId);lastPoint=point(e);lastSpawn=performance.now();ripple(lastPoint.x,lastPoint.y);e.preventDefault()});
- surface.addEventListener("pointermove",function(e){if(!lastPoint)return;var p=point(e),dx=p.x-lastPoint.x,dy=p.y-lastPoint.y,dist=Math.hypot(dx,dy),now=performance.now();if(dist>34&&now-lastSpawn>38){ripple(p.x,p.y);lastPoint=p;lastSpawn=now}});
- function end(){lastPoint=null}surface.addEventListener("pointerup",end);surface.addEventListener("pointercancel",end);
- surface.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){var r=surface.getBoundingClientRect();ripple(r.width/2,r.height/2);e.preventDefault()}});
-})();
-</script>
-<script>
-(function(){
- var screen=document.getElementById("orbitingOrbsScreen"),open=document.getElementById("orbitingOrbsOpen"),back=document.getElementById("orbitingOrbsBack"),stage=document.getElementById("orbitingOrbsStage"),hint=document.getElementById("orbitingOrbsHint"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
- if(!screen||!open||!stage)return;
- var radii=[63,105,146],angles=[0,130,245],selected=1,dragging=false,lastPointerAngle=0,lastTime=0,velocity=0,frame=0,lastFrame=0;
- var beads=[0,1,2].map(function(i){return document.getElementById("orbitBead"+i)}),starGroup=document.getElementById("orbitStars"),stars=[],selectors=Array.from(document.querySelectorAll(".orbit-orb-selectors button")),tracks=Array.from(document.querySelectorAll(".orbit-track"));
- function buildStarfield(){var seed=72931;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}for(var i=0;i<108;i++){var x,y,tries=0;do{x=22+rand()*316;y=22+rand()*316;tries++}while((Math.hypot(x-180,y-180)>158||Math.hypot(x-180,y-180)<21)&&tries<30);var c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("class","orbit-star");c.setAttribute("cx",x.toFixed(1));c.setAttribute("cy",y.toFixed(1));var radius=.55+rand()*1.15;c.dataset.base=radius.toFixed(2);c.setAttribute("r",radius.toFixed(2));c.style.fill=rand()>.68?"var(--accent)":"var(--trace)";c.style.opacity=".18";starGroup.appendChild(c);stars.push(c)}}
- function render(){beads.forEach(function(b,i){b.setAttribute("transform","rotate("+angles[i]+" 180 180)")});var positions=angles.map(function(a,i){a=a*Math.PI/180;return{x:180+Math.cos(a)*radii[i],y:180+Math.sin(a)*radii[i]}});stars.forEach(function(star){var sx=Number(star.getAttribute("cx")),sy=Number(star.getAttribute("cy")),glow=0;positions.forEach(function(p){glow=Math.max(glow,Math.max(0,1-Math.hypot(sx-p.x,sy-p.y)/48))});star.style.opacity=String(.16+glow*.8);star.setAttribute("r",(Number(star.dataset.base)+glow*1.65).toFixed(2));star.style.filter=glow>.08?"drop-shadow(0 0 "+(2+glow*8)+"px var(--trace))":""})}
- function choose(i){if(i!==selected){velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0}selected=i;selectors.forEach(function(b){b.setAttribute("aria-pressed",String(Number(b.dataset.orb)===i))});tracks.forEach(function(t){t.classList.toggle("selected",Number(t.dataset.track)===i)});render()}
- function animate(now){if(!lastFrame)lastFrame=now;var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;if(!dragging){angles[selected]+=velocity*dt;velocity*=Math.exp(-1.45*dt);if(Math.abs(velocity)<2){velocity=0;frame=0;lastFrame=0;render();return}}render();frame=requestAnimationFrame(animate)}
- function startMotion(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
- function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
- function pointerRadius(e){var r=stage.getBoundingClientRect();return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))/(Math.min(r.width,r.height)/360)}
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");["orbitSpinnerScreen","ripplePoolScreen"].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
- function hide(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
- function begin(e){if(e.button!==undefined&&e.button!==0)return;var r=pointerRadius(e),i=0;radii.forEach(function(v,n){if(Math.abs(v-r)<Math.abs(radii[i]-r))i=n});choose(i);dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()}
- function move(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angles[selected]+=delta;velocity=Math.max(-900,Math.min(900,delta/dt*1000));lastPointerAngle=a;lastTime=now;render()}
- function end(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else startMotion()}
- open.addEventListener("click",show);back.addEventListener("click",hide);selectors.forEach(function(b){b.addEventListener("click",function(){choose(Number(b.dataset.orb))})});stage.addEventListener("pointerdown",begin);stage.addEventListener("pointermove",move);stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
- stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowUp"){angles[selected]+=8;velocity=0;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowDown"){angles[selected]-=8;velocity=0;render();e.preventDefault()}else if(e.key==="1"||e.key==="2"||e.key==="3"){choose(Number(e.key)-1);e.preventDefault()}});
- buildStarfield();render();;
-})();
-</script>
-<script>
-(function(){
- var open=document.getElementById("playgroundOpen"),screen=document.getElementById("playgroundScreen"),wheel=document.getElementById("compassWheel"),wrap=document.getElementById("compassWrap"),track=document.getElementById("carouselTrack"),current=document.getElementById("playgroundCurrent"),play=document.getElementById("playSelected"),surprise=document.getElementById("surpriseMe"),back=document.getElementById("playgroundBack"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
- if(!open||!screen||!wheel||!track)return;
- var games=[{name:"Starlight Tracer",icon:"✧",desc:"Trace slow, glowing paths",button:"resumeBtn"},{name:"Paint by Number",icon:"✿",desc:"Fill calm cosmic illustrations",button:"colorStudioOpen"},{name:"Cosmic Orbit Spinner",icon:"✦",desc:"Spin a tiny solar system",button:"orbitSpinnerOpen"},{name:"Ripple Pool",icon:"◉",desc:"Send soft rings across water",button:"ripplePoolOpen"},{name:"Orbiting Orbs",icon:"☼",desc:"Guide beads through space",button:"orbitingOrbsOpen"},{name:"Liquid Nebula",icon:"✺",desc:"Shape drifting clouds of color",button:"liquidNebulaOpen"},{name:"Comet Tether",icon:"☄",desc:"Pull a comet and let it spring back",button:"cometTetherOpen"},{name:"Stardust Rake",icon:"✧",desc:"Sweep glowing grains that settle softly",button:"stardustRakeOpen"}],position=0,velocity=0,selected=0,dragging=false,lastPointer=0,lastTime=0,frame=0,lastFrame=0,randomTarget=null,randomFrom=0,randomStart=0,randomEnd=0,randomDuration=0,dragMoved=false,suppressClick=false,renderFrame=0,shownSelected=-1;
- var cards=games.map(function(g,i){var b=document.createElement("button");b.type="button";b.className="carousel-card";b.setAttribute("aria-label","Select "+g.name);b.innerHTML='<span class="carousel-icon" aria-hidden="true">'+g.icon+'</span><b>'+g.name+'</b><small>'+g.desc+'</small>';b.addEventListener("click",function(){if(i!==selected){position=i;velocity=0;render()}else launch()});track.appendChild(b);return b});
- function mod(n,m){return((n%m)+m)%m}
- function render(){selected=mod(Math.round(position),games.length);if(selected!==shownSelected){shownSelected=selected;current.textContent="Selected "+(selected+1)+" of "+games.length+": "+games[selected].name;play.textContent="Play "+games[selected].name}var gap=wrap.clientWidth*.38,half=games.length/2;cards.forEach(function(card,i){var off=mod(i-position+half,games.length)-half,abs=Math.abs(off),scale=Math.max(.42,1-abs*.19),opacity=Math.max(0,1-abs*.29),near=abs<1.12;card.style.transform="translate(calc(-50% + "+(off*gap)+"px), calc(-50% + "+(abs*7)+"px)) scale("+scale+")";card.style.opacity=String(opacity);card.style.zIndex=String(10-Math.round(abs));card.style.pointerEvents=near?"auto":"none";card.tabIndex=near?0:-1;card.setAttribute("aria-hidden",abs<2.2?"false":"true");card.classList.toggle("is-selected",abs<.5);card.setAttribute("aria-current",abs<.5?"true":"false")})}function requestRender(){if(!renderFrame)renderFrame=requestAnimationFrame(function(){renderFrame=0;render()})}
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");["colorStudio","orbitSpinnerScreen","ripplePoolScreen","orbitingOrbsScreen","liquidNebulaScreen","cometTetherScreen","stardustRakeScreen"].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove("active");el.setAttribute("aria-hidden","true");el.hidden=true}});screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});render();wheel.focus()}
- function stopMotion(){velocity=0;randomTarget=null;if(frame){cancelAnimationFrame(frame);frame=0}if(renderFrame){cancelAnimationFrame(renderFrame);renderFrame=0}lastFrame=0}
- function hide(){stopMotion();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});open.focus()}
- function launch(){stopMotion();var button=games[selected].button;if(button==="resumeBtn"&&document.getElementById(button).disabled)button="newGameBtn";screen.hidden=true;document.getElementById(button).click()}
- function animate(now){if(randomTarget!==null){var t=Math.min(1,(now-randomStart)/randomDuration),ease=1-Math.pow(1-t,4);position=randomFrom+(randomEnd-randomFrom)*ease;render();if(t>=1){position=randomEnd;selected=randomTarget;randomTarget=null;velocity=0;frame=0;lastFrame=0;render();return}frame=requestAnimationFrame(animate);return}if(!lastFrame)lastFrame=now;var dt=Math.min((now-lastFrame)/1000,.04);lastFrame=now;if(!dragging){if(Math.abs(velocity)>.045){position+=velocity*dt;velocity*=Math.exp(-4.2*dt)}else{velocity=0;var diff=Math.round(position)-position;if(Math.abs(diff)<.001){position=Math.round(position);render();frame=0;lastFrame=0;return}position+=diff*(1-Math.exp(-10*dt))}}render();frame=requestAnimationFrame(animate)}
- function start(){if(!frame){lastFrame=0;frame=requestAnimationFrame(animate)}}
- function down(e){if(e.button!==undefined&&e.button!==0)return;stopMotion();dragging=true;dragMoved=false;lastPointer=e.clientX;lastTime=performance.now();e.preventDefault()}
- function move(e){if(!dragging)return;var dx=e.clientX-lastPointer,now=performance.now(),dt=Math.max(now-lastTime,8);if(Math.abs(dx)>3){dragMoved=true;try{wheel.setPointerCapture(e.pointerId)}catch(err){}}position-=dx/Math.max(100,wrap.clientWidth*.38);velocity=Math.max(-6,Math.min(6,-dx/Math.max(dt,8)*1000/Math.max(100,wrap.clientWidth*.38)));lastPointer=e.clientX;lastTime=now;requestRender()}
- function up(){if(!dragging)return;dragging=false;if(dragMoved){suppressClick=true;setTimeout(function(){suppressClick=false},80)}if(reduced){velocity=0;position=Math.round(position);render()}else start()}
- function pickRandom(){stopMotion();var idx=Math.floor(Math.random()*games.length);if(reduced){position=idx;render();return}randomTarget=idx;randomFrom=position;randomEnd=position+games.length*3+mod(idx-mod(position,games.length),games.length);randomStart=performance.now();randomDuration=3100;start()}
- open.addEventListener("click",show);back.addEventListener("click",hide);play.addEventListener("click",launch);surprise.addEventListener("click",pickRandom);wheel.addEventListener("pointerdown",down);wheel.addEventListener("pointermove",move);wheel.addEventListener("pointerup",up);wheel.addEventListener("pointercancel",up);wheel.addEventListener("lostpointercapture",up);wheel.addEventListener("click",function(e){if(suppressClick){e.preventDefault();e.stopPropagation()}},true);
- wheel.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowDown"){stopMotion();position+=.14;render();e.preventDefault()}else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){stopMotion();position-=.14;render();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){launch();e.preventDefault()}});window.addEventListener("resize",render);render();
-})();</script>
-<script>
-(function(){
- var screen=document.getElementById("liquidNebulaScreen"),open=document.getElementById("liquidNebulaOpen"),back=document.getElementById("liquidNebulaBack"),canvas=document.getElementById("liquidNebulaCanvas"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
- if(!screen||!open||!canvas)return;var ctx=canvas.getContext("2d");if(!ctx)return;
- var width=0,height=0,dpr=1,active=false,pointer={x:0,y:0},clouds=[],frame=0,running=false,lastTime=0,keyTimer=0;
- function rgb(color,fallback){var m=color.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);if(!m)return fallback;var h=m[1];if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]}
- function rgba(c,a){return"rgba("+c[0]+","+c[1]+","+c[2]+","+a+")"}
- function resize(){var r=canvas.getBoundingClientRect();if(!r.width)return;width=r.width;height=r.height;dpr=Math.min(window.devicePixelRatio||1,1.6);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw(performance.now())}
- function makeClouds(){var style=getComputedStyle(document.documentElement),trace=rgb(style.getPropertyValue("--trace").trim(),[114,215,242]),accent=rgb(style.getPropertyValue("--accent").trim(),[167,189,247]),colors=[trace,accent,[151,126,255],[91,194,225],[126,139,255],[104,213,198],[181,134,230],[95,163,228]];clouds=[{x:.2,y:.28,r:.34,p:.2},{x:.5,y:.2,r:.32,p:1.3},{x:.79,y:.3,r:.36,p:2.5},{x:.28,y:.52,r:.37,p:3.8},{x:.68,y:.53,r:.4,p:5.1},{x:.18,y:.77,r:.34,p:2.1},{x:.49,y:.8,r:.36,p:4.2},{x:.82,y:.75,r:.35,p:.9}].map(function(c,i){return Object.assign(c,{color:colors[i],dx:0,dy:0,tx:0,ty:0})})}
- function draw(time){if(!ctx||!width)return;ctx.clearRect(0,0,width,height);ctx.fillStyle="#081326";ctx.fillRect(0,0,width,height);var min=Math.min(width,height),cx=width/2,cy=height/2;
-  clouds.forEach(function(c){var drift=reduced?0:Math.sin(time*.00024+c.p)*2.5,x=c.x*width+c.dx+drift,y=c.y*height+c.dy+Math.cos(time*.00021+c.p)*(!reduced?2.5:0),r=c.r*min,g=ctx.createRadialGradient(x-r*.12,y-r*.16,r*.04,x,y,r);g.addColorStop(0,rgba(c.color,.54));g.addColorStop(.28,rgba(c.color,.3));g.addColorStop(.62,rgba(c.color,.13));g.addColorStop(1,rgba(c.color,0));ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)});
-  for(var i=0;i<32;i++){var a=i*2.39996,rr=(.17+(i%7)*.105)*min,sx=cx+Math.cos(a)*rr,sy=cy+Math.sin(a)*rr,twinkle=.28+(.5+.5*Math.sin(time*.0014+i*4.1))*.45;ctx.beginPath();ctx.arc(sx,sy,i%9===0?1.35:.75,0,Math.PI*2);ctx.fillStyle="rgba(220,240,255,"+twinkle+")";ctx.fill()}
-  if(active){var hole=ctx.createRadialGradient(pointer.x,pointer.y,2,pointer.x,pointer.y,min*.28);hole.addColorStop(0,"rgba(5,12,28,.58)");hole.addColorStop(.42,"rgba(5,12,28,.25)");hole.addColorStop(1,"rgba(5,12,28,0)");ctx.fillStyle=hole;ctx.fillRect(0,0,width,height)}
- }
- function updateTargets(){clouds.forEach(function(c){if(!active){c.tx=0;c.ty=0;return}var dx=c.x*width-pointer.x,dy=c.y*height-pointer.y,d=Math.hypot(dx,dy),push=Math.max(0,1-d/(Math.min(width,height)*.48))*Math.min(width,height)*.17;if(d<1){dx=Math.cos(c.p);dy=Math.sin(c.p);d=1}c.tx=dx/d*push;c.ty=dy/d*push})}
- function settle(){updateTargets();if(reduced){clouds.forEach(function(c){c.dx=c.tx;c.dy=c.ty});draw(performance.now());return}if(!running){running=true;lastTime=performance.now();frame=requestAnimationFrame(tick)}}
- function tick(now){var dt=Math.min((now-lastTime)/16.67,2.5);lastTime=now,remaining=0;updateTargets();clouds.forEach(function(c){var ease=1-Math.pow(.91,dt);c.dx+=(c.tx-c.dx)*ease;c.dy+=(c.ty-c.dy)*ease;if(Math.abs(c.dx-c.tx)+Math.abs(c.dy-c.ty)>.35)remaining++});draw(now);if(remaining||active){frame=requestAnimationFrame(tick)}else{running=false;frame=0;draw(now)}}
- function position(e){var r=canvas.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;active=true;settle()}
- function end(){active=false;settle()}
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");["orbitSpinnerScreen","ripplePoolScreen","orbitingOrbsScreen","playgroundScreen","liquidNebulaScreen"].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove("active");el.setAttribute("aria-hidden","true");el.hidden=true}});screen.hidden=false;resize();canvas.focus();window.scrollTo({top:0,behavior:reduced?"auto":"smooth"})}
- function hide(){active=false;settle();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});document.getElementById("playgroundOpen").focus()}
- open.addEventListener("click",show);back.addEventListener("click",hide);canvas.addEventListener("pointerdown",function(e){canvas.setPointerCapture(e.pointerId);position(e);e.preventDefault()});canvas.addEventListener("pointermove",function(e){if(e.buttons||e.pointerType==="touch")position(e)});canvas.addEventListener("pointerup",end);canvas.addEventListener("pointercancel",end);canvas.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse"&&!e.buttons)end()});canvas.addEventListener("keydown",function(e){if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){var step=Math.min(width,height)*.055;if(e.key==="ArrowLeft")pointer.x=Math.max(0,pointer.x-step);if(e.key==="ArrowRight")pointer.x=Math.min(width,pointer.x+step);if(e.key==="ArrowUp")pointer.y=Math.max(0,pointer.y-step);if(e.key==="ArrowDown")pointer.y=Math.min(height,pointer.y+step);active=true;settle();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){pointer.x=width/2;pointer.y=height/2;active=true;settle();clearTimeout(keyTimer);keyTimer=setTimeout(end,650);e.preventDefault()}});canvas.addEventListener("keyup",function(e){if(e.key.startsWith("Arrow"))end()});window.addEventListener("resize",resize);makeClouds();resize();
-})();
-</script>
-<script>
-(function(){
- var screen=document.getElementById("cometTetherScreen"),open=document.getElementById("cometTetherOpen"),back=document.getElementById("cometTetherBack"),canvas=document.getElementById("cometTetherCanvas"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
- if(!screen||!open||!canvas)return;var ctx=canvas.getContext("2d");if(!ctx)return;
- var width=0,height=0,dpr=1,anchor={x:0,y:0},head={x:0,y:0},velocity={x:0,y:0},dragging=false,frame=0,running=false,lastTime=0,lastPointer={x:0,y:0},lastPointerTime=0,stars=[];
- function rgb(value,fallback){var m=value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);if(!m)return fallback;var h=m[1];if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]}
- function rgba(c,a){return"rgba("+c[0]+","+c[1]+","+c[2]+","+a+")"}
- function colors(){var st=getComputedStyle(document.documentElement);return{trace:rgb(st.getPropertyValue("--trace").trim(),[114,215,242]),accent:rgb(st.getPropertyValue("--accent").trim(),[167,189,247])}}
- function resize(){var r=canvas.getBoundingClientRect();if(!r.width)return;var firstSize=!width||!height,oldWidth=width,oldHeight=height;width=r.width;height=r.height;dpr=Math.min(window.devicePixelRatio||1,1.6);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);anchor={x:width/2,y:height/2};if(firstSize){head.x=anchor.x;head.y=anchor.y;velocity.x=velocity.y=0}else{head.x=anchor.x+(head.x-oldWidth/2)*(width/oldWidth);head.y=anchor.y+(head.y-oldHeight/2)*(height/oldHeight)}stars=[];var seed=78113;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}for(var i=0;i<42;i++){var a=rand()*Math.PI*2,r=Math.sqrt(rand())*Math.min(width,height)*.46;stars.push({x:anchor.x+Math.cos(a)*r,y:anchor.y+Math.sin(a)*r,r:.45+rand()*1.05,p:rand()*6.28})}draw()}
- function pathPoint(t){var dx=head.x-anchor.x,dy=head.y-anchor.y,dist=Math.hypot(dx,dy),perpX=dist? -dy/dist:0,perpY=dist?dx/dist:0,bend=Math.min(dist*.22,34);return{x:(1-t)*(1-t)*anchor.x+2*(1-t)*t*(anchor.x+dx*.5+perpX*bend)+t*t*head.x,y:(1-t)*(1-t)*anchor.y+2*(1-t)*t*(anchor.y+dy*.5+perpY*bend)+t*t*head.y}}
- function draw(){if(!ctx||!width)return;var palette=colors(),cx=anchor.x,cy=anchor.y,min=Math.min(width,height);ctx.clearRect(0,0,width,height);ctx.fillStyle="#081326";ctx.fillRect(0,0,width,height);
-  stars.forEach(function(s){var glow=.3+(.5+.5*Math.sin(performance.now()*.001+s.p))*.32;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle="rgba(218,237,255,"+glow+")";ctx.fill()});
-  var dx=head.x-cx,dy=head.y-cy,dist=Math.hypot(dx,dy),curve=pathPoint(.5),g=ctx.createLinearGradient(cx,cy,head.x,head.y);g.addColorStop(0,rgba(palette.accent,.26));g.addColorStop(.56,rgba(palette.trace,.76));g.addColorStop(1,"rgba(238,250,255,.98)");
-  ctx.save();ctx.lineCap="round";ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(curve.x,curve.y,head.x,head.y);ctx.strokeStyle=rgba(palette.trace,.13);ctx.lineWidth=15;ctx.stroke();ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(curve.x,curve.y,head.x,head.y);ctx.strokeStyle=g;ctx.lineWidth=4.5;ctx.shadowColor=rgba(palette.trace,.72);ctx.shadowBlur=13;ctx.stroke();ctx.restore();
-  for(var j=1;j<=5;j++){var q=pathPoint(j/6),size=1.1+(j%2)*.7;ctx.beginPath();ctx.arc(q.x,q.y,size,0,Math.PI*2);ctx.fillStyle="rgba(239,250,255,"+(0.28+Math.min(dist/min,.5)*.45)+")";ctx.fill()}
-  var glow=ctx.createRadialGradient(head.x,head.y,1,head.x,head.y,min*.13);glow.addColorStop(0,"rgba(245,252,255,.78)");glow.addColorStop(.16,rgba(palette.trace,.48));glow.addColorStop(1,rgba(palette.trace,0));ctx.fillStyle=glow;ctx.fillRect(head.x-min*.14,head.y-min*.14,min*.28,min*.28);
-  ctx.beginPath();ctx.arc(head.x,head.y,Math.max(8,min*.026),0,Math.PI*2);var orb=ctx.createRadialGradient(head.x-3,head.y-4,1,head.x,head.y,Math.max(9,min*.026));orb.addColorStop(0,"#ffffff");orb.addColorStop(.46,rgba(palette.trace,.96));orb.addColorStop(1,rgba(palette.accent,.9));ctx.fillStyle=orb;ctx.shadowColor=rgba(palette.trace,.8);ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
-  ctx.beginPath();ctx.arc(cx,cy,Math.max(5,min*.014),0,Math.PI*2);ctx.fillStyle=rgba(palette.accent,.88);ctx.shadowColor=rgba(palette.accent,.75);ctx.shadowBlur=11;ctx.fill();ctx.shadowBlur=0;
- }
- function start(){if(!running){running=true;lastTime=performance.now();frame=requestAnimationFrame(tick)}}
- function tick(now){var dt=Math.min((now-lastTime)/1000,.035);lastTime=now;if(!dragging){var ax=-22*(head.x-anchor.x)-7.1*velocity.x,ay=-22*(head.y-anchor.y)-7.1*velocity.y;velocity.x+=ax*dt;velocity.y+=ay*dt;head.x+=velocity.x*dt;head.y+=velocity.y*dt;if(Math.hypot(head.x-anchor.x,head.y-anchor.y)<.65&&Math.hypot(velocity.x,velocity.y)<3){head.x=anchor.x;head.y=anchor.y;velocity.x=velocity.y=0;draw();frame=0;running=false;return}}draw();frame=requestAnimationFrame(tick)}
- function coords(e){var r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
- function clamp(p){var dx=p.x-anchor.x,dy=p.y-anchor.y,d=Math.hypot(dx,dy),max=Math.min(width,height)*.43;if(d>max){p.x=anchor.x+dx/d*max;p.y=anchor.y+dy/d*max}return p}
- function down(e){if(e.button!==undefined&&e.button!==0)return;var p=coords(e);if(Math.hypot(p.x-head.x,p.y-head.y)>Math.min(width,height)*.28)return;dragging=true;velocity.x=velocity.y=0;lastPointer=p;lastPointerTime=performance.now();try{canvas.setPointerCapture(e.pointerId)}catch(err){}e.preventDefault()}
- function move(e){if(!dragging)return;var p=clamp(coords(e)),now=performance.now(),dt=Math.max((now-lastPointerTime)/1000,.008);velocity.x=Math.max(-850,Math.min(850,(p.x-lastPointer.x)/dt));velocity.y=Math.max(-850,Math.min(850,(p.y-lastPointer.y)/dt));head.x=p.x;head.y=p.y;lastPointer=p;lastPointerTime=now;draw()}
- function up(){if(!dragging)return;dragging=false;if(reduced){head.x=anchor.x;head.y=anchor.y;velocity.x=velocity.y=0;draw()}else start()}
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");["orbitSpinnerScreen","ripplePoolScreen","orbitingOrbsScreen","playgroundScreen","liquidNebulaScreen"].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove("active");el.setAttribute("aria-hidden","true");el.hidden=true}});screen.hidden=false;resize();canvas.focus();window.scrollTo({top:0,behavior:reduced?"auto":"smooth"})}
- function hide(){dragging=false;if(frame)cancelAnimationFrame(frame);frame=0;running=false;screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});document.getElementById("playgroundOpen").focus()}
- canvas.style.touchAction="none";canvas.addEventListener("pointerdown",down);canvas.addEventListener("pointermove",move);canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up);canvas.addEventListener("lostpointercapture",up);window.addEventListener("blur",up);document.addEventListener("visibilitychange",function(){if(document.hidden)up()});canvas.addEventListener("keydown",function(e){var step=Math.min(width,height)*.1;if(e.key==="ArrowLeft"||e.key==="ArrowRight"||e.key==="ArrowUp"||e.key==="ArrowDown"){if(!dragging){dragging=true;velocity.x=velocity.y=0}if(e.key==="ArrowLeft")head.x=Math.max(0,head.x-step);if(e.key==="ArrowRight")head.x=Math.min(width,head.x+step);if(e.key==="ArrowUp")head.y=Math.max(0,head.y-step);if(e.key==="ArrowDown")head.y=Math.min(height,head.y+step);var p=clamp({x:head.x,y:head.y});head.x=p.x;head.y=p.y;draw();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){if(reduced){draw()}else{velocity.y=-420;start()}e.preventDefault()}});canvas.addEventListener("keyup",function(e){if(e.key.startsWith("Arrow"))up()});window.addEventListener("resize",resize);open.addEventListener("click",show);back.addEventListener("click",hide);resize();
-})();
-</script>
-<script>
-(function(){
- var screen=document.getElementById("stardustRakeScreen"),open=document.getElementById("stardustRakeOpen"),back=document.getElementById("stardustRakeBack"),canvas=document.getElementById("stardustRakeCanvas"),reduced=document.documentElement.classList.contains("pref-reduced-motion");
- if(!screen||!open||!canvas)return;var ctx=canvas.getContext("2d");if(!ctx)return;
- var width=0,height=0,dpr=1,grains=[],pointer={x:0,y:0},active=false,dragging=false,frame=0,running=false,lastTime=0,seed=98641;
- function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
- function resize(){var r=canvas.getBoundingClientRect();if(!r.width)return;width=r.width;height=r.height;dpr=Math.min(window.devicePixelRatio||1,1.6);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);grains=[];for(var i=0;i<145;i++){var a=rand()*Math.PI*2,rad=Math.sqrt(rand())*Math.min(width,height)*.46,x=width/2+Math.cos(a)*rad,y=height/2+Math.sin(a)*rad;grains.push({x:x,y:y,ox:x,oy:y,vx:0,vy:0,r:.8+rand()*1.5,p:rand()*6.28})}draw(performance.now())}
- function draw(now){if(!ctx||!width)return;ctx.clearRect(0,0,width,height);ctx.fillStyle="#081326";ctx.fillRect(0,0,width,height);var trace=getComputedStyle(document.documentElement).getPropertyValue("--trace").trim()||"#72d7f2",accent=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#a7bdf7";grains.forEach(function(g){var d=active?Math.hypot(g.x-pointer.x,g.y-pointer.y):999,tw=.45+.3*(.5+.5*Math.sin(now*.001+g.p)),near=active?Math.max(0,1-d/110):0;ctx.beginPath();ctx.arc(g.x,g.y,g.r+near*.8,0,Math.PI*2);ctx.fillStyle=near>.02?trace:"rgba(226,241,255,"+tw+")";ctx.globalAlpha=.45+near*.55;ctx.shadowColor=near>.02?trace:accent;ctx.shadowBlur=near>0?4+near*10:2;ctx.fill()});ctx.globalAlpha=1;ctx.shadowBlur=0}
- function tick(now){var dt=Math.min((now-lastTime)/1000,.04);lastTime=now;var moving=0;grains.forEach(function(g){var ax=(g.ox-g.x)*20-g.vx*7.2,ay=(g.oy-g.y)*20-g.vy*7.2;if(active){var dx=g.x-pointer.x,dy=g.y-pointer.y,d=Math.hypot(dx,dy),reach=108;if(d<reach){if(d<.1){dx=Math.cos(g.p);dy=Math.sin(g.p);d=1}var force=(1-d/reach)*560;ax+=dx/d*force;ay+=dy/d*force;var swirl=(1-d/reach)*85;ax+=-dy/d*swirl;ay+=dx/d*swirl}}g.vx+=ax*dt;g.vy+=ay*dt;g.x+=g.vx*dt;g.y+=g.vy*dt;if(Math.abs(g.ox-g.x)+Math.abs(g.oy-g.y)>.7||Math.abs(g.vx)+Math.abs(g.vy)>.9)moving++});draw(now);if(active||moving){frame=requestAnimationFrame(tick)}else{running=false;frame=0;draw(now)}}
- function settle(){if(reduced){grains.forEach(function(g){g.x=g.ox;g.y=g.oy;g.vx=g.vy=0});draw(performance.now());return}if(!running){running=true;lastTime=performance.now();frame=requestAnimationFrame(tick)}}
- function point(e){var r=canvas.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;active=true;settle()}
- function end(){active=false;dragging=false;settle()}
- function show(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");["colorStudio","orbitSpinnerScreen","ripplePoolScreen","orbitingOrbsScreen","playgroundScreen","liquidNebulaScreen","cometTetherScreen"].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove("active");el.setAttribute("aria-hidden","true");el.hidden=true}});screen.hidden=false;resize();canvas.focus();window.scrollTo({top:0,behavior:reduced?"auto":"smooth"})}
- function hide(){active=false;settle();screen.hidden=true;document.getElementById("landingScreen").hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});document.getElementById("playgroundOpen").focus()}
- canvas.style.touchAction="none";canvas.addEventListener("pointerdown",function(e){dragging=true;canvas.setPointerCapture(e.pointerId);point(e);e.preventDefault()});canvas.addEventListener("pointermove",function(e){if(dragging||e.pointerType==="touch")point(e)});canvas.addEventListener("pointerup",end);canvas.addEventListener("pointercancel",end);canvas.addEventListener("lostpointercapture",end);window.addEventListener("blur",end);document.addEventListener("visibilitychange",function(){if(document.hidden)end()});canvas.addEventListener("keydown",function(e){var step=Math.min(width,height)*.12;if(e.key==="ArrowLeft"||e.key==="ArrowRight"||e.key==="ArrowUp"||e.key==="ArrowDown"){if(e.key==="ArrowLeft")pointer.x=Math.max(0,pointer.x-step);if(e.key==="ArrowRight")pointer.x=Math.min(width,pointer.x+step);if(e.key==="ArrowUp")pointer.y=Math.max(0,pointer.y-step);if(e.key==="ArrowDown")pointer.y=Math.min(height,pointer.y+step);active=true;settle();e.preventDefault()}else if(e.key==="Enter"||e.key===" "){pointer.x=width/2;pointer.y=height/2;active=true;settle();setTimeout(end,650);e.preventDefault()}});canvas.addEventListener("keyup",function(e){if(e.key.startsWith("Arrow"))end()});window.addEventListener("resize",resize);open.addEventListener("click",show);back.addEventListener("click",hide);resize();
-})();
-</script>
+<script src="./js/starlight-app.js"></script>
+<script src="./js/games/cosmic-orbit-spinner.js"></script>
+<script src="./js/games/ripple-pool.js"></script>
+<script src="./js/games/orbiting-orbs.js"></script>
+<script src="./js/playground.js"></script>
+<script src="./js/games/liquid-nebula.js"></script>
+<script src="./js/games/comet-tether.js"></script>
+<script src="./js/games/stardust-rake.js"></script>
 </body>
 </html>
