@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#102b3a">
+<meta name="theme-color" content="#a7471c">
 <meta name="description" content="Build a broadband empire, match colorful puzzles, guide little critters home, or trace constellations beneath a quiet starfield.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=cityscape-2">
-<title>Choose Your Game</title>
+<title>Network Tycoon Games</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
 *{box-sizing:border-box}body{margin:0;min-height:100vh;color:#173443;font-family:'DM Sans',system-ui,sans-serif;background:radial-gradient(ellipse at 12% 8%,#c9f2df,transparent 33%),radial-gradient(ellipse at 92% 10%,#e6d8ff,transparent 35%),linear-gradient(145deg,#f4f8f2,#eaf3f1 58%,#f5f1fb)}
@@ -69,9 +69,60 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 @media(prefers-reduced-motion:reduce){.spark,.halo,.emoji{animation:none!important}.game{transition:none!important;scroll-behavior:auto!important}}
+
+/* Animated portfolio arrival */
+.splash-overlay[hidden]{display:none}
+.splash-overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 46%,#d4753d 0%,#bc5b28 48%,#963d1c 100%);color:#a9dcff}
+.splash-overlay:before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at center,#ffd7a31c 0 1px,transparent 2px);background-size:46px 46px;opacity:.55;transform:rotate(-8deg)}
+.splash-skip{position:absolute;z-index:4;right:max(18px,env(safe-area-inset-right));top:max(16px,env(safe-area-inset-top));border:1px solid #b6e3ff66;border-radius:999px;padding:10px 15px;background:#7f351c80;color:#d8efff;font:700 .9rem 'DM Sans',system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
+.splash-skip:focus-visible{outline:3px solid #d8efff;outline-offset:3px}
+.splash-stage{position:absolute;inset:0;display:grid;place-items:center}
+.splash-orbit{position:relative;width:min(72vw,72vh,620px);aspect-ratio:1;border:1px solid #bce5ff64;border-radius:50%;box-shadow:0 0 0 22px #bce5ff0e,0 0 0 54px #bce5ff0a;animation:splash-orbit-collapse 3.8s cubic-bezier(.2,.75,.25,1) forwards}
+.splash-orbit:before,.splash-orbit:after{content:"";position:absolute;inset:12%;border:1px solid #bce5ff27;border-radius:50%}
+.splash-orbit:after{inset:25%;border-color:#bce5ff20}
+.splash-logo{position:absolute;display:grid;place-items:center;width:clamp(46px,9vw,76px);aspect-ratio:1;border-radius:50%;font-size:clamp(2rem,6vw,3.6rem);filter:drop-shadow(0 8px 12px #55230d70);animation:splash-scatter .62s cubic-bezier(.2,.7,.25,1) 3.2s forwards}
+.splash-logo:nth-child(1){left:50%;top:-5%;--scatter-x:-78vw;--scatter-y:-42vh}
+.splash-logo:nth-child(2){left:94%;top:30%;--scatter-x:72vw;--scatter-y:-45vh}
+.splash-logo:nth-child(3){left:78%;top:87%;--scatter-x:76vw;--scatter-y:46vh}
+.splash-logo:nth-child(4){left:22%;top:87%;--scatter-x:-76vw;--scatter-y:47vh}
+.splash-logo:nth-child(5){left:6%;top:30%;--scatter-x:-74vw;--scatter-y:-45vh}
+.splash-brand{position:absolute;z-index:2;left:50%;top:44%;display:flex;align-items:baseline;justify-content:center;white-space:nowrap;font:900 clamp(2.65rem,10.5vw,8rem)/.92 Outfit,system-ui,sans-serif;letter-spacing:-.075em;text-shadow:0 5px 0 #5087aa66,0 14px 32px #54220e55;pointer-events:none}
+.splash-word{display:inline-flex;align-items:baseline}
+.splash-word--left{animation:splash-enter-left 1.35s cubic-bezier(.12,.82,.18,1) 2.25s both}
+.splash-word--right{animation:splash-enter-right 1.35s cubic-bezier(.12,.82,.18,1) 2.25s both}
+.splash-k,.splash-t{display:inline-block;position:relative;z-index:2}
+.splash-k{animation:splash-impact-k .48s cubic-bezier(.16,.9,.3,1) 3.53s both}
+.splash-t{animation:splash-impact-t .48s cubic-bezier(.16,.9,.3,1) 3.53s both}
+.splash-impact{position:absolute;left:50%;top:44%;width:clamp(30px,6vw,70px);aspect-ratio:1;border-radius:50%;background:#e6f6ff;filter:blur(4px);opacity:0;transform:translate(-50%,-50%) scale(.1);animation:splash-impact-flash .55s ease-out 3.53s both}
+.splash-games{position:absolute;z-index:3;left:50%;top:69%;margin:0;color:#c6e8ff;font:900 clamp(2rem,6vw,4.4rem)/1 Outfit,system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase;text-shadow:0 4px 0 #5087aa66,0 12px 28px #54220e60;transform:translate(-50%,100vh) scale(.25);animation:splash-games-slam .72s cubic-bezier(.12,.84,.22,1) 4.22s forwards}
+.splash-hint{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);margin:0;color:#ffe3ce;font:600 .8rem 'DM Sans',system-ui,sans-serif;letter-spacing:.08em;opacity:0;animation:splash-hint-show .35s ease 5.05s forwards}
+.splash-overlay.is-leaving{animation:splash-fade-away .48s ease forwards}
+@keyframes splash-orbit-collapse{0%{transform:scale(1) rotate(0);opacity:1}76%{transform:scale(.58) rotate(310deg);opacity:1}100%{transform:scale(.43) rotate(360deg);opacity:.8}}
+@keyframes splash-scatter{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--scatter-x),var(--scatter-y)) scale(.3) rotate(300deg);opacity:0}}
+@keyframes splash-enter-left{0%{transform:translateX(-110vw);opacity:0}70%{transform:translateX(5%);opacity:1}85%{transform:translateX(-2%)}100%{transform:translateX(0);opacity:1}}
+@keyframes splash-enter-right{0%{transform:translateX(110vw);opacity:0}70%{transform:translateX(-5%);opacity:1}85%{transform:translateX(2%)}100%{transform:translateX(0);opacity:1}}
+@keyframes splash-impact-k{0%{transform:scale(1)}36%{transform:translateX(7px) scale(1.3)}58%{transform:translateX(-3px) scale(.9)}100%{transform:translateX(0) scale(1)}}
+@keyframes splash-impact-t{0%{transform:scale(1)}36%{transform:translateX(-7px) scale(1.3)}58%{transform:translateX(3px) scale(.9)}100%{transform:translateX(0) scale(1)}}
+@keyframes splash-impact-flash{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}30%{opacity:.9;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+@keyframes splash-games-slam{0%{transform:translate(-50%,100vh) scale(.25);opacity:0}68%{transform:translate(-50%,-8%) scale(1.12);opacity:1}84%{transform:translate(-50%,4%) scale(.96)}100%{transform:translate(-50%,0) scale(1);opacity:1}}
+@keyframes splash-hint-show{to{opacity:.75}}
+@keyframes splash-fade-away{to{opacity:0;visibility:hidden}}
+@media(max-width:520px){.splash-brand{font-size:clamp(2.35rem,10.3vw,3.4rem);letter-spacing:-.08em}.splash-games{top:67%;font-size:clamp(1.75rem,7vw,2.5rem)}.splash-orbit{width:min(78vw,68vh,430px)}}
+@media(prefers-reduced-motion:reduce){.splash-overlay{display:none!important}}
 </style>
 </head>
-<body><main class="page">
+<body><div class="splash-overlay" id="portfolio-splash" hidden aria-label="Network Tycoon Games intro">
+  <button class="splash-skip" id="splash-skip" type="button">Skip intro</button>
+  <div class="splash-stage" aria-hidden="true">
+    <div class="splash-orbit">
+      <span class="splash-logo">🏙️</span><span class="splash-logo">🌼</span><span class="splash-logo">🦊</span><span class="splash-logo">🌌</span><span class="splash-logo">⚙️</span>
+    </div>
+    <div class="splash-brand"><span class="splash-word splash-word--left">Networ<span class="splash-k">k</span></span><span class="splash-word splash-word--right"><span class="splash-t">T</span>ycoon</span></div>
+    <span class="splash-impact"></span><p class="splash-games">Games</p>
+  </div>
+  <p class="splash-hint" aria-hidden="true">A little world of play</p>
+</div>
+<main class="page">
 <div class="orbit" aria-hidden="true"></div><span class="spark a" aria-hidden="true">✦</span><span class="spark b" aria-hidden="true">✧</span><span class="spark c" aria-hidden="true">✦</span>
 <header><div class="kicker"><i class="dot" aria-hidden="true"></i>Your next little adventure</div><h1>Pick a game.<br><span>Make a moment.</span></h1><p class="intro">Build a broadband empire, solve colorful puzzles, guide little critters home, trace the stars, or tinker with tiny machines. Pick an adventure and jump in.</p></header>
 <nav class="games" aria-label="Choose a game">
@@ -80,4 +131,8 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 <a class="game rescue" href="/rescue/" aria-label="Play Critter Rescue"><div class="top"><span class="label">Logic · Explore · Rescue</span><span class="badge">A safe path home</span></div><div class="art" aria-hidden="true"><span class="halo"></span><span class="emoji">🦊</span></div><h2 class="title">Critter Rescue</h2><p class="desc">Read the clues, uncover a safe trail, and guide three little friends home through a world of hidden dangers.</p><div class="tags"><span>🧩 Number clues</span><span>🐾 Three friends</span><span>🌙 New worlds</span></div><div class="cta"><span>Guide them home</span><span class="arrow" aria-hidden="true">→</span></div></a>
 <a class="game starlight" href="/starlight/" aria-label="Play Starlight Tracer"><div class="top"><span class="label">Space · Trace · Unwind</span><span class="badge">No timer, just starlight</span></div><div class="art" aria-hidden="true"><span class="halo"></span><span class="emoji">🌌</span></div><h2 class="title">Starlight Tracer</h2><p class="desc">Trace glowing constellations, drift through new starfields, and discover new shapes at your own pace.</p><div class="tags"><span>✦ Gentle tracing</span><span>🌌 New constellations</span><span>🎨 Space palettes</span></div><div class="cta"><span>Trace the stars</span><span class="arrow" aria-hidden="true">→</span></div></a>
 <a class="game tinker" href="/tinker/" aria-label="Play Tinker Factory"><div class="top"><span class="label">Tinker · Build · Solve</span><span class="badge">Make it move</span></div><div class="art" aria-hidden="true"><span class="halo"></span><span class="emoji">⚙️</span></div><h2 class="title">Tinker Factory</h2><p class="desc">Choose curious parts, set them in motion, and build a chain reaction that brings each tiny workshop to life.</p><div class="tags"><span>⚙️ Curious parts</span><span>🎯 Clever chains</span><span>✨ Satisfying runs</span></div><div class="cta"><span>Start tinkering</span><span class="arrow" aria-hidden="true">→</span></div></a></nav><footer>Five games, one place to play. <span>Choose your next adventure above.</span></footer>
-</main></body></html>
+</main>
+<script>
+(()=>{const splash=document.getElementById('portfolio-splash');const skip=document.getElementById('splash-skip');if(!splash||!skip||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;splash.hidden=false;let done=false;const finish=()=>{if(done)return;done=true;splash.classList.add('is-leaving');window.setTimeout(()=>{splash.hidden=true},500)};const timer=window.setTimeout(finish,7000);skip.addEventListener('click',()=>{window.clearTimeout(timer);finish()},{once:true})})();
+</script>
+</body></html>
