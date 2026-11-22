@@ -87,6 +87,14 @@ html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shad
 @media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.exit.is-ringing{animation:none;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}}
 .gate.exit.is-ringing{position:relative;z-index:2;transform-origin:50% 12%;animation:bellRing .5s ease-in-out 4;box-shadow:0 0 0 4px #f5ce6555,0 0 18px #f5bd45}
 @keyframes bellRing{0%,100%{transform:rotate(0) scale(1)}15%,45%,75%{transform:rotate(15deg) scale(1.12)}30%,60%,90%{transform:rotate(-15deg) scale(1.12)}}
+.gate.entry{background:#ffe8ad;color:#714a12;box-shadow:0 0 0 2px #e6a93655;font-weight:1000}.gate.entry.is-intro{animation:entryGatePulse .72s ease-in-out 2}
+.cell.entry-cell.is-intro{position:relative;z-index:2;animation:entryCellPulse .8s ease-in-out 2}.cell.entry-cell.is-intro:after{content:"";position:absolute;z-index:4;left:2px;top:50%;width:14px;height:14px;border:2px solid #fff;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8c7 0 16%,#ffc342 42%,#cf7618 100%);box-shadow:0 0 0 3px #e9a83155,0 0 14px #ffc342;transform:translate(-22px,-50%);animation:entryMarbleRoll .8s cubic-bezier(.2,.75,.35,1) 2 both;pointer-events:none}.gate.exit.is-intro{animation:goalPulse .8s ease-in-out 2}
+@keyframes entryGatePulse{50%{transform:scale(1.15);box-shadow:0 0 0 6px #f2c76777,0 0 18px #e6a936}}@keyframes entryCellPulse{50%{box-shadow:0 0 0 7px #efc55f66,0 4px 0 #d9ad5d}}@keyframes entryMarbleRoll{0%{opacity:0;transform:translate(-22px,-50%) scale(.55)}15%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translate(22px,-50%) scale(.85)}}@keyframes goalPulse{50%{transform:scale(1.2);box-shadow:0 0 0 6px #85c99c88,0 0 18px #5aaf79}}
+html[data-portfolio-motion=reduce] .gate.entry.is-intro,html[data-portfolio-motion=reduce] .cell.entry-cell.is-intro,html[data-portfolio-motion=reduce] .gate.exit.is-intro{animation:none;box-shadow:0 0 0 4px #efc55f55,0 0 16px #f5bd45}html[data-portfolio-motion=reduce] .cell.entry-cell.is-intro:after{animation:none;opacity:0}
+@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.entry.is-intro,html:not([data-portfolio-motion=full]) .cell.entry-cell.is-intro,html:not([data-portfolio-motion=full]) .gate.exit.is-intro{animation:none;box-shadow:0 0 0 4px #efc55f55,0 0 16px #f5bd45}html:not([data-portfolio-motion=full]) .cell.entry-cell.is-intro:after{animation:none;opacity:0}}
+.failure-stop-mark{position:absolute;z-index:5;right:3px;top:3px;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#a53f30;color:#fff;font-size:16px;font-weight:1000;line-height:1;box-shadow:0 1px 5px #0005;animation:failureMarkPop .24s ease-out both;pointer-events:none}.cell.failure-stop{z-index:3;animation:failureStopPulse .65s ease-in-out 3;border-color:#b94937;box-shadow:0 0 0 4px #c9584433,0 0 17px #d16a4c66}
+@keyframes failureStopPulse{50%{transform:scale(1.06);background:#ffd9cc;box-shadow:0 0 0 8px #d8694d22,0 0 22px #d16a4c88}}@keyframes failureMarkPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+html[data-portfolio-motion=reduce] .cell.failure-stop,html[data-portfolio-motion=reduce] .failure-stop-mark{animation:none}@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .cell.failure-stop,html:not([data-portfolio-motion=full]) .failure-stop-mark{animation:none}}
 .cell{position:relative;display:grid;place-items:center;aspect-ratio:1;min-width:0;border:1px solid #d5c7a8;border-radius:12px;background:#fffaf0;box-shadow:0 3px 0 #d9c8a4;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
 html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=dark] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=dark] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=dark] .broken-circuit .circuit-break{stroke:#d99568}
 @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=system] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=system] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=system] .broken-circuit .circuit-break{stroke:#d99568}}
@@ -100,8 +108,8 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .cell.is-missing{background:#ffede3;border-color:#d47a5f;box-shadow:0 0 0 4px #db816c33}
 .cell-icon{width:72%;height:72%;pointer-events:none}
 .ball-dot{position:absolute;right:3px;top:3px;width:10px;height:10px;border-radius:50%;background:#ffd45b;box-shadow:0 0 10px #f6a92c}
-.board-caption{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;color:var(--game-muted);font-size:.75em;font-weight:800;margin:11px 0 0}
-.board-caption span{display:inline-flex;align-items:center;gap:5px}
+.board-caption{display:flex;justify-content:center;gap:10px 18px;flex-wrap:wrap;color:var(--game-ink);font-size:.82em;font-weight:900;margin:11px 0 0}.board-caption span{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--game-line);border-radius:999px;background:var(--game-surface)}.board-caption .start-label{border-color:#e6bd69}.board-caption .goal-label{border-color:#91c5a2}
+.first-run-demo{display:flex;align-items:center;justify-content:center;gap:9px;margin:10px auto 0;padding:8px 12px;width:max-content;max-width:100%;border:1px solid var(--game-line);border-radius:13px;background:var(--game-surface);color:var(--game-ink);font-size:.84em;font-weight:850;text-align:left}.first-run-demo[hidden]{display:none}.demo-step-number{display:grid;place-items:center;flex:none;width:27px;height:27px;border-radius:50%;background:var(--game-accent);color:#fff;font-weight:1000}.demo-focus{position:relative!important;z-index:8!important;animation:demoFocus .72s ease-in-out infinite alternate!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--game-accent) 40%,transparent),0 0 18px color-mix(in srgb,var(--game-accent) 45%,transparent)!important}@keyframes demoFocus{to{transform:scale(1.06);filter:brightness(1.08)}}html[data-portfolio-motion=reduce] .demo-focus{animation:none!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--game-accent) 45%,transparent)!important}@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .demo-focus{animation:none!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--game-accent) 45%,transparent)!important}}
 .inventory{margin:0;padding:12px 16px;border:1px solid var(--game-line);border-radius:18px;background:var(--game-surface);box-shadow:var(--game-shadow)}
 .inventory-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
 .inventory-top p{font-size:.8em;color:var(--game-muted);margin:0}
@@ -318,7 +326,8 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
       <div class="board-heading"><h2>Workbench</h2><div class="board-heading-meta"><span class="difficulty-tag" id="difficulty-tag" hidden></span><span id="board-size">5 × 5 grid</span></div></div>
       <div class="board-wrap">
         <div class="board-grid" id="board" aria-label="Machine building grid"></div>
-        <div class="board-caption"><span>▶ Marble starts here</span><span>🔔 Carry it to the bell</span></div>
+        <div class="board-caption"><span class="start-label">▶ MARBLE START · enters here</span><span class="goal-label">🔔 GOAL · ring the bell</span></div>
+        <div class="first-run-demo" id="first-run-demo" hidden aria-live="polite"><span class="demo-step-number" id="demo-step-number">1</span><span id="demo-step-copy">Choose a part from the tray.</span></div>
       </div>
     </section>
     <section class="inventory" aria-label="Parts tray">
@@ -438,6 +447,9 @@ let removeMode = false;
 let running = false;
 let solved = [];
 let levelIndex = 0;
+let introCueLevel = -1;
+let firstPuzzleDemoPlayed = false;
+let firstPuzzleDemoToken = 0;
 function gridSizeForLevel(index) { return index < 5 ? 5 : index < 12 ? 6 : 7; }
 function migrateLegacyLayout(layout, size) {
   if (!layout || size <= 5 || typeof layout !== "object") return layout;
@@ -780,9 +792,9 @@ function render() {
     rowNode.className = "board-row";
     rowNode.style.gridTemplateColumns = `26px repeat(${size}, minmax(0, 1fr)) 26px`;
     const source = document.createElement("span");
-    source.className = "gate";
+    source.className = row === current.start ? "gate entry" : "gate";
     source.textContent = row === current.start ? "▶" : "";
-    if (row === current.start) source.setAttribute("aria-label", "Marble entry row");
+    if (row === current.start) { source.id = "marble-entry"; source.setAttribute("aria-label", "Marble start, entering from the left"); }
     rowNode.append(source);
     for (let col = 0; col < size; col++) {
       const index = keyOf(row, col);
@@ -805,8 +817,8 @@ function render() {
       } else {
         cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", empty");
       }
-      if (row === current.start && col === 0) cell.classList.add("entry-cell");
-      if (row === current.goal && col === size - 1) cell.classList.add("exit-cell");
+      if (row === current.start && col === 0) { cell.classList.add("entry-cell"); cell.id = "marble-start-cell"; }
+      if (row === current.goal && col === size - 1) { cell.classList.add("exit-cell"); cell.setAttribute("aria-label", (cell.getAttribute("aria-label") || "") + ", bell goal"); }
       const checkpointIndex = (current.targets || []).indexOf(index);
       if (checkpointIndex >= 0) {
         cell.classList.add("checkpoint-cell");
@@ -871,7 +883,7 @@ function render() {
     selectedPart ? PARTS[selectedPart].name + " selected. Tap empty squares to place more; tap placed parts to rotate; tap this part again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
-  board.querySelectorAll(".cell").forEach(cell => cell.classList.remove("is-lit", "is-missing"));
+  board.querySelectorAll(".cell").forEach(cell => { cell.classList.remove("is-lit", "is-missing", "failure-stop"); cell.querySelector(".failure-stop-mark")?.remove(); });
 }
 function storePlacement(index, tile) {
   placements[index] = tile;
@@ -881,6 +893,7 @@ function storePlacement(index, tile) {
 board.addEventListener("click", event => {
   const cell = event.target.closest(".cell");
   if (!cell || cell.disabled || running) return;
+  stopFirstPuzzleDemo();
   const index = Number(cell.dataset.index);
   const existing = placements[index];
   if (removeMode) {
@@ -934,6 +947,7 @@ board.addEventListener("click", event => {
 partsNode.addEventListener("click", event => {
   const button = event.target.closest(".part");
   if (!button || button.disabled || running) return;
+  stopFirstPuzzleDemo();
   selectedPart = selectedPart === button.dataset.part ? "" : button.dataset.part;
   removeMode = false;
   render();
@@ -945,6 +959,47 @@ removeButton.addEventListener("click", () => {
   render();
 });
 function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+function playBoardIntro() {
+  if (introCueLevel === levelIndex) return;
+  introCueLevel = levelIndex;
+  const entry = document.getElementById("marble-entry");
+  const start = document.getElementById("marble-start-cell");
+  const bell = document.getElementById("bell-goal");
+  entry?.classList.add("is-intro"); start?.classList.add("is-intro"); bell?.classList.add("is-intro");
+  window.setTimeout(() => { entry?.classList.remove("is-intro"); start?.classList.remove("is-intro"); bell?.classList.remove("is-intro"); }, 1700);
+}
+function stopFirstPuzzleDemo() {
+  firstPuzzleDemoToken++;
+  document.querySelectorAll(".demo-focus").forEach(node => node.classList.remove("demo-focus"));
+  document.getElementById("first-run-demo").hidden = true;
+}
+async function playFirstPuzzleDemo() {
+  if (levelIndex !== 0 || solved.length || firstPuzzleDemoPlayed) return;
+  firstPuzzleDemoPlayed = true;
+  const token = ++firstPuzzleDemoToken;
+  const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
+  const demo = document.getElementById("first-run-demo");
+  const number = document.getElementById("demo-step-number");
+  const copy = document.getElementById("demo-step-copy");
+  const steps = [
+    { selector: ".part:not(:disabled)", text: "Choose a part from the tray." },
+    { selector: "#marble-start-cell", text: "Tap an empty square to place it." },
+    { selector: "#run-button", text: "Run the machine to test your route." }
+  ];
+  demo.hidden = false;
+  await wait(1550);
+  for (let i = 0; i < steps.length; i++) {
+    if (token !== firstPuzzleDemoToken) return;
+    document.querySelectorAll(".demo-focus").forEach(node => node.classList.remove("demo-focus"));
+    number.textContent = String(i + 1);
+    copy.textContent = steps[i].text;
+    document.querySelector(steps[i].selector)?.classList.add("demo-focus");
+    await wait(reduced ? 1100 : 1450);
+  }
+  if (token !== firstPuzzleDemoToken) return;
+  document.querySelectorAll(".demo-focus").forEach(node => node.classList.remove("demo-focus"));
+  demo.hidden = true;
+}
 function triggerFailureShake() {
   const motion = document.documentElement.dataset.portfolioMotion;
   if (motion === "reduce" || (motion !== "full" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)) return;
@@ -957,6 +1012,7 @@ app.addEventListener("animationend", event => {
 });
 async function runMachine() {
   if (running) return;
+  stopFirstPuzzleDemo();
   running = true;
   clearTrace();
   app.classList.add("machine-running");
@@ -1021,11 +1077,18 @@ async function runMachine() {
     running = false;
     app.classList.remove("machine-running");
     render();
-    triggerFailureShake();
     const blocked = result.path[result.path.length - 1];
+    if (blocked) {
+      const stoppedCell = board.querySelector('.cell[data-index="' + keyOf(blocked.row, blocked.col) + '"]');
+      if (stoppedCell) {
+        stoppedCell.classList.add("failure-stop");
+        const marker = document.createElement("span"); marker.className = "failure-stop-mark"; marker.setAttribute("aria-hidden", "true"); marker.textContent = "×"; stoppedCell.append(marker);
+      }
+    }
+    triggerFailureShake();
     setStatus(blocked
-      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
-      : "The machine needs a connected route. Try starting at the marble entry.", "error");
+      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The pulsing × marks the gap. Add or rotate a part there to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
+      : "The machine needs a connected route. Start with a part at the marble entry.", "error");
   }
 }
 runButton.addEventListener("click", runMachine);
@@ -1056,9 +1119,14 @@ function showGame() {
   document.getElementById("game-screen").hidden = false;
   document.getElementById("home-button").hidden = false;
   document.getElementById("mission-title").focus();
+  playBoardIntro();
+  playFirstPuzzleDemo();
 }
 function startNewGame() {
   levelIndex = 0;
+  introCueLevel = -1;
+  firstPuzzleDemoPlayed = false;
+  stopFirstPuzzleDemo();
   solved = [];
   hintCredits = 0;
   hintStepByLevel = {};
@@ -1160,8 +1228,9 @@ function advancePuzzle() {
   clearTrace();
   saveGame();
   render();
-  setStatus("A new workbench is ready. Take a look at the workshop note.");
+  setStatus("A new workbench is ready. Follow the marble from START to the bell.");
   document.getElementById("mission-title").focus();
+  playBoardIntro();
 }
 document.getElementById("settings-button").addEventListener("click", () => openModal("settings-modal"));
 document.getElementById("tutorial-button").addEventListener("click", () => openModal("tutorial-modal"));
