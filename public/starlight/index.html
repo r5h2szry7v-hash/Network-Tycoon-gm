@@ -182,7 +182,7 @@ html.pref-reduced-motion *,html.pref-reduced-motion *:before,html.pref-reduced-m
 .ripple-wave{position:absolute;width:54px;height:54px;margin:-27px 0 0 -27px;border:1.5px solid color-mix(in srgb,var(--trace) 80%,white);border-radius:50%;pointer-events:none;opacity:0;will-change:transform,opacity;animation:ripple-expand 2.4s cubic-bezier(.14,.48,.25,1) forwards}
 .ripple-wave:after{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--accent) 63%,transparent);border-radius:50%;opacity:.7}
 .ripple-wave.soft{animation-duration:2.8s}.ripple-pool-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.ripple-pool-controls button{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:15px;background:#ffffff08;font-size:14px;font-weight:800}.ripple-pool-controls button:hover{border-color:color-mix(in srgb,var(--trace) 50%,transparent);background:color-mix(in srgb,var(--trace) 12%,#101a2c)}
-@keyframes ripple-expand{0%{transform:scale(.22);opacity:.78}20%{opacity:.56}100%{transform:scale(4.8);opacity:0}}
+@keyframes ripple-expand{0%{transform:scale(.22);opacity:.78}20%{opacity:.56}100%{transform:scale(var(--ripple-scale,4.8));opacity:0}}
 @media(max-width:600px){.ripple-pool-screen{min-height:calc(100svh - 36px);padding:8px 0 18px}.ripple-pool-card{border-radius:23px}.ripple-pool-surface{width:min(100%,min(50svh,380px));margin:14px auto}}
 @media(prefers-reduced-motion:reduce){.ripple-wave{animation:none;opacity:.36;transform:scale(1.5)}}
 
