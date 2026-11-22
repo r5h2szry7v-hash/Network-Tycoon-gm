@@ -708,6 +708,8 @@ function findPath() {
       ? (state.gearSpin ? -state.gearSpin : (tile.rotation % 2 === 0 ? 1 : -1))
       : state.gearSpin;
     const path = state.path.concat([{ row: state.row, col: state.col, missing: !tile, spinDirection: tile?.type === "gear" ? spin : 0 }]);
+    const stateScore = Math.abs(state.row - current.goal) + Math.max(0, size - 1 - state.col);
+    if (stateScore < best.score) best = { path, score: stateScore };
     const checkpointMask = (current.targets || []).reduce((mask, target, i) =>
       path.some(point => point.row * size + point.col === target) ? mask | (1 << i) : mask, 0);
     const signature = state.row + "," + state.col + "," + state.dir + "," + state.gearSpin + "," + checkpointMask;
@@ -1038,7 +1040,8 @@ async function runMachine() {
       previousMarble = traveler;
       if (point.missing) { await wait(reduced ? 80 : 520); break; }
     }
-    await wait(reduced ? 50 : 310);
+    if (point.missing) continue;
+    await wait(i === result.path.length - 1 ? (reduced ? 80 : 520) : (reduced ? 50 : 310));
   }
   previousMarble?.remove();
   const firstClear = result.success && !solved.includes(levelIndex);
@@ -1078,18 +1081,26 @@ async function runMachine() {
     app.classList.remove("machine-running");
     render();
     const blocked = result.path[result.path.length - 1];
+    let stoppedTraveler = null;
     if (blocked) {
       const stoppedCell = board.querySelector('.cell[data-index="' + keyOf(blocked.row, blocked.col) + '"]');
       if (stoppedCell) {
         stoppedCell.classList.add("failure-stop");
+        stoppedTraveler = document.createElement("span");
+        stoppedTraveler.className = "marble-traveler";
+        stoppedTraveler.setAttribute("aria-hidden", "true");
+        stoppedCell.append(stoppedTraveler);
         const marker = document.createElement("span"); marker.className = "failure-stop-mark"; marker.setAttribute("aria-hidden", "true"); marker.textContent = "×"; stoppedCell.append(marker);
       }
     }
-    setStatus(blocked
-      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The pulsing × marks the gap. Add or rotate a part there to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
-      : "The machine needs a connected route. Start with a part at the marble entry.", "error");
+    const stopCopy = blocked
+      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The pulsing × marks where its route ends. Add or rotate a part to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
+      : "The machine needs a connected route. Start with a part at the marble entry.";
+    setStatus(stopCopy, "error");
     await wait(reduced ? 0 : 320);
     triggerFailureShake();
+    await wait(reduced ? 0 : 720);
+    stoppedTraveler?.remove();
   }
 }
 runButton.addEventListener("click", runMachine);
