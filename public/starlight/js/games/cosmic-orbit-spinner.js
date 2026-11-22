@@ -4,6 +4,7 @@
  var screen=document.getElementById("orbitSpinnerScreen"),open=document.getElementById("orbitSpinnerOpen"),back=document.getElementById("orbitSpinnerBack"),stage=document.getElementById("orbitSpinnerStage"),rotor=document.getElementById("orbitSpinnerRotor"),starfield=document.getElementById("orbitStarfield"),spin=document.getElementById("orbitSpinnerSpin"),hint=document.getElementById("orbitSpinnerHint");
  if(!screen||!open||!stage||!rotor)return;
  var angle=0,velocity=0,frame=0,lastFrame=0,dragging=false,lastPointerAngle=0,lastTime=0,reduced=document.documentElement.classList.contains("pref-reduced-motion");
+ function makeStarfield(){if(!starfield)return;var seed=73129;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}for(var i=0;i<170;i++){var c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("class","orbit-star generated-star");c.setAttribute("cx",String(12+rand()*336));c.setAttribute("cy",String(12+rand()*336));c.setAttribute("r",String(.55+rand()*1.3));c.style.opacity=String(.28+rand()*.62);starfield.appendChild(c)}}
  function render(){rotor.setAttribute("transform","rotate("+angle+" 180 180)");if(starfield){starfield.setAttribute("transform","rotate("+(-angle*.28)+" 180 180)");starfield.style.opacity=String(.42+Math.min(Math.abs(velocity)/900,.42))}}
  function animate(now){
   if(!lastFrame)lastFrame=now;
@@ -15,7 +16,7 @@
  function pointerAngle(e){var r=stage.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
  function openSpinner(){document.getElementById("landingScreen").hidden=true;document.getElementById("gameScreen").classList.remove("active");document.getElementById("gameScreen").setAttribute("aria-hidden","true");var studio=document.getElementById("colorStudio");studio.classList.remove("active");studio.setAttribute("aria-hidden","true");screen.hidden=false;window.scrollTo({top:0,behavior:reduced?"auto":"smooth"});stage.focus()}
  function closeSpinner(){velocity=0;dragging=false;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;window.StarlightApp.returnToPlayground()}
- open.addEventListener("click",openSpinner);back.addEventListener("click",closeSpinner);
+ makeStarfield();open.addEventListener("click",openSpinner);back.addEventListener("click",closeSpinner);
  stage.addEventListener("pointerdown",function(e){if(e.button!==undefined&&e.button!==0)return;dragging=true;velocity=0;if(frame){cancelAnimationFrame(frame);frame=0}lastFrame=0;lastPointerAngle=pointerAngle(e);lastTime=performance.now();stage.setPointerCapture(e.pointerId);e.preventDefault()});
  stage.addEventListener("pointermove",function(e){if(!dragging)return;var a=pointerAngle(e),delta=((a-lastPointerAngle+540)%360)-180,now=performance.now(),dt=Math.max(now-lastTime,8);angle+=delta;velocity=delta/dt*1000;lastPointerAngle=a;lastTime=now;render()});
  function release(){if(!dragging)return;dragging=false;if(reduced)velocity=0;else ensureFrame()}
