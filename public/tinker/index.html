@@ -92,9 +92,7 @@ html[data-portfolio-motion=reduce] .gate.exit.is-ringing{animation:none;box-shad
 @keyframes entryGatePulse{50%{transform:scale(1.15);box-shadow:0 0 0 6px #f2c76777,0 0 18px #e6a936}}@keyframes entryCellPulse{50%{box-shadow:0 0 0 7px #efc55f66,0 4px 0 #d9ad5d}}@keyframes entryMarbleRoll{0%{opacity:0;transform:translate(-22px,-50%) scale(.55)}15%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translate(22px,-50%) scale(.85)}}@keyframes goalPulse{50%{transform:scale(1.2);box-shadow:0 0 0 6px #85c99c88,0 0 18px #5aaf79}}
 html[data-portfolio-motion=reduce] .gate.entry.is-intro,html[data-portfolio-motion=reduce] .cell.entry-cell.is-intro,html[data-portfolio-motion=reduce] .gate.exit.is-intro{animation:none;box-shadow:0 0 0 4px #efc55f55,0 0 16px #f5bd45}html[data-portfolio-motion=reduce] .cell.entry-cell.is-intro:after{animation:none;opacity:0}
 @media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .gate.entry.is-intro,html:not([data-portfolio-motion=full]) .cell.entry-cell.is-intro,html:not([data-portfolio-motion=full]) .gate.exit.is-intro{animation:none;box-shadow:0 0 0 4px #efc55f55,0 0 16px #f5bd45}html:not([data-portfolio-motion=full]) .cell.entry-cell.is-intro:after{animation:none;opacity:0}}
-.failure-stop-mark{position:absolute;z-index:5;right:3px;top:3px;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#a53f30;color:#fff;font-size:16px;font-weight:1000;line-height:1;box-shadow:0 1px 5px #0005;animation:failureMarkPop .24s ease-out both;pointer-events:none}.cell.failure-stop{z-index:3;animation:failureStopPulse .65s ease-in-out 3;border-color:#b94937;box-shadow:0 0 0 4px #c9584433,0 0 17px #d16a4c66}
-@keyframes failureStopPulse{50%{transform:scale(1.06);background:#ffd9cc;box-shadow:0 0 0 8px #d8694d22,0 0 22px #d16a4c88}}@keyframes failureMarkPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
-html[data-portfolio-motion=reduce] .cell.failure-stop,html[data-portfolio-motion=reduce] .failure-stop-mark{animation:none}@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .cell.failure-stop,html:not([data-portfolio-motion=full]) .failure-stop-mark{animation:none}}
+
 .cell{position:relative;display:grid;place-items:center;aspect-ratio:1;min-width:0;border:1px solid #d5c7a8;border-radius:12px;background:#fffaf0;box-shadow:0 3px 0 #d9c8a4;cursor:pointer;transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
 html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=dark] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=dark] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=dark] .broken-circuit .circuit-break{stroke:#d99568}
 @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .cell{background:#273431;border-color:#53655a;box-shadow:0 3px 0 #354740;color:#e8efe7}html[data-portfolio-color-mode=system] .broken-circuit path{stroke:#c2c6ad}html[data-portfolio-color-mode=system] .broken-circuit circle{fill:#b1bca4}html[data-portfolio-color-mode=system] .broken-circuit .circuit-break{stroke:#d99568}}
@@ -106,6 +104,10 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .cell.checkpoint-cell:after{content:"★";position:absolute;top:2px;left:4px;z-index:3;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--game-accent-2);color:#fff;font-size:11px;font-weight:1000;box-shadow:0 1px 4px #0003;pointer-events:none}
 .cell.is-lit{background:#f8e9b8;border-color:#e0a94e;box-shadow:0 0 0 4px #efc55f44,0 4px 0 #d9ad5d}
 .cell.is-missing{background:#ffede3;border-color:#d47a5f;box-shadow:0 0 0 4px #db816c33}
+.cell.failure-stop{background:#ef9585!important;border-color:#b63d31!important;color:#44201b!important;box-shadow:0 0 0 4px #cf514733,0 0 18px #ce514788!important;animation:failureSquareShake .48s ease-in-out 2!important}
+@keyframes failureSquareShake{0%,100%{transform:translateX(0) rotate(0)}15%,55%{transform:translateX(-5px) rotate(-3deg)}35%,75%{transform:translateX(5px) rotate(3deg)}}
+html[data-portfolio-motion=reduce] .cell.failure-stop{animation:none!important}
+@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .cell.failure-stop{animation:none!important}}
 .cell-icon{width:72%;height:72%;pointer-events:none}
 .ball-dot{position:absolute;right:3px;top:3px;width:10px;height:10px;border-radius:50%;background:#ffd45b;box-shadow:0 0 10px #f6a92c}
 .board-caption{display:flex;justify-content:center;gap:10px 18px;flex-wrap:wrap;color:var(--game-ink);font-size:.82em;font-weight:900;margin:11px 0 0}.board-caption span{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--game-line);border-radius:999px;background:var(--game-surface)}.board-caption .start-label{border-color:#e6bd69}.board-caption .goal-label{border-color:#91c5a2}
@@ -1090,14 +1092,13 @@ async function runMachine() {
         stoppedTraveler.className = "marble-traveler";
         stoppedTraveler.setAttribute("aria-hidden", "true");
         stoppedCell.append(stoppedTraveler);
-        const marker = document.createElement("span"); marker.className = "failure-stop-mark"; marker.setAttribute("aria-hidden", "true"); marker.textContent = "×"; stoppedCell.append(marker);
       }
     }
     const stopCopy = blocked
-      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The pulsing × marks where its route ends. Add or rotate a part to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
+      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The red, shaking square marks where its route ends. Add or rotate a part there to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
       : "The machine needs a connected route. Start with a part at the marble entry.";
     setStatus(stopCopy, "error");
-    await wait(reduced ? 0 : 320);
+    await wait(reduced ? 0 : 1000);
     triggerFailureShake();
     await wait(reduced ? 0 : 720);
     stoppedTraveler?.remove();
