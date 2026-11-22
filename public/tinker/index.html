@@ -686,17 +686,20 @@ function findPath() {
   const queue = [{ row: current.start, col: 0, dir: "E", gearSpin: 0, path: [] }];
   const seen = new Set();
   let best = { path: [], score: Infinity };
-  for (let q = 0; q < queue.length && q < 500; q++) {
+  const searchLimit = size * size * 12 * (1 << (current.targets?.length || 0));
+  for (let q = 0; q < queue.length && q < searchLimit; q++) {
     const state = queue[q];
-    const signature = state.row + "," + state.col + "," + state.dir + "," + state.gearSpin;
-    if (seen.has(signature)) continue;
-    seen.add(signature);
     const index = keyOf(state.row, state.col);
     const tile = placements[index];
     const spin = tile?.type === "gear"
       ? (state.gearSpin ? -state.gearSpin : (tile.rotation % 2 === 0 ? 1 : -1))
       : state.gearSpin;
     const path = state.path.concat([{ row: state.row, col: state.col, missing: !tile, spinDirection: tile?.type === "gear" ? spin : 0 }]);
+    const checkpointMask = (current.targets || []).reduce((mask, target, i) =>
+      path.some(point => point.row * size + point.col === target) ? mask | (1 << i) : mask, 0);
+    const signature = state.row + "," + state.col + "," + state.dir + "," + state.gearSpin + "," + checkpointMask;
+    if (seen.has(signature)) continue;
+    seen.add(signature);
     if (!tile) {
       const score = Math.abs(state.row - current.goal) + (size - 1 - state.col);
       if (score < best.score) best = { path, score };
