@@ -199,6 +199,58 @@ html[data-portfolio-color-mode=dark] .cell:hover{background:color-mix(in srgb,va
 html[data-portfolio-color-mode=dark] .mission{border-color:color-mix(in srgb,var(--game-accent) 44%,var(--game-line));background:linear-gradient(110deg,color-mix(in srgb,var(--game-accent) 19%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 17%,var(--game-surface)))}
 html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,var(--game-accent) 32%,var(--game-surface));color:var(--game-ink)}
 @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] body{background:radial-gradient(ellipse at 8% 5%,color-mix(in srgb,var(--game-accent) 20%,#141b1c),transparent 40%),radial-gradient(ellipse at 92% 10%,color-mix(in srgb,var(--game-accent-2) 19%,#141b1c),transparent 40%),#141b1c}html[data-portfolio-color-mode=system] .board-wrap{background:linear-gradient(145deg,color-mix(in srgb,var(--game-accent) 14%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 14%,var(--game-surface)))}html[data-portfolio-color-mode=system] .cell{background:color-mix(in srgb,var(--game-accent) 10%,var(--game-surface));border-color:color-mix(in srgb,var(--game-accent-2) 38%,var(--game-line));box-shadow:0 3px 0 color-mix(in srgb,var(--game-accent-2) 28%,var(--game-line));color:var(--game-ink)}html[data-portfolio-color-mode=system] .cell:hover{background:color-mix(in srgb,var(--game-accent-2) 23%,var(--game-surface))}html[data-portfolio-color-mode=system] .mission{border-color:color-mix(in srgb,var(--game-accent) 44%,var(--game-line));background:linear-gradient(110deg,color-mix(in srgb,var(--game-accent) 19%,var(--game-surface)),color-mix(in srgb,var(--game-accent-2) 17%,var(--game-surface)))}html[data-portfolio-color-mode=system] .mission-icon{background:color-mix(in srgb,var(--game-accent) 32%,var(--game-surface));color:var(--game-ink)}}
+
+/* Mobile play flow: keep the complete parts tray directly under the board. */
+@media(max-width:850px){
+  #game-screen .layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"workbench" "inventory" "side"!important;gap:6px!important}
+  #game-screen .layout>.workbench{grid-area:workbench;order:1;width:100%;margin:0}
+  #game-screen .layout>.inventory{grid-area:inventory;order:2;width:100%;margin:0}
+  #game-screen .layout>.side{grid-area:side;order:3;width:100%;margin:0}
+}
+@media(max-width:540px){
+  #tinker-app{padding:7px 7px calc(12px + env(safe-area-inset-bottom))}
+  #game-screen .hero{align-items:center;gap:5px;margin-bottom:4px}
+  #game-screen .hero .eyebrow{font-size:.59em;letter-spacing:.09em}
+  #game-screen .hero h1{font-size:clamp(1.45rem,6vw,1.9rem);line-height:.9;margin:3px 0}
+  #game-screen .hero-badges{gap:5px}
+  #game-screen .level-chip{min-width:62px;padding:5px 6px;border-radius:11px}
+  #game-screen .level-chip strong{font-size:1.08em}
+  #game-screen .level-chip span{font-size:.62em}
+  #game-screen .bolt-chip{min-width:62px;padding:5px 6px;border-radius:11px}
+  #game-screen .bolt-chip strong{font-size:1.08em}
+  #game-screen .bolt-chip span{font-size:.62em}
+  #game-screen .layout{gap:4px!important}
+  #game-screen .workbench{padding:7px;border-radius:14px}
+  #game-screen .mission{gap:7px;padding:7px 8px;margin-bottom:5px;border-radius:11px}
+  #game-screen .mission-icon{width:29px;height:29px;font-size:16px}
+  #game-screen .mission p{font-size:.76em;line-height:1.18}
+  #game-screen .board-heading{margin-bottom:4px}
+  #game-screen .board-wrap{padding:5px 2px;border-radius:11px}
+  #game-screen .board-grid{width:100%;gap:2px}
+  #game-screen .board-head,#game-screen .board-row{gap:2px}
+  #game-screen .gate{width:18px;height:20px;font-size:12px}
+  #game-screen .cell{border-radius:6px}
+  #game-screen .board-caption{gap:4px;margin-top:5px;font-size:.62em}
+  #game-screen .board-caption span{flex:1;justify-content:center;min-width:0;padding:3px 4px;line-height:1.15}
+  #game-screen .first-run-demo{gap:6px;margin-top:5px;padding:5px 7px;font-size:.72em}
+  #game-screen .demo-step-number{width:23px;height:23px}
+  #game-screen .inventory{padding:6px 7px;border-radius:13px}
+  #game-screen .inventory-top{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 8px;margin-bottom:4px}
+  #game-screen .inventory h2{font-size:.82em;white-space:nowrap}
+  #game-screen .inventory-guidance{max-width:none;text-align:right}
+  #game-screen #parts-budget-note{display:none}
+  #game-screen #selection-help{font-size:.66em;line-height:1.15}
+  #game-screen .parts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;overflow:visible;padding:0}
+  #game-screen .part{min-width:0;max-width:none;min-height:48px;gap:1px;padding:3px 2px;border-radius:9px;font-size:.62em;scroll-snap-align:none}
+  #game-screen .part-icon{width:22px;height:22px}
+}
+@media(max-width:380px){
+  #game-screen .board-caption{font-size:.58em;gap:3px}
+  #game-screen .board-caption span{padding:3px 2px}
+  #game-screen .parts{gap:3px}
+  #game-screen .part{font-size:.59em}
+  #game-screen .part-icon{width:20px;height:20px}
+}
 </style>
 <link rel="stylesheet" href="/disable-text-selection.css">
 </head>
@@ -430,16 +482,6 @@ const app = document.getElementById("tinker-app");
 const board = document.getElementById("board");
 const partsNode = document.getElementById("parts");
 const statusNode = document.getElementById("status");
-const layout = document.querySelector(".layout");
-const boardWrap = document.querySelector(".board-wrap");
-const sidePanel = document.querySelector(".side");
-const mobileLayout = window.matchMedia("(max-width: 850px)");
-function placeHelpersForViewport() {
-  if (mobileLayout.matches) boardWrap.after(sidePanel);
-  else layout.append(sidePanel);
-}
-placeHelpersForViewport();
-mobileLayout.addEventListener("change", placeHelpersForViewport);
 const runButton = document.getElementById("run-button");
 const resetButton = document.getElementById("reset-button");
 const removeButton = document.getElementById("remove-button");
@@ -778,10 +820,11 @@ function render() {
   const size = current.size || gridSizeForLevel(levelIndex);
   document.getElementById("board-size").textContent = size + " × " + size + " grid";
   board.replaceChildren();
+  const railWidth = window.matchMedia("(max-width: 540px)").matches ? 20 : 26;
   const header = document.createElement("div");
   header.className = "board-head";
   header.append(document.createElement("span"));
-  header.style.gridTemplateColumns = `26px repeat(${size}, minmax(0, 1fr)) 26px`;
+  header.style.gridTemplateColumns = `${railWidth}px repeat(${size}, minmax(0, 1fr)) ${railWidth}px`;
   for (let col = 0; col < size; col++) {
     const label = document.createElement("span");
     label.className = "column-label";
@@ -794,7 +837,7 @@ function render() {
   for (let row = 0; row < size; row++) {
     const rowNode = document.createElement("div");
     rowNode.className = "board-row";
-    rowNode.style.gridTemplateColumns = `26px repeat(${size}, minmax(0, 1fr)) 26px`;
+    rowNode.style.gridTemplateColumns = `${railWidth}px repeat(${size}, minmax(0, 1fr)) ${railWidth}px`;
     const source = document.createElement("span");
     source.className = row === current.start ? "gate entry" : "gate";
     source.textContent = row === current.start ? "▶" : "";
