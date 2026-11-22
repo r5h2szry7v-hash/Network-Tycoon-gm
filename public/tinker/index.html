@@ -95,6 +95,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .cell.wall{position:relative;background:repeating-linear-gradient(135deg,#e8dfcc 0 6px,#d6cbb5 6px 12px);box-shadow:none;border-style:dashed;overflow:hidden}.broken-circuit{position:absolute;inset:12%;width:76%;height:76%;overflow:visible;opacity:.27;animation:circuitBreath 5.8s ease-in-out infinite;pointer-events:none}.broken-circuit path{fill:none;stroke:#746b5b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.broken-circuit circle{fill:#8a806d;stroke:none}.broken-circuit .circuit-break{stroke:#c9753d;stroke-width:2.8;opacity:.76}html[data-portfolio-motion=reduce] .broken-circuit{animation:none}@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) .broken-circuit{animation:none}}@keyframes circuitBreath{0%,100%{opacity:.2}50%{opacity:.34}}
 .cell.entry-cell{border-color:#dfaa4b;box-shadow:0 0 0 2px #dfaa4b55}
 .cell.exit-cell{border-color:#65a884;box-shadow:0 0 0 2px #65a88455}
+.cell.checkpoint-cell:after{content:"★";position:absolute;top:2px;left:4px;z-index:3;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--game-accent-2);color:#fff;font-size:11px;font-weight:1000;box-shadow:0 1px 4px #0003;pointer-events:none}
 .cell.is-lit{background:#f8e9b8;border-color:#e0a94e;box-shadow:0 0 0 4px #efc55f44,0 4px 0 #d9ad5d}
 .cell.is-missing{background:#ffede3;border-color:#d47a5f;box-shadow:0 0 0 4px #db816c33}
 .cell-icon{width:72%;height:72%;pointer-events:none}
@@ -320,7 +321,7 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
       </div>
     </section>
     <section class="inventory" aria-label="Parts tray">
-      <div class="inventory-top"><h2>Parts tray</h2><p id="selection-help" aria-live="polite">Choose a part, then place it on the grid.</p></div>
+      <div class="inventory-top"><h2>Parts tray</h2><p id="parts-budget-note">Select a part, then tap a square. Tap a placed part to rotate.</p></div>
       <div class="parts" id="parts"></div>
     </section>
     <aside class="side" aria-label="Puzzle controls and workshop note">
@@ -408,6 +409,7 @@ const HINT_BLUEPRINTS = [
 ];
 const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16 };
 const BOLTS_PER_FIRST_WIN = 5;
+const MEDAL_SYMBOL = "⚙";
 const DIRS = ["E", "S", "W", "N"];
 const VECTORS = { E: [0, 1], S: [1, 0], W: [0, -1], N: [-1, 0] };
 const opposite = dir => DIRS[(DIRS.indexOf(dir) + 2) % 4];
@@ -452,6 +454,8 @@ let hintCredits = 0;
 let hintStepByLevel = {};
 let bolts = 0;
 let purchasedByLevel = {};
+let bestMedalsByLevel = {};
+let lastRunMedals = 0;
 let soundEnabled = false;
 let visualChange = null;
 let audioContext = null;
@@ -466,6 +470,7 @@ try {
     hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
     bolts = Number.isInteger(save.bolts) ? Math.max(0, Math.min(999999, save.bolts)) : 0;
     purchasedByLevel = save.purchasedByLevel && typeof save.purchasedByLevel === "object" ? Object.fromEntries(Object.entries(save.purchasedByLevel).filter(([key, type]) => Number.isInteger(Number(key)) && Number(key) >= 0 && PARTS[type])) : {};
+    bestMedalsByLevel = save.bestMedalsByLevel && typeof save.bestMedalsByLevel === "object" ? Object.fromEntries(Object.entries(save.bestMedalsByLevel).filter(([key, value]) => Number.isInteger(Number(key)) && Number(key) >= 0 && Number.isInteger(value) && value >= 1 && value <= 3)) : {};
     soundEnabled = save.soundEnabled === true;
     levelIndex = Math.max(0, save.levelIndex);
     placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
@@ -503,7 +508,7 @@ function saveGame() {
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
   try {
-    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 5, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, soundEnabled }));
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 6, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, bestMedalsByLevel, soundEnabled }));
   } catch {}
 }
 function seededRandom(seed) {
@@ -520,6 +525,9 @@ function generatedPuzzle(index) {
   const size = gridSizeForLevel(index);
   const random = seededRandom(0x71A9C3 + generatedNumber * 7919);
   const breather = generatedNumber % 8 === 7;
+  const precisionBuild = generatedNumber >= 4 && !breather;
+  const checkpointCount = breather ? 0 : generatedNumber >= 12 ? 3 : generatedNumber >= 4 ? 2 : 0;
+  const switchChallenge = generatedNumber >= 8 && !breather;
   const stage = Math.floor(Math.max(0, index - 5) / 7);
   const minLength = breather ? size : Math.min(size + 2 + stage * 2, size * size - 2);
   const maxLength = breather ? size + 2 : Math.min(size * 2 + stage * 3, size * size - 1);
@@ -566,6 +574,11 @@ function generatedPuzzle(index) {
   const counts = {belt:0, ramp:0, gear:0, switch:0, spring:0};
   let turns = 0;
   const directionBetween = (a, b) => DIRS.find(dir => { const v=VECTORS[dir]; return a.row+v[0]===b.row && a.col+v[1]===b.col; });
+  let forcedSwitchAt = -1;
+  if (switchChallenge) {
+    forcedSwitchAt = route.findIndex((point, i) => i > 0 && i < route.length - 1
+      && directionBetween(route[i-1], point) !== directionBetween(point, route[i+1]));
+  }
   for (let i=0; i<route.length; i++) {
     const incoming = i === 0 ? "E" : directionBetween(route[i-1], route[i]);
     const outgoing = i === route.length-1 ? "E" : directionBetween(route[i], route[i+1]);
@@ -577,7 +590,7 @@ function generatedPuzzle(index) {
     } else {
       turns++;
       const entry = opposite(incoming);
-      if (!breather && random() < .14) {
+      if (!breather && (i === forcedSwitchAt || random() < .14)) {
         type="switch";
         const possible=[];
         for (let r=0; r<4; r++) { const ports=PARTS.switch.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) possible.push(r); }
@@ -597,12 +610,18 @@ function generatedPuzzle(index) {
   const wallCount = breather ? 0 : Math.min(Math.floor(size*.7) + stage*2 + Math.floor(generatedNumber%3), Math.floor(size*1.5), empty.length);
   const walls = empty.slice(0,wallCount).map(i=>[Math.floor(i/size),i%size]);
   const difficulty = route.length >= size*2.5 && turns >= 5 ? "Extremely Hard" : route.length >= size*1.8 && turns >= 3 ? "Very Hard" : route.length >= size+2 || turns >= 2 ? "Hard" : "";
+  const targets = Array.from({length: checkpointCount}, (_, i) => {
+    const routePosition = Math.round((i + 1) * (route.length - 1) / (checkpointCount + 1));
+    return route[routePosition].row * size + route[routePosition].col;
+  });
+  const idealPartCount = solution.length;
+  const partBudget = precisionBuild ? idealPartCount + 2 : null;
   return {
     size,
     title: breather ? "A lighter turn at the workbench" : ["Wind through the workshop", "Route around the clutter", "Build a clever chain", "Tangle and untangle"][Math.min(3,stage)],
-    copy: breather ? "A shorter route gives you room to experiment before the next challenge." : "Find a route through the blocked squares and carry the marble to the bell.",
-    note: breather ? "This is a shorter puzzle. Try a different part or route just for fun." : "Use the openings in the board. Rotate parts to match each turn; the parts guide explains their capabilities.",
-    start: route[0].row, goal: route[route.length-1].row, walls, stock: Object.fromEntries(Object.keys(counts).map(type=>[type, Math.max(counts[type], type==="belt"?3:0)])), solution, difficulty
+    copy: breather ? "A shorter route gives you room to experiment before the next challenge." : targets.length ? "Route the marble through every marked checkpoint, then reach the bell. Parts are limited on this precision build." : switchChallenge ? "Choose a switch branch carefully to carry the marble to the bell." : "Find a route through the blocked squares and carry the marble to the bell.",
+    note: breather ? "This is a shorter puzzle. Try a different part or route just for fun." : targets.length ? "Visit each starred checkpoint before the bell. Your total part limit is shown below the tray; fewer parts earn more workshop medals." : switchChallenge ? "This route requires a switch. It can send the marble along either open branch, so rotate it to send the marble toward the bell." : "Use the openings in the board. Rotate parts to match each turn; the parts guide explains their capabilities.",
+    start: route[0].row, goal: route[route.length-1].row, walls, targets, partBudget, switchChallenge, stock: Object.fromEntries(Object.keys(counts).map(type=>[type, type === "belt" && precisionBuild ? counts[type] + 2 : Math.max(counts[type], type==="belt" ? 3 : 0)])), idealPartCount, solution, difficulty
   };
 }
 const GENERATED_PUZZLE_CACHE = new Map();
@@ -687,7 +706,10 @@ function findPath() {
       const vector = VECTORS[output.dir];
       const row = state.row + vector[0] * output.jump;
       const col = state.col + vector[1] * output.jump;
-      if (output.dir === "E" && row === current.goal && col >= size) return { success: true, path };
+      if (output.dir === "E" && row === current.goal && col >= size) {
+        const reached = new Set(path.map(point => point.row * size + point.col));
+        if ((current.targets || []).every(target => reached.has(target))) return { success: true, path };
+      }
       if (row < 0 || row >= size || col < 0 || col >= size) continue;
       if (output.jump === 1 && current.walls.some(wall => wall[0] === row && wall[1] === col)) continue;
       const nextIndex = keyOf(row, col);
@@ -719,6 +741,12 @@ function render() {
   document.getElementById("help-button").disabled = running;
   document.getElementById("parts-guide-tutorial").disabled = running;
   const current = level();
+  const partCount = placements.filter(Boolean).length;
+  const budgetReached = current.partBudget != null && partCount >= current.partBudget;
+  const budgetNote = document.getElementById("parts-budget-note");
+  budgetNote.textContent = current.partBudget == null
+    ? "Select a part, then tap a square. Tap a placed part to rotate."
+    : "Precision build · " + partCount + " / " + current.partBudget + " parts used" + (current.targets?.length ? " · hit every ★" : "");
   document.getElementById("level-number").textContent = String(levelIndex + 1).padStart(2, "0");
   document.getElementById("mission-title").textContent = current.title;
   document.getElementById("mission-copy").textContent = current.copy;
@@ -775,6 +803,11 @@ function render() {
       }
       if (row === current.start && col === 0) cell.classList.add("entry-cell");
       if (row === current.goal && col === size - 1) cell.classList.add("exit-cell");
+      const checkpointIndex = (current.targets || []).indexOf(index);
+      if (checkpointIndex >= 0) {
+        cell.classList.add("checkpoint-cell");
+        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", checkpoint " + (checkpointIndex + 1) + (tile ? ", " + PARTS[tile.type].name : ", empty"));
+      }
       if (visualChange?.index === index) cell.classList.add(visualChange.kind === "turn" ? "tile-turn" : "tile-enter");
       rowNode.append(cell);
     }
@@ -811,7 +844,7 @@ function render() {
     button.className = "part";
     button.dataset.part = id;
     if (hintCue?.type === id && hintCue.index == null) button.classList.add("hint-target");
-    button.disabled = available <= 0 || running;
+    button.disabled = available <= 0 || running || budgetReached;
     button.setAttribute("aria-pressed", String(selectedPart === id));
     button.setAttribute("aria-label", part.name + ", " + Math.max(0, available) + " available");
     button.innerHTML = part.symbol + '<span>' + part.name + '</span><span class="part-count">' + Math.max(0, available) + '</span>';
@@ -820,7 +853,8 @@ function render() {
 
   const progress = document.getElementById("progress");
   progress.replaceChildren();
-  progress.textContent = solved.length + (solved.length === 1 ? " puzzle solved" : " puzzles solved");
+  const medalTotal = Object.values(bestMedalsByLevel).reduce((total, count) => total + count, 0);
+  progress.textContent = solved.length + (solved.length === 1 ? " puzzle solved" : " puzzles solved") + (medalTotal ? " · " + medalTotal + " workshop medals" : "");
   progress.setAttribute("aria-label", progress.textContent);
   nextButton.hidden = !solved.includes(levelIndex);
   runButton.disabled = running;
@@ -868,6 +902,10 @@ board.addEventListener("click", event => {
     return;
   }
   if (selectedPart) {
+    if (level().partBudget != null && placements.filter(Boolean).length >= level().partBudget) {
+      setStatus("This precision build has reached its part limit. Remove a part before placing another.", "error");
+      return;
+    }
     if (!partAvailable(selectedPart, null)) {
       setStatus("You have used every " + PARTS[selectedPart].name.toLowerCase() + ". Remove one from the board first.", "error");
       return;
@@ -944,6 +982,12 @@ async function runMachine() {
   }
   previousMarble?.remove();
   const firstClear = result.success && !solved.includes(levelIndex);
+  const current = level();
+  const partCount = placements.filter(Boolean).length;
+  lastRunMedals = result.success && current.partBudget != null
+    ? (partCount <= current.idealPartCount ? 3 : partCount <= current.idealPartCount + 1 ? 2 : 1)
+    : 0;
+  if (lastRunMedals) bestMedalsByLevel[levelIndex] = Math.max(bestMedalsByLevel[levelIndex] || 0, lastRunMedals);
   let boltReward = 0;
   if (firstClear) {
     solved = [...solved, levelIndex];
@@ -975,7 +1019,9 @@ async function runMachine() {
     render();
     triggerFailureShake();
     const blocked = result.path[result.path.length - 1];
-    setStatus(blocked ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." : "The machine needs a connected route. Try starting at the marble entry.", "error");
+    setStatus(blocked
+      ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Add or rotate a part to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
+      : "The machine needs a connected route. Try starting at the marble entry.", "error");
   }
 }
 runButton.addEventListener("click", runMachine);
@@ -1015,6 +1061,8 @@ function startNewGame() {
   layouts = {};
   bolts = 0;
   purchasedByLevel = {};
+  bestMedalsByLevel = {};
+  lastRunMedals = 0;
   placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
   selectedPart = "";
   removeMode = false;
@@ -1069,7 +1117,8 @@ function applyHint() {
 }
 function showVictorySplash(firstClear) {
   const modal = document.getElementById("win-modal");
-  document.getElementById("win-reward").textContent = firstClear ? "✦ +1 hint · 🔩 +" + BOLTS_PER_FIRST_WIN + " bolts" : "A clean run · first-win reward already claimed";
+  const medalCopy = lastRunMedals ? " · " + MEDAL_SYMBOL.repeat(lastRunMedals) + " " + lastRunMedals + " workshop medals" : "";
+  document.getElementById("win-reward").textContent = (firstClear ? "✦ +1 hint · 🔩 +" + BOLTS_PER_FIRST_WIN + " bolts" : "A clean run · first-win reward already claimed") + medalCopy;
   const next = document.getElementById("win-next");
   next.hidden = false;
   next.classList.remove("wide");
