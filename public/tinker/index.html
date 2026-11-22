@@ -1036,7 +1036,7 @@ async function runMachine() {
       traveler.setAttribute("aria-hidden", "true");
       cell.append(traveler);
       previousMarble = traveler;
-      if (point.missing) { await wait(reduced ? 30 : 180); break; }
+      if (point.missing) { await wait(reduced ? 80 : 520); break; }
     }
     await wait(reduced ? 50 : 310);
   }
@@ -1085,10 +1085,11 @@ async function runMachine() {
         const marker = document.createElement("span"); marker.className = "failure-stop-mark"; marker.setAttribute("aria-hidden", "true"); marker.textContent = "×"; stoppedCell.append(marker);
       }
     }
-    triggerFailureShake();
     setStatus(blocked
       ? "The marble stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". The pulsing × marks the gap. Add or rotate a part there to continue." + (level().targets?.length ? " Make sure it crosses every ★ checkpoint." : "")
       : "The machine needs a connected route. Start with a part at the marble entry.", "error");
+    await wait(reduced ? 0 : 320);
+    triggerFailureShake();
   }
 }
 runButton.addEventListener("click", runMachine);
