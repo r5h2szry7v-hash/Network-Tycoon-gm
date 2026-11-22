@@ -105,6 +105,7 @@ html[data-portfolio-color-mode=dark] .cell{background:#273431;border-color:#5365
 .inventory{margin:0;padding:12px 16px;border:1px solid var(--game-line);border-radius:18px;background:var(--game-surface);box-shadow:var(--game-shadow)}
 .inventory-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
 .inventory-top p{font-size:.8em;color:var(--game-muted);margin:0}
+.inventory-guidance{display:grid;gap:3px;min-width:0;max-width:68%;text-align:right}.inventory-guidance p{margin:0}
 .parts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .part{position:relative;display:grid;justify-items:center;gap:4px;min-width:0;border:1px solid var(--game-line);background:var(--game-surface);border-radius:13px;padding:9px 5px 8px;cursor:pointer;font-size:.73em;font-weight:850;transition:transform .15s,border-color .15s,background .15s}
 .part:hover:not(:disabled){transform:translateY(-2px);border-color:var(--game-accent)}
@@ -321,7 +322,7 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
       </div>
     </section>
     <section class="inventory" aria-label="Parts tray">
-      <div class="inventory-top"><h2>Parts tray</h2><p id="parts-budget-note">Select a part, then tap a square. Tap a placed part to rotate.</p></div>
+      <div class="inventory-top"><h2>Parts tray</h2><div class="inventory-guidance"><p id="parts-budget-note">Select a part, then tap a square. Tap a placed part to rotate.</p><p id="selection-help" aria-live="polite">Choose a part, then place it on the grid.</p></div></div>
       <div class="parts" id="parts"></div>
     </section>
     <aside class="side" aria-label="Puzzle controls and workshop note">
