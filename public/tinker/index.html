@@ -310,7 +310,7 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
     <div class="home-dialog" role="dialog" aria-modal="true" aria-labelledby="parts-store-title">
       <div class="home-dialog-head"><div><span class="eyebrow">One extra part for this puzzle</span><h2 id="parts-store-title">Parts store</h2></div><button class="home-dialog-close" type="button" data-close-modal="parts-store-modal" aria-label="Close parts store">×</button></div>
       <p class="store-balance-line">Your balance: <strong>🔩 <span id="parts-store-balance">0</span> bolts</strong></p>
-      <p class="store-note">Earn 5 bolts the first time you solve a puzzle. Make one purchase per round; the part is added to this puzzle’s tray.</p>
+      <p class="store-note">Earn 5 bolts the first time you solve a puzzle. Offers match the current puzzle; gear is sold as a pair. Make one purchase per round.</p>
       <ul class="parts-store-list" id="parts-store-list"></ul>
       <p id="parts-store-status" class="store-status" role="status" aria-live="polite">Choose one extra part for this round.</p>
       <button class="button primary wide" type="button" data-close-modal="parts-store-modal">Done</button>
@@ -482,7 +482,13 @@ const HINT_BLUEPRINTS = [
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
 ];
-const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16, splitter:20 };
+const STORE_OFFERS = {
+ belt:{name:"Extra belt",type:"belt",quantity:1,price:8},
+ ramp:{name:"Extra ramp",type:"ramp",quantity:1,price:12},
+ spring:{name:"Spring",type:"spring",quantity:1,price:10},
+ switch:{name:"Switch",type:"switch",quantity:1,price:16},
+ gearPair:{name:"Gear pair",type:"gear",quantity:2,price:24}
+};
 const BOLTS_PER_FIRST_WIN = 5;
 const MEDAL_SYMBOL = "⚙";
 const DIRS = ["E", "S", "W", "N"];
@@ -522,6 +528,7 @@ let hintCredits = 0;
 let hintStepByLevel = {};
 let bolts = 0;
 let purchasedByLevel = {};
+let purchasedQuantityByLevel = {};
 let bestMedalsByLevel = {};
 let lastRunMedals = 0;
 let soundEnabled = false;
@@ -538,6 +545,7 @@ try {
     hintStepByLevel = save.hintStepByLevel && typeof save.hintStepByLevel === "object" ? save.hintStepByLevel : {};
     bolts = Number.isInteger(save.bolts) ? Math.max(0, Math.min(999999, save.bolts)) : 0;
     purchasedByLevel = save.purchasedByLevel && typeof save.purchasedByLevel === "object" ? Object.fromEntries(Object.entries(save.purchasedByLevel).filter(([key, type]) => Number.isInteger(Number(key)) && Number(key) >= 0 && PARTS[type])) : {};
+    purchasedQuantityByLevel = save.purchasedQuantityByLevel && typeof save.purchasedQuantityByLevel === "object" ? Object.fromEntries(Object.entries(save.purchasedQuantityByLevel).filter(([key, quantity]) => Number.isInteger(Number(key)) && Number(key) >= 0 && Number.isInteger(quantity) && quantity >= 1 && quantity <= 2)) : {};
     bestMedalsByLevel = save.bestMedalsByLevel && typeof save.bestMedalsByLevel === "object" ? Object.fromEntries(Object.entries(save.bestMedalsByLevel).filter(([key, value]) => Number.isInteger(Number(key)) && Number(key) >= 0 && Number.isInteger(value) && value >= 1 && value <= 3)) : {};
     soundEnabled = save.soundEnabled === true;
     levelIndex = Math.max(0, save.levelIndex);
@@ -576,7 +584,7 @@ function saveGame() {
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
   try {
-    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 6, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, bestMedalsByLevel, soundEnabled }));
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 7, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, purchasedQuantityByLevel, bestMedalsByLevel, soundEnabled }));
   } catch {}
 }
 function seededRandom(seed) {
@@ -767,7 +775,7 @@ function playTone(kind = "tap") {
 }
 function usedCount(type) { return placements.filter(tile => tile?.type === type).length; }
 function partAvailable(type, replacing = null) {
-  const stock = (level().stock[type] || 0) + (purchasedByLevel[levelIndex] === type ? 1 : 0);
+  const stock = (level().stock[type] || 0) + (purchasedByLevel[levelIndex] === type ? (purchasedQuantityByLevel[levelIndex] || 1) : 0);
   const returned = replacing?.type === type ? 1 : 0;
   return stock - usedCount(type) + returned > 0;
 }
@@ -1003,7 +1011,7 @@ function render() {
   partsNode.replaceChildren();
   Object.entries(PARTS).forEach(([id, part]) => { if(id==="splitter" && levelIndex<20) return;
     const button = document.createElement("button");
-    const count = (current.stock[id] || 0) + (purchasedByLevel[levelIndex] === id ? 1 : 0);
+    const count = (current.stock[id] || 0) + (purchasedByLevel[levelIndex] === id ? (purchasedQuantityByLevel[levelIndex] || 1) : 0);
     const available = count - usedCount(id);
     button.type = "button";
     button.className = "part";
@@ -1419,69 +1427,84 @@ document.getElementById("hint-button").addEventListener("click", applyHint);
 document.getElementById("store-button").addEventListener("click", () => { renderPartsStore(); openModal("parts-store-modal"); });
 document.getElementById("help-button").addEventListener("click", () => openModal("parts-guide-modal"));
 document.getElementById("parts-guide-tutorial").addEventListener("click", () => { closeModal("parts-guide-modal"); openModal("tutorial-modal"); });
+function storeOffersForPuzzle(current) {
+  if (current.gearChallenge) return ["belt","ramp","gearPair"];
+  if (current.requiredSignalPart === "switch") return ["belt","switch","spring"];
+  if (current.requiredSignalPart === "spring") return ["belt","ramp","spring"];
+  if (current.splitterChallenge) return ["belt","ramp","spring","switch"];
+  const offers=["belt"];
+  if ((current.stock.ramp||0)>0) offers.push("ramp");
+  if ((current.stock.spring||0)>0) offers.push("spring");
+  if ((current.stock.switch||0)>0) offers.push("switch");
+  if ((current.stock.gear||0)>0) offers.push("gearPair");
+  return offers.length>1?offers:["belt","ramp","spring"];
+}
 function renderPartsStore() {
   const list = document.getElementById("parts-store-list");
   const balance = document.getElementById("parts-store-balance");
   const status = document.getElementById("parts-store-status");
   const purchased = purchasedByLevel[levelIndex] || "";
+  const quantity = purchasedQuantityByLevel[levelIndex] || 1;
   balance.textContent = String(bolts);
   list.replaceChildren();
-  Object.entries(PARTS).forEach(([id, part]) => {
+  storeOffersForPuzzle(level()).forEach(offerId => {
+    const offer=STORE_OFFERS[offerId], part=PARTS[offer.type];
     const item = document.createElement("li");
     item.className = "parts-store-item";
     const icon = document.createElement("span");
     icon.className = "parts-guide-icon";
-    icon.dataset.part = id;
+    icon.dataset.part = offer.type;
     icon.setAttribute("aria-hidden", "true");
     icon.innerHTML = part.symbol;
     const copy = document.createElement("div");
     copy.className = "parts-guide-copy";
     const title = document.createElement("strong");
-    title.textContent = part.name;
+    title.textContent = offer.name;
     const description = document.createElement("p");
-    description.textContent = part.capability;
+    description.textContent = offer.quantity===2 ? "Two gears for a complete alternating gear train." : part.capability;
     copy.append(title, description);
     const buy = document.createElement("button");
     buy.type = "button";
     buy.className = "button store-buy";
-    buy.dataset.buyPart = id;
-    buy.textContent = purchased === id ? "Bought this round" : PART_PRICES[id] + " bolts";
-    buy.disabled = running || solved.includes(levelIndex) || !!purchased || bolts < PART_PRICES[id];
+    buy.dataset.buyOffer = offerId;
+    buy.textContent = purchased ? (purchased===offer.type ? "Bought this round" : "Purchase used") : offer.price + " bolts";
+    buy.disabled = running || solved.includes(levelIndex) || !!purchased || bolts < offer.price;
     item.append(icon, copy, buy);
     list.append(item);
   });
   if (purchased) {
-    const name = PARTS[purchased]?.name || "part";
-    status.textContent = name + " added to this round’s tray. You can buy one part per round.";
+    const name = quantity===2 ? "Gear pair" : (PARTS[purchased]?.name || "part");
+    status.textContent = name + " added to this round’s tray. You can buy one supply per puzzle.";
   } else if (solved.includes(levelIndex)) {
     status.textContent = "This puzzle is complete. Continue to the next round to make a purchase.";
   } else if (running) {
     status.textContent = "The machine is running. Wait for the round to finish before shopping.";
   } else {
-    status.textContent = "One purchase per round. A first-time puzzle win earns " + BOLTS_PER_FIRST_WIN + " bolts.";
+    status.textContent = "Choose a useful extra for this puzzle. A first-time win earns " + BOLTS_PER_FIRST_WIN + " bolts.";
   }
 }
-function buyPart(type) {
-  if (!PARTS[type] || running || solved.includes(levelIndex)) return;
+function buyPart(offerId) {
+  const offer=STORE_OFFERS[offerId];
+  if (!offer || running || solved.includes(levelIndex)) return;
   if (purchasedByLevel[levelIndex]) {
-    document.getElementById("parts-store-status").textContent = "You’ve already bought one part this round.";
+    document.getElementById("parts-store-status").textContent = "You’ve already bought one supply this round.";
     return;
   }
-  const price = PART_PRICES[type];
-  if (bolts < price) {
-    document.getElementById("parts-store-status").textContent = "Win more puzzles to earn bolts for this part.";
+  if (bolts < offer.price) {
+    document.getElementById("parts-store-status").textContent = "Win more puzzles to earn bolts for this supply.";
     return;
   }
-  bolts -= price;
-  purchasedByLevel[levelIndex] = type;
+  bolts -= offer.price;
+  purchasedByLevel[levelIndex] = offer.type;
+  purchasedQuantityByLevel[levelIndex] = offer.quantity;
   selectedPart = "";
   saveGame();
   render();
-  setStatus(PARTS[type].name + " bought for this round and added to your tray.", "success");
+  setStatus(offer.name + " bought for this round and added to your tray.", "success");
 }
 document.getElementById("parts-store-list").addEventListener("click", event => {
-  const button = event.target.closest("[data-buy-part]");
-  if (button && !button.disabled) buyPart(button.dataset.buyPart);
+  const button = event.target.closest("[data-buy-offer]");
+  if (button && !button.disabled) buyPart(button.dataset.buyOffer);
 });
 
 function renderPartsGuide() {
