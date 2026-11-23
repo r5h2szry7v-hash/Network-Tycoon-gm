@@ -945,7 +945,7 @@ function render() {
     selectedPart ? PARTS[selectedPart].name + " selected. Tap empty squares to place more; tap placed parts to rotate; tap this part again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
-  board.querySelectorAll(".cell").forEach(cell => { cell.classList.remove("is-lit", "is-missing", "failure-stop"); cell.querySelector(".failure-stop-mark")?.remove(); });
+  board.querySelectorAll(".cell").forEach(cell => { cell.classList.remove("is-lit", "is-missing", "failure-stop", "signal-lit", "bulb-lit"); cell.querySelector(".failure-stop-mark")?.remove(); });
 }
 function storePlacement(index, tile) {
   placements[index] = tile;
