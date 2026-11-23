@@ -472,15 +472,15 @@ const LEVELS = [
   {
     title: "Send a signal upstairs",
     copy: "Use the switch to turn the marble north, then spring it to the bell.",
-    note: "The switch can send the marble down either open branch. The gear is a flexible junction.",
+    note: "The switch routes the marble through one open branch. Gears steer through alternating spin and must be used in pairs.",
     start: 4, goal: 2, walls: [[4, 3], [3, 3], [2, 4]],
-    stock: { belt: 3, spring: 1, ramp: 1, gear: 1, switch: 1 }
+    stock: { belt: 3, spring: 1, ramp: 1, gear: 0, switch: 1 }
   }
 ];
 const HINT_BLUEPRINTS = [
   [{ index: 10, type: "belt", rotation: 0 }, { index: 11, type: "belt", rotation: 0 }, { index: 12, type: "spring", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
-  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "gear", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
+  [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
 ];
 const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16, splitter:20 };
 const BOLTS_PER_FIRST_WIN = 5;
@@ -1218,7 +1218,7 @@ async function runMachine() {
       }
     }
     const routeGearCount=result.path.reduce((n,point)=>n+(placements[keyOf(point.row,point.col)]?.type==="gear"?1:0),0);
-    const gearPairIssue=current.gearChallenge && routeGearCount>0 && routeGearCount%2!==0;
+    const gearPairIssue=routeGearCount>0 && routeGearCount%2!==0;
     const stopCopy = mainSuccess && current.splitterChallenge && !signalResult.success
       ? "The marble reached the bell, but the signal fuse stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Connect the splitter’s second route all the way to the bulb."
       : gearPairIssue
