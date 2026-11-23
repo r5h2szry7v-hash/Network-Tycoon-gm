@@ -816,13 +816,13 @@ function findSignalPath(mainPath=[]) {
      for(let q=0;q<queue.length&&q<size*size*8;q++){
        const st=queue[q],idx=st.row*size+st.col,t=placements[idx],atBulb=idx===goal;
        const path=st.path.concat([{row:st.row,col:st.col,missing:!t&&!atBulb,signal:true}]);
-       if(atBulb && gearPairIsValid(path) && signalRequiredPartValid(path))return {success:true,path};
+       if(atBulb && gearPairIsValid(path,false) && signalRequiredPartValid(path))return {success:true,path};
        const sig=idx+","+st.dir;if(seen.has(sig))continue;seen.add(sig);
        if(!t){best={success:false,path};continue;}
        for(const next of outputsFor(t,st.dir,0)){
          const v=VECTORS[next.dir],nr=st.row+v[0]*next.jump,nc=st.col+v[1]*next.jump;
          if(nr<0||nr>=size||nc<0||nc>=size||current.walls.some(w=>w[0]===nr&&w[1]===nc))continue;
-         if(!placements[nr*size+nc]){const terminal=nr*size+nc===goal;if(terminal){const completed=path.concat([{row:nr,col:nc,missing:false,signal:true}]);if(gearPairIsValid(completed)&&signalRequiredPartValid(completed))return {success:true,path:completed};}best={success:false,path:path.concat([{row:nr,col:nc,missing:true,signal:true}])};continue;}
+         if(!placements[nr*size+nc]){const terminal=nr*size+nc===goal;if(terminal){const completed=path.concat([{row:nr,col:nc,missing:false,signal:true}]);if(gearPairIsValid(completed,false)&&signalRequiredPartValid(completed))return {success:true,path:completed};}best={success:false,path:path.concat([{row:nr,col:nc,missing:true,signal:true}])};continue;}
          queue.push({row:nr,col:nc,dir:next.dir,path});
        }
      }
@@ -830,9 +830,9 @@ function findSignalPath(mainPath=[]) {
  }
  return best;
 }
-function gearPairIsValid(path) {
+function gearPairIsValid(path, requireChallengePair=true) {
  const count=path.reduce((n,point)=>n+(placements[keyOf(point.row,point.col)]?.type==="gear"?1:0),0);
- return level().gearChallenge ? count>=2 && count%2===0 : count===0 || (count>=2 && count%2===0);
+ return requireChallengePair && level().gearChallenge ? count>=2 && count%2===0 : count===0 || (count>=2 && count%2===0);
 }
 function signalRequiredPartValid(path) {
  const required=level().requiredSignalPart;
