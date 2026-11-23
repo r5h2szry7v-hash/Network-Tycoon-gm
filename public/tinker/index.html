@@ -1081,7 +1081,9 @@ async function runMachine() {
   render();
   setStatus("The marble is rolling…");
   playTone("run");
+  const current = level();
   const result = findPath();
+  const mainSuccess = result.success;
   const signalResult = findSignalPath();
   result.signalPath = signalResult.path;
   result.success = result.success && signalResult.success;
@@ -1108,7 +1110,7 @@ async function runMachine() {
   }
   previousMarble?.remove();
   if (current.splitterChallenge && result.signalPath?.length) {
-    setStatus("The marble reached the bell. The signal fuse is running…");
+    setStatus(mainSuccess ? "The marble reached the bell. The signal fuse is running…" : "The signal fuse is running…");
     let fuse=null;
     for(let i=0;i<result.signalPath.length;i++){
       const point=result.signalPath[i], idx=keyOf(point.row,point.col), cell=board.querySelector('[data-index="' + idx + '"]');
@@ -1119,7 +1121,6 @@ async function runMachine() {
     fuse?.remove();
   }
   const firstClear = result.success && !solved.includes(levelIndex);
-  const current = level();
   const partCount = placements.filter(Boolean).length;
   lastRunMedals = result.success && current.partBudget != null
     ? (partCount <= current.idealPartCount ? 3 : partCount <= current.idealPartCount + 1 ? 2 : 1)
@@ -1155,7 +1156,8 @@ async function runMachine() {
     running = false;
     app.classList.remove("machine-running");
     render();
-    const blocked = result.path[result.path.length - 1];
+    const failurePath = current.splitterChallenge && mainSuccess && !signalResult.success ? result.signalPath : result.path;
+    const blocked = failurePath[failurePath.length - 1];
     let stoppedTraveler = null;
     if (blocked) {
       const stoppedCell = board.querySelector('.cell[data-index="' + keyOf(blocked.row, blocked.col) + '"]');
