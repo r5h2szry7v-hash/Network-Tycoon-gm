@@ -928,7 +928,7 @@ function render() {
   document.getElementById("bolt-count").textContent = String(bolts);
   document.getElementById("header-bolt-count").textContent = String(bolts);
   document.getElementById("store-button-balance").textContent = bolts + " 🔩";
-  document.getElementById("store-button").disabled = running || solved.includes(levelIndex);
+  document.getElementById("store-button").disabled = running || removingPart || solved.includes(levelIndex);
   renderPartsStore();
   document.getElementById("help-button").disabled = running;
   document.getElementById("parts-guide-tutorial").disabled = running;
@@ -1070,7 +1070,7 @@ function storePlacement(index, tile) {
   saveGame();
   render();
 }
-board.addEventListener("click", event => {
+board.addEventListener("click", async event => {
   const cell = event.target.closest(".cell");
   if (!cell || cell.disabled || running || removingPart) return;
   stopFirstPuzzleDemo();
@@ -1157,7 +1157,7 @@ partsNode.addEventListener("click", event => {
   render();
 });
 removeButton.addEventListener("click", () => {
-  if (running) return;
+  if (running || removingPart) return;
   removeMode = !removeMode;
   selectedPart = "";
   render();
@@ -1515,7 +1515,7 @@ function renderPartsStore() {
     buy.className = "button store-buy";
     buy.dataset.buyOffer = offerId;
     buy.textContent = purchased ? (purchased===offer.type ? "Bought this round" : "Purchase used") : offer.price + " bolts";
-    buy.disabled = running || solved.includes(levelIndex) || !!purchased || bolts < offer.price;
+    buy.disabled = running || removingPart || solved.includes(levelIndex) || !!purchased || bolts < offer.price;
     item.append(icon, copy, buy);
     list.append(item);
   });
@@ -1532,7 +1532,7 @@ function renderPartsStore() {
 }
 function buyPart(offerId) {
   const offer=STORE_OFFERS[offerId];
-  if (!offer || running || solved.includes(levelIndex)) return;
+  if (!offer || running || removingPart || solved.includes(levelIndex)) return;
   if (purchasedByLevel[levelIndex]) {
     document.getElementById("parts-store-status").textContent = "You’ve already bought one supply this round.";
     return;
