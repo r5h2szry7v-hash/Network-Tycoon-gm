@@ -141,6 +141,25 @@ html[data-portfolio-motion=reduce] .cell.failure-stop{animation:none!important}
 .button:hover:not(:disabled){border-color:var(--game-accent)}
 .button.primary{background:var(--game-accent);border-color:var(--game-accent);color:#fff}
 .button[aria-pressed=true]{border-color:#bd7651;background:#fff0db}
+#remove-button.remove-active{position:relative;background:#b84232;border-color:#8d2d23;color:#fff;box-shadow:0 0 0 3px #d7644a44,0 4px 0 #7b2c25;transform:translateY(-1px);animation:remove-mode-pulse 1.15s ease-in-out infinite}
+#remove-button.remove-active::before{content:"🔨";display:inline-block;margin-right:6px;animation:remove-hammer-ready .7s ease-in-out infinite alternate}
+@keyframes remove-mode-pulse{50%{box-shadow:0 0 0 5px #d7644a3d,0 4px 0 #7b2c25}}
+@keyframes remove-hammer-ready{to{transform:rotate(-20deg) translateY(-2px)}}
+.cell.remove-target{border:2px dashed #d94c3d!important;box-shadow:0 0 0 3px #db514144,0 3px 0 #bd3f35!important;animation:remove-target-pulse .9s ease-in-out infinite alternate}
+@keyframes remove-target-pulse{to{box-shadow:0 0 0 6px #db514155,0 3px 0 #bd3f35!important}}
+.cell.hammer-strike{overflow:visible;z-index:8;animation:tile-hammer-shake .42s ease-in both}
+.remove-hammer{position:absolute;z-index:12;right:0;top:-.72em;font-size:1.8em;line-height:1;pointer-events:none;filter:drop-shadow(0 2px 1px #0005);animation:hammer-smash .42s cubic-bezier(.35,.02,.75,.42) both}
+@keyframes hammer-smash{0%{transform:translate(8px,-18px) rotate(-48deg) scale(1.12)}60%{transform:translate(-1px,3px) rotate(8deg) scale(.92)}78%{transform:translate(0,0) rotate(0) scale(1.04)}100%{transform:translate(0,0) rotate(0) scale(1)}}
+@keyframes tile-hammer-shake{0%,100%{translate:0 0}55%{translate:0 2px}75%{translate:0 -1px}}
+.cell.hammer-cracked{background-color:#f6dbd0!important;border-color:#c64639!important;box-shadow:inset 0 0 0 2px #c6463955!important}
+.remove-cracks{position:absolute;inset:8%;z-index:10;pointer-events:none;animation:cracks-burst .28s ease-out both}
+.remove-cracks svg{width:100%;height:100%;overflow:visible}
+.remove-cracks path{fill:none;stroke:#a3322b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #fff)}
+@keyframes cracks-burst{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+html[data-portfolio-motion="reduce"] #remove-button.remove-active,html[data-portfolio-motion="reduce"] .cell.remove-target{animation:none}
+html[data-portfolio-motion="reduce"] .remove-hammer,html[data-portfolio-motion="reduce"] .remove-cracks{animation:none}
+@media(prefers-reduced-motion:reduce){#remove-button.remove-active,.cell.remove-target,.cell.hammer-strike,.remove-hammer,.remove-cracks{animation:none!important}}
+
 .button:disabled{opacity:.48;cursor:not-allowed}
 .button.wide{grid-column:1/-1}
 .status{min-height:48px;margin-top:13px;padding:11px 12px;border-radius:12px;background:#f1f4ed;color:#50665b;font-size:.86em;font-weight:700}
@@ -505,6 +524,7 @@ const removeButton = document.getElementById("remove-button");
 const nextButton = document.getElementById("next-button");
 let selectedPart = "";
 let removeMode = false;
+let removingPart = false;
 let running = false;
 let solved = [];
 let levelIndex = 0;
@@ -900,6 +920,7 @@ function iconFor(tile) {
   return '<span class="part-orientation" style="transform:rotate(' + (turn * 90) + 'deg)" aria-hidden="true">' + PARTS[tile.type].symbol + '</span>';
 }
 function render() {
+  app.classList.toggle("remove-mode-active",removeMode);
   document.getElementById("resume-game-button").disabled = !hasSavedGame;
   document.getElementById("hint-button").disabled = running || hintCredits < 1;
   document.getElementById("hint-button").textContent = hintCredits ? "Use hint · " + hintCredits : "Hint · earn one";
@@ -962,6 +983,7 @@ function render() {
       const tile = placements[index];
       if (tile) { cell.dataset.type = tile.type; if (tile.type === "gear") cell.dataset.spinDirection = tile.rotation % 2 ? "ccw" : "cw"; }
       if (hintCue?.index === index) cell.classList.add("hint-target");
+      if (removeMode && tile) cell.classList.add("remove-target");
       if (wall) {
         cell.classList.add("wall");
         cell.innerHTML = '<svg class="broken-circuit" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14h9l5 5m12 0 6-5h2M8 34h7l5-5m12 0 7 5h3M24 7v8m0 18v8"/><circle cx="8" cy="14" r="2"/><circle cx="42" cy="14" r="2"/><circle cx="8" cy="34" r="2"/><circle cx="42" cy="34" r="2"/><path class="circuit-break" d="m20 21 3 3-2 3 4 3 3-4-2-3 3-3"/></svg>';
@@ -1030,13 +1052,14 @@ function render() {
   progress.textContent = solved.length + (solved.length === 1 ? " puzzle solved" : " puzzles solved") + (medalTotal ? " · " + medalTotal + " workshop medals" : "");
   progress.setAttribute("aria-label", progress.textContent);
   nextButton.hidden = !solved.includes(levelIndex);
-  runButton.disabled = running;
-  resetButton.disabled = running;
-  removeButton.disabled = running;
-  nextButton.disabled = running;
+  runButton.disabled = running || removingPart;
+  resetButton.disabled = running || removingPart;
+  removeButton.disabled = running || removingPart;
+  nextButton.disabled = running || removingPart;
   removeButton.setAttribute("aria-pressed", String(removeMode));
-  removeButton.textContent = removeMode ? "Remove mode on" : "Remove part";
-  document.getElementById("selection-help").textContent = removeMode ? "Choose a placed part to return it to the tray." :
+  removeButton.classList.toggle("remove-active",removeMode);
+  removeButton.textContent = removeMode ? "Tap a square to break" : "Remove part";
+  document.getElementById("selection-help").textContent = removeMode ? "Tap a highlighted part to break it and return it to the tray. Tap the button again to cancel." :
     selectedPart ? PARTS[selectedPart].name + " selected. Tap empty squares to place more; tap placed parts to rotate; tap this part again to stop." : "Tap a part to place it. Tap a placed part to rotate.";
 }
 function clearTrace() {
@@ -1049,19 +1072,43 @@ function storePlacement(index, tile) {
 }
 board.addEventListener("click", event => {
   const cell = event.target.closest(".cell");
-  if (!cell || cell.disabled || running) return;
+  if (!cell || cell.disabled || running || removingPart) return;
   stopFirstPuzzleDemo();
   const index = Number(cell.dataset.index);
   const existing = placements[index];
   if (removeMode) {
     if (!existing) return;
+    removingPart = true;
+    removeButton.disabled = true;
+    runButton.disabled = true;
+    resetButton.disabled = true;
+    const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
+    const hammer = document.createElement("span");
+    hammer.className = "remove-hammer";
+    hammer.textContent = "🔨";
+    hammer.setAttribute("aria-hidden","true");
+    cell.classList.remove("remove-target");
+    cell.classList.add("hammer-strike");
+    cell.append(hammer);
+    playTone("tap");
+    await wait(reduced ? 40 : 420);
+    if(cell.isConnected){
+      cell.classList.add("hammer-cracked");
+      const cracks=document.createElement("span");
+      cracks.className="remove-cracks";
+      cracks.setAttribute("aria-hidden","true");
+      cracks.innerHTML='<svg viewBox="0 0 100 100"><path d="M48 4 43 24 53 34 42 48 54 57 46 73 51 96M44 25 27 18 35 39 18 52 39 55M55 35 74 21 64 43 84 53 58 59M45 72 28 82 48 79 66 92"/></svg>';
+      cell.append(cracks);
+    }
+    await wait(reduced ? 20 : 180);
     placements[index] = null;
     hintCue = null;
-    visualChange = { index, kind: "remove" };
+    visualChange = null;
     clearTrace();
     saveGame();
+    removingPart = false;
     render();
-    setStatus(PARTS[existing.type].name + " returned to your tray.");
+    setStatus(PARTS[existing.type].name + " broken free and returned to your tray.");
     return;
   }
   if (existing) {
@@ -1103,7 +1150,7 @@ board.addEventListener("click", event => {
 });
 partsNode.addEventListener("click", event => {
   const button = event.target.closest(".part");
-  if (!button || button.disabled || running) return;
+  if (!button || button.disabled || running || removingPart) return;
   stopFirstPuzzleDemo();
   selectedPart = selectedPart === button.dataset.part ? "" : button.dataset.part;
   removeMode = false;
