@@ -435,6 +435,7 @@ const PARTS = {
     name: "Switch", capability: "Offers two exit branches after the marble enters.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 29h12l10-18M19 29l10-18M19 29h14" fill="none" stroke="#4d8bc0" stroke-width="3.5" stroke-linecap="round"/><circle cx="7" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="29" cy="11" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/><circle cx="33" cy="29" r="3.5" fill="#ffe08d" stroke="#755d2d" stroke-width="2"/></svg>',
     ports: ["W", "N", "E"]
   },
+  splitter: { name:"Splitter", capability:"At the fork, sends the marble east toward the bell and launches the signal fuse north toward a bulb.", symbol:'<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 20h13M18 20 31 8M18 20h13" fill="none" stroke="#377f74" stroke-width="4" stroke-linecap="round"/><circle cx="5" cy="20" r="3.5" fill="#fff1bb" stroke="#815c2a" stroke-width="2"/><circle cx="31" cy="8" r="3.5" fill="#ffd36a" stroke="#815c2a" stroke-width="2"/><circle cx="31" cy="20" r="3.5" fill="#fff" stroke="#815c2a" stroke-width="2"/></svg>', ports:["W","E","N"] },
   spring: {
     name: "Spring", capability: "Launches the marble straight across one square to the next part.", symbol: '<svg class="part-icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 20h6l4-8 6 16 6-16 4 8h6" fill="none" stroke="#cf7052" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12v16m32-16v16" stroke="#76564d" stroke-width="2.5" stroke-linecap="round"/></svg>',
     ports: ["E", "W"]
@@ -472,7 +473,7 @@ const HINT_BLUEPRINTS = [
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "ramp", rotation: 0 }, { index: 16, type: "belt", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "belt", rotation: 0 }, { index: 14, type: "belt", rotation: 0 }],
   [{ index: 20, type: "belt", rotation: 0 }, { index: 21, type: "switch", rotation: 0 }, { index: 16, type: "gear", rotation: 1 }, { index: 11, type: "ramp", rotation: 2 }, { index: 12, type: "belt", rotation: 0 }, { index: 13, type: "spring", rotation: 0 }]
 ];
-const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16 };
+const PART_PRICES = { belt: 8, spring: 10, ramp: 12, gear: 16, switch: 16, splitter:20 };
 const BOLTS_PER_FIRST_WIN = 5;
 const MEDAL_SYMBOL = "⚙";
 const DIRS = ["E", "S", "W", "N"];
@@ -579,6 +580,7 @@ function shuffleWith(items, random) {
   return result;
 }
 function generatedPuzzle(index) {
+  if(index>=20) return generatedBranchPuzzle(index);
   const generatedNumber = index - LEVELS.length;
   const size = gridSizeForLevel(index);
   const random = seededRandom(0x71A9C3 + generatedNumber * 7919);
@@ -683,6 +685,10 @@ function generatedPuzzle(index) {
     start: route[0].row, goal: route[route.length-1].row, walls, targets, partBudget, switchChallenge, stock: Object.fromEntries(Object.keys(counts).map(type=>[type, type === "belt" && precisionBuild ? counts[type] + 2 : Math.max(counts[type], type==="belt" ? 3 : 0)])), idealPartCount, solution, difficulty
   };
 }
+function generatedBranchPuzzle(index) {
+ const solution=[{index:21,type:"belt",rotation:0},{index:22,type:"belt",rotation:0},{index:23,type:"splitter",rotation:0},{index:24,type:"belt",rotation:0},{index:25,type:"belt",rotation:0},{index:26,type:"belt",rotation:0},{index:27,type:"belt",rotation:0},{index:16,type:"ramp",rotation:2},{index:17,type:"belt",rotation:0},{index:18,type:"belt",rotation:0},{index:19,type:"belt",rotation:0}];
+ return {size:7,start:3,goal:3,walls:[[0,0],[0,6],[6,0],[6,6]],targets:[],partBudget:null,splitterChallenge:true,signalStart:16,signalGoal:19,title:index===20?"Light the signal line":"Branch signal workshop",copy:"Build the marble route to the bell and a second route from the splitter to the bulb. Both must connect.",note:"The splitter sends the marble east to the bell and launches a glowing fuse north. Build the fuse route to the bulb; both routes must work.",stock:{belt:9,ramp:1,gear:0,switch:0,spring:0,splitter:1},solution,difficulty:index===20?"Hard":"Very Hard",idealPartCount:solution.length};
+}
 const GENERATED_PUZZLE_CACHE = new Map();
 function level() {
   if (LEVELS[levelIndex]) return LEVELS[levelIndex];
@@ -731,6 +737,7 @@ function outputsFor(tile, travelDir, spinDirection = 0) {
     const ports = portsFor(tile);
     return ports.includes(entrySide) ? [{ dir: travelDir, jump: 2 }] : [];
   }
+  if (tile.type === "splitter") return travelDir === "E" ? [{dir:"E",jump:1}] : [];
   if (tile.type === "gear") {
     const spin = spinDirection || (tile.rotation % 2 === 0 ? 1 : -1);
     return [{ dir: rotate(travelDir, spin > 0 ? 1 : 3), jump: 1, spinDirection: spin }];
@@ -738,6 +745,11 @@ function outputsFor(tile, travelDir, spinDirection = 0) {
   const ports = portsFor(tile);
   if (!ports.includes(entrySide)) return [];
   return ports.filter(side => side !== entrySide).map(dir => ({ dir, jump: 1 }));
+}
+function findSignalPath() {
+ const current=level(); if(!current.splitterChallenge)return {success:true,path:[]};
+ const size=current.size, goal=current.signalGoal, queue=[{row:Math.floor(current.signalStart/size),col:current.signalStart%size,dir:"N",path:[]}], seen=new Set(); let best={success:false,path:[]};
+ for(let q=0;q<queue.length&&q<size*size*8;q++){const st=queue[q],idx=st.row*size+st.col,tile=placements[idx],path=st.path.concat([{row:st.row,col:st.col,missing:!tile,signal:true}]);if(idx===goal&&tile)return {success:true,path};const sig=idx+","+st.dir;if(seen.has(sig))continue;seen.add(sig);if(!tile){best={success:false,path};continue;}for(const out of outputsFor(tile,st.dir,0)){const v=VECTORS[out.dir],row=st.row+v[0]*out.jump,col=st.col+v[1]*out.jump;if(row<0||row>=size||col<0||col>=size||current.walls.some(w=>w[0]===row&&w[1]===col))continue;const ni=row*size+col;if(!placements[ni]){best={success:false,path:path.concat([{row,col,missing:true,signal:true}])};continue;}queue.push({row,col,dir:out.dir,path});}}return best;
 }
 function findPath() {
   const current = level();
