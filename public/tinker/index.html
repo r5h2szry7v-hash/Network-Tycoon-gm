@@ -642,7 +642,8 @@ function generatedPuzzle(index) {
     const indexAt = route[i].row * size + route[i].col;
     let type, rotation;
     if (incoming === outgoing) {
-      if (!breather && random() < Math.min(.08 + stage*.025, .18)) { type="gear"; rotation=1; }
+      const gearRoll = random();
+      if (!breather && gearRoll < Math.min(.08 + stage*.025, .18)) { type="belt"; rotation=(incoming === "N" || incoming === "S") ? 1 : 0; }
       else { type="belt"; rotation=(incoming === "N" || incoming === "S") ? 1 : 0; }
     } else {
       turns++;
@@ -653,8 +654,8 @@ function generatedPuzzle(index) {
         for (let r=0; r<4; r++) { const ports=PARTS.switch.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) possible.push(r); }
         rotation=possible[Math.floor(random()*possible.length)];
       } else if (!breather && random() < .10) {
-        type="gear";
-        rotation=(DIRS.indexOf(outgoing)-DIRS.indexOf(incoming)+1+4)%4;
+        type="ramp";
+        for (let r=0; r<4; r++) { const ports=PARTS.ramp.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) { rotation=r; break; } }
       } else {
         type="ramp";
         for (let r=0; r<4; r++) { const ports=PARTS.ramp.ports.map(dir=>rotate(dir,r)); if (ports.includes(entry) && ports.includes(outgoing)) { rotation=r; break; } }
