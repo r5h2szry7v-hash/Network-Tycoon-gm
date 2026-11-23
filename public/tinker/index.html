@@ -147,15 +147,15 @@ html[data-portfolio-motion=reduce] .cell.failure-stop{animation:none!important}
 @keyframes remove-hammer-ready{to{transform:rotate(-20deg) translateY(-2px)}}
 .cell.remove-target{border:2px dashed #d94c3d!important;box-shadow:0 0 0 3px #db514144,0 3px 0 #bd3f35!important;animation:remove-target-pulse .9s ease-in-out infinite alternate}
 @keyframes remove-target-pulse{to{box-shadow:0 0 0 6px #db514155,0 3px 0 #bd3f35!important}}
-.cell.hammer-strike{overflow:visible;z-index:8;animation:tile-hammer-shake .42s ease-in both}
-.remove-hammer{position:absolute;z-index:12;right:0;top:-.72em;font-size:1.8em;line-height:1;pointer-events:none;filter:drop-shadow(0 2px 1px #0005);animation:hammer-smash .42s cubic-bezier(.35,.02,.75,.42) both}
-@keyframes hammer-smash{0%{transform:translate(8px,-18px) rotate(-48deg) scale(1.12)}60%{transform:translate(-1px,3px) rotate(8deg) scale(.92)}78%{transform:translate(0,0) rotate(0) scale(1.04)}100%{transform:translate(0,0) rotate(0) scale(1)}}
+.cell.hammer-strike{overflow:visible;z-index:8;animation:tile-hammer-shake .68s ease-in both}
+.remove-hammer{position:absolute;z-index:12;right:0;top:-.72em;font-size:1.8em;line-height:1;pointer-events:none;filter:drop-shadow(0 2px 1px #0005);animation:hammer-smash .68s cubic-bezier(.35,.02,.75,.42) both}
+@keyframes hammer-smash{0%{transform:translate(8px,-22px) rotate(-48deg) scale(1.12)}48%{transform:translate(-1px,3px) rotate(8deg) scale(.92)}64%{transform:translate(0,0) rotate(0) scale(1.04)}100%{transform:translate(0,0) rotate(0) scale(1)}}
 @keyframes tile-hammer-shake{0%,100%{translate:0 0}55%{translate:0 2px}75%{translate:0 -1px}}
 .cell.hammer-cracked{background-color:#f6dbd0!important;border-color:#c64639!important;box-shadow:inset 0 0 0 2px #c6463955!important}
-.remove-cracks{position:absolute;inset:8%;z-index:10;pointer-events:none;animation:cracks-burst .28s ease-out both}
+.remove-cracks{position:absolute;inset:8%;z-index:10;pointer-events:none;animation:cracks-burst .46s ease-out both}
 .remove-cracks svg{width:100%;height:100%;overflow:visible}
 .remove-cracks path{fill:none;stroke:#a3322b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #fff)}
-@keyframes cracks-burst{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+@keyframes cracks-burst{0%{opacity:0;transform:scale(.3)}45%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
 html[data-portfolio-motion="reduce"] #remove-button.remove-active,html[data-portfolio-motion="reduce"] .cell.remove-target{animation:none}
 html[data-portfolio-motion="reduce"] .remove-hammer,html[data-portfolio-motion="reduce"] .remove-cracks{animation:none}
 @media(prefers-reduced-motion:reduce){#remove-button.remove-active,.cell.remove-target,.cell.hammer-strike,.remove-hammer,.remove-cracks{animation:none!important}}
@@ -1091,7 +1091,7 @@ board.addEventListener("click", async event => {
     cell.classList.add("hammer-strike");
     cell.append(hammer);
     playTone("tap");
-    await wait(reduced ? 40 : 420);
+    await wait(reduced ? 40 : 680);
     if(cell.isConnected){
       cell.classList.add("hammer-cracked");
       const cracks=document.createElement("span");
@@ -1100,7 +1100,7 @@ board.addEventListener("click", async event => {
       cracks.innerHTML='<svg viewBox="0 0 100 100"><path d="M48 4 43 24 53 34 42 48 54 57 46 73 51 96M44 25 27 18 35 39 18 52 39 55M55 35 74 21 64 43 84 53 58 59M45 72 28 82 48 79 66 92"/></svg>';
       cell.append(cracks);
     }
-    await wait(reduced ? 20 : 180);
+    await wait(reduced ? 20 : 520);
     placements[index] = null;
     hintCue = null;
     visualChange = null;
