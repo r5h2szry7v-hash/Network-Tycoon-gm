@@ -835,8 +835,8 @@ function gearPairIsValid(path, requireChallengePair=true) {
  return requireChallengePair && level().gearChallenge ? count>=2 && count%2===0 : count===0 || (count>=2 && count%2===0);
 }
 function signalRequiredPartValid(path) {
- const required=level().requiredSignalPart;
- return !required || path.some(point=>placements[keyOf(point.row,point.col)]?.type===required);
+ const current=level(), required=current.requiredSignalPart, bulb=current.signalGoal;
+ return !required || path.some(point=>keyOf(point.row,point.col)!==bulb && placements[keyOf(point.row,point.col)]?.type===required);
 }
 function findPath() {
   const current = level();
