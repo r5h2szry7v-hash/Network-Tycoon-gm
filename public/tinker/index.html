@@ -57,7 +57,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #487fce;outline-offset:3p
 @keyframes tutorialPoint{to{transform:translateY(4px)}}
 @keyframes tutorialMarble{50%{transform:scale(1.12);box-shadow:0 0 0 5px #77b8d530,0 2px 5px #193d5150}}
 @media(max-width:560px){.home-dialog.tutorial-dialog{padding:16px}.tutorial-flow{gap:3px}.tutorial-flow-step{gap:4px;min-height:36px;padding:5px 3px;font-size:.76em}.tutorial-flow-step b{width:18px;height:18px}.tutorial-workbench{padding:9px}.tutorial-route{gap:2px}.tutorial-route-cell{border-radius:9px}.tutorial-route-arrow{font-size:1.05em}.tutorial-tray{gap:6px;min-height:42px;padding:4px 6px}.tutorial-tray-part{width:32px;height:32px}.tutorial-tray-part svg{width:26px;height:26px}.tutorial-capabilities{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.tutorial-capability{min-height:76px;padding:6px 3px}.tutorial-capability-use{font-size:.66em}}
-@media(prefers-reduced-motion:reduce){.tutorial-marble,.tutorial-tray-pointer,.signal-bulb-marker{position:absolute;right:-.22em;top:-.3em;font-size:1.15em;filter:drop-shadow(0 0 5px #ffcf58);z-index:4}.signal-lit{box-shadow:inset 0 0 0 3px #ffbf45,0 0 14px #ffcd69!important}.signal-fuse-traveler{position:absolute;inset:28%;display:grid;place-items:center;color:#ffb72e;font-size:2em;text-shadow:0 0 9px #ffcf62;z-index:6;animation:fuse-pulse .3s ease-in-out infinite alternate}.bulb-lit .signal-bulb-marker{filter:drop-shadow(0 0 10px #ffd84e);transform:scale(1.35)}@keyframes fuse-pulse{to{transform:scale(1.22);filter:brightness(1.5)}}
+@media(prefers-reduced-motion:reduce){.tutorial-marble,.tutorial-tray-pointer,.signal-bulb-marker{position:absolute;right:-.22em;top:-.3em;font-size:1.15em;filter:drop-shadow(0 0 5px #ffcf58);z-index:4}html[data-portfolio-motion="reduce"] .signal-fuse-traveler{animation:none}.signal-lit{box-shadow:inset 0 0 0 3px #ffbf45,0 0 14px #ffcd69!important}.signal-fuse-traveler{position:absolute;inset:28%;display:grid;place-items:center;color:#ffb72e;font-size:2em;text-shadow:0 0 9px #ffcf62;z-index:6;animation:fuse-pulse .3s ease-in-out infinite alternate}.bulb-lit .signal-bulb-marker{filter:drop-shadow(0 0 10px #ffd84e);transform:scale(1.35)}@keyframes fuse-pulse{to{transform:scale(1.22);filter:brightness(1.5)}}
 .broken-circuit{animation:none!important}}
 .hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:18px;margin-bottom:20px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--game-accent-2);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
@@ -914,7 +914,7 @@ function render() {
   }
   visualChange = null;
   partsNode.replaceChildren();
-  Object.entries(PARTS).forEach(([id, part]) => {
+  Object.entries(PARTS).forEach(([id, part]) => { if(id==="splitter" && levelIndex<20) return;
     const button = document.createElement("button");
     const count = (current.stock[id] || 0) + (purchasedByLevel[levelIndex] === id ? 1 : 0);
     const available = count - usedCount(id);
