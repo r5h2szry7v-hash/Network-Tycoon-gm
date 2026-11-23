@@ -930,8 +930,8 @@ function render() {
   document.getElementById("store-button-balance").textContent = bolts + " 🔩";
   document.getElementById("store-button").disabled = running || removingPart || solved.includes(levelIndex);
   renderPartsStore();
-  document.getElementById("help-button").disabled = running;
-  document.getElementById("parts-guide-tutorial").disabled = running;
+  document.getElementById("help-button").disabled = running || removingPart;
+  document.getElementById("parts-guide-tutorial").disabled = running || removingPart;
   const current = level();
   const partCount = placements.filter(Boolean).length;
   const budgetReached = current.partBudget != null && partCount >= current.partBudget;
@@ -991,7 +991,7 @@ function render() {
         cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", blocked gap");
       } else if (tile) {
         cell.innerHTML = iconFor(tile);
-        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", " + PARTS[tile.type].name + ". Activate to rotate clockwise.");
+        cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", " + PARTS[tile.type].name + (removeMode ? ". Tap to break and return to tray." : ". Activate to rotate clockwise."));
       } else {
         cell.setAttribute("aria-label", "Row " + (row + 1) + ", column " + (col + 1) + ", empty");
       }
@@ -1039,7 +1039,7 @@ function render() {
     button.className = "part";
     button.dataset.part = id;
     if (hintCue?.type === id && hintCue.index == null) button.classList.add("hint-target");
-    button.disabled = available <= 0 || running || budgetReached;
+    button.disabled = available <= 0 || running || removingPart || budgetReached;
     button.setAttribute("aria-pressed", String(selectedPart === id));
     button.setAttribute("aria-label", part.name + ", " + Math.max(0, available) + " available");
     button.innerHTML = part.symbol + '<span>' + part.name + '</span><span class="part-count">' + Math.max(0, available) + '</span>';
