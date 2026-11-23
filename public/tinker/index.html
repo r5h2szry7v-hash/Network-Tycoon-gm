@@ -572,7 +572,8 @@ try {
     placements = Array(gridSizeForLevel(levelIndex) ** 2).fill(null);
     solved = Array.isArray(save.solved) ? save.solved.filter(n => Number.isInteger(n) && n >= 0) : [];
     const saved = save.layouts && save.layouts[levelIndex];
-    const activeLayout = save.schemaVersion < 4 ? migrateLegacyLayout(saved, gridSizeForLevel(levelIndex)) : saved;
+    const staleGeneratedLayout = (save.puzzleGenerationVersion || 1) < 2 && levelIndex >= 20;
+    const activeLayout = staleGeneratedLayout ? null : (save.schemaVersion < 4 ? migrateLegacyLayout(saved, gridSizeForLevel(levelIndex)) : saved);
     if (activeLayout && typeof activeLayout === "object") {
       for (const [key, tile] of Object.entries(activeLayout)) {
         const index = Number(key);
@@ -588,7 +589,11 @@ let layouts = {};
 try {
   const save = JSON.parse(localStorage.getItem("tinkerFactory") || "null");
   if (save?.layouts && typeof save.layouts === "object") {
-    layouts = save.layouts;
+    layouts = {...save.layouts};
+    if ((save.puzzleGenerationVersion || 1) < 2) {
+      for (const key of Object.keys(layouts)) if (Number(key) >= 20) delete layouts[key];
+      hintStepByLevel = Object.fromEntries(Object.entries(hintStepByLevel).filter(([key]) => Number(key) < 20));
+    }
     if (save.schemaVersion < 4) {
       for (const [key, savedLayout] of Object.entries(layouts)) {
         const level = Number(key);
@@ -604,7 +609,7 @@ function saveGame() {
   placements.forEach((tile, index) => { if (tile) layout[index] = tile; });
   layouts[levelIndex] = layout;
   try {
-    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 7, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, purchasedQuantityByLevel, bestMedalsByLevel, soundEnabled }));
+    localStorage.setItem("tinkerFactory", JSON.stringify({ schemaVersion: 8, puzzleGenerationVersion: 2, levelIndex, solved, layouts, hintCredits, hintStepByLevel, bolts, purchasedByLevel, purchasedQuantityByLevel, bestMedalsByLevel, soundEnabled }));
   } catch {}
 }
 function seededRandom(seed) {
@@ -723,49 +728,123 @@ function generatedPuzzle(index) {
   };
 }
 function generatedBranchPuzzle(index) {
- const n=index-20, size=7, gearChallenge=n>=4 && n%8===4;
- if(gearChallenge) {
-   const mirror=Math.floor(n/8)%2===1;
-   const signalRow=mirror?4:2, signalDir=mirror?"S":"N", signalRamp=mirror?1:2;
-   const signalStart=signalRow*7+1, signalGoal=signalRow*7+5;
-   const solution=mirror
-    ? [{index:21,type:"belt",rotation:0},{index:22,type:"splitter",rotation:2},{index:23,type:"gear",rotation:1},{index:16,type:"gear",rotation:1},{index:17,type:"belt",rotation:0},{index:18,type:"belt",rotation:0},{index:19,type:"belt",rotation:0},{index:20,type:"ramp",rotation:3},{index:27,type:"ramp",rotation:1},{index:29,type:"ramp",rotation:1},{index:30,type:"belt",rotation:0},{index:31,type:"belt",rotation:0},{index:32,type:"belt",rotation:0}]
-    : [{index:21,type:"belt",rotation:0},{index:22,type:"splitter",rotation:0},{index:23,type:"gear",rotation:0},{index:30,type:"gear",rotation:0},{index:31,type:"belt",rotation:0},{index:32,type:"belt",rotation:0},{index:33,type:"belt",rotation:0},{index:34,type:"ramp",rotation:0},{index:27,type:"ramp",rotation:2},{index:15,type:"ramp",rotation:2},{index:16,type:"belt",rotation:0},{index:17,type:"belt",rotation:0},{index:18,type:"belt",rotation:0}];
-   return {size,start:3,goal:3,walls:[[0,0],[0,6],[6,0],[6,6]],targets:[],partBudget:null,splitterChallenge:true,signalStart,signalGoal,signalDir,title:"Interlocking gear train",copy:"Pair the gears to steer the marble, then carry the splitter’s fuse to the bulb. Both routes must connect.",note:"A gear train needs an even pair of active gears. Their spin alternates. Ramps make simple corners; the splitter sends a separate fuse to the bulb.",stock:{belt:7,ramp:3,gear:2,switch:0,spring:0,splitter:1},solution,difficulty:n>=20?"Extremely Hard":"Very Hard",idealPartCount:solution.length,gearChallenge:true};
- }
+ const n=index-20, size=7;
  const breather=n%9===7;
- const switchChallenge=!breather && n>=5 && n%5===0;
- const springChallenge=!breather && !switchChallenge && n>=6 && n%7===6;
- const startRow=1+((n*2+Math.floor(n/3))%5);
- const forkCol=1+(n%3);
- let sign=(n%2===0)?-1:1;
- let depth=breather?1:1+((Math.floor(n/3))%2);
- if(startRow+sign*depth<1||startRow+sign*depth>5)sign=-sign;
- if(startRow+sign*depth<1||startRow+sign*depth>5)depth=1;
- const branchRow=startRow+sign*depth, splitterIndex=startRow*size+forkCol;
- const rampRotation=sign<0?2:1;
- const elbowIndex=branchRow*size+forkCol;
+ const gearChallenge=!breather&&n>=4&&n%8===4;
+ const dualBulb=!breather&&n>=2&&n%6===2;
+ const springChallenge=!breather&&!gearChallenge&&!dualBulb&&n%6===1;
+ const sequenceChallenge=!breather&&!dualBulb&&n%6===5;
+ const signalOrder=sequenceChallenge?"fuseFirst":"marbleFirst";
  const solution=[];
- const counts={belt:0,ramp:0,gear:0,switch:0,spring:0,splitter:1};
- const add=(row,col,type,rotation=0)=>{const indexAt=row*size+col;solution.push({index:indexAt,type,rotation});counts[type]++;};
- for(let col=0;col<size;col++) add(startRow,col,col===forkCol?"splitter":"belt",col===forkCol?(sign<0?0:2):0);
- for(let step=1;step<depth;step++) add(startRow+sign*step,forkCol,"belt",1);
- add(branchRow,forkCol,switchChallenge?"switch":"ramp",rampRotation);
- if(springChallenge){
-   for(let col=forkCol+1;col<=3;col++) add(branchRow,col,"belt",0);
-   add(branchRow,4,"spring",0);
+ const counts={belt:0,ramp:0,gear:0,switch:0,spring:0,splitter:0};
+ const add=(row,col,type,rotation=0)=>{solution.push({index:row*size+col,type,rotation});counts[type]++;};
+ const rotationFor=(type,incoming,outgoing)=>{
+  const entry=opposite(incoming);
+  for(let rotation=0;rotation<4;rotation++){
+   const ports=PARTS[type].ports.map(dir=>rotate(dir,rotation));
+   if(ports.includes(entry)&&ports.includes(outgoing))return rotation;
+  }
+  return 0;
+ };
+ const addTurn=(row,col,type,incoming,outgoing)=>add(row,col,type,rotationFor(type,incoming,outgoing));
+ const addMainRow=(row,splitterColumns,splitterRotations={})=>{
+  for(let col=0;col<size;col++){
+   if(splitterColumns.includes(col))add(row,col,"splitter",splitterRotations[col]||0);
+   else add(row,col,"belt",0);
+  }
+ };
+ let start=3,goal=3, signalGoals=[],targets=[],requiredSignalParts=["switch"];
+ let requiredSignalPart="switch", signalDir="N", forcedWall=null, title="", copy="", note="";
+ let typeName="long-branch", idealPartCount=0;
+ if(gearChallenge){
+  typeName="gear-train"; start=3;goal=4;signalDir="N"; requiredSignalParts=["switch","ramp"];
+  add(3,0,"belt",0);add(3,1,"splitter",0);add(3,2,"gear",0);add(4,2,"gear",0);
+  for(let col=3;col<7;col++)add(4,col,"belt",0);
+  add(2,1,"belt",1);add(1,1,"belt",1);addTurn(0,1,"switch","N","E");
+  for(let col=2;col<=4;col++)add(0,col,"belt",0);
+  addTurn(0,5,"ramp","E","S");
+  signalGoals=[1*size+5];
+  title="Interlocking gear train";
+  copy="Pair the gears to steer the marble around the workshop. Route the separate fuse through a switch and ramp to the distant bulb, then ring the bell.";
+  note="The active marble route needs an even gear pair. The bulb branch needs its own switch and ramp; follow the fuse path to check both connections.";
+ } else if(dualBulb){
+  typeName="twin-signals"; start=3;goal=3;signalDir="N";requiredSignalParts=["switch"];
+  addMainRow(3,[2,4],{2:0,4:2});
+  add(2,2,"belt",1);add(1,2,"belt",1);addTurn(0,2,"switch","N","E");
+  for(let col=3;col<=5;col++)add(0,col,"belt",0);
+  signalGoals.push(6);
+  add(4,4,"belt",1);add(5,4,"belt",1);addTurn(6,4,"switch","S","E");add(6,5,"belt",0);
+  signalGoals.push(48);targets=[3*size+3];
+  title="Light both signal branches";
+  copy="Pass the starred checkpoint, ring the bell, and light both bulbs. Each splitter must feed its own switch-controlled fuse route.";
+  note="There are two separate fuse routes. Both need a switch and must reach their own bulb; the starred checkpoint is part of the marble route.";
+ } else if(springChallenge){
+  typeName="spring-gap";start=3;goal=3;
+  const forkCol=n%2===0?2:4, horizontal=forkCol===2?1:-1, branchSign=n%3===1?-1:1, branchRow=start+branchSign*2;
+  signalDir=branchSign<0?"N":"S";
+  addMainRow(3,[forkCol],{[forkCol]:branchSign<0?0:2});
+  add(branchRow-branchSign,forkCol,"belt",1);
+  addTurn(branchRow,forkCol,"switch",signalDir,horizontal>0?"E":"W");
+  add(branchRow,forkCol+horizontal,"belt",0);
+  const springCol=forkCol+2*horizontal, gapCol=forkCol+3*horizontal, bulbCol=forkCol+4*horizontal;
+  add(branchRow,springCol,"spring",0);
+  signalGoals=[branchRow*size+bulbCol];
+  forcedWall=[branchRow,gapCol];
+  requiredSignalParts=["switch","spring"];
+  title="Springboard signal";
+  copy="The bulb is separated from the splitter by a blocked square. Route the fuse through a switch and spring, then ring the bell.";
+  note="The spring jumps over exactly one square. The fuse must pass through the branch switch and spring to reach the bulb.";
+ } else if(breather){
+  typeName="breather";start=3;goal=3;
+  const forkCol=n%2===0?2:4, horizontal=forkCol===2?1:-1, branchSign=n%2===0?-1:1, branchRow=start+branchSign*2;
+  signalDir=branchSign<0?"N":"S";
+  addMainRow(3,[forkCol],{[forkCol]:branchSign<0?0:2});
+  add(branchRow-branchSign,forkCol,"belt",1);
+  addTurn(branchRow,forkCol,"switch",signalDir,horizontal>0?"E":"W");
+  add(branchRow,forkCol+horizontal,"belt",0);
+  add(branchRow,forkCol+2*horizontal,"belt",0);
+  signalGoals=[branchRow*size+forkCol+3*horizontal];
+  title="A lighter signal run";
+  copy="Build a short but separate switch-controlled fuse branch to the bulb, then carry the marble to the bell.";
+  note="This is an easier board with fewer blocked squares. The bulb still needs its own switch-controlled branch.";
  } else {
-   for(let col=forkCol+1;col<=5;col++) add(branchRow,col,"belt",0);
+  typeName="long-branch";
+  const mirror=Math.floor(n/5)%2===1;
+  const mainRow=mirror?1:5, branchSign=mirror?1:-1, forkCol=n%2===0?2:4, horizontal=forkCol===2?1:-1;
+  start=mainRow;goal=mainRow;signalDir=branchSign<0?"N":"S";
+  addMainRow(mainRow,[forkCol],{[forkCol]:branchSign<0?0:2});
+  for(let step=1;step<=3;step++)add(mainRow+branchSign*step,forkCol,"belt",1);
+  const switchRow=mainRow+branchSign*4;
+  addTurn(switchRow,forkCol,"switch",signalDir,horizontal>0?"E":"W");
+  add(switchRow,forkCol+horizontal,"belt",0);
+  add(switchRow,forkCol+2*horizontal,"belt",0);
+  const rampCol=forkCol+3*horizontal;
+  addTurn(switchRow,rampCol,"ramp",horizontal>0?"E":"W",signalDir);
+  signalGoals=[(switchRow+branchSign)*size+rampCol];
+  requiredSignalParts=["switch","ramp"];
+  title=sequenceChallenge?"Fuse first, then marble":mirror?"Route to the far signal dock":"Turn through the signal workshop";
+  copy=sequenceChallenge
+   ?"Light the distant bulb first, then send the marble to the bell. The separate fuse route requires both a switch and a ramp."
+   :"Send the marble to the bell and the fuse through a long switch-and-ramp branch to the distant bulb.";
+  note=sequenceChallenge
+   ?"The machine runs the fuse branch first on this puzzle. Connect the switch and ramp route to the bulb before the marble takes the bell route."
+   :"The bulb is several cells away from the bell route. Follow the fuse through the switch, around the blocked spaces, and through the ramp.";
  }
  const protectedCells=new Set(solution.map(part=>part.index));
- const signalGoal=branchRow*size+6; protectedCells.add(signalGoal);
+ for(const bulb of signalGoals)protectedCells.add(bulb);
+ for(const checkpoint of targets)protectedCells.add(checkpoint);
  const random=seededRandom(0xB4A7C2+index*7919);
  const possible=shuffleWith(Array.from({length:size*size},(_,i)=>i).filter(i=>!protectedCells.has(i)),random);
- const wallCount=breather?0:Math.min(2+Math.floor(n/5)+n%4,10,possible.length);
- const walls=possible.slice(0,wallCount).map(i=>[Math.floor(i/size),i%size]);
- if(springChallenge && !walls.some(w=>w[0]===branchRow&&w[1]===5)) walls.push([branchRow,5]);
- if(switchChallenge) counts.ramp=0;
- return {size,start:startRow,goal:startRow,walls,targets:[],partBudget:null,splitterChallenge:true,signalStart:branchRow*size+forkCol,signalGoal,signalDir:sign<0?"N":"S",requiredSignalPart:switchChallenge?"switch":springChallenge?"spring":"",title:gearChallenge?"Interlocking gear train":springChallenge?"Springboard signal":switchChallenge?"Choose the live branch":breather?"A lighter signal run":"Branch signal workshop",copy:"Connect the marble route to the bell and the splitter’s fuse route to the bulb. Both routes must work.",note:switchChallenge?"Use the switch at the branch turn; the level’s parts tray is tuned for this route. The switch chooses the fuse’s route but does not launch a second signal.":springChallenge?"The signal route needs a spring to jump the blocked gap before the bulb.":breather?"A shorter, open branch puzzle to practice the splitter and bulb.":"Build both routes from the splitter. Walls, turns, and inventory change from round to round.",stock:{belt:counts.belt,ramp:switchChallenge?0:counts.ramp,gear:0,switch:switchChallenge?1:0,spring:springChallenge?1:0,splitter:1},solution,difficulty:breather?"":n>=18&&(depth>1||wallCount>=7)?"Extremely Hard":springChallenge||switchChallenge||depth>1||wallCount>=5?"Very Hard":"Hard",idealPartCount:solution.length,gearChallenge:false};
+ const wallCount=breather?4:Math.min((dualBulb?11:10)+Math.floor(n/8)+(n%3),15,possible.length);
+ const wallKeys=new Set(possible.slice(0,wallCount));
+ if(forcedWall)wallKeys.add(forcedWall[0]*size+forcedWall[1]);
+ const walls=Array.from(wallKeys).map(i=>[Math.floor(i/size),i%size]);
+ const signalGoal=signalGoals[0];
+ idealPartCount=solution.length;
+ const partBudget=breather?null:idealPartCount+1;
+ const stock={...counts};
+ const difficulty=breather?"":dualBulb||gearChallenge?"Extremely Hard":springChallenge||sequenceChallenge?"Very Hard":"Hard";
+ return {size,start,goal,walls,targets,partBudget,splitterChallenge:true,signalStart:solution.find(part=>part.type==="splitter").index,signalGoal,signalGoals,signalDir,requiredSignalPart,requiredSignalParts,signalOrder,stock,solution,difficulty,title,copy,note,idealPartCount,gearChallenge,branchChallengeType:typeName};
 }
 const GENERATED_PUZZLE_CACHE = new Map();
 function level() {
@@ -824,14 +903,16 @@ function outputsFor(tile, travelDir, spinDirection = 0) {
   if (!ports.includes(entrySide)) return [];
   return ports.filter(side => side !== entrySide).map(dir => ({ dir, jump: 1 }));
 }
-function findSignalPath(mainPath=[]) {
+function findSignalPath(mainPath=[], targetGoal=null, usedSplitters=new Set()) {
  const current=level(); if(!current.splitterChallenge)return {success:true,path:[]};
- const size=current.size, goal=current.signalGoal;
+ const size=current.size, goal=targetGoal==null?current.signalGoal:targetGoal;
  const dirBetween=(a,b)=>DIRS.find(dir=>a.row+VECTORS[dir][0]===b.row&&a.col+VECTORS[dir][1]===b.col);
  let best={success:false,path:[]};
  for(let i=0;i<mainPath.length;i++){
    const point=mainPath[i], tile=placements[keyOf(point.row,point.col)];
    if(!tile || tile.type!=="splitter") continue;
+   const splitterIndex=keyOf(point.row,point.col);
+   if(usedSplitters.has(splitterIndex))continue;
    const incoming=i===0?"E":dirBetween(mainPath[i-1],point);
    const mainOut=i<mainPath.length-1?dirBetween(point,mainPath[i+1]):"E";
    if(!incoming) continue;
@@ -844,13 +925,21 @@ function findSignalPath(mainPath=[]) {
      for(let q=0;q<queue.length&&q<size*size*8;q++){
        const st=queue[q],idx=st.row*size+st.col,t=placements[idx],atBulb=idx===goal;
        const path=st.path.concat([{row:st.row,col:st.col,missing:!t&&!atBulb,signal:true}]);
-       if(atBulb && gearPairIsValid(path,false) && signalRequiredPartValid(path))return {success:true,path};
+       if(atBulb && gearPairIsValid(path,false) && signalRequiredPartValid(path,goal))return {success:true,path,splitterIndex};
        const sig=idx+","+st.dir;if(seen.has(sig))continue;seen.add(sig);
-       if(!t){best={success:false,path};continue;}
+       if(!t){best={success:false,path,splitterIndex};continue;}
        for(const next of outputsFor(t,st.dir,0)){
          const v=VECTORS[next.dir],nr=st.row+v[0]*next.jump,nc=st.col+v[1]*next.jump;
          if(nr<0||nr>=size||nc<0||nc>=size||current.walls.some(w=>w[0]===nr&&w[1]===nc))continue;
-         if(!placements[nr*size+nc]){const terminal=nr*size+nc===goal;if(terminal){const completed=path.concat([{row:nr,col:nc,missing:false,signal:true}]);if(gearPairIsValid(completed,false)&&signalRequiredPartValid(completed))return {success:true,path:completed};}best={success:false,path:path.concat([{row:nr,col:nc,missing:true,signal:true}])};continue;}
+         if(!placements[nr*size+nc]){
+           const terminal=nr*size+nc===goal;
+           if(terminal){
+             const completed=path.concat([{row:nr,col:nc,missing:false,signal:true}]);
+             if(gearPairIsValid(completed,false)&&signalRequiredPartValid(completed,goal))return {success:true,path:completed,splitterIndex};
+           }
+           best={success:false,path:path.concat([{row:nr,col:nc,missing:true,signal:true}]),splitterIndex};
+           continue;
+         }
          queue.push({row:nr,col:nc,dir:next.dir,path});
        }
      }
@@ -858,13 +947,26 @@ function findSignalPath(mainPath=[]) {
  }
  return best;
 }
+function findSignalPaths(mainPath=[]) {
+ const current=level();
+ if(!current.splitterChallenge)return {success:true,paths:[]};
+ const goals=Array.isArray(current.signalGoals)?current.signalGoals:[current.signalGoal];
+ const usedSplitters=new Set();
+ const paths=goals.map(goal=>{
+   const found=findSignalPath(mainPath,goal,usedSplitters);
+   if(found.success&&found.splitterIndex!=null)usedSplitters.add(found.splitterIndex);
+   return found;
+ });
+ return {success:paths.length>0&&paths.every(result=>result.success),paths};
+}
 function gearPairIsValid(path, requireChallengePair=true) {
  const count=path.reduce((n,point)=>n+(placements[keyOf(point.row,point.col)]?.type==="gear"?1:0),0);
  return requireChallengePair && level().gearChallenge ? count>=2 && count%2===0 : count===0 || (count>=2 && count%2===0);
 }
-function signalRequiredPartValid(path) {
- const current=level(), required=current.requiredSignalPart, bulb=current.signalGoal;
- return !required || path.some(point=>keyOf(point.row,point.col)!==bulb && placements[keyOf(point.row,point.col)]?.type===required);
+function signalRequiredPartValid(path, targetGoal=null) {
+ const current=level(), bulb=targetGoal==null?current.signalGoal:targetGoal;
+ const required=current.requiredSignalParts || (current.requiredSignalPart?[current.requiredSignalPart]:[]);
+ return required.every(type=>path.some(point=>keyOf(point.row,point.col)!==bulb && placements[keyOf(point.row,point.col)]?.type===type));
 }
 function findPath() {
   const current = level();
@@ -997,7 +1099,7 @@ function render() {
       }
       if (row === current.start && col === 0) { cell.classList.add("entry-cell"); cell.id = "marble-start-cell"; }
       if (row === current.goal && col === size - 1) { cell.classList.add("exit-cell"); cell.setAttribute("aria-label", (cell.getAttribute("aria-label") || "") + ", bell goal"); }
-      if (current.splitterChallenge && index === current.signalGoal) { cell.classList.add("bulb-cell"); cell.setAttribute("aria-label",(cell.getAttribute("aria-label")||"")+", signal bulb target"); const bulb=document.createElement("span"); bulb.className="signal-bulb-marker"; bulb.textContent="💡"; bulb.setAttribute("aria-hidden","true"); cell.append(bulb); }
+      const bulbGoals=current.signalGoals||[current.signalGoal]; const bulbNumber=bulbGoals.indexOf(index); if (current.splitterChallenge && bulbNumber>=0) { cell.classList.add("bulb-cell"); cell.setAttribute("aria-label",(cell.getAttribute("aria-label")||"")+", signal bulb target"+(bulbGoals.length>1?" "+(bulbNumber+1)+" of "+bulbGoals.length:"")); const bulb=document.createElement("span"); bulb.className="signal-bulb-marker"; bulb.textContent="💡"; bulb.setAttribute("aria-hidden","true"); cell.append(bulb); }
       const checkpointIndex = (current.targets || []).indexOf(index);
       if (checkpointIndex >= 0) {
         cell.classList.add("checkpoint-cell");
@@ -1226,10 +1328,29 @@ async function runMachine() {
   const current = level();
   const result = findPath();
   const mainSuccess = result.success;
-  const signalResult = findSignalPath(result.path);
-  result.signalPath = signalResult.path;
-  result.success = result.success && signalResult.success;
+  const signalValidation = findSignalPaths(result.path);
+  result.signalResults = signalValidation.paths;
+  result.signalPath = result.signalResults[0]?.path || [];
+  result.success = result.success && signalValidation.success;
   const reduced = document.documentElement.dataset.portfolioMotion === "reduce";
+  const animateSignalPaths = async () => {
+    for (let signalIndex=0; signalIndex<result.signalResults.length; signalIndex++) {
+      const signalResult=result.signalResults[signalIndex];
+      if (!signalResult.path?.length) continue;
+      setStatus(current.signalGoals?.length>1
+        ? "Fuse " + (signalIndex+1) + " of " + result.signalResults.length + " is tracing to its bulb…"
+        : current.signalOrder==="fuseFirst" ? "The bulb fuse is running before the marble…" : mainSuccess ? "The marble reached the bell. The signal fuse is running…" : "The signal fuse is running…");
+      let fuse=null;
+      for(let i=0;i<signalResult.path.length;i++){
+        const point=signalResult.path[i], idx=keyOf(point.row,point.col), cell=board.querySelector('[data-index="' + idx + '"]');
+        if(cell){cell.classList.add(point.missing?"is-missing":"signal-lit");fuse?.remove();fuse=document.createElement("span");fuse.className="signal-fuse-traveler";fuse.textContent="✦";cell.append(fuse);}
+        await wait(reduced?50:260);
+        if(point.missing) break;
+      }
+      fuse?.remove();
+    }
+  };
+  if (current.splitterChallenge && current.signalOrder==="fuseFirst") await animateSignalPaths();
   let previousMarble = null;
   for (let i = 0; i < result.path.length; i++) {
     const point = result.path[i];
@@ -1251,17 +1372,7 @@ async function runMachine() {
     await wait(i === result.path.length - 1 ? (reduced ? 80 : 520) : (reduced ? 50 : 310));
   }
   previousMarble?.remove();
-  if (current.splitterChallenge && result.signalPath?.length) {
-    setStatus(mainSuccess ? "The marble reached the bell. The signal fuse is running…" : "The signal fuse is running…");
-    let fuse=null;
-    for(let i=0;i<result.signalPath.length;i++){
-      const point=result.signalPath[i], idx=keyOf(point.row,point.col), cell=board.querySelector('[data-index="' + idx + '"]');
-      if(cell){cell.classList.add(point.missing?"is-missing":"signal-lit");fuse?.remove();fuse=document.createElement("span");fuse.className="signal-fuse-traveler";fuse.textContent="✦";cell.append(fuse);}
-      await wait(reduced?50:260);
-      if(point.missing) break;
-    }
-    fuse?.remove();
-  }
+  if (current.splitterChallenge && current.signalOrder!=="fuseFirst") await animateSignalPaths();
   const firstClear = result.success && !solved.includes(levelIndex);
   const partCount = placements.filter(Boolean).length;
   lastRunMedals = result.success && current.partBudget != null
@@ -1284,8 +1395,8 @@ async function runMachine() {
   if (result.success) {
     const bell = document.getElementById("bell-goal");
     bell?.classList.add("is-ringing");
-    if(current.splitterChallenge) board.querySelector(".bulb-cell")?.classList.add("bulb-lit");
-    setStatus(current.splitterChallenge ? "Bell rung and signal bulb lit!" : "The bell is ringing!", "success");
+    if(current.splitterChallenge) board.querySelectorAll(".bulb-cell").forEach(bulb=>bulb.classList.add("bulb-lit"));
+    setStatus(current.splitterChallenge ? "Bell rung and all signal bulbs lit!" : "The bell is ringing!", "success");
     playTone("win");
     await wait(2000);
     bell?.classList.remove("is-ringing");
@@ -1298,7 +1409,8 @@ async function runMachine() {
     running = false;
     app.classList.remove("machine-running");
     render();
-    const failurePath = current.splitterChallenge && mainSuccess && !signalResult.success ? result.signalPath : result.path;
+    const failedSignal = result.signalResults?.find(signal=>!signal.success);
+    const failurePath = current.splitterChallenge && mainSuccess && failedSignal ? failedSignal.path : result.path;
     const blocked = failurePath[failurePath.length - 1];
     let stoppedTraveler = null;
     if (blocked) {
@@ -1313,8 +1425,13 @@ async function runMachine() {
     }
     const routeGearCount=result.path.reduce((n,point)=>n+(placements[keyOf(point.row,point.col)]?.type==="gear"?1:0),0);
     const gearPairIssue=routeGearCount>0 && (routeGearCount%2!==0 || (current.gearChallenge && routeGearCount<2));
-    const stopCopy = mainSuccess && current.splitterChallenge && !signalResult.success
-      ? "The marble reached the bell, but the signal fuse stopped at row " + (blocked.row + 1) + ", column " + (blocked.col + 1) + ". Connect the splitter’s second route all the way to the bulb."
+    const signalFailureNumber=result.signalResults?.findIndex(signal=>!signal.success) ?? -1;
+    const signalStop = mainSuccess && current.splitterChallenge && signalFailureNumber>=0;
+    const blockedLocation=blocked?"at row " + (blocked.row+1) + ", column " + (blocked.col+1):"at the splitter";
+    const stopCopy = signalStop
+      ? current.signalGoals?.length>1
+        ? "The marble reached the bell, but signal fuse " + (signalFailureNumber+1) + " stopped " + blockedLocation + ". Connect each splitter to its own bulb."
+        : "The marble reached the bell, but the signal fuse stopped " + blockedLocation + ". Connect the splitter’s second route all the way to the bulb."
       : gearPairIssue
         ? "The gear train needs an even pair of active gears. Add its partner gear or reroute the marble through a complete pair."
         : blocked
@@ -1475,10 +1592,6 @@ document.getElementById("store-button").addEventListener("click", () => { render
 document.getElementById("help-button").addEventListener("click", () => openModal("parts-guide-modal"));
 document.getElementById("parts-guide-tutorial").addEventListener("click", () => { closeModal("parts-guide-modal"); openModal("tutorial-modal"); });
 function storeOffersForPuzzle(current) {
-  if (current.gearChallenge) return ["belt","ramp","gearPair"];
-  if (current.requiredSignalPart === "switch") return ["belt","switch","spring"];
-  if (current.requiredSignalPart === "spring") return ["belt","ramp","spring"];
-  if (current.splitterChallenge) return ["belt","ramp","spring","switch"];
   const offers=["belt"];
   if ((current.stock.ramp||0)>0) offers.push("ramp");
   if ((current.stock.spring||0)>0) offers.push("spring");
