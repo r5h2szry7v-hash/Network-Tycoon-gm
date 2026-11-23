@@ -696,7 +696,7 @@ function generatedPuzzle(index) {
 }
 function generatedBranchPuzzle(index) {
  if(index>=24 && index%4===0) {
-   const solution=[{index:21,type:"belt",rotation:0},{index:22,type:"splitter",rotation:0},{index:23,type:"gear",rotation:0},{index:30,type:"gear",rotation:0},{index:31,type:"belt",rotation:0},{index:32,type:"belt",rotation:0},{index:33,type:"belt",rotation:0},{index:34,type:"ramp",rotation:1},{index:27,type:"ramp",rotation:2},{index:15,type:"ramp",rotation:2},{index:16,type:"belt",rotation:0},{index:17,type:"belt",rotation:0},{index:18,type:"belt",rotation:0}];
+   const solution=[{index:21,type:"belt",rotation:0},{index:22,type:"splitter",rotation:0},{index:23,type:"gear",rotation:0},{index:30,type:"gear",rotation:0},{index:31,type:"belt",rotation:0},{index:32,type:"belt",rotation:0},{index:33,type:"belt",rotation:0},{index:34,type:"ramp",rotation:0},{index:27,type:"ramp",rotation:2},{index:15,type:"ramp",rotation:2},{index:16,type:"belt",rotation:0},{index:17,type:"belt",rotation:0},{index:18,type:"belt",rotation:0}];
    return {size:7,start:3,goal:3,walls:[[0,0],[0,6],[6,0],[6,6]],targets:[],partBudget:null,splitterChallenge:true,signalStart:15,signalGoal:19,signalDir:"N",title:"Interlocking gear train",copy:"Pair the gears to steer the marble, then carry the splitter’s fuse to the bulb. Both routes must connect.",note:"A gear only works as part of an even gear pair. The gears alternate spin direction. The ramp makes simple corners; the splitter sends a separate fuse to the bulb.",stock:{belt:7,ramp:3,gear:2,switch:0,spring:0,splitter:1},solution,difficulty:"Very Hard",idealPartCount:solution.length,gearChallenge:true};
  }
  const south=index%2===1, branchRow=south?4:2, splitRotation=south?2:0, rampRotation=south?1:2;
