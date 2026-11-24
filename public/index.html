@@ -73,7 +73,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
   .a{left:3%;top:7%}.b{right:4%;top:9%}.c{right:7%;bottom:5%}
   footer{margin-top:14px;font-size:.7rem}
 }
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.page *,.page *:before,.page *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 @media(prefers-reduced-motion:reduce){.spark,.halo,.emoji{animation:none!important}.game{transition:none!important;scroll-behavior:auto!important}}
 
 /* Animated portfolio arrival */
@@ -120,7 +120,6 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 @keyframes splash-hint-show{to{opacity:.75}}
 @keyframes splash-fade-away{to{opacity:0;visibility:hidden}}
 @media(max-width:520px){.splash-brand{top:39%;font-size:clamp(2.85rem,14.5vw,4.4rem);letter-spacing:-.09em}.splash-games{top:54%;font-size:clamp(2rem,8vw,2.8rem)}.splash-dog{width:clamp(140px,42vw,210px);max-height:32vh;bottom:max(-18px,calc(env(safe-area-inset-bottom) - 22px))}.splash-orbit{width:min(78vw,68vh,430px)}}
-@media(prefers-reduced-motion:reduce){.splash-overlay{display:none!important}}
 </style>
 <link rel="stylesheet" href="/disable-text-selection.css">
 </head>
@@ -147,7 +146,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 <a class="game paws" href="/paws/" aria-label="Play Pawprint Pursuit"><div class="top"><span class="label">Dash · Dodge · Collect</span><span class="badge">A new maze every run</span></div><div class="art" aria-hidden="true"><span class="halo"></span><span class="emoji">🐕</span></div><h2 class="title">Pawprint Pursuit</h2><p class="desc">Dash through twisty mazes with the pups, collect treats, grab playful boosts, and outwit three mischievous cats.</p><div class="tags"><span>🐾 Winding mazes</span><span>✨ Playful boosts</span><span>🐈 Sneaky chases</span></div><div class="cta"><span>Start the chase</span><span class="arrow" aria-hidden="true">→</span></div></a></nav><footer>Six games, one place to play. <span>Choose your next adventure above.</span></footer>
 </main>
 <script>
-(()=>{const splash=document.getElementById('portfolio-splash');const skip=document.getElementById('splash-skip');if(!splash||!skip||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;splash.hidden=false;let done=false;const finish=()=>{if(done)return;done=true;splash.classList.add('is-leaving');window.setTimeout(()=>{splash.hidden=true},500)};const timer=window.setTimeout(finish,8000);skip.addEventListener('click',()=>{window.clearTimeout(timer);finish()},{once:true})})();
+(()=>{const splash=document.getElementById('portfolio-splash');const skip=document.getElementById('splash-skip');if(!splash||!skip)return;splash.hidden=false;let done=false;const finish=()=>{if(done)return;done=true;splash.classList.add('is-leaving');window.setTimeout(()=>{splash.hidden=true},500)};const timer=window.setTimeout(finish,8000);skip.addEventListener('click',()=>{window.clearTimeout(timer);finish()},{once:true})})();
 </script>
 <script>
 if ("serviceWorker" in navigator) {
