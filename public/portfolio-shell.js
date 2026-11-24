@@ -10,7 +10,7 @@ function loadCloudServices() {
     import("https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js"),
     import("https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js"),
     import("https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js"),
-    import("./cloud-save.js")
+    import("./cloud-save.js?v=portfolio-cloud-v1")
   ]).then(([appSdk, authSdk, storeSdk, saveSdk]) => {
     const app = appSdk.getApp();
     CLOUD = {

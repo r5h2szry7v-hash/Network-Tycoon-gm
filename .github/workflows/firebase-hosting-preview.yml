@@ -57,7 +57,7 @@ jobs:
           login_nav_with_button = '<nav class="cross-game-links"><a href="/">← All games</a><button type="button" class="cloud-home-login" data-cloud-login><span data-cloud-label>☁ Log in to sync</span></button></nav>'
           if 'data-cloud-login' not in html:
               html = html.replace(login_nav, login_nav_with_button, 1)
-          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=auth-restore-guard-3"; startCloudSync("networkTycoon");</script>'
+          tag = '<script type="module">import { startCloudSync } from "/cloud-save.js?v=portfolio-cloud-v1"; startCloudSync("networkTycoon");</script>'
           if tag not in html:
               html = html.replace("</body>", tag + "</body>", 1)
               page.write_text(html)

@@ -40,6 +40,8 @@ const gameStorage = {
   ],
   matchGarden: ["matchGarden"],
   starlightTracer: ["starlightTracer"],
+  tinkerFactory: ["tinkerFactory"],
+  pawprintPursuit: ["pawprintPursuit"],
   critterRescue: [
     "critterRescue.campaignWins",
     "critterRescue.difficultyWins",
@@ -48,6 +50,8 @@ const gameStorage = {
     "critterRescue.motion",
     "critterRescue.tutorialSeen",
     "critterRescue.sound",
+    "critterRescue.darkMode",
+    "critterRescue.avatar",
     "critterRescue.cluePalette",
     "critterRescue.boardSize",
     "critterRescue.palette"
@@ -64,6 +68,7 @@ const emailKey = "firebaseCloudPendingEmail";
 const pendingProviderKey = "firebaseCloudPendingProvider";
 const pendingProviderSignInKey = "firebaseCloudProviderSignIn";
 let gameId = null;
+let portfolioMode = false;
 let activeUid = null;
 let ready = false;
 let suppress = false;
@@ -177,7 +182,6 @@ function mountStyles() {
 .cloud-card button{border:1px solid #d6e1e4;background:#f7faf9;color:#203d48;border-radius:12px;padding:12px 14px;font:800 14px system-ui,sans-serif;cursor:pointer;text-align:left}
 .cloud-card button:hover{background:#eef7f4;border-color:#9fcbc0}
 .cloud-card .cloud-primary{background:#158777;color:white;border-color:#158777}.cloud-card .cloud-primary:hover{background:#0f766a}
-.cloud-card .cloud-apple{background:#1b2730;color:#fff;border-color:#1b2730}
 .cloud-card .cloud-signout{border-color:#f1d5d2;color:#99473f;background:#fff8f7;text-align:center}
 .cloud-card button:disabled{opacity:.58;cursor:not-allowed}
 .cloud-card .cloud-cancel{background:transparent;border-color:transparent;color:#617680;text-align:center;width:100%;margin-top:8px}
@@ -189,9 +193,9 @@ function mountStyles() {
   document.head.appendChild(style);
 }
 function ensureButton() {
-  if (button || !gameId) return;
+  if (button || (!gameId && !portfolioMode)) return;
   mountStyles();
-  button = gameId === "matchGarden" ? document.querySelector("[data-cloud-login]") : null;
+  button = document.querySelector("[data-cloud-login]");
   if (button) {
     button.classList.add("cloud-account-button");
   } else {
@@ -321,6 +325,12 @@ function syncGame(uid, id) {
   syncQueue = task.catch(() => {});
   return task;
 }
+async function syncScope(uid) {
+  if (!uid) return;
+  if (!portfolioMode) return syncGame(uid, gameId);
+  for (const id of Object.keys(gameStorage)) await syncGame(uid, id);
+  setStatus("Your game portfolio is synced.");
+}
 async function getInitialUser() {
   if (auth.currentUser) return auth.currentUser;
   return await new Promise(resolve => {
@@ -350,23 +360,26 @@ function installStorageWatcher() {
   const originalSet = Storage.prototype.setItem;
   Storage.prototype.setItem = function(key, value) {
     originalSet.call(this, key, value);
-    if (this !== localStorage || suppress || !gameId || !gameStorage[gameId].includes(String(key))) return;
+    const changedKey = String(key);
+    const changedGame = Object.keys(gameStorage).find(id => gameStorage[id].includes(changedKey));
+    if (this !== localStorage || suppress || !changedGame || (!portfolioMode && changedGame !== gameId)) return;
     if (!ready) { dirtyDuringBoot = true; return; }
-    const meta = parseMeta(gameId);
-    putMeta(gameId, { ownerUid: auth.currentUser?.uid || meta.ownerUid || null, modifiedAtMs: Date.now() });
+    const meta = parseMeta(changedGame);
+    putMeta(changedGame, { ownerUid: auth.currentUser?.uid || meta.ownerUid || null, modifiedAtMs: Date.now() });
     clearTimeout(syncTimer);
     syncTimer = setTimeout(() => {
       const user = auth.currentUser;
-      if (user && gameId) writeCloud(user.uid, gameId, localPayload(gameId)).catch(error => {
+      if (user) writeCloud(user.uid, changedGame, localPayload(changedGame)).catch(error => {
         console.warn("Cloud save could not sync:", error);
         setStatus("Saved on this device. Cloud sync will retry when available.");
       });
     }, 900);
   };
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden" && auth.currentUser && gameId) {
+    if (document.visibilityState === "hidden" && auth.currentUser && (gameId || portfolioMode)) {
       clearTimeout(syncTimer);
-      writeCloud(auth.currentUser.uid, gameId, localPayload(gameId)).catch(() => {});
+      if (portfolioMode) syncScope(auth.currentUser.uid).catch(() => {});
+      else writeCloud(auth.currentUser.uid, gameId, localPayload(gameId)).catch(() => {});
     }
   });
 }
@@ -377,12 +390,11 @@ function openAccountModal() {
   overlay.className = "cloud-overlay";
   overlay.innerHTML = `
     <section class="cloud-card" role="dialog" aria-modal="true" aria-labelledby="cloud-title">
-      <h2 id="cloud-title">Save across devices</h2>
-      <p>Guest play keeps progress on this device. Link an account to continue the same games on another device.</p>
+      <h2 id="cloud-title">${portfolioMode ? "Sync your game portfolio" : "Save across devices"}</h2>
+      <p>${portfolioMode ? "Sync Network Tycoon, Match Garden, Critter Rescue, Starlight Tracer, Tinker Factory, and Pawprint Pursuit with one account." : "Guest play keeps progress on this device. Link an account to continue the same games on another device."}</p>
       <div class="cloud-account-name" data-cloud-account>Guest · this device</div>
       <div class="cloud-provider-list">
         <button type="button" class="cloud-primary" data-provider="google">Continue with Google</button>
-        <button type="button" class="cloud-apple" data-provider="apple" disabled aria-disabled="true" title="Apple sign-in setup is pending">Apple sign-in coming soon</button>
         <input class="cloud-email-field" type="email" inputmode="email" autocomplete="email" placeholder="Email address" aria-label="Email address">
         <button type="button" data-provider="email">Email me a sign-in link</button>
         <button type="button" class="cloud-signout" data-cloud-signout hidden>Sign out of account</button>
@@ -395,7 +407,6 @@ function openAccountModal() {
   overlay.querySelector("[data-cloud-close]").onclick = () => { overlay.remove(); modal = null; };
   overlay.addEventListener("click", e => { if (e.target === overlay) { overlay.remove(); modal = null; } });
   overlay.querySelector('[data-provider="google"]').onclick = () => connectProvider("google.com");
-  overlay.querySelector('[data-provider="apple"]').onclick = () => setStatus("Apple sign-in will be available when Apple Developer setup is complete.");
   overlay.querySelector('[data-provider="email"]').onclick = sendEmailLink;
   overlay.querySelector("[data-cloud-signout]").onclick = async () => {
     try {
@@ -403,7 +414,7 @@ function openAccountModal() {
       await signOut(auth);
       const result = await signInAnonymously(auth);
       activeUid = result.user.uid;
-      await syncGame(result.user.uid, gameId);
+      await syncScope(result.user.uid);
       setStatus(`Signed out of ${signedOutName}. You are now playing as a guest on this device.`);
       updateButton();
     } catch (error) { setStatus(friendlyError(error)); }
@@ -453,15 +464,16 @@ async function sendEmailLink() {
   } catch (error) { setStatus(friendlyError(error)); }
 }
 async function startCloudSync(id) {
+  portfolioMode = id === "portfolio";
   gameId = gameStorage[id] ? id : null;
   if (!onlineRetryInstalled) {
     onlineRetryInstalled = true;
     window.addEventListener("online", async () => {
-      if (!ready || auth.currentUser || !gameId) return;
+      if (!ready || auth.currentUser || (!gameId && !portfolioMode)) return;
       try {
         const user = (await signInAnonymously(auth)).user;
         activeUid = user?.uid || null;
-        if (user) await syncGame(user.uid, gameId);
+        if (user) await syncScope(user.uid);
         updateButton();
       } catch (error) {
         console.warn("Cloud sync could not resume after reconnecting:", error);
@@ -481,8 +493,8 @@ async function startCloudSync(id) {
     if (completedLink) user = await getInitialUser();
     if (!user) user = (await signInAnonymously(auth)).user;
     activeUid = user?.uid || null;
-    if (user && gameId) {
-      try { await syncGame(user.uid, gameId); }
+    if (user && (gameId || portfolioMode)) {
+      try { await syncScope(user.uid); }
       catch (error) {
         console.warn("Cloud save unavailable; local save remains active:", error);
         setStatus("Local save is active. Cloud sync needs Firebase Auth and Firestore rules.");
@@ -507,10 +519,10 @@ async function startCloudSync(id) {
     setStatus(friendlyError(error));
   }
   ready = true;
-  if (dirtyDuringBoot && auth.currentUser && gameId) {
+  if (dirtyDuringBoot && auth.currentUser && (gameId || portfolioMode)) {
     dirtyDuringBoot = false;
     clearTimeout(syncTimer);
-    syncTimer = setTimeout(() => writeCloud(auth.currentUser.uid, gameId, localPayload(gameId))
+    syncTimer = setTimeout(() => syncScope(auth.currentUser.uid)
       .catch(() => setStatus("Saved on this device. Cloud sync will retry when available.")), 500);
   }
   updateButton();
@@ -519,8 +531,8 @@ async function startCloudSync(id) {
     updateButton();
     if (!ready || !next || next.uid === activeUid) return;
     activeUid = next.uid;
-    if (gameId) {
-      try { await syncGame(next.uid, gameId); }
+    if (gameId || portfolioMode) {
+      try { await syncScope(next.uid); }
       catch (error) { setStatus(friendlyError(error)); }
     }
   });
