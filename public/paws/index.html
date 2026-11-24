@@ -193,7 +193,19 @@ html[data-portfolio-motion=reduce] .outcome-interlude.active .interlude-mascot,h
 
 @media(max-width:620px),(max-width:760px) and (max-height:500px){#play-screen .game-controls{justify-content:flex-start;padding-inline:8px}#play-screen[data-handedness="right"] .game-controls{justify-content:flex-end}#play-screen .dpad{grid-column:1;grid-row:1}#play-screen .helper-buttons{grid-column:2;grid-row:1}#play-screen[data-handedness="right"] .dpad{grid-column:2}#play-screen[data-handedness="right"] .helper-buttons{grid-column:1}}
 .handedness-setting{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 10px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--game-accent) 16%,transparent);border-radius:15px;background:color-mix(in srgb,var(--game-accent) 5%,var(--maze-surface))}.handedness-copy{display:grid;gap:2px}.handedness-copy strong{font-weight:900}.handedness-copy small{color:var(--maze-muted);font-size:.82rem}.handedness-options{display:flex;gap:6px;flex:none}.handedness-option{min-height:40px;padding:6px 10px;border:1px solid color-mix(in srgb,var(--game-accent) 24%,transparent);border-radius:12px;background:var(--maze-surface);color:var(--game-accent);font:850 .82rem/1.15 'DM Sans',system-ui,sans-serif;transition:background-color .14s,color .14s,box-shadow .14s}.handedness-option[aria-pressed=true]{background:var(--game-accent);border-color:var(--game-accent);color:#fff;box-shadow:0 0 0 2px color-mix(in srgb,var(--game-accent) 18%,transparent)}
-@media(max-width:390px){.handedness-setting{align-items:stretch;flex-direction:column;gap:8px}.handedness-options{display:grid;grid-template-columns:1fr 1fr}.handedness-option{min-height:42px}}</style>
+@media(max-width:390px){.handedness-setting{align-items:stretch;flex-direction:column;gap:8px}.handedness-options{display:grid;grid-template-columns:1fr 1fr}.handedness-option{min-height:42px}}
+/* Elongated directional targets form a continuous, balanced plus. */
+#play-screen .dpad{--dpad-tall:69px;display:block;position:relative;width:calc(var(--dpad-size) + var(--dpad-size) + var(--dpad-size));height:calc(var(--dpad-tall) + var(--dpad-tall));gap:0;place-content:initial;place-items:initial;overflow:visible}
+#play-screen .dpad button[data-dir]{position:absolute;box-sizing:border-box;width:var(--dpad-size)!important;height:var(--dpad-tall)!important;min-width:var(--dpad-size)!important;min-height:var(--dpad-tall)!important;margin:0;padding:0;z-index:1}
+@media(max-width:620px){#play-screen .dpad{--dpad-tall:clamp(57px,18vw,69px)}}
+@media(max-width:360px){#play-screen .dpad{--dpad-tall:57px}}
+@media(max-width:760px) and (max-height:500px){#play-screen .dpad{--dpad-tall:clamp(51px,15svh,63px)}}
+#play-screen .dpad button[data-dir=up]{left:50%;top:0;right:auto;bottom:auto;translate:-50% 0}
+#play-screen .dpad button[data-dir=down]{left:50%;top:50%;right:auto;bottom:auto;translate:-50% 0}
+#play-screen .dpad button[data-dir=left]{left:0;top:50%;right:auto;bottom:auto;translate:0 -50%}
+#play-screen .dpad button[data-dir=right]{left:auto;top:50%;right:0;bottom:auto;translate:0 -50%}
+#play-screen .dpad button[data-dir=up]{border-radius:14px 14px 0 0}#play-screen .dpad button[data-dir=down]{border-radius:0 0 14px 14px}#play-screen .dpad button[data-dir=left]{border-radius:14px 0 0 14px}#play-screen .dpad button[data-dir=right]{border-radius:0 14px 14px 0}
+</style>
 <link rel="stylesheet" href="/disable-text-selection.css">
 </head>
 <body>
