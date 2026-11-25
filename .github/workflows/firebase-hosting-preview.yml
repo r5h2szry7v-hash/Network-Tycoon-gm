@@ -26,6 +26,7 @@ on:
       - feat/starlight-companion-completion
       - feat/portfolio-companion-preference
       - feat/tycoon-shared-companion-guidance
+      - feat/story-momentum-guidance
 
 permissions:
   contents: read
@@ -132,6 +133,21 @@ jobs:
                   html = html[:offset] + script + html[offset:]
                   page.write_text(html)
           PY
+      - name: Validate embedded Story Mode module
+        run: |
+          python3 - <<'PY'
+          import base64
+          import json
+          import re
+          from pathlib import Path
+          page = Path("public/tycoon/index.html").read_text()
+          match = re.search(r"atob\('([^']+)'\)", page)
+          if not match:
+              raise SystemExit("Embedded Network Tycoon module map not found")
+          modules = json.loads(base64.b64decode(match.group(1)).decode("utf-8"))
+          Path("/tmp/network-tycoon-app.js").write_text(modules["app.js"])
+          PY
+          node --check /tmp/network-tycoon-app.js
       - name: Validate PWA release artifacts
         run: |
           node --check public/update-manager.js
