@@ -74,24 +74,19 @@ jobs:
           from pathlib import Path
           page = Path("public/tycoon/index.html")
           html = page.read_text()
-          updated = False
-          stylesheet = '<link rel="stylesheet" href="/companion-layer.css">'
-          if stylesheet not in html:
-              html = html.replace("</head>", stylesheet + "</head>", 1)
-              updated = True
-          assets = '<script src="/companion-assets.js" defer></script>'
-          companions = '<script src="/tycoon-companions.js" defer></script>'
-          if assets not in html:
-              if companions in html:
-                  html = html.replace(companions, assets + companions, 1)
-              else:
-                  html = html.replace("</head>", assets + "</head>", 1)
-              updated = True
-          if companions not in html:
-              html = html.replace("</head>", companions + "</head>", 1)
-              updated = True
-          if updated:
-              page.write_text(html)
+          tags = [
+              '<link rel="stylesheet" href="/companion-layer.css">',
+              '<script src="/companion-assets.js" defer></script>',
+              '<script src="/companion-layer.js" defer></script>',
+              '<script src="/tycoon-companions.js" defer></script>',
+          ]
+          for tag in tags:
+              html = html.replace(tag, "")
+          insertion = html.lower().rfind("</head>")
+          if insertion < 0:
+              raise SystemExit("Network Tycoon page has no head close tag.")
+          html = html[:insertion] + "".join(tags) + html[insertion:]
+          page.write_text(html)
           PY
       - name: Prepare shared PWA release
         run: |
@@ -139,9 +134,10 @@ jobs:
           tycoon = Path("public/tycoon/index.html").read_text()
           stylesheet_tag = '<link rel="stylesheet" href="/companion-layer.css">'
           assets_tag = '<script src="/companion-assets.js" defer></script>'
+          layer_tag = '<script src="/companion-layer.js" defer></script>'
           tycoon_tag = '<script src="/tycoon-companions.js" defer></script>'
-          assert stylesheet_tag in tycoon and assets_tag in tycoon and tycoon_tag in tycoon
-          assert tycoon.index(assets_tag) < tycoon.index(tycoon_tag), "Companion registry must load before Network Tycoon companions."
+          assert all(tag in tycoon for tag in (stylesheet_tag, assets_tag, layer_tag, tycoon_tag))
+          assert tycoon.index(assets_tag) < tycoon.index(layer_tag) < tycoon.index(tycoon_tag), "Shared companion assets and presentation must load before Network Tycoon companions."
           print(f"Validated {len(pages)} portfolio pages for release {version['version']}.")
           PY
       - uses: FirebaseExtended/action-hosting-deploy@v0
