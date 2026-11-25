@@ -1,24 +1,23 @@
-name: Story guide QA preview
-
+name: Temporary Network Tycoon Story Guide QA
 on:
   push:
     branches:
       - feat/story-chapter-experience
-
+    paths:
+      - index.html
+      - .github/workflows/story-guide-qa.yml
 permissions:
   contents: read
-
 jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Stage Network Tycoon
+      - name: Stage Network Tycoon route
         run: |
           mkdir -p public/tycoon
           cp index.html public/tycoon/index.html
-      - name: Deploy temporary Firebase Hosting preview
-        id: deploy_preview
+      - name: Deploy isolated Firebase preview
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
@@ -26,7 +25,3 @@ jobs:
           channelId: story-guide-qa
           expires: 7d
           disableComment: true
-      - name: Add preview URL to workflow summary
-        env:
-          PREVIEW_URL: ${{ steps.deploy_preview.outputs.details_url }}
-        run: echo "Preview URL: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
