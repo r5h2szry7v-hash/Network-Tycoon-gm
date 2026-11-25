@@ -28,6 +28,8 @@
 - At each year mark, an optional activity reminder points to mini-games in MORE and map surprises. It can open MORE or be dismissed; it does not change the story objective.
 - Guidance uses the existing mobile view switcher, scrolls smoothly to the target area, and keeps the cue inline with the section. Dark-mode and reduced-motion behavior continue to use the shared presentation layer.
 - The pacing-calibration build records foreground Story Mode playtime overall and by chapter in the campaign save. The completion card will show the total and a collapsible chapter breakdown; time in another tab is excluded. The run still needs a complete playthrough to validate the 3–4 hour target.
+- The mobile Story coach now spans the full company-tile grid row, with its companion voice text allowed to wrap inside the card. This prevents a narrow Pooch dialog from stretching the neighboring management tile.
+- Preview QA checks now cover the 18-chapter list, chapter 4–18 cue coverage, action guidance, pause cues, timing summary, companion text wrapping, and embedded module syntax.
 
 ## Pacing and QA checkpoint
 
@@ -40,6 +42,6 @@ The new 18-chapter outline adds a longer regional growth curve and varied operat
 ## Active review
 
 - Branch: `feat/story-pacing-calibration`
-- Scope: measure foreground Story Mode time overall and by chapter, then display a campaign timing report on completion.
+- Scope: measure foreground Story Mode time overall and by chapter, display a campaign timing report on completion, and correct mobile companion dialog wrapping and tile alignment.
 - Preview: pending branch validation and Firebase Hosting preview.
 - Calibration: the 3–4 hour playtime target remains unverified until a full playthrough.
