@@ -21,7 +21,7 @@
  function announce(target,{pup,line}={}){
   if(!target)return null;addStyles();const data=pups.find(item=>item.name===pup)||pups[0];
   target.querySelector('.portfolio-companion')?.remove();const card=document.createElement('div');card.className='portfolio-companion';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
-  const image=document.createElement('img');image.src=data.src;image.alt='';const copy=document.createElement('span');const label=document.createElement('strong');label.textContent=data.name+' says';const message=document.createElement('span');message.textContent=line||data.lines[Math.floor(Math.random()*data.lines.length)];copy.append(label,message);card.append(image,copy);const anchor=target.querySelector('.win-actions,.celebration-machine');if(anchor)target.insertBefore(card,anchor);else target.append(card);return card;
+  const image=document.createElement('img');image.src=data.src;image.alt='';const copy=document.createElement('span');const label=document.createElement('strong');label.textContent=data.name+' says';const message=document.createElement('span');message.textContent=line||data.lines[Math.floor(Math.random()*data.lines.length)];copy.append(label,message);card.append(image,copy);const anchor=target.querySelector('.win-actions,.celebration-machine,.modal-actions');if(anchor)target.insertBefore(card,anchor);else target.append(card);return card;
  }
  function mountTinker(){
   const modal=document.getElementById('win-modal'),title=document.getElementById('win-title');if(!modal||!title)return;
@@ -35,7 +35,13 @@
   new MutationObserver(observe).observe(dialog,{attributes:true,attributeFilter:['open']});
   if(dialog.open)observe();
  }
- window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue});
- function mount(){mountTinker();mountCritterRescue()}
+ function mountMatchGarden(){
+  const cover=document.getElementById('modalCover');if(!cover)return;
+  const observe=()=>{const modal=cover.querySelector('#modal');if(!modal)return;if(!cover.classList.contains('open')){delete modal.dataset.companionShown;return}const heading=modal.querySelector('.win-copy h2');if(!heading||!/^beautifully matched!/i.test(heading.textContent.trim())||modal.dataset.companionShown)return;modal.dataset.companionShown='yes';announce(modal,{pup:'Pooch',line:'Another garden level blooms! You’re getting quicker at spotting those pairs.'})};
+  new MutationObserver(observe).observe(cover,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  observe();
+ }
+ window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue,mountMatchGarden});
+ function mount(){mountTinker();mountCritterRescue();mountMatchGarden()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();

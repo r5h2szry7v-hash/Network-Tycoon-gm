@@ -34,7 +34,7 @@ Phase 2 review build adds brief Mack and Pooch reactions after build, service, c
 - Bring the same characters into other games only where they add useful feedback or guidance.
 - Build a small asset and animation pipeline so future character states remain consistent across screen sizes.
 
-Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer.js` and adds animated, accessible character reactions to Tinker Factory's win card and Critter Rescue's rescue-complete card. Both use the same small presentation API, with dark-mode and reduced-motion support, before expanding to other titles.
+Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer.js` and adds animated, accessible character reactions to Tinker Factory's win card, Critter Rescue's rescue-complete card, and Match Garden's round-win card. Each uses the same small presentation API, with dark-mode and reduced-motion support.
 
 ## First implementation notes
 
