@@ -34,6 +34,8 @@ Phase 2 review build adds brief Mack and Pooch reactions after build, service, c
 - Bring the same characters into other games only where they add useful feedback or guidance.
 - Build a small asset and animation pipeline so future character states remain consistent across screen sizes.
 
+Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer.js` and adds animated, accessible character reactions to Tinker Factory's win card and Critter Rescue's rescue-complete card. Both use the same small presentation API, with dark-mode and reduced-motion support, before expanding to other titles.
+
 ## First implementation notes
 
 Phase 1 reuses /images/dog-dark.webp for Mack, /images/dog-tan.webp for Pooch, and the existing three /paws/images/cat-*.webp files. Narration is on-screen text with animated portraits, so the guidance remains available without audio. Cat cameos live inside the SVG map and follow its pan and zoom. The free-play hint panel stays collapsed until requested.
