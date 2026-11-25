@@ -22,6 +22,11 @@
 - Dark-mode map labels use stronger foreground and outline contrast.
 - After Year 2, the mini-game cue reads “Have you tried the mini games? Find them in the MORE menu.” The map cue reads “Keep an eye on the map for surprises as districts come online.” The map cue returns the player to the map and leaves time paused.
 - The Year 3 cues remain available after the player finishes the story and switches to free building.
+- Story Two now pairs its chapter goals with action-by-action Mack and Pooch guidance: selecting an eligible district, choosing a network, planning construction, advancing the month, moving into a new region, converting to Fast Fiber, and reviewing cash flow or reputation.
+- Chapter targets 4–18 are aligned with the campaign definitions in code so cues track the correct goal and the player’s current action stage.
+- Any Story Mode decision modal includes a companion cue explaining that the clock is paused while the player decides. Low-cash, rival-market, and six-month event pauses point to the relevant dashboard section.
+- At each year mark, an optional activity reminder points to mini-games in MORE and map surprises. It can open MORE or be dismissed; it does not change the story objective.
+- Guidance uses the existing mobile view switcher, scrolls smoothly to the target area, and keeps the cue inline with the section. Dark-mode and reduced-motion behavior continue to use the shared presentation layer.
 
 ## Pacing and QA checkpoint
 
@@ -31,8 +36,9 @@ With the 250-customer target, the same save reached Chapter 2 at Month 12 with 2
 
 The new 18-chapter outline adds a longer regional growth curve and varied operational goals. Its 3–4 hour target still needs a complete playthrough to measure; do not treat that duration as verified until the preview is played end to end. Use measured time and difficulty to tune the targets and optional story content, rather than stretching the opening milestones.
 
-## Branch and preview
+## Current review
 
-- Branch: `feat/story-chapter-experience`
-- Review: PR #48 (draft)
-- Preview channel: `story-chapters-preview`
+- Branch: `feat/story-momentum-guidance`
+- Scope: guided action cues for regional Story Mode, companion guidance for paused decisions, and annual optional-activity reminders.
+- Preview: pending this branch’s validation and Firebase Hosting preview.
+- Duration: the 3–4 hour playtime target remains unverified until a full preview playthrough.
