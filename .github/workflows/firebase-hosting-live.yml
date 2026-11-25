@@ -57,6 +57,17 @@ jobs:
               html = html.replace("</body>", tag + "</body>", 1)
               page.write_text(html)
           PY
+      - name: Enable touch panning on the map
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path("public/tycoon/index.html")
+          html = page.read_text()
+          script = '<script src="/map-touch-pan.js" defer></script>'
+          if script not in html:
+              html = html.replace("</head>", script + "</head>", 1)
+              page.write_text(html)
+          PY
       - name: Prepare shared PWA release
         run: |
           python3 - <<'PY'
