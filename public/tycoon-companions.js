@@ -115,12 +115,12 @@ const REACTIONS={
 };
 
 function addStyles(){if($('#nt-companion-styles'))return;const style=document.createElement('style');style.id='nt-companion-styles';style.textContent=styles;document.head.append(style)}
-function addNarration(container,pup,line,key){
+function addNarration(container,pup,line,key,mood='think'){
  if(!container||!enabled())return;
  if(container.dataset.ntNarration===key)return;
  container.dataset.ntNarration=key;
  container.querySelector('.nt-story-narrator')?.remove();
- const row=document.createElement('div');row.className='nt-story-narrator';
+ const row=document.createElement('div');row.className='nt-story-narrator';row.dataset.mood=mood;
  const image=document.createElement('img');image.src=DOGS[pup].src;image.alt='';
  const words=document.createElement('span'),name=document.createElement('strong'),speech=document.createElement('span');
  name.textContent=pup+' says';speech.textContent=line;words.append(name,speech);row.append(image,words);
@@ -137,7 +137,7 @@ function decorateStory(){
  else if(finished)pair=['Mack','What a network. You can keep building in free play whenever you like.'];
  else if(complete)pair=[chapter%2?'Pooch':'Mack','Goal reached! Shall we see what the next chapter brings?'];
  else pair=storyLines[chapter]||['Mack','I’ll keep an eye on the map while you decide where to grow.'];
- addNarration(copy,pair[0],pair[1],[eyebrow,title,complete,finished].join('|'));
+ addNarration(copy,pair[0],pair[1],[eyebrow,title,complete,finished].join('|'),complete||finished?'reassure':'think');
 }
 function decorateCoach(){
  const coach=$('#story-coach');if(!coach)return;
@@ -145,8 +145,8 @@ function decorateCoach(){
  if(!enabled()){if(face?.dataset.ntOriginal)face.textContent=face.dataset.ntOriginal;copy?.querySelector('.nt-coach-voice')?.remove();delete coach.dataset.ntNarration;return;}
  const title=copy?.querySelector('strong')?.textContent?.trim()||'',body=copy?.querySelector('small')?.textContent?.trim()||'',key=[coach.dataset.guideStep,title,body].join('|');if(coach.dataset.ntNarration===key)return;coach.dataset.ntNarration=key;
  const step=Number((coach.dataset.guideStep||'').replace('chapter-',''))||0,pup=step%2?'Pooch':'Mack';
- if(face){if(!face.dataset.ntOriginal)face.dataset.ntOriginal=face.textContent;face.replaceChildren();const img=document.createElement('img');img.className='nt-coach-portrait';img.src=DOGS[pup].src;img.alt='';face.append(img);}
- if(copy){copy.querySelector('.nt-coach-voice')?.remove();const voice=document.createElement('span');voice.className='nt-coach-voice';const img=document.createElement('img');img.src=DOGS[pup].src;img.alt='';const words=document.createElement('span');words.textContent=pup+': '+(step===1?'I’ll help you find your way around.':step===2?'We can keep track of the important numbers together.':step===3?'Let’s handle urgent needs first; the rest can wait.':step===7?'Tap the glowing neighborhood when you’re ready.':'I’m here if you need a hand with this step.');voice.append(img,words);copy.append(voice);}
+ if(face){if(!face.dataset.ntOriginal)face.dataset.ntOriginal=face.textContent;face.replaceChildren();const img=document.createElement('img');img.className='nt-coach-portrait';img.dataset.mood='reassure';img.src=DOGS[pup].src;img.alt='';face.append(img);}
+ if(copy){copy.querySelector('.nt-coach-voice')?.remove();const voice=document.createElement('span');voice.className='nt-coach-voice';voice.dataset.mood='reassure';const img=document.createElement('img');img.src=DOGS[pup].src;img.alt='';const words=document.createElement('span');words.textContent=pup+': '+(step===1?'I’ll help you find your way around.':step===2?'We can keep track of the important numbers together.':step===3?'Let’s handle urgent needs first; the rest can wait.':step===7?'Tap the glowing neighborhood when you’re ready.':'I’m here if you need a hand with this step.');voice.append(img,words);copy.append(voice);}
 }
 function refreshGuidance(){
  decorateStory();decorateCoach();
@@ -232,16 +232,17 @@ function helper(){
  let dock=card.querySelector('.nt-map-companion-helper'),shouldShow=enabled()&&!game.classList.contains('hidden')&&(!story||story.classList.contains('hidden'));
  if(!shouldShow){dock?.remove();return}if(dock)return;
  dock=document.createElement('div');dock.className='nt-map-companion-helper';dock.setAttribute('aria-label','Optional hints from Mack and Pooch');
- dock.innerHTML='<button class="nt-helper-button" type="button" aria-expanded="false"><span class="nt-helper-faces"><img src="/images/dog-dark.webp" alt=""><img src="/images/dog-tan.webp" alt=""></span><span>Ask Mack &amp; Pooch for a hint</span></button><div class="nt-helper-message" role="status" aria-live="polite" hidden><img alt=""><p></p><span class="nt-helper-actions"><button type="button" data-next aria-label="Another hint">↻</button><button type="button" data-close aria-label="Close hints">×</button></span></div>';
+ dock.innerHTML='<button class="nt-helper-button" type="button" aria-expanded="false"><span class="nt-helper-faces"><img data-pup="Mack" alt=""><img data-pup="Pooch" alt=""></span><span>Ask Mack &amp; Pooch for a hint</span></button><div class="nt-helper-message" role="status" aria-live="polite" hidden><img alt=""><p></p><span class="nt-helper-actions"><button type="button" data-next aria-label="Another hint">↻</button><button type="button" data-close aria-label="Close hints">×</button></span></div>';
+ dock.querySelectorAll('.nt-helper-faces img').forEach(image=>image.src=DOGS[image.dataset.pup].src);
  const footer=card.querySelector('.map-footer');if(footer)card.insertBefore(dock,footer);else card.append(dock);
  const trigger=dock.querySelector('.nt-helper-button'),message=dock.querySelector('.nt-helper-message'),face=message.querySelector('img'),copy=message.querySelector('p');let index=-1;
- const show=()=>{const list=hints();index=(index+1)%list.length;const item=list[index];face.src=DOGS[item[0]].src;copy.textContent=item[0]+': '+item[1];message.hidden=false;message.classList.add('is-open');trigger.setAttribute('aria-expanded','true');trigger.querySelector('span:last-child').textContent='Another tip'};
- trigger.addEventListener('click',show);dock.querySelector('[data-next]').addEventListener('click',show);dock.querySelector('[data-close]').addEventListener('click',()=>{message.hidden=true;message.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');trigger.querySelector('span:last-child').textContent='Ask Mack & Pooch for a hint'});
+ const show=()=>{const list=hints();index=(index+1)%list.length;const item=list[index];message.dataset.mood='think';face.src=DOGS[item[0]].src;copy.textContent=item[0]+': '+item[1];message.hidden=false;message.classList.add('is-open');trigger.setAttribute('aria-expanded','true');trigger.querySelector('span:last-child').textContent='Another tip'};
+ trigger.addEventListener('click',show);dock.querySelector('[data-next]').addEventListener('click',show);dock.querySelector('[data-close]').addEventListener('click',()=>{message.hidden=true;message.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');delete message.dataset.mood;trigger.querySelector('span:last-child').textContent='Ask Mack & Pooch for a hint'});
 }
 
 function busyForReaction(){const game=$('#game');return document.hidden||modalOpen()||storyPriorityActive()||!game||game.classList.contains('hidden')}
 function reactionMarkup(item){
- const card=document.createElement('aside');card.className='nt-event-reaction';card.dataset.kind=item.kind;card.setAttribute('role','status');card.setAttribute('aria-live','polite');
+ const card=document.createElement('aside');card.className='nt-event-reaction';card.dataset.kind=item.kind;card.dataset.mood=item.kind==='build'?'celebrate':item.kind==='finance'?'think':'reassure';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
  const img=document.createElement('img');img.src=DOGS[item.pup].src;img.alt='';
  const copy=document.createElement('span');copy.className='nt-event-reaction-copy';const name=document.createElement('strong');name.textContent=item.pup+' noticed';const line=document.createElement('span');line.textContent=item.text;copy.append(name,line);
  const close=document.createElement('button');close.type='button';close.setAttribute('aria-label','Dismiss companion message');close.textContent='×';close.addEventListener('click',()=>removeReaction(card));

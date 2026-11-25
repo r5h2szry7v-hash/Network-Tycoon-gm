@@ -74,9 +74,13 @@ jobs:
           from pathlib import Path
           page = Path("public/tycoon/index.html")
           html = page.read_text()
+          updated = False
+          stylesheet = '<link rel="stylesheet" href="/companion-layer.css">'
+          if stylesheet not in html:
+              html = html.replace("</head>", stylesheet + "</head>", 1)
+              updated = True
           assets = '<script src="/companion-assets.js" defer></script>'
           companions = '<script src="/tycoon-companions.js" defer></script>'
-          updated = False
           if assets not in html:
               if companions in html:
                   html = html.replace(companions, assets + companions, 1)
@@ -132,9 +136,10 @@ jobs:
           assert not missing, "Update manager missing from: " + ", ".join(missing)
           assert any(header.get("source") == "service-worker.js" for header in config["hosting"]["headers"])
           tycoon = Path("public/tycoon/index.html").read_text()
+          stylesheet_tag = '<link rel="stylesheet" href="/companion-layer.css">'
           assets_tag = '<script src="/companion-assets.js" defer></script>'
           tycoon_tag = '<script src="/tycoon-companions.js" defer></script>'
-          assert assets_tag in tycoon and tycoon_tag in tycoon
+          assert stylesheet_tag in tycoon and assets_tag in tycoon and tycoon_tag in tycoon
           assert tycoon.index(assets_tag) < tycoon.index(tycoon_tag), "Companion registry must load before Network Tycoon companions."
           print(f"Validated {len(pages)} portfolio pages for release {version['version']}.")
           PY
