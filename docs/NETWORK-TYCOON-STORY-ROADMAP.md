@@ -25,7 +25,7 @@ The PR #48 preview playthrough reached Month 7 with three connected neighborhood
 
 With the revised target, the same save reached Chapter 2 at Month 12 with 257 customers, while all three original districts were online. Chapter 3 then showed 3/4. Connecting East Meadow completed Chapter 3 at Month 15, proving that the goals progress separately. The Year 2 playthrough also confirmed visible monthly recaps and a repair decision during construction.
 
-Next: confirm the post-story Year 3 mini-game and map cues on the preview, including the return to the paused map, then continue any final tuning based on that playthrough.
+Year 3 cue QA is complete on the preview after story completion and handoff to free building. At Month 26, the mini-game cue displayed the requested “Find them in the MORE menu” copy; Next moved to the map-surprise cue, and Done returned to the map with the clock still paused. Testing exposed and fixed a stale arcade selector plus a trigger that could be skipped by an already-advanced guide step. Continue with any final pacing and difficulty tuning.
 
 ## Branch and preview
 
