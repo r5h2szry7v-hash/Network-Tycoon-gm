@@ -19,6 +19,10 @@
 .portfolio-companion[data-mood=celebrate] img{animation:portfolioPupCelebrate 1.25s cubic-bezier(.2,.8,.25,1) infinite}
 .portfolio-companion[data-mood=think] img{animation:portfolioPupThink 2.7s ease-in-out infinite}
 .portfolio-companion[data-mood=reassure] img{animation:portfolioPupReassure 3s ease-in-out infinite}
+
+.nt-story-narrator[data-mood=think] img,.nt-coach-portrait[data-mood=think],.nt-coach-voice[data-mood=think] img,.nt-helper-message[data-mood=think] img,.nt-event-reaction[data-mood=think] img{animation:portfolioPupThink 2.7s ease-in-out infinite}
+.nt-story-narrator[data-mood=reassure] img,.nt-coach-portrait[data-mood=reassure],.nt-coach-voice[data-mood=reassure] img,.nt-helper-message[data-mood=reassure] img,.nt-event-reaction[data-mood=reassure] img{animation:portfolioPupReassure 3s ease-in-out infinite}
+.nt-story-narrator[data-mood=celebrate] img,.nt-coach-portrait[data-mood=celebrate],.nt-coach-voice[data-mood=celebrate] img,.nt-helper-message[data-mood=celebrate] img,.nt-event-reaction[data-mood=celebrate] img{animation:portfolioPupCelebrate 1.25s cubic-bezier(.2,.8,.25,1) infinite}
 .portfolio-companion strong{display:block;color:#28765d;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
 html[data-portfolio-color-mode=dark] .portfolio-companion,html.dark-mode .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}
 html[data-portfolio-color-mode=dark] .portfolio-companion strong,html.dark-mode .portfolio-companion strong{color:#a9e2be}

@@ -7,7 +7,7 @@ This lightweight pipeline keeps Mack and Pooch consistent wherever the shared po
 - `public/companion-assets.js` registers character IDs, names, roles, image paths, fallback lines, and the supported motion states.
 - `public/companion-layer.css` owns card styling, responsive sizing tokens, dark-mode colors, and motion keyframes.
 - `public/companion-layer.js` owns rendering and game-specific mount points. It reads the registry instead of repeating the character assets and fallback lines.
-- Games using the shared companion card load the stylesheet and both shared scripts from the portfolio root. Network Tycoon loads the registry before `tycoon-companions.js`, so its narrators, hints, and event reactions use the same Mack and Pooch image source while retaining Tycoon-specific presentation and cat behavior.
+- Games using the shared companion card load the stylesheet and both shared scripts from the portfolio root. Network Tycoon loads the shared stylesheet and registry before `tycoon-companions.js`, so its narrators, hints, and event reactions use the same Mack and Pooch image source and thinking/reassuring motion while retaining Tycoon-specific presentation and cat behavior.
 
 ## Current image assets
 
@@ -25,7 +25,7 @@ Use optimized transparent WebP for runtime portraits. Keep the full silhouette a
 3. To add a motion state, add its key to the manifest’s `moods` list, define a matching `[data-mood]` rule and keyframes in `public/companion-layer.css`, and pass that state through the shared `announce` API.
 4. Keep companion portraits decorative to assistive technology when the nearby text names the character and carries the message. The message card remains a polite status announcement.
 5. Preserve the existing dark-mode selectors and both reduced-motion overrides. New animation must become still when either system reduced motion or the game’s reduced-motion class is active.
-6. Add the stylesheet and ordered deferred scripts to each game that adopts the shared layer. For Network Tycoon, load `companion-assets.js` before `tycoon-companions.js`; keep the Tycoon-specific presentation and cat registry in its own module. Preview the integration before merging.
+6. Add the stylesheet and ordered deferred scripts to each game that adopts the shared layer. For Network Tycoon, load `companion-layer.css` and `companion-assets.js` before `tycoon-companions.js`; set supported `data-mood` states on the Tycoon-specific cards while keeping the cat registry in its own module. Preview the integration before merging.
 
 ## Responsive and motion conventions
 
