@@ -68,6 +68,17 @@ jobs:
               html = html.replace("</head>", script + "</head>", 1)
               page.write_text(html)
           PY
+      - name: Add Network Tycoon character companions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path("public/tycoon/index.html")
+          html = page.read_text()
+          script = '<script src="/tycoon-companions.js" defer></script>'
+          if script not in html:
+              html = html.replace("</head>", script + "</head>", 1)
+              page.write_text(html)
+          PY
       - name: Prepare shared PWA release
         run: |
           python3 - <<'PY'
@@ -93,6 +104,7 @@ jobs:
       - name: Validate PWA release artifacts
         run: |
           node --check public/update-manager.js
+          node --check public/tycoon-companions.js
           node --check public/service-worker.js
           python3 - <<'PY'
           import json

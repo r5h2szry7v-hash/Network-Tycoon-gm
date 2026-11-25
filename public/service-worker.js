@@ -13,6 +13,7 @@ const CORE_FILES = [
   "/offline.html",
   "/version.json",
   "/cloud-save.js",
+  "/tycoon-companions.js",
   "/disable-text-selection.css",
   "/portfolio-shell.js",
   "/manifest.webmanifest",
