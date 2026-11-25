@@ -26,6 +26,8 @@ Character moments should be brief, optional where they interrupt play, readable 
 - Add a light settings control for companion appearances and animation frequency.
 - Tune cameo timing so cats do not appear during modals, urgent story guidance, or repeated map interactions.
 
+Phase 2 review build adds brief Mack and Pooch reactions after build, service, capacity, customer-count, and financing events. Reactions wait for open dialogs and active story guidance to clear, then appear as dismissible animated status cards. Settings can turn dog guidance off, set cat visit frequency, and choose a gentle or playful animation pace. Cat visits average about one minute, 35 seconds, or 20–25 seconds apart depending on the selected frequency. Cats stay visible for 28 seconds (18 seconds at the most frequent setting) of quiet map time; dialogs, story cues, and active map gestures pause and hide the cameo timer. Reduced-motion behavior and dark-mode styling cover the new surfaces.
+
 ### Phase 3: Portfolio character layer
 
 - Extract shared character presentation and reaction data into a reusable portfolio module.
