@@ -309,7 +309,8 @@ function init(){
  addStyles();observeSettings();observeGame();
  const story=$('#story-campaign-card');if(story)new MutationObserver(decorateStory).observe(story,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
  const map=$('#city-map');if(map)new MutationObserver(()=>{decorateCoach();helper();if(!map.querySelector('.nt-map-cat'))scheduleCat(3000+Math.random()*4500)}).observe(map,{childList:true});
- window.addEventListener('portfolio-companions:change',event=>{refreshGuidance();const toggle=document.querySelector('[data-nt-guidance]');if(toggle)toggle.checked=event.detail?.enabled!==false;});\n applyAnimationPace();refreshGuidance();scheduleCat(9000);setInterval(()=>{decorateCoach();helper();settingsMarkup();inspectModal();inspectToast();inspectRecap();inspectCustomers();flushReaction();tickCat()},350);
+ window.addEventListener('portfolio-companions:change',event=>{refreshGuidance();const toggle=document.querySelector('[data-nt-guidance]');if(toggle)toggle.checked=event.detail?.enabled!==false;});
+ applyAnimationPace();refreshGuidance();scheduleCat(9000);setInterval(()=>{decorateCoach();helper();settingsMarkup();inspectModal();inspectToast();inspectRecap();inspectCustomers();flushReaction();tickCat()},350);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
