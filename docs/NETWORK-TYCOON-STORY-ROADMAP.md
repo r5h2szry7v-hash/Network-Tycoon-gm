@@ -13,7 +13,7 @@
 - Story Chapters is the featured new-game option; the other modes remain available below it.
 - The six-step dashboard tour and contextual first-build cues guide the initial connection.
 - Chapter 1 asks the player to connect one neighborhood.
-- Chapter 2 asks the player to welcome 300 customers.
+- Chapter 2 asks the player to welcome 250 customers.
 - Chapter 3 asks the player to connect four neighborhoods.
 - Time remains player-paced, with a prominent month-advance control.
 - After Year 2, the mini-game cue reads “Have you tried the mini games? Find them in the MORE menu.” The map cue reads “Keep an eye on the map for surprises as districts come online.” The map cue returns the player to the map and leaves time paused.
@@ -25,9 +25,9 @@ The PR #48 preview playthrough reached Month 7 with three connected neighborhood
 
 With the 250-customer target, the same save reached Chapter 2 at Month 12 with 257 customers, while all three original districts were online. Chapter 3 then showed 3/4. Connecting East Meadow completed Chapter 3 at Month 15, proving that the goals progress separately. The Year 2 playthrough also confirmed visible monthly recaps and a repair decision during construction.
 
-Final pacing adjustment: raise Chapter 2 to 300 customers. That is about 77% of the 391 combined wireless capacity measured across the three starter neighborhoods, leaving room for the customer goal to complete before a fourth build while adding a little more runway before Chapter 3. This value needs confirmation in the refreshed preview.
+Final pacing adjustment: retain Chapter 2 at 250 customers. A fresh Balanced preview run with the 300 target was still at 272 customers in Year 3, Month 25, after all three starter neighborhoods were connected. The same run passed 250 at Month 20, before a fourth player-built neighborhood, while the chapter target still read 300. This confirms that 300 adds several months beyond the existing 250-customer milestone and makes Chapter 2 drag into Year 3. The earlier preview run already completed Chapter 2 at Month 12 with 257 customers, then completed Chapter 3 at four connected neighborhoods by Month 15. Keep the 250 target so the campaign matches that demonstrated pace and leaves the four-neighborhood expansion as Chapter 3.
 
-Year 3 cue QA is complete on the preview after story completion and handoff to free building. At Month 26, the mini-game cue displayed the requested “Find them in the MORE menu” copy; Next moved to the map-surprise cue, and Done returned to the map with the clock still paused. Testing exposed and fixed a stale arcade selector plus a trigger that could be skipped by an already-advanced guide step. The remaining handoff is to confirm the 300-customer threshold in the refreshed preview, including that Chapter 3 remains a separate 4-neighborhood goal and Open City stays available from setup.
+Year 3 cue QA is complete in the fresh preview run at Month 25, while Chapter 2 was still in progress. The mini-game cue displayed “Have you tried the mini games? Find them in the MORE menu.” Next moved to “Keep an eye on the map for surprises as districts come online.” Done returned to the paused map. The same setup offered Open City alongside Story Chapters, preserving sandbox play. Testing also exposed a construction dialog action covered by the fixed month bar in the mobile viewport; keyboard activation bypassed the overlap, and the preview fix raises the construction dialog above that bar. The previous 250-customer preview run confirmed Chapter 3 remained a separate four-neighborhood goal.
 
 ## Branch and preview
 
