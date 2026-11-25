@@ -16,7 +16,7 @@ let prefs=readPrefs(),catTimer=0,catGroup=null,catRemaining=0,catLastTick=Date.n
 
 function readPrefs(){try{return{...DEFAULT_PREFS,...JSON.parse(localStorage.getItem(PREFS_KEY)||'{}')}}catch{return{...DEFAULT_PREFS}}}
 function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch{}}
-function enabled(){return prefs.guidance!==false}
+function enabled(){return window.PortfolioCompanionAssets?.areCompanionsEnabled?.()!==false}
 function randomBetween(min,max){return min+Math.random()*(max-min)}
 function applyAnimationPace(){document.documentElement.classList.toggle('nt-companions-gentle',prefs.animationPace==='gentle')}
 
@@ -157,9 +157,9 @@ function refreshGuidance(){
 function settingsMarkup(){
  const content=$('#modal-content'),layout=content?.querySelector('.settings-layout');
  if(!layout||layout.querySelector('.nt-companion-settings'))return;
- const section=document.createElement('section');section.className='settings-section nt-companion-settings';section.innerHTML=`<h3 class="settings-subheading">Companions</h3><div class="settings-toggle-list"><label class="settings-toggle"><input role="switch" type="checkbox" data-nt-guidance ${enabled()?'checked':''}><span class="settings-toggle-copy"><strong>Mack &amp; Pooch guidance</strong><small>Show story narration, optional hints, and reactions to game events.</small></span><span class="switch-track" aria-hidden="true"></span></label></div><label class="setting-field"><span>Map cat visits</span><select data-nt-cat-frequency aria-label="Map cat visit frequency"><option value="off" ${prefs.catFrequency==='off'?'selected':''}>Off</option><option value="occasional" ${prefs.catFrequency==='occasional'?'selected':''}>Occasional · about every minute</option><option value="regular" ${prefs.catFrequency==='regular'?'selected':''}>Regular · about every 35 seconds</option><option value="frequent" ${prefs.catFrequency==='frequent'?'selected':''}>Frequent · about every 20–25 seconds</option></select></label><label class="setting-field"><span>Character animation pace</span><select data-nt-animation-pace aria-label="Character animation pace"><option value="gentle" ${prefs.animationPace==='gentle'?'selected':''}>Gentle</option><option value="playful" ${prefs.animationPace==='playful'?'selected':''}>Playful</option></select></label>`;
+ const section=document.createElement('section');section.className='settings-section nt-companion-settings';section.innerHTML=`<h3 class="settings-subheading">Companions</h3><div class="settings-toggle-list"><label class="settings-toggle"><input role="switch" type="checkbox" data-nt-guidance ${enabled()?'checked':''}><span class="settings-toggle-copy"><strong>Mack &amp; Pooch moments</strong><small>Show guidance and celebrations across supported games.</small></span><span class="switch-track" aria-hidden="true"></span></label></div><label class="setting-field"><span>Map cat visits</span><select data-nt-cat-frequency aria-label="Map cat visit frequency"><option value="off" ${prefs.catFrequency==='off'?'selected':''}>Off</option><option value="occasional" ${prefs.catFrequency==='occasional'?'selected':''}>Occasional · about every minute</option><option value="regular" ${prefs.catFrequency==='regular'?'selected':''}>Regular · about every 35 seconds</option><option value="frequent" ${prefs.catFrequency==='frequent'?'selected':''}>Frequent · about every 20–25 seconds</option></select></label><label class="setting-field"><span>Character animation pace</span><select data-nt-animation-pace aria-label="Character animation pace"><option value="gentle" ${prefs.animationPace==='gentle'?'selected':''}>Gentle</option><option value="playful" ${prefs.animationPace==='playful'?'selected':''}>Playful</option></select></label>`;
  const audio=layout.querySelector('.settings-audio');if(audio)layout.insertBefore(section,audio);else layout.append(section);
- section.querySelector('[data-nt-guidance]').addEventListener('change',event=>{prefs.guidance=event.currentTarget.checked;savePrefs();refreshGuidance();});
+ section.querySelector('[data-nt-guidance]').addEventListener('change',event=>{window.PortfolioCompanionAssets?.setCompanionsEnabled?.(event.currentTarget.checked);refreshGuidance();});
  section.querySelector('[data-nt-cat-frequency]').addEventListener('change',event=>{prefs.catFrequency=event.currentTarget.value;savePrefs();rescheduleCat();});
  section.querySelector('[data-nt-animation-pace]').addEventListener('change',event=>{prefs.animationPace=event.currentTarget.value;savePrefs();applyAnimationPace();});
 }
@@ -309,7 +309,7 @@ function init(){
  addStyles();observeSettings();observeGame();
  const story=$('#story-campaign-card');if(story)new MutationObserver(decorateStory).observe(story,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']});
  const map=$('#city-map');if(map)new MutationObserver(()=>{decorateCoach();helper();if(!map.querySelector('.nt-map-cat'))scheduleCat(3000+Math.random()*4500)}).observe(map,{childList:true});
- applyAnimationPace();refreshGuidance();scheduleCat(9000);setInterval(()=>{decorateCoach();helper();settingsMarkup();inspectModal();inspectToast();inspectRecap();inspectCustomers();flushReaction();tickCat()},350);
+ window.addEventListener('portfolio-companions:change',event=>{refreshGuidance();const toggle=document.querySelector('[data-nt-guidance]');if(toggle)toggle.checked=event.detail?.enabled!==false;});\n applyAnimationPace();refreshGuidance();scheduleCat(9000);setInterval(()=>{decorateCoach();helper();settingsMarkup();inspectModal();inspectToast();inspectRecap();inspectCustomers();flushReaction();tickCat()},350);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

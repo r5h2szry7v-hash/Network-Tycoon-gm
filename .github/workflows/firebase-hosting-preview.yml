@@ -24,6 +24,7 @@ on:
       - feat/companion-registry-tycoon
       - feat/tycoon-guidance-motion
       - feat/starlight-companion-completion
+      - feat/portfolio-companion-preference
 
 permissions:
   contents: read

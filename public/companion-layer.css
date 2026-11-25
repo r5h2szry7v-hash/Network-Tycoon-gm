@@ -35,3 +35,16 @@ html[data-portfolio-color-mode=dark] .portfolio-companion strong,html.dark-mode 
 @media(prefers-reduced-motion:reduce){.portfolio-companion,.portfolio-companion img{animation:none!important;transition:none!important}}
 html.pref-reduced-motion .portfolio-companion,html.pref-reduced-motion .portfolio-companion img{animation:none!important;transition:none!important}
 @media(max-width:600px){:root{--portfolio-companion-gap:7px;--portfolio-companion-card-padding:8px}.portfolio-companion{font-size:.82rem}}
+
+.portfolio-companion-setting{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px;padding:12px 0;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);color:inherit;font:700 .86rem/1.35 system-ui,sans-serif;text-align:left}
+.portfolio-companion-setting>span:first-child{flex:1;min-width:0}
+.portfolio-companion-setting strong{display:block;font-size:.86rem}
+.portfolio-companion-setting small{display:block;margin-top:3px;color:color-mix(in srgb,currentColor 72%,transparent);font-size:.75rem;font-weight:500;line-height:1.4}
+.portfolio-companion-setting input{position:absolute;width:1px;height:1px;margin:0;opacity:0}
+.portfolio-companion-switch{position:relative;flex:none;width:46px;height:27px;border-radius:99px;background:#aeb5c3;transition:background .2s}
+.portfolio-companion-switch:after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0002;transition:transform .2s}
+.portfolio-companion-setting input:checked+.portfolio-companion-switch{background:#4b9e70}
+.portfolio-companion-setting input:checked+.portfolio-companion-switch:after{transform:translateX(19px)}
+.portfolio-companion-setting input:focus-visible+.portfolio-companion-switch{outline:3px solid #4b9e70;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.portfolio-companion-switch,.portfolio-companion-switch:after{transition:none!important}}
+html.pref-reduced-motion .portfolio-companion-switch,html.pref-reduced-motion .portfolio-companion-switch:after{transition:none!important}

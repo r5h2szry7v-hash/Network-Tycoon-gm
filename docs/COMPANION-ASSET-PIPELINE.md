@@ -4,10 +4,10 @@ This lightweight pipeline keeps Mack and Pooch consistent wherever the shared po
 
 ## Runtime sources of truth
 
-- `public/companion-assets.js` registers character IDs, names, roles, image paths, fallback lines, and the supported motion states.
+- `public/companion-assets.js` registers character IDs, names, roles, image paths, fallback lines, supported motion states, and the shared Mack and Pooch visibility preference.
 - `public/companion-layer.css` owns card styling, responsive sizing tokens, dark-mode colors, and motion keyframes.
 - `public/companion-layer.js` owns rendering and game-specific mount points. It reads the registry instead of repeating the character assets and fallback lines.
-- Games using the shared companion card load the stylesheet and both shared scripts from the portfolio root. Network Tycoon loads the shared stylesheet and registry before `tycoon-companions.js`, so its narrators, hints, and event reactions use the same Mack and Pooch image source and thinking/reassuring motion while retaining Tycoon-specific presentation and cat behavior.
+- Games using the shared companion card load the stylesheet and both shared scripts from the portfolio root. The shared settings control stores the visibility preference in same-origin local storage, so it follows the player across supported games and browser tabs. Network Tycoon loads the shared stylesheet and registry before `tycoon-companions.js`, so its narrators, hints, and event reactions use the same Mack and Pooch image source, visibility preference, and thinking/reassuring motion while retaining Tycoon-specific presentation and cat behavior. Existing Tycoon guidance preferences migrate into the shared setting when it has not been chosen.
 
 ## Current image assets
 
