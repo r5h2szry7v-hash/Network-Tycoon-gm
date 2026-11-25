@@ -1,21 +1,25 @@
 # Network Tycoon story campaign roadmap
 
-## Campaign plan
+## Roadmap
 
-1. **Campaign frame** — feature Story Chapters in setup, introduce three clear neighborhood goals, and explain that the campaign has no deadlines.
-2. **Player-paced months** — keep time paused between player actions, make month advances visible, and let players control the pace.
-3. **Goal-centered responsive dashboard** — keep campaign progress visible and make each guide cue jump to the interface area it explains on desktop and mobile.
-4. **Story and consequences** — connect neighborhood moments and visible district changes to progress. After Year 2, surface the mini-game cue and map-surprise cue, then return the player to the map with the clock ready to advance.
-5. **Tune length and difficulty; preserve sandbox** — play through Chapters 2 and 3, remove redundant goals, and keep open-ended sandbox play available.
+1. **Campaign frame** — feature Story Chapters in setup, introduce neighborhood goals, and explain that the campaign has no deadlines. **Complete.**
+2. **Player-paced months** — keep time paused between actions and make each month advance visible. **Complete.**
+3. **Goal-centered responsive dashboard** — keep campaign progress visible and make guide cues jump to the interface area they explain. **Complete.**
+4. **Story and consequences** — connect neighborhood moments and visible district changes to progress. After Year 2, show the mini-game and map-surprise cues, then return to the paused map. **Complete.**
+5. **Tune length and difficulty; preserve sandbox** — keep the opening arc quick, offer a choice between the next story and free build, and expand the campaign into meaningful regional goals. **In progress.**
+6. **Playthrough calibration** — verify the expanded campaign’s actual playtime and difficulty curve. Target 3–4 hours of substantial story play. Adjust chapter pacing and add optional side-story contracts or decision chains if the measured run falls short.
 
 ## Current implementation
 
-- Story Chapters is the featured new-game option; the other modes remain available below it.
+- Story Chapters is the featured new-game option; Open City and the other modes remain available.
 - The six-step dashboard tour and contextual first-build cues guide the initial connection.
-- Chapter 1 asks the player to connect one neighborhood.
-- Chapter 2 asks the player to welcome 250 customers.
-- Chapter 3 asks the player to connect four neighborhoods.
-- Time remains player-paced, with a prominent month-advance control.
+- Story One, “First Connections,” has three opening chapters: connect one neighborhood, welcome 250 customers, and connect four neighborhoods.
+- Completing Story One presents **Begin the next story** and **Enter free build** choices.
+- Story Two, “The Regional Network,” expands the campaign to 18 total chapters. Its 15 goals include neighborhood expansion, customer growth, reputation, entry into additional regions, fiber upgrades, consecutive profitable months, and lifetime revenue.
+- Older saves that already completed the original three chapters are migrated to the Story One choice screen.
+- A player may switch to free build after Story One, and the existing Open City setup remains available for players who want sandbox play from the start.
+- Time remains player-paced, with a prominent month-advance control. Each advance now adds a short board bounce and calendar-style month flip; the effect respects reduced-motion settings.
+- Dark-mode map labels use stronger foreground and outline contrast.
 - After Year 2, the mini-game cue reads “Have you tried the mini games? Find them in the MORE menu.” The map cue reads “Keep an eye on the map for surprises as districts come online.” The map cue returns the player to the map and leaves time paused.
 - The Year 3 cues remain available after the player finishes the story and switches to free building.
 
@@ -23,11 +27,9 @@
 
 The PR #48 preview playthrough reached Month 7 with three connected neighborhoods and 139 customers. Those districts' combined initial wireless capacity was 391, so the former 500-customer goal forced a fourth build and overlapped with Chapter 3's four-neighborhood goal.
 
-With the 250-customer target, the same save reached Chapter 2 at Month 12 with 257 customers, while all three original districts were online. Chapter 3 then showed 3/4. Connecting East Meadow completed Chapter 3 at Month 15, proving that the goals progress separately. The Year 2 playthrough also confirmed visible monthly recaps and a repair decision during construction.
+With the 250-customer target, the same save reached Chapter 2 at Month 12 with 257 customers, while all three original districts were online. Chapter 3 then showed 3/4. Connecting East Meadow completed Chapter 3 at Month 15, proving that the goals progress separately. A fresh preview run also confirmed the Year 2 mini-game and map-surprise cues, the Done return to the paused map, and the construction dialog’s fixed backdrop.
 
-Final pacing adjustment: retain Chapter 2 at 250 customers. A fresh Balanced preview run with the 300 target was still at 272 customers in Year 3, Month 25, after all three starter neighborhoods were connected. The same run passed 250 at Month 20, before a fourth player-built neighborhood, while the chapter target still read 300. This confirms that 300 adds several months beyond the existing 250-customer milestone and makes Chapter 2 drag into Year 3. The earlier preview run already completed Chapter 2 at Month 12 with 257 customers, then completed Chapter 3 at four connected neighborhoods by Month 15. Keep the 250 target so the campaign matches that demonstrated pace and leaves the four-neighborhood expansion as Chapter 3.
-
-Year 3 cue QA is complete in the fresh preview run at Month 25, while Chapter 2 was still in progress. The mini-game cue displayed “Have you tried the mini games? Find them in the MORE menu.” Next moved to “Keep an eye on the map for surprises as districts come online.” Done returned to the paused map. The same setup offered Open City alongside Story Chapters, preserving sandbox play. The refreshed preview exposed a modal wrapper class typo that left the construction dialog in document flow beneath the fixed month bar. The wrapper now uses the existing fixed backdrop, keeping build choices visible and clickable. The previous 250-customer preview run confirmed Chapter 3 remained a separate four-neighborhood goal.
+The new 18-chapter outline adds a longer regional growth curve and varied operational goals. Its 3–4 hour target still needs a complete playthrough to measure; do not treat that duration as verified until the preview is played end to end. Use measured time and difficulty to tune the targets and optional story content, rather than stretching the opening milestones.
 
 ## Branch and preview
 
