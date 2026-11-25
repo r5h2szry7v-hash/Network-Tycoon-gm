@@ -21,7 +21,7 @@
  function announce(target,{pup,line}={}){
   if(!target)return null;addStyles();const data=pups.find(item=>item.name===pup)||pups[0];
   target.querySelector('.portfolio-companion')?.remove();const card=document.createElement('div');card.className='portfolio-companion';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
-  const image=document.createElement('img');image.src=data.src;image.alt='';const copy=document.createElement('span');const label=document.createElement('strong');label.textContent=data.name+' says';const message=document.createElement('span');message.textContent=line||data.lines[Math.floor(Math.random()*data.lines.length)];copy.append(label,message);card.append(image,copy);target.append(card);return card;
+  const image=document.createElement('img');image.src=data.src;image.alt='';const copy=document.createElement('span');const label=document.createElement('strong');label.textContent=data.name+' says';const message=document.createElement('span');message.textContent=line||data.lines[Math.floor(Math.random()*data.lines.length)];copy.append(label,message);card.append(image,copy);const anchor=target.querySelector('.win-actions,.celebration-machine');if(anchor)target.insertBefore(card,anchor);else target.append(card);return card;
  }
  function mountTinker(){
   const modal=document.getElementById('win-modal'),title=document.getElementById('win-title');if(!modal||!title)return;
