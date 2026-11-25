@@ -281,6 +281,7 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
 }
 </style>
 <link rel="stylesheet" href="/disable-text-selection.css">
+  <link rel="stylesheet" href="/companion-layer.css">
 </head>
 <body>
 <div id="tinker-app">
@@ -1768,6 +1769,7 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
 }
 </script>
+<script src="/companion-assets.js" defer></script>
 <script src="/companion-layer.js" defer></script>
 </body>
 </html>

@@ -20,6 +20,7 @@ on:
       - feat/companion-layer-match-garden
       - feat/companion-motion-states
       - feat/companion-guidance-states
+      - feat/companion-asset-pipeline
 
 permissions:
   contents: read
@@ -120,6 +121,7 @@ jobs:
       - name: Validate PWA release artifacts
         run: |
           node --check public/update-manager.js
+          node --check public/companion-assets.js
           node --check public/tycoon-companions.js
           node --check public/service-worker.js
           python3 - <<'PY'
