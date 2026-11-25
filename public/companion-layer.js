@@ -8,8 +8,8 @@
  .portfolio-companion{display:flex;align-items:center;gap:10px;margin:12px 0;padding:9px 12px;border:1px solid #a9cfb5;border-left:4px solid #42966a;border-radius:14px;background:#effaf2;color:#203b2d;text-align:left;font-size:.9rem;font-weight:750;line-height:1.4;animation:portfolioCompanionEnter .42s cubic-bezier(.2,.9,.25,1.15) both}
  .portfolio-companion img{width:52px;height:52px;flex:none;object-fit:contain;filter:drop-shadow(0 3px 4px #183c3450);animation:portfolioPupBob 1.9s ease-in-out infinite;transform-origin:center bottom}
  .portfolio-companion strong{display:block;color:#28765d;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
- html[data-portfolio-color-mode=dark] .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}
- html[data-portfolio-color-mode=dark] .portfolio-companion strong{color:#a9e2be}
+ html[data-portfolio-color-mode=dark] .portfolio-companion,html.dark-mode .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}
+ html[data-portfolio-color-mode=dark] .portfolio-companion strong,html.dark-mode .portfolio-companion strong{color:#a9e2be}
  @media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}html[data-portfolio-color-mode=system] .portfolio-companion strong{color:#a9e2be}}
  @keyframes portfolioPupBob{0%,100%{transform:translateY(0) rotate(-2deg)}28%{transform:translateY(-5px) rotate(2deg)}56%{transform:translateY(-8px) rotate(-1deg)}80%{transform:translateY(-2px) rotate(2deg)}}
  @keyframes portfolioCompanionEnter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -29,6 +29,13 @@
   new MutationObserver(observe).observe(modal,{attributes:true,attributeFilter:['hidden']});
   if(!modal.hidden)observe();
  }
- window.PortfolioCompanions=Object.freeze({announce,mountTinker});
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountTinker,{once:true});else mountTinker();
+ function mountCritterRescue(){
+  const dialog=document.getElementById('winDialog');if(!dialog)return;
+  const observe=()=>{if(!dialog.open)return;announce(dialog.querySelector('.win-card'),{pup:'Pooch',line:'All three friends are home safe. That was a thoughtful trail!'})};
+  new MutationObserver(observe).observe(dialog,{attributes:true,attributeFilter:['open']});
+  if(dialog.open)observe();
+ }
+ window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue});
+ function mount(){mountTinker();mountCritterRescue()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
