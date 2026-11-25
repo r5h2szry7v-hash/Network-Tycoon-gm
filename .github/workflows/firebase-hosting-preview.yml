@@ -9,6 +9,7 @@ on:
       - feat/pawprint-pursuit-prototype
       - feat/pawprint-reactions
       - feat/pawprint-prize-feedback
+      - feat/mobile-map-first-pinch
 
 permissions:
   contents: read
@@ -110,7 +111,7 @@ jobs:
         with:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
           projectId: network-tycoon-gm
-          channelId: portfolio-game-shell
+          channelId: map-review
           expires: 7d
           disableComment: true
       - name: Add preview URL to workflow summary
