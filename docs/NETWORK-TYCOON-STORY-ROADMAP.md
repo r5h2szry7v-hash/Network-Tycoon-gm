@@ -43,5 +43,7 @@ The new 18-chapter outline adds a longer regional growth curve and varied operat
 
 - Branch: `feat/story-pacing-calibration`
 - Scope: measure foreground Story Mode time overall and by chapter, display a campaign timing report on completion, and correct mobile companion dialog wrapping and tile alignment.
-- Preview: pending branch validation and Firebase Hosting preview.
+- Preview: Firebase Hosting preview deployed successfully after syntax, chapter-coverage, pause-cue, timing-report, and layout-rule checks passed.
+- Mobile fix: inline Story coaches span tile grids; companion dialogue text has a shrinkable wrapping width.
+- Scope: timing report and layout correction are ready for review; the 3–4 hour campaign target still needs a complete player run.
 - Calibration: the 3–4 hour playtime target remains unverified until a full playthrough.
