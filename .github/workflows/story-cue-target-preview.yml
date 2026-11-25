@@ -1,0 +1,27 @@
+name: Temporary Network Tycoon Story Cue Target QA
+on:
+  push:
+    branches:
+      - feat/story-chapter-experience
+    paths:
+      - index.html
+      - .github/workflows/story-cue-target-preview.yml
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage Network Tycoon route
+        run: |
+          mkdir -p public/tycoon
+          cp index.html public/tycoon/index.html
+      - name: Deploy isolated Firebase preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NETWORK_TYCOON_GM }}
+          projectId: network-tycoon-gm
+          channelId: story-cue-target-qa-1125
+          expires: 7d
+          disableComment: true
