@@ -23,6 +23,7 @@ on:
       - feat/companion-asset-pipeline
       - feat/companion-registry-tycoon
       - feat/tycoon-guidance-motion
+      - feat/starlight-companion-completion
 
 permissions:
   contents: read
@@ -138,6 +139,7 @@ jobs:
         run: |
           node --check public/update-manager.js
           node --check public/companion-assets.js
+          node --check public/companion-layer.js
           node --check public/tycoon-companions.js
           node --check public/service-worker.js
           python3 - <<'PY'

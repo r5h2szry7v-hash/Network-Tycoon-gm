@@ -26,7 +26,32 @@
   new MutationObserver(observe).observe(cover,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
   observe();
  }
- window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue,mountMatchGarden,moods:Object.freeze([...moods])});
- function mount(){mountTinker();mountCritterRescue();mountMatchGarden()}
+ function mountStarlight(){
+  const traceCompletion=document.getElementById('completion');
+  if(traceCompletion){
+   const observeTrace=()=>{
+    if(!traceCompletion.classList.contains('show')){delete traceCompletion.dataset.companionShown;traceCompletion.querySelector('.portfolio-companion')?.remove();return}
+    if(traceCompletion.dataset.companionShown)return;
+    traceCompletion.dataset.companionShown='yes';
+    announce(traceCompletion,{pup:'Pooch',line:'That constellation found its way home. Take a quiet moment to enjoy your little patch of sky.',mood:'reassure'});
+   };
+   new MutationObserver(observeTrace).observe(traceCompletion,{attributes:true,attributeFilter:['class']});
+   observeTrace();
+  }
+  const colorBoard=document.getElementById('colorArtboard');
+  const colorColumn=document.querySelector('#colorStudio .color-art-column');
+  if(colorBoard&&colorColumn){
+   const observeColor=()=>{
+    if(!colorBoard.classList.contains('complete')){delete colorColumn.dataset.companionShown;colorColumn.querySelector('.portfolio-companion')?.remove();return}
+    if(colorColumn.dataset.companionShown)return;
+    colorColumn.dataset.companionShown='yes';
+    announce(colorColumn,{pup:'Pooch',line:'A little corner of the cosmos is yours. Enjoy the colors you brought together.',mood:'reassure'});
+   };
+   new MutationObserver(observeColor).observe(colorBoard,{attributes:true,attributeFilter:['class']});
+   observeColor();
+  }
+ }
+ window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue,mountMatchGarden,mountStarlight,moods:Object.freeze([...moods])});
+ function mount(){mountTinker();mountCritterRescue();mountMatchGarden();mountStarlight()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
