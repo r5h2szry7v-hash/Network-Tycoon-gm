@@ -15,6 +15,7 @@ on:
       - feat/tycoon-companions-review
       - feat/tycoon-companions-preview
       - feat/tycoon-companions-motion
+      - feat/tycoon-companions-phase2
 
 permissions:
   contents: read
