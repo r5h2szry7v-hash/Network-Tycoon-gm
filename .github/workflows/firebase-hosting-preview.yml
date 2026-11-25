@@ -19,6 +19,7 @@ on:
       - feat/portfolio-companion-layer
       - feat/companion-layer-match-garden
       - feat/companion-motion-states
+      - feat/companion-guidance-states
 
 permissions:
   contents: read

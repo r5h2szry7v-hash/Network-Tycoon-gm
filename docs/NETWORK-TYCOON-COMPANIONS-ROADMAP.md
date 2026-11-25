@@ -38,6 +38,8 @@ Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer
 
 The shared component now supports idle, celebration, thinking, and reassuring motion states. Game integrations choose the state that fits the moment while using the same dog assets and reduced-motion behavior.
 
+The next review branch applies thinking and reassuring reactions to practical help moments in Tinker Factory, Critter Rescue, and Match Garden. Mack helps players focus on a Tinker hint, a guaranteed-safe rescue tile, or the cards revealed by a helper. Pooch reassures players when a hint or scan is unavailable, a safe move is not yet deducible, or extra time is added. These brief guidance cards use the shared presentation API and clear automatically.
+
 ## First implementation notes
 
 Phase 1 reuses /images/dog-dark.webp for Mack, /images/dog-tan.webp for Pooch, and the existing three /paws/images/cat-*.webp files. Narration is on-screen text with animated portraits, so the guidance remains available without audio. Cat cameos live inside the SVG map and follow its pan and zoom. The free-play hint panel stays collapsed until requested.
