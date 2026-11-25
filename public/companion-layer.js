@@ -4,7 +4,7 @@
  const pups=Array.isArray(assets.characters)?assets.characters:[];
  const moods=new Set(Array.isArray(assets.moods)?assets.moods:[]);
  function announce(target,{pup,line,mood='idle'}={}){
-  if(!target)return null;const data=pups.find(item=>item.name===pup||item.id===String(pup||'').toLowerCase())||pups[0];if(!data?.src)return null;
+  if(!target||assets.areCompanionsEnabled?.()===false)return null;const data=pups.find(item=>item.name===pup||item.id===String(pup||'').toLowerCase())||pups[0];if(!data?.src)return null;
   target.querySelector('.portfolio-companion')?.remove();const card=document.createElement('div');card.className='portfolio-companion';card.dataset.mood=moods.has(mood)?mood:'idle';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
   const image=document.createElement('img');image.src=data.src;image.alt='';const copy=document.createElement('span');const label=document.createElement('strong');label.textContent=data.name+' says';const lines=Array.isArray(data.lines)?data.lines:[];const message=document.createElement('span');message.textContent=line||lines[Math.floor(Math.random()*lines.length)]||'';copy.append(label,message);card.append(image,copy);const anchor=target.querySelector('.win-actions,.celebration-machine,.modal-actions');if(anchor)target.insertBefore(card,anchor);else target.append(card);return card;
  }
@@ -51,7 +51,30 @@
    observeColor();
   }
  }
+ function preferenceSettingsRoot(){
+  const tinker=document.querySelector('#settings-modal .settings-choices');if(tinker)return tinker;
+  const rescue=document.querySelector('#settingsDialog .dialog-inner');if(rescue)return rescue;
+  const match=document.getElementById('modal'),matchTitle=match?.querySelector('h2')?.textContent?.trim();if(match&&matchTitle==='Make it yours')return match;
+  const starlight=document.querySelector('#modalCover .modal');if(starlight?.querySelector('#settingsTitle'))return starlight;
+  return null;
+ }
+ function syncPreferenceToggle(){const enabled=assets.areCompanionsEnabled?.()!==false;document.querySelectorAll('[data-portfolio-companion-toggle]').forEach(input=>{input.checked=enabled})}
+ function mountPreferenceControl(){
+  const root=preferenceSettingsRoot();if(!root||root.querySelector('[data-portfolio-companion-setting]'))return;
+  const label=document.createElement('label');label.className='portfolio-companion-setting';label.dataset.portfolioCompanionSetting='true';
+  const copy=document.createElement('span'),title=document.createElement('strong'),note=document.createElement('small');
+  title.textContent='Mack & Pooch moments';note.textContent='Show guidance and celebrations across supported games.';copy.append(title,note);
+  const input=document.createElement('input');input.type='checkbox';input.setAttribute('role','switch');input.dataset.portfolioCompanionToggle='true';input.checked=assets.areCompanionsEnabled?.()!==false;
+  const track=document.createElement('span');track.className='portfolio-companion-switch';track.setAttribute('aria-hidden','true');
+  input.addEventListener('change',()=>assets.setCompanionsEnabled?.(input.checked));
+  label.append(copy,input,track);root.append(label);
+ }
+ function mountPreferenceControls(){
+  mountPreferenceControl();
+  if(!document.body.dataset.portfolioCompanionPreferenceObserver){document.body.dataset.portfolioCompanionPreferenceObserver='true';new MutationObserver(mountPreferenceControl).observe(document.body,{childList:true,subtree:true})}
+ }
+ window.addEventListener('portfolio-companions:change',event=>{syncPreferenceToggle();if(event.detail?.enabled===false)document.querySelectorAll('.portfolio-companion').forEach(card=>card.remove())});
  window.PortfolioCompanions=Object.freeze({announce,mountTinker,mountCritterRescue,mountMatchGarden,mountStarlight,moods:Object.freeze([...moods])});
- function mount(){mountTinker();mountCritterRescue();mountMatchGarden();mountStarlight()}
+ function mount(){mountTinker();mountCritterRescue();mountMatchGarden();mountStarlight();mountPreferenceControls()}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
