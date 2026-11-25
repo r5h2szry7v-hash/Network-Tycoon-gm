@@ -119,5 +119,6 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
 }
 </script>
+<script src="/companion-layer.js" defer></script>
 </body></html>
 
