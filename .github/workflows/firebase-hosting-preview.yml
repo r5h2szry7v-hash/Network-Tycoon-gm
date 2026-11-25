@@ -12,6 +12,8 @@ on:
       - feat/mobile-map-first-pinch
       - feat/map-touch-pan
       - feat/tycoon-companions
+      - feat/tycoon-companions-review
+      - feat/tycoon-companions-preview
 
 permissions:
   contents: read
