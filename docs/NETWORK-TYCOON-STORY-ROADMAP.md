@@ -7,7 +7,7 @@
 3. **Goal-centered responsive dashboard** — keep campaign progress visible and make guide cues jump to the interface area they explain. **Complete.**
 4. **Story and consequences** — connect neighborhood moments and visible district changes to progress. After Year 2, show the mini-game and map-surprise cues, then return to the paused map. **Complete.**
 5. **Tune length and difficulty; preserve sandbox** — keep the opening arc quick, offer a choice between the next story and free build, and expand the campaign into meaningful regional goals. **In progress.**
-6. **Playthrough calibration** — verify the expanded campaign’s actual playtime and difficulty curve. Target 3–4 hours of substantial story play. Adjust chapter pacing and add optional side-story contracts or decision chains if the measured run falls short.
+6. **Playthrough calibration** — capture visible playtime overall and per chapter, then verify the expanded campaign’s actual playtime and difficulty curve. Target 3–4 hours of substantial story play. Adjust chapter pacing and add optional side-story contracts or decision chains if the measured run falls short.
 
 ## Current implementation
 
@@ -27,6 +27,7 @@
 - Any Story Mode decision modal includes a companion cue explaining that the clock is paused while the player decides. Low-cash, rival-market, and six-month event pauses point to the relevant dashboard section.
 - At each year mark, an optional activity reminder points to mini-games in MORE and map surprises. It can open MORE or be dismissed; it does not change the story objective.
 - Guidance uses the existing mobile view switcher, scrolls smoothly to the target area, and keeps the cue inline with the section. Dark-mode and reduced-motion behavior continue to use the shared presentation layer.
+- The pacing-calibration build records foreground Story Mode playtime overall and by chapter in the campaign save. The completion card will show the total and a collapsible chapter breakdown; time in another tab is excluded. The run still needs a complete playthrough to validate the 3–4 hour target.
 
 ## Pacing and QA checkpoint
 
@@ -36,9 +37,9 @@ With the 250-customer target, the same save reached Chapter 2 at Month 12 with 2
 
 The new 18-chapter outline adds a longer regional growth curve and varied operational goals. Its 3–4 hour target still needs a complete playthrough to measure; do not treat that duration as verified until the preview is played end to end. Use measured time and difficulty to tune the targets and optional story content, rather than stretching the opening milestones.
 
-## Current review
+## Active review
 
-- Branch: `feat/story-momentum-guidance`
-- Scope: guided action cues for regional Story Mode, companion guidance for paused decisions, and annual optional-activity reminders.
-- Preview: pending this branch’s validation and Firebase Hosting preview.
-- Duration: the 3–4 hour playtime target remains unverified until a full preview playthrough.
+- Branch: `feat/story-pacing-calibration`
+- Scope: measure foreground Story Mode time overall and by chapter, then display a campaign timing report on completion.
+- Preview: pending branch validation and Firebase Hosting preview.
+- Calibration: the 3–4 hour playtime target remains unverified until a full playthrough.
