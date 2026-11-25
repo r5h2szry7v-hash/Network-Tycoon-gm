@@ -17,6 +17,7 @@ on:
       - feat/tycoon-companions-motion
       - feat/tycoon-companions-phase2
       - feat/portfolio-companion-layer
+      - feat/companion-layer-match-garden
 
 permissions:
   contents: read
