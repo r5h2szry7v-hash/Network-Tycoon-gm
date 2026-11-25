@@ -1,7 +1,9 @@
 (()=>{
 'use strict';
 
-const DOGS={Mack:{src:'/images/dog-dark.webp'},Pooch:{src:'/images/dog-tan.webp'}};
+const dogAssets=window.PortfolioCompanionAssets?.characters||[];
+const DOGS=Object.fromEntries(dogAssets.map(({name,src})=>[name,{src}]));
+if(!DOGS.Mack||!DOGS.Pooch)throw new Error('Network Tycoon requires Mack and Pooch in the shared companion registry.');
 const CATS=[
  {name:'Kitty',src:'/paws/images/cat-black-sleek.webp',lines:['Oops. I was napping.','Pounce? You moved.','Nice map. Mine now.']},
  {name:'Kit’n',src:'/paws/images/cat-black-fluffy.webp',lines:['This map is my box.','I allow this visit.','Region claimed!']},
