@@ -1,9 +1,6 @@
 (()=>{
 'use strict';
 
-const dogAssets=window.PortfolioCompanionAssets?.characters||[];
-const DOGS=Object.fromEntries(dogAssets.map(({name,src})=>[name,{src}]));
-if(!DOGS.Mack||!DOGS.Pooch)throw new Error('Network Tycoon requires Mack and Pooch in the shared companion registry.');
 const CATS=[
  {name:'Kitty',src:'/paws/images/cat-black-sleek.webp',lines:['Oops. I was napping.','Pounce? You moved.','Nice map. Mine now.']},
  {name:'Kit’n',src:'/paws/images/cat-black-fluffy.webp',lines:['This map is my box.','I allow this visit.','Region claimed!']},
@@ -17,27 +14,22 @@ let prefs=readPrefs(),catTimer=0,catGroup=null,catRemaining=0,catLastTick=Date.n
 function readPrefs(){try{return{...DEFAULT_PREFS,...JSON.parse(localStorage.getItem(PREFS_KEY)||'{}')}}catch{return{...DEFAULT_PREFS}}}
 function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch{}}
 function enabled(){return window.PortfolioCompanionAssets?.areCompanionsEnabled?.()!==false}
+function announce(target,pup,line,mood='idle'){return window.PortfolioCompanions?.announce(target,{pup,line,mood})||null}
 function randomBetween(min,max){return min+Math.random()*(max-min)}
 function applyAnimationPace(){document.documentElement.classList.toggle('nt-companions-gentle',prefs.animationPace==='gentle')}
 
 const styles=`
 .nt-story-narrator,.nt-map-companion-helper{--nt-companion-ink:#244a42;--nt-companion-accent:#28765d}
-.nt-story-narrator{display:flex;align-items:center;gap:8px;margin:8px 0 10px;padding:7px 9px;border:1px solid #c7e4d4;border-radius:13px;background:linear-gradient(110deg,#f2fff7,#f4f5ff);color:#244a42;font-size:.82rem;line-height:1.38;font-weight:700}
-.nt-story-narrator img{width:44px;height:44px;flex:0 0 44px;object-fit:contain;filter:drop-shadow(0 3px 4px #183c3450);animation:nt-pup-bob 2.2s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
-.nt-story-narrator strong{display:block;color:#28765d;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
-.nt-coach-portrait{width:100%;height:100%;object-fit:contain;padding:2px;filter:drop-shadow(0 3px 4px #183c3450);animation:nt-pup-bob 2.05s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
-.nt-coach-voice{display:flex;align-items:center;gap:7px;margin-top:6px;color:#28765d;font-size:.78rem;font-weight:800;line-height:1.35}
-.nt-coach-voice img{width:34px;height:34px;flex:0 0 34px;object-fit:contain;filter:drop-shadow(0 3px 3px #183c3450);animation:nt-pup-bob 2.2s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
+.nt-story-narrator.portfolio-companion{margin:8px 0 10px}
+.nt-coach-voice.portfolio-companion{margin-top:6px}
 .nt-map-companion-helper{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:7px 9px;border:1px solid #c6dfd4;border-radius:14px;background:linear-gradient(110deg,#f3fff8,#f5f7ff);color:#183e3a;box-shadow:0 5px 14px #193e3012}
 .nt-helper-button{display:flex;align-items:center;gap:7px;min-height:40px;padding:4px 10px;border:1px solid #85baa0;border-radius:12px;background:#e1f5e9;color:#17513e;font:850 .8rem/1.2 system-ui,sans-serif;cursor:pointer;transition:transform .18s,box-shadow .18s}
 .nt-helper-button:hover{transform:translateY(-2px);box-shadow:0 4px 10px #193e3025}
-.nt-helper-faces{display:flex;align-items:center}
-.nt-helper-faces img{width:34px;height:34px;object-fit:contain;margin-left:-4px;filter:drop-shadow(0 3px 3px #183c3450);animation:nt-pup-bob 2.15s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
+.nt-helper-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#fff;color:#28765d;font-size:1.2rem}
 .nt-helper-faces img:first-child{margin-left:0;animation-delay:-.75s}
-.nt-helper-message{display:none;align-items:center;gap:8px;flex:1 1 220px;min-width:180px;padding:4px 3px 4px 7px;font-size:.8rem;line-height:1.38;font-weight:750}
+.nt-helper-message{display:none;align-items:center;gap:8px;flex:1 1 220px;min-width:180px;padding:4px 3px 4px 7px}
 .nt-helper-message.is-open{display:flex}.nt-helper-message[hidden]{display:none!important}
-.nt-helper-message img{width:42px;height:42px;flex:0 0 42px;object-fit:contain;filter:drop-shadow(0 3px 3px #183c3450);animation:nt-pup-bob 2.15s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
-.nt-helper-message p{margin:0}.nt-helper-actions{display:flex;gap:5px;margin-left:auto}
+.nt-helper-message-content{min-width:0;flex:1}.nt-helper-message-content .portfolio-companion{margin:0}
 .nt-helper-actions button{min-width:36px;min-height:36px;border:1px solid #c6dfd4;border-radius:10px;background:#fff;color:#28534a;font-weight:900}
 .nt-helper-actions button:focus-visible,.nt-helper-button:focus-visible{outline:3px solid #f3b94f;outline-offset:2px}
 .nt-companion-settings{padding:12px;border:1px solid #c7e4d4;border-radius:14px;background:linear-gradient(110deg,#f2fff7,#f4f5ff)}
@@ -52,19 +44,14 @@ const styles=`
 .nt-map-cat-quiet{opacity:0!important;pointer-events:none!important}
 .nt-map-cat-poked .nt-map-cat-motion{animation:nt-cat-pounce .58s cubic-bezier(.2,1.5,.3,1) both!important}
 .nt-map-cat-poked image{filter:drop-shadow(0 0 7px #ffc547)}
-.nt-event-reaction{position:fixed;z-index:35;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));display:grid;grid-template-columns:48px minmax(0,1fr) 32px;align-items:center;gap:9px;width:min(470px,calc(100vw - 24px));padding:9px 10px;border:1px solid #8bc5a0;border-left:5px solid #32a078;border-radius:16px;background:linear-gradient(110deg,#f3fff8,#f5f5ff);color:#1d3d3a;box-shadow:0 14px 34px #102b3c3d;transform:translate(-50%,18px) scale(.98);opacity:0;pointer-events:none;transition:opacity .24s ease,transform .32s cubic-bezier(.2,.9,.25,1.15)}
+.nt-event-reaction{position:fixed;z-index:35;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));width:min(470px,calc(100vw - 24px));padding:9px 10px;box-shadow:0 14px 34px #102b3c3d;transform:translate(-50%,18px) scale(.98);opacity:0;pointer-events:none;transition:opacity .24s ease,transform .32s cubic-bezier(.2,.9,.25,1.15);animation:none}
 .nt-event-reaction.is-visible{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
 .nt-event-reaction[data-kind="service"]{border-color:#e1a36c;border-left-color:#e08343;background:linear-gradient(110deg,#fff7ed,#fff9f0)}
 .nt-event-reaction[data-kind="capacity"]{border-color:#e0be68;border-left-color:#d19a27;background:linear-gradient(110deg,#fffbea,#fff8ec)}
 .nt-event-reaction[data-kind="finance"]{border-color:#8daec8;border-left-color:#4d82ad;background:linear-gradient(110deg,#f0f8ff,#f7f5ff)}
-.nt-event-reaction img{width:46px;height:46px;object-fit:contain;filter:drop-shadow(0 3px 4px #183c3450);animation:nt-pup-bob 1.8s ease-in-out infinite;transform-origin:center bottom;will-change:transform}
-.nt-event-reaction-copy{min-width:0;font-size:.83rem;line-height:1.35;font-weight:750}
-.nt-event-reaction-copy strong{display:block;margin-bottom:2px;color:#246b55;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase}
 .nt-event-reaction button{width:32px;height:32px;border:1px solid #b8d3c5;border-radius:10px;background:#fff;color:#31584d;font-size:1.15rem;font-weight:900}
-.nt-event-reaction button:focus-visible{outline:3px solid #f3b94f;outline-offset:2px}
-.nt-companion-settings select{min-height:42px;width:100%;padding:8px 10px;border:1px solid #cbded4;border-radius:10px;background:#fff;color:#244a42;font:700 .85rem system-ui,sans-serif}
-html.dark-mode .nt-story-narrator,html.dark-mode .nt-map-companion-helper{background:linear-gradient(110deg,#203a32,#252a40);border-color:#456e5a;color:#effff4;box-shadow:0 5px 14px #0004}
-html.dark-mode .nt-story-narrator strong,html.dark-mode .nt-coach-voice{color:#a9e2be}
+.nt-event-reaction button:focus-visible{outline:3px solid #f3b94f;outline-offset:2px}.nt-companion-settings select{min-height:42px;width:100%;padding:8px 10px;border:1px solid #cbded4;border-radius:10px;background:#fff;color:#244a42;font:700 .85rem system-ui,sans-serif}
+html.dark-mode .nt-map-companion-helper{background:linear-gradient(110deg,#203a32,#252a40);border-color:#456e5a;color:#effff4;box-shadow:0 5px 14px #0004}
 html.dark-mode .nt-helper-button{background:#29483b;border-color:#5b9b78;color:#eafff1}
 html.dark-mode .nt-helper-actions button{background:#263b35;border-color:#466d5a;color:#eafff1}
 html.dark-mode .nt-map-cat-bubble rect{fill:#26352f;stroke:#a7cf98}html.dark-mode .nt-map-cat-bubble text{fill:#f1f5e8}
@@ -76,14 +63,14 @@ html.dark-mode .nt-event-reaction[data-kind="capacity"]{background:linear-gradie
 html.dark-mode .nt-event-reaction[data-kind="finance"]{background:linear-gradient(110deg,#263a48,#302d45);border-color:#526d82;border-left-color:#78add1}
 html.dark-mode .nt-event-reaction-copy strong{color:#b7e9cb}
 html.dark-mode .nt-event-reaction button{background:#263b35;border-color:#52735f;color:#effff4}
-html.nt-companions-gentle .nt-story-narrator img,html.nt-companions-gentle .nt-coach-portrait,html.nt-companions-gentle .nt-coach-voice img,html.nt-companions-gentle .nt-helper-faces img,html.nt-companions-gentle .nt-helper-message img,html.nt-companions-gentle .nt-event-reaction img{animation-duration:3.8s}
+.nt-companions-gentle .portfolio-companion img{animation-duration:3.8s}
 html.nt-companions-gentle .nt-map-cat-motion{animation-duration:6s}
 @keyframes nt-pup-bob{0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}24%{transform:translateY(-5px) rotate(1deg) scale(1.04)}52%{transform:translateY(-8px) rotate(3deg) scale(1.02)}78%{transform:translateY(-2px) rotate(-1deg) scale(1.04)}}
 @keyframes nt-cat-drift{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
 @keyframes nt-cat-pounce{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.24) rotate(-12deg)}70%{transform:scale(.92) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
 @media(max-width:680px){.nt-story-narrator{font-size:.8rem;gap:6px;margin:7px 0 8px;padding:6px 8px}.nt-story-narrator img{width:36px;height:36px;flex-basis:36px}.nt-map-companion-helper{gap:6px;margin:7px 0;padding:6px}.nt-helper-button{min-height:42px;padding:4px 8px;font-size:.78rem}.nt-helper-message{flex-basis:100%;min-width:0;font-size:.82rem}.nt-map-cat-bubble text{font-size:15px}.nt-event-reaction{bottom:calc(74px + env(safe-area-inset-bottom));grid-template-columns:42px minmax(0,1fr) 34px;gap:7px;padding:8px}.nt-event-reaction img{width:40px;height:40px}.nt-event-reaction-copy{font-size:.8rem}.nt-companion-settings{padding:10px}}
-@media(prefers-reduced-motion:reduce){.nt-story-narrator img,.nt-coach-portrait,.nt-coach-voice img,.nt-helper-faces img,.nt-helper-message img,.nt-map-cat-motion,.nt-event-reaction img{animation:none!important;transition:none!important}}
-html.pref-reduced-motion .nt-story-narrator img,html.pref-reduced-motion .nt-coach-portrait,html.pref-reduced-motion .nt-coach-voice img,html.pref-reduced-motion .nt-helper-faces img,html.pref-reduced-motion .nt-helper-message img,html.pref-reduced-motion .nt-map-cat-motion,html.pref-reduced-motion .nt-event-reaction,html.pref-reduced-motion .nt-event-reaction img{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.nt-map-cat-motion,.nt-event-reaction{animation:none!important;transition:none!important}}
+html.pref-reduced-motion .nt-map-cat-motion,html.pref-reduced-motion .nt-event-reaction{animation:none!important;transition:none!important}
 `;
 
 const storyLines={
@@ -119,13 +106,11 @@ function addNarration(container,pup,line,key,mood='think'){
  if(!container||!enabled())return;
  if(container.dataset.ntNarration===key)return;
  container.dataset.ntNarration=key;
- container.querySelector('.nt-story-narrator')?.remove();
- const row=document.createElement('div');row.className='nt-story-narrator';row.dataset.mood=mood;
- const image=document.createElement('img');image.src=DOGS[pup].src;image.alt='';
- const words=document.createElement('span'),name=document.createElement('strong'),speech=document.createElement('span');
- name.textContent=pup+' says';speech.textContent=line;words.append(name,speech);row.append(image,words);
- const title=container.querySelector('h3');if(title)title.before(row);else container.prepend(row);
+ const card=announce(container,pup,line,mood);if(!card)return;
+ card.classList.add('nt-story-narrator');
+ const title=container.querySelector('h3');if(title)title.before(card);
 }
+
 function decorateStory(){
  const card=$('#story-campaign-card');if(!card)return;
  if(!enabled()){card.querySelector('.nt-story-narrator')?.remove();delete card.dataset.ntNarration;return;}
@@ -142,12 +127,19 @@ function decorateStory(){
 function decorateCoach(){
  const coach=$('#story-coach');if(!coach)return;
  const face=coach.querySelector('.story-coach-icon'),copy=coach.querySelector('.story-coach-copy');
- if(!enabled()){if(face?.dataset.ntOriginal)face.textContent=face.dataset.ntOriginal;copy?.querySelector('.nt-coach-voice')?.remove();delete coach.dataset.ntNarration;return;}
- const title=copy?.querySelector('strong')?.textContent?.trim()||'',body=copy?.querySelector('small')?.textContent?.trim()||'',key=[coach.dataset.guideStep,title,body].join('|');if(coach.dataset.ntNarration===key)return;coach.dataset.ntNarration=key;
+ if(!enabled()){
+  if(face?.dataset.ntOriginal)face.textContent=face.dataset.ntOriginal;
+  copy?.querySelector('.nt-coach-voice')?.remove();
+  delete coach.dataset.ntNarration;return;
+ }
+ const title=copy?.querySelector('strong')?.textContent?.trim()||'',body=copy?.querySelector('small')?.textContent?.trim()||'',key=[coach.dataset.guideStep,title,body].join('|');
+ if(coach.dataset.ntNarration===key)return;coach.dataset.ntNarration=key;
  const step=Number((coach.dataset.guideStep||'').replace('chapter-',''))||0,pup=step%2?'Pooch':'Mack';
- if(face){if(!face.dataset.ntOriginal)face.dataset.ntOriginal=face.textContent;face.replaceChildren();const img=document.createElement('img');img.className='nt-coach-portrait';img.dataset.mood='reassure';img.src=DOGS[pup].src;img.alt='';face.append(img);}
- if(copy){copy.querySelector('.nt-coach-voice')?.remove();const voice=document.createElement('span');voice.className='nt-coach-voice';voice.dataset.mood='reassure';const img=document.createElement('img');img.src=DOGS[pup].src;img.alt='';const words=document.createElement('span');words.textContent=pup+': '+(step===1?'I’ll help you find your way around.':step===2?'We can keep track of the important numbers together.':step===3?'Let’s handle urgent needs first; the rest can wait.':step===7?'Tap the glowing neighborhood when you’re ready.':'I’m here if you need a hand with this step.');voice.append(img,words);copy.append(voice);}
+ if(face){if(!face.dataset.ntOriginal)face.dataset.ntOriginal=face.textContent;face.textContent=face.dataset.ntOriginal}
+ const line=step===1?'I’ll help you find your way around.':step===2?'We can keep track of the important numbers together.':step===3?'Let’s handle urgent needs first; the rest can wait.':step===7?'Tap the glowing neighborhood when you’re ready.':'I’m here if you need a hand with this step.';
+ const card=announce(copy,pup,line,'reassure');card?.classList.add('nt-coach-voice');
 }
+
 function refreshGuidance(){
  decorateStory();decorateCoach();
  if(!enabled()){$('.nt-map-companion-helper')?.remove();document.querySelectorAll('.nt-event-reaction').forEach(removeReaction);eventQueue=[];}
@@ -232,22 +224,22 @@ function helper(){
  let dock=card.querySelector('.nt-map-companion-helper'),shouldShow=enabled()&&!game.classList.contains('hidden')&&(!story||story.classList.contains('hidden'));
  if(!shouldShow){dock?.remove();return}if(dock)return;
  dock=document.createElement('div');dock.className='nt-map-companion-helper';dock.setAttribute('aria-label','Optional hints from Mack and Pooch');
- dock.innerHTML='<button class="nt-helper-button" type="button" aria-expanded="false"><span class="nt-helper-faces"><img data-pup="Mack" alt=""><img data-pup="Pooch" alt=""></span><span>Ask Mack &amp; Pooch for a hint</span></button><div class="nt-helper-message" role="status" aria-live="polite" hidden><img alt=""><p></p><span class="nt-helper-actions"><button type="button" data-next aria-label="Another hint">↻</button><button type="button" data-close aria-label="Close hints">×</button></span></div>';
- dock.querySelectorAll('.nt-helper-faces img').forEach(image=>image.src=DOGS[image.dataset.pup].src);
+ dock.innerHTML='<button class="nt-helper-button" type="button" aria-expanded="false"><span class="nt-helper-mark" aria-hidden="true">✦</span><span>Ask Mack &amp; Pooch for a hint</span></button><div class="nt-helper-message" hidden><div class="nt-helper-message-content"></div><span class="nt-helper-actions"><button type="button" data-next aria-label="Another hint">↻</button><button type="button" data-close aria-label="Close hints">×</button></span></div>';
  const footer=card.querySelector('.map-footer');if(footer)card.insertBefore(dock,footer);else card.append(dock);
- const trigger=dock.querySelector('.nt-helper-button'),message=dock.querySelector('.nt-helper-message'),face=message.querySelector('img'),copy=message.querySelector('p');let index=-1;
- const show=()=>{const list=hints();index=(index+1)%list.length;const item=list[index];message.dataset.mood='think';face.src=DOGS[item[0]].src;copy.textContent=item[0]+': '+item[1];message.hidden=false;message.classList.add('is-open');trigger.setAttribute('aria-expanded','true');trigger.querySelector('span:last-child').textContent='Another tip'};
- trigger.addEventListener('click',show);dock.querySelector('[data-next]').addEventListener('click',show);dock.querySelector('[data-close]').addEventListener('click',()=>{message.hidden=true;message.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');delete message.dataset.mood;trigger.querySelector('span:last-child').textContent='Ask Mack & Pooch for a hint'});
+ const trigger=dock.querySelector('.nt-helper-button'),message=dock.querySelector('.nt-helper-message'),content=message.querySelector('.nt-helper-message-content');let index=-1;
+ const show=()=>{const list=hints();index=(index+1)%list.length;const item=list[index];announce(content,item[0],item[1],'think');message.hidden=false;message.classList.add('is-open');trigger.setAttribute('aria-expanded','true');trigger.querySelector('span:last-child').textContent='Another tip'};
+ trigger.addEventListener('click',show);dock.querySelector('[data-next]').addEventListener('click',show);dock.querySelector('[data-close]').addEventListener('click',()=>{message.hidden=true;message.classList.remove('is-open');content.querySelector('.portfolio-companion')?.remove();trigger.setAttribute('aria-expanded','false');trigger.querySelector('span:last-child').textContent='Ask Mack & Pooch for a hint'});
 }
 
 function busyForReaction(){const game=$('#game');return document.hidden||modalOpen()||storyPriorityActive()||!game||game.classList.contains('hidden')}
 function reactionMarkup(item){
- const card=document.createElement('aside');card.className='nt-event-reaction';card.dataset.kind=item.kind;card.dataset.mood=item.kind==='build'?'celebrate':item.kind==='finance'?'think':'reassure';card.setAttribute('role','status');card.setAttribute('aria-live','polite');
- const img=document.createElement('img');img.src=DOGS[item.pup].src;img.alt='';
- const copy=document.createElement('span');copy.className='nt-event-reaction-copy';const name=document.createElement('strong');name.textContent=item.pup+' noticed';const line=document.createElement('span');line.textContent=item.text;copy.append(name,line);
+ const host=document.createElement('div'),mood=item.kind==='build'?'celebrate':item.kind==='finance'?'think':'reassure';
+ const card=announce(host,item.pup,item.text,mood);if(!card)return null;
+ card.classList.add('nt-event-reaction');card.dataset.kind=item.kind;
  const close=document.createElement('button');close.type='button';close.setAttribute('aria-label','Dismiss companion message');close.textContent='×';close.addEventListener('click',()=>removeReaction(card));
- card.append(img,copy,close);return card;
+ card.append(close);return card;
 }
+
 function removeReaction(card){if(!card)return;clearTimeout(reactionTimer);card.classList.remove('is-visible');setTimeout(()=>card.remove(),260)}
 function queueReaction(kind,customText='',key=''){
  if(!enabled()||!REACTIONS[kind])return;
@@ -257,7 +249,7 @@ function queueReaction(kind,customText='',key=''){
 function flushReaction(){
  if(!enabled()||busyForReaction()||$('.nt-event-reaction')||!eventQueue.length)return;
  eventQueue=eventQueue.filter(item=>Date.now()-item.at<90000);const item=eventQueue.shift();if(!item)return;
- const card=reactionMarkup(item);document.body.append(card);requestAnimationFrame(()=>card.classList.add('is-visible'));clearTimeout(reactionTimer);reactionTimer=setTimeout(()=>removeReaction(card),6500);
+ const card=reactionMarkup(item);if(!card)return;document.body.append(card);requestAnimationFrame(()=>card.classList.add('is-visible'));clearTimeout(reactionTimer);reactionTimer=setTimeout(()=>removeReaction(card),6500);
 }
 function inspectCustomers(){
  const value=Number(($('#subs-value')?.textContent||'').replace(/[^\d]/g,''));if(!Number.isFinite(value))return;
