@@ -34,6 +34,8 @@ Phase 2 review build adds brief Mack and Pooch reactions after build, service, c
 - Bring the same characters into other games only where they add useful feedback or guidance.
 - Build a small asset and animation pipeline so future character states remain consistent across screen sizes.
 
+Phase 3 progress: Tinker Factory, Critter Rescue, and Match Garden use the shared companion layer for celebrations and gameplay guidance. Network Tycoon now reads Mack and Pooch image paths from the shared asset registry; its story narration, hints, event reactions, and map cats remain in the Tycoon-specific module.
+
 Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer.js` and adds animated, accessible character reactions to Tinker Factory's win card, Critter Rescue's rescue-complete card, and Match Garden's round-win card. Each uses the same small presentation API, with dark-mode and reduced-motion support.
 
 The shared component now supports idle, celebration, thinking, and reassuring motion states. Game integrations choose the state that fits the moment while using the same dog assets and reduced-motion behavior.
