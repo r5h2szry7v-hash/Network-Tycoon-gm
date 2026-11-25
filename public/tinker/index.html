@@ -429,6 +429,7 @@ html[data-portfolio-color-mode=dark] .mission-icon{background:color-mix(in srgb,
           <select class="button wide home-destination-select" id="home-button" aria-label="Choose where to go"><option value="">Home…</option><option value="tinker">Tinker Factory home</option><option value="/">Game selector home</option></select>
         </div>
         <div class="status" id="status" role="status" aria-live="polite">Your workbench is ready. Place a part to begin.</div>
+        <div id="companion-guide-slot"></div>
         <div class="hint-tools" aria-label="Puzzle helpers"><button class="button" id="hint-button" type="button" disabled>Hint · earn one</button><button class="button" id="store-button" type="button" aria-label="Open parts store"><svg class="storefront-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.2 4.7 4h14.6l1.7 6.2v1.1a2.5 2.5 0 0 1-2.5 2.5 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.4 2.4 0 0 1-1.8-.8 2.4 2.4 0 0 1-1.8.8 2.5 2.5 0 0 1-2.5-2.5v-1.1ZM5 14.1V21h14v-6.9M9 21v-5h6v5M4.7 4h14.6"/></svg><span>Store</span><span id="store-button-balance">0 🔩</span></button><button class="button" id="help-button" type="button">Parts guide</button></div>
       </section>
       <section class="hint-card">
@@ -1534,11 +1535,19 @@ function applyHint() {
       render();
       setStatus((existing ? "Replace the part" : "Place the " + PARTS[step.type].name.toLowerCase()) + " at row " + (Math.floor(step.index / size) + 1) + ", column " + (step.index % size + 1) + ".");
     }
+    const companion = window.PortfolioCompanions?.announce(document.getElementById("companion-guide-slot"), {
+      pup: "Mack", mood: "think", line: "Let’s work through this next machine step together."
+    });
+    if (companion) window.setTimeout(() => companion.remove(), 6500);
     saveGame();
     playTone("hint");
     return;
   }
   setStatus("No more hints are mapped for this workbench. Try the parts guide.");
+  const companion = window.PortfolioCompanions?.announce(document.getElementById("companion-guide-slot"), {
+    pup: "Pooch", mood: "reassure", line: "You’ve used every mapped clue here. The parts guide can help with how each piece works."
+  });
+  if (companion) window.setTimeout(() => companion.remove(), 6500);
 }
 function showVictorySplash(firstClear) {
   const modal = document.getElementById("win-modal");
