@@ -1943,6 +1943,39 @@ body.palette-storybook .world-beat{background:#faf8ff;border-color:#ddd6f1;color
 @keyframes story-map-start-pulse{to{stroke:#fff06a;stroke-width:10px;filter:drop-shadow(0 0 15px #ffb527)}}
 .story-coach-next:focus-visible,.story-coach-skip:focus-visible{outline:3px solid #23394d;outline-offset:3px}
 @media(max-width:680px){.story-coach{top:calc(env(safe-area-inset-top) + 61px);width:calc(100vw - 20px);gap:8px;padding:9px 10px;border-radius:15px}.story-coach-icon{width:36px;height:36px;flex-basis:36px;font-size:1.35rem}.story-coach-copy strong{font-size:.88rem}.story-coach-copy small{font-size:.78rem;line-height:1.28}.story-coach-actions{gap:4px}.story-coach-next{min-height:38px;padding:7px 9px;font-size:.72rem}.story-coach-skip{min-height:34px;padding:6px 7px;font-size:.69rem}.story-coach.story-coach-inline{margin:0 0 8px}.construction-planner-modal .flip-card{aspect-ratio:.9}}
+
+
+/* Make Story Mode the clear setup default and keep its companions compact. */
+.scenario-featured{position:relative!important;display:grid!important;grid-template-columns:52px minmax(0,1fr) 26px!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:112px!important;margin:12px 0!important;padding:20px 22px!important;text-align:left!important;border:2px solid #38b779!important;border-radius:20px!important;background:linear-gradient(115deg,#e5fff0,#f5fffa 60%,#e9f5ff)!important;box-shadow:0 8px 24px #16835d24!important;overflow:visible!important}
+.scenario-featured.selected{outline:3px solid #37ba79!important;outline-offset:3px!important}
+
+.scenario-featured-icon{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#caf3dc;font-size:1.8rem}
+.scenario-featured-copy{display:grid;gap:5px}.scenario-featured-copy strong{font-size:1.2rem!important;line-height:1.2}.scenario-featured-copy small{font-size:.92rem!important;line-height:1.4}.scenario-featured-arrow{font-size:1.7rem;font-weight:900;color:#147f5d}
+.scenario-alternates-label{margin:8px 0 7px;color:var(--muted,#64748b);font-size:.78rem;font-weight:800}
+.scenario-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+.scenario-grid .scenario-card{min-height:74px!important;padding:10px 8px!important;border-radius:13px!important;text-align:center!important}
+.scenario-grid .scenario-card strong{font-size:.82rem!important;line-height:1.2}.scenario-grid .scenario-card small{font-size:.72rem!important;line-height:1.3}
+.story-coach:not(.story-coach-inline){position:sticky!important;inset:auto!important;z-index:12000!important;width:min(680px,calc(100% - 24px))!important;margin:10px auto 14px!important;top:calc(env(safe-area-inset-top) + 8px)!important}
+html.dark-mode .scenario-featured{background:linear-gradient(115deg,#1c4738,#213a4a 75%,#29344d)!important;color:#f0fff5!important;border-color:#56ce90!important}
+html.dark-mode .scenario-featured-icon{background:#305e49}
+@media(max-width:680px){.scenario-featured{grid-template-columns:42px minmax(0,1fr) 18px!important;gap:9px!important;min-height:100px!important;margin:10px 0!important;padding:16px 14px!important;border-radius:17px!important}.scenario-featured-icon{width:40px;height:40px;font-size:1.5rem}.scenario-featured-copy strong{font-size:1.05rem!important}.scenario-featured-copy small{font-size:.82rem!important;line-height:1.35}.scenario-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}.scenario-grid .scenario-card{min-height:66px!important;padding:9px 6px!important}.scenario-grid .scenario-card strong{font-size:.76rem!important}.scenario-grid .scenario-card small{font-size:.68rem!important}.story-coach:not(.story-coach-inline){width:calc(100% - 20px)!important;margin:8px auto 12px!important;top:calc(env(safe-area-inset-top) + 4px)!important}}
+
+.story-coach-progress{display:inline-block;margin:1px 0 3px;color:#13835e;font-size:.65rem;font-style:normal;font-weight:950;letter-spacing:.1em;line-height:1.2}
+html.dark-mode .story-coach-progress{color:#8ce1ae}
+@media(max-width:680px){.story-coach-progress{font-size:.63rem}}
+
+/* Keep the guide bubble in view while the highlighted section scrolls beneath it. */
+.story-coach:not(.story-coach-inline){position:sticky!important;top:calc(env(safe-area-inset-top) + 8px)!important;left:auto!important;transform:none!important;scroll-margin-top:calc(env(safe-area-inset-top) + 8px)}
+.story-guide-target,.story-guide-related{scroll-margin-top:calc(env(safe-area-inset-top) + 116px);scroll-margin-bottom:24px}
+html{scroll-padding-top:calc(env(safe-area-inset-top) + 116px);scroll-padding-bottom:24px}
+@media(max-width:680px){.story-guide-target,.story-guide-related{scroll-margin-top:calc(env(safe-area-inset-top) + 108px)}html{scroll-padding-top:calc(env(safe-area-inset-top) + 108px)}}
+
+/* Chapter cues are surfaced at the top of the screen whenever guidance changes. */
+.story-coach:not(.story-coach-inline){position:relative!important;inset:auto!important;top:auto!important;left:auto!important;transform:none!important;scroll-margin-top:0!important;width:min(680px,calc(100% - 24px))!important;margin:10px auto 14px!important}
+
+/* Chapter cues travel with the section they explain. */
+.story-coach.story-coach-inline{position:relative!important;inset:auto!important;top:auto!important;left:auto!important;transform:none!important;width:100%!important;max-width:none!important;margin:0 0 10px!important;scroll-margin-top:14px}
+
 </style><script>(()=>{const q=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');let reduce=!!(q&&q.matches);try{const p=JSON.parse(localStorage.getItem('network-tycoon-player-preferences-v1')||'{}');if(p.darkMode)document.documentElement.classList.add('dark-mode');reduce=!!p.reducedMotion||(reduce&&!p.ignoreSystemReducedMotion)}catch{}if(reduce)document.documentElement.classList.add('pref-reduced-motion')})();</script></head>
 <body>
   <main id="app">
@@ -2070,34 +2103,3 @@ body.palette-storybook .world-beat{background:#faf8ff;border-color:#ddd6f1;color
 })();
 </script>
 </body></html>
-
-/* Make Story Mode the clear setup default and keep its companions compact. */
-.scenario-featured{position:relative!important;display:grid!important;grid-template-columns:52px minmax(0,1fr) 26px!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:112px!important;margin:12px 0!important;padding:20px 22px!important;text-align:left!important;border:2px solid #38b779!important;border-radius:20px!important;background:linear-gradient(115deg,#e5fff0,#f5fffa 60%,#e9f5ff)!important;box-shadow:0 8px 24px #16835d24!important;overflow:visible!important}
-.scenario-featured.selected{outline:3px solid #37ba79!important;outline-offset:3px!important}
-
-.scenario-featured-icon{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#caf3dc;font-size:1.8rem}
-.scenario-featured-copy{display:grid;gap:5px}.scenario-featured-copy strong{font-size:1.2rem!important;line-height:1.2}.scenario-featured-copy small{font-size:.92rem!important;line-height:1.4}.scenario-featured-arrow{font-size:1.7rem;font-weight:900;color:#147f5d}
-.scenario-alternates-label{margin:8px 0 7px;color:var(--muted,#64748b);font-size:.78rem;font-weight:800}
-.scenario-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
-.scenario-grid .scenario-card{min-height:74px!important;padding:10px 8px!important;border-radius:13px!important;text-align:center!important}
-.scenario-grid .scenario-card strong{font-size:.82rem!important;line-height:1.2}.scenario-grid .scenario-card small{font-size:.72rem!important;line-height:1.3}
-.story-coach:not(.story-coach-inline){position:sticky!important;inset:auto!important;z-index:12000!important;width:min(680px,calc(100% - 24px))!important;margin:10px auto 14px!important;top:calc(env(safe-area-inset-top) + 8px)!important}
-html.dark-mode .scenario-featured{background:linear-gradient(115deg,#1c4738,#213a4a 75%,#29344d)!important;color:#f0fff5!important;border-color:#56ce90!important}
-html.dark-mode .scenario-featured-icon{background:#305e49}
-@media(max-width:680px){.scenario-featured{grid-template-columns:42px minmax(0,1fr) 18px!important;gap:9px!important;min-height:100px!important;margin:10px 0!important;padding:16px 14px!important;border-radius:17px!important}.scenario-featured-icon{width:40px;height:40px;font-size:1.5rem}.scenario-featured-copy strong{font-size:1.05rem!important}.scenario-featured-copy small{font-size:.82rem!important;line-height:1.35}.scenario-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}.scenario-grid .scenario-card{min-height:66px!important;padding:9px 6px!important}.scenario-grid .scenario-card strong{font-size:.76rem!important}.scenario-grid .scenario-card small{font-size:.68rem!important}.story-coach:not(.story-coach-inline){width:calc(100% - 20px)!important;margin:8px auto 12px!important;top:calc(env(safe-area-inset-top) + 4px)!important}}
-
-.story-coach-progress{display:inline-block;margin:1px 0 3px;color:#13835e;font-size:.65rem;font-style:normal;font-weight:950;letter-spacing:.1em;line-height:1.2}
-html.dark-mode .story-coach-progress{color:#8ce1ae}
-@media(max-width:680px){.story-coach-progress{font-size:.63rem}}
-
-/* Keep the guide bubble in view while the highlighted section scrolls beneath it. */
-.story-coach:not(.story-coach-inline){position:sticky!important;top:calc(env(safe-area-inset-top) + 8px)!important;left:auto!important;transform:none!important;scroll-margin-top:calc(env(safe-area-inset-top) + 8px)}
-.story-guide-target,.story-guide-related{scroll-margin-top:calc(env(safe-area-inset-top) + 116px);scroll-margin-bottom:24px}
-html{scroll-padding-top:calc(env(safe-area-inset-top) + 116px);scroll-padding-bottom:24px}
-@media(max-width:680px){.story-guide-target,.story-guide-related{scroll-margin-top:calc(env(safe-area-inset-top) + 108px)}html{scroll-padding-top:calc(env(safe-area-inset-top) + 108px)}}
-
-/* Chapter cues are surfaced at the top of the screen whenever guidance changes. */
-.story-coach:not(.story-coach-inline){position:relative!important;inset:auto!important;top:auto!important;left:auto!important;transform:none!important;scroll-margin-top:0!important;width:min(680px,calc(100% - 24px))!important;margin:10px auto 14px!important}
-
-/* Chapter cues travel with the section they explain. */
-.story-coach.story-coach-inline{position:relative!important;inset:auto!important;top:auto!important;left:auto!important;transform:none!important;width:100%!important;max-width:none!important;margin:0 0 10px!important;scroll-margin-top:14px}
