@@ -215,6 +215,7 @@ html.dark-mode .board-actions .mode#markMode[aria-pressed="true"]{background:#78
 html.dark-mode.clue-accessible .cell .num-1{color:#91d1ff}html.dark-mode.clue-accessible .cell .num-2{color:#8df0b2}html.dark-mode.clue-accessible .cell .num-3{color:#ffbd8e}html.dark-mode.clue-accessible .cell .num-4{color:#ceb1ff}html.dark-mode.clue-accessible .cell .num-5{color:#ff9da7}html.dark-mode.clue-accessible .cell .num-6{color:#82d9ee}html.dark-mode.clue-accessible .cell .num-7{color:#f0f3f6}html.dark-mode.clue-accessible .cell .num-8{color:#d4e0e8}
 </style>
 <link rel="stylesheet" href="/disable-text-selection.css">
+  <link rel="stylesheet" href="/companion-layer.css">
 </head>
 <body>
 <main class="shell">
@@ -491,6 +492,7 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {}));
 }
 </script>
+<script src="/companion-assets.js" defer></script>
 <script src="/companion-layer.js" defer></script>
 </body>
 </html>

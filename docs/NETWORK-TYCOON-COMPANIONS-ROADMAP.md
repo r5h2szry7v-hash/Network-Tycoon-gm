@@ -38,7 +38,9 @@ Phase 3 review pilot extracts Mack and Pooch presentation into `/companion-layer
 
 The shared component now supports idle, celebration, thinking, and reassuring motion states. Game integrations choose the state that fits the moment while using the same dog assets and reduced-motion behavior.
 
-The next review branch applies thinking and reassuring reactions to practical help moments in Tinker Factory, Critter Rescue, and Match Garden. Mack helps players focus on a Tinker hint, a guaranteed-safe rescue tile, or the cards revealed by a helper. Pooch reassures players when a hint or scan is unavailable, a safe move is not yet deducible, or extra time is added. These brief guidance cards use the shared presentation API and clear automatically.
+The companion guidance review branch applies thinking and reassuring reactions to practical help moments in Tinker Factory, Critter Rescue, and Match Garden. Mack helps players focus on a Tinker hint, a guaranteed-safe rescue tile, or the cards revealed by a helper. Pooch reassures players when a hint or scan is unavailable, a safe move is not yet deducible, or extra time is added. These brief guidance cards use the shared presentation API and clear automatically.
+
+The companion asset and animation pipeline is now split into `/companion-assets.js` for the character registry and `/companion-layer.css` for shared appearance, responsive sizing, and motion. Portfolio games load the same registry, stylesheet, and presentation module; the preview workflow checks the registry script before publishing.
 
 ## First implementation notes
 

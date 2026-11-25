@@ -1,0 +1,33 @@
+:root{
+ --portfolio-companion-avatar-size:clamp(44px,5vw,52px);
+ --portfolio-companion-gap:10px;
+ --portfolio-companion-card-padding:9px 12px;
+ --portfolio-companion-card-radius:14px;
+}
+.portfolio-companion{
+ display:flex;align-items:center;gap:var(--portfolio-companion-gap);margin:12px 0;
+ padding:var(--portfolio-companion-card-padding);border:1px solid #a9cfb5;border-left:4px solid #42966a;
+ border-radius:var(--portfolio-companion-card-radius);background:#effaf2;color:#203b2d;text-align:left;
+ font-size:.9rem;font-weight:750;line-height:1.4;
+ animation:portfolioCompanionEnter .42s cubic-bezier(.2,.9,.25,1.15) both
+}
+.portfolio-companion img{
+ width:var(--portfolio-companion-avatar-size);height:var(--portfolio-companion-avatar-size);flex:none;
+ object-fit:contain;filter:drop-shadow(0 3px 4px #183c3450);
+ animation:portfolioPupBob 1.9s ease-in-out infinite;transform-origin:center bottom
+}
+.portfolio-companion[data-mood=celebrate] img{animation:portfolioPupCelebrate 1.25s cubic-bezier(.2,.8,.25,1) infinite}
+.portfolio-companion[data-mood=think] img{animation:portfolioPupThink 2.7s ease-in-out infinite}
+.portfolio-companion[data-mood=reassure] img{animation:portfolioPupReassure 3s ease-in-out infinite}
+.portfolio-companion strong{display:block;color:#28765d;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
+html[data-portfolio-color-mode=dark] .portfolio-companion,html.dark-mode .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}
+html[data-portfolio-color-mode=dark] .portfolio-companion strong,html.dark-mode .portfolio-companion strong{color:#a9e2be}
+@media(prefers-color-scheme:dark){html[data-portfolio-color-mode=system] .portfolio-companion{background:#25382d;border-color:#547c5c;color:#f0fff2}html[data-portfolio-color-mode=system] .portfolio-companion strong{color:#a9e2be}}
+@keyframes portfolioPupBob{0%,100%{transform:translateY(0) rotate(-2deg)}28%{transform:translateY(-5px) rotate(2deg)}56%{transform:translateY(-8px) rotate(-1deg)}80%{transform:translateY(-2px) rotate(2deg)}}
+@keyframes portfolioPupCelebrate{0%,100%{transform:translateY(0) rotate(-3deg) scale(1)}24%{transform:translateY(-9px) rotate(4deg) scale(1.06)}47%{transform:translateY(-2px) rotate(-4deg) scale(1.02)}72%{transform:translateY(-7px) rotate(3deg) scale(1.05)}}
+@keyframes portfolioPupThink{0%,100%{transform:translateY(0) rotate(-3deg)}35%{transform:translateY(-3px) rotate(5deg)}68%{transform:translateY(-2px) rotate(2deg)}}
+@keyframes portfolioPupReassure{0%,100%{transform:translateY(0) rotate(-1deg)}45%{transform:translateY(-4px) rotate(2deg)}70%{transform:translateY(-2px) rotate(-1deg)}}
+@keyframes portfolioCompanionEnter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.portfolio-companion,.portfolio-companion img{animation:none!important;transition:none!important}}
+html.pref-reduced-motion .portfolio-companion,html.pref-reduced-motion .portfolio-companion img{animation:none!important;transition:none!important}
+@media(max-width:600px){:root{--portfolio-companion-gap:7px;--portfolio-companion-card-padding:8px}.portfolio-companion{font-size:.82rem}}
