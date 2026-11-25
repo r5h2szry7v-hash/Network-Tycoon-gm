@@ -27,6 +27,7 @@ on:
       - feat/portfolio-companion-preference
       - feat/tycoon-shared-companion-guidance
       - feat/story-momentum-guidance
+      - feat/story-pacing-calibration
 
 permissions:
   contents: read
@@ -145,7 +146,21 @@ jobs:
           if not match:
               raise SystemExit("Embedded Network Tycoon module map not found")
           modules = json.loads(base64.b64decode(match.group(1)).decode("utf-8"))
-          Path("/tmp/network-tycoon-app.js").write_text(modules["app.js"])
+          app = modules["app.js"]
+          Path("/tmp/network-tycoon-app.js").write_text(app)
+          chapter_match = re.search(r"const storyChapters=\[([\s\S]*?)\];", app)
+          assert chapter_match, "Story chapter list is missing"
+          chapter_count = len(re.findall(r"(?m)^\s*\{title:", chapter_match.group(1)))
+          assert chapter_count == 18, f"Expected 18 story chapters, found {chapter_count}"
+          guide_match = re.search(r"const storyChapterGuidance=\{([\s\S]*?)\n\};", app)
+          assert guide_match, "Regional story guide table is missing"
+          guided_chapters = {int(value) for value in re.findall(r"(?m)^\s*(\d+):", guide_match.group(1))}
+          assert set(range(4, 19)).issubset(guided_chapters), "A regional story chapter is missing its opening cue"
+          for required in ("function storyActionGuidance()", "function tickStoryPlaytime(", "state.chapterPlayMs[chapter]", "setStoryPauseCue('cash-buffer'", "setStoryPauseCue('rival-milestone'", "setStoryPauseCue('six-month-checkin'"):
+              assert required in app, "Story Mode regression: " + required
+          assert "Recorded Story Mode time" in app and "View chapter timing" in app
+          assert "grid-column:1/-1" in page, "Inline Story coach must span the mobile tile grid"
+          assert ".nt-coach-voice.portfolio-companion>span" in page, "Companion voice text must be allowed to shrink and wrap"
           PY
           node --check /tmp/network-tycoon-app.js
       - name: Validate PWA release artifacts
