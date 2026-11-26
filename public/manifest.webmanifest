@@ -11,19 +11,19 @@
   "theme_color": "#a7471c",
   "icons": [
     {
-      "src": "/icons/network-tycoon-192.png",
+      "src": "/icons/network-tycoon-192-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/network-tycoon-512.png",
+      "src": "/icons/network-tycoon-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/network-tycoon-maskable-512.png",
+      "src": "/icons/network-tycoon-maskable-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
