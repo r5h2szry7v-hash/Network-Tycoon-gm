@@ -83,16 +83,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 .splash-skip{position:absolute;z-index:4;right:max(18px,env(safe-area-inset-right));top:max(16px,env(safe-area-inset-top));border:1px solid #b6e3ff66;border-radius:999px;padding:10px 15px;background:#7f351c80;color:#d8efff;font:700 .9rem 'DM Sans',system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(8px)}
 .splash-skip:focus-visible{outline:3px solid #d8efff;outline-offset:3px}
 .splash-stage{position:absolute;inset:0;display:grid;place-items:center}
-.splash-orbit{position:relative;width:min(72vw,72vh,620px);aspect-ratio:1;border:1px solid #bce5ff64;border-radius:50%;box-shadow:0 0 0 22px #bce5ff0e,0 0 0 54px #bce5ff0a;animation:splash-orbit-collapse 3.8s cubic-bezier(.2,.75,.25,1) forwards}
-.splash-orbit:before,.splash-orbit:after{content:"";position:absolute;inset:12%;border:1px solid #bce5ff27;border-radius:50%}
-.splash-orbit:after{inset:25%;border-color:#bce5ff20}
-.splash-logo{position:absolute;display:block;width:clamp(92px,18vw,152px);height:clamp(92px,18vw,152px);object-fit:contain;filter:drop-shadow(0 8px 12px #55230d70);animation:splash-scatter .62s cubic-bezier(.2,.7,.25,1) 3.2s forwards}
-.splash-logo:nth-child(1){left:50%;top:-5%;--scatter-x:-78vw;--scatter-y:-42vh}
-.splash-logo:nth-child(2){left:94%;top:30%;--scatter-x:72vw;--scatter-y:-45vh}
-.splash-logo:nth-child(3){left:78%;top:87%;--scatter-x:76vw;--scatter-y:46vh}
-.splash-logo:nth-child(4){left:22%;top:87%;--scatter-x:-76vw;--scatter-y:47vh}
-.splash-logo:nth-child(5){left:6%;top:30%;--scatter-x:-74vw;--scatter-y:-45vh}
-.splash-brand{position:absolute;z-index:2;left:50%;top:39%;width:max-content;max-width:calc(100vw - 20px);transform:translateX(-50%);display:flex;align-items:baseline;justify-content:center;white-space:nowrap;color:#092b49;font:900 clamp(3.4rem,12vw,9rem)/.92 Outfit,system-ui,sans-serif;letter-spacing:-.085em;text-shadow:0 3px 0 #b8dff466,0 10px 28px #54220e55;pointer-events:none}
+.splash-brand{position:absolute;z-index:2;left:50%;top:30%;width:max-content;max-width:calc(100vw - 20px);transform:translateX(-50%);display:flex;align-items:baseline;justify-content:center;white-space:nowrap;color:#092b49;font:900 clamp(3.4rem,12vw,9rem)/.92 Outfit,system-ui,sans-serif;letter-spacing:-.085em;text-shadow:0 3px 0 #b8dff466,0 10px 28px #54220e55;pointer-events:none}
 .splash-word{display:inline-flex;align-items:baseline}
 .splash-word--left{animation:splash-enter-left 1.35s cubic-bezier(.12,.82,.18,1) 2.25s both}
 .splash-word--right{animation:splash-enter-right 1.35s cubic-bezier(.12,.82,.18,1) 2.25s both}
@@ -100,17 +91,22 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 .splash-k{animation:splash-impact-k .48s cubic-bezier(.16,.9,.3,1) 3.53s both}
 .splash-t{animation:splash-impact-t .48s cubic-bezier(.16,.9,.3,1) 3.53s both}
 .splash-impact{position:absolute;left:50%;top:44%;width:clamp(30px,6vw,70px);aspect-ratio:1;border-radius:50%;background:#e6f6ff;filter:blur(4px);opacity:0;transform:translate(-50%,-50%) scale(.1);animation:splash-impact-flash .55s ease-out 3.53s both}
-.splash-games{position:absolute;z-index:3;left:50%;top:55%;margin:0;color:#b9e2ff;font:900 clamp(2rem,6vw,4.4rem)/1 Outfit,system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase;text-shadow:0 4px 0 #5087aa66,0 12px 28px #54220e60;transform:translate(-50%,100vh) scale(.25);animation:splash-games-slam .72s cubic-bezier(.12,.84,.22,1) 4.22s forwards}
-.splash-hint{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);margin:0;color:#ffe3ce;font:600 .8rem 'DM Sans',system-ui,sans-serif;letter-spacing:.08em;opacity:0;animation:splash-hint-show .35s ease 5.05s forwards}
+.splash-games{position:absolute;z-index:3;left:50%;top:68%;margin:0;color:#b9e2ff;font:900 clamp(2rem,6vw,4.4rem)/1 Outfit,system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase;text-shadow:0 4px 0 #5087aa66,0 12px 28px #54220e60;transform:translate(-50%,100vh) scale(.25);animation:splash-games-slam .72s cubic-bezier(.12,.84,.22,1) 4.22s forwards}
+.splash-cats{position:absolute;z-index:3;left:50%;top:51%;width:min(calc(100vw - 28px),540px);height:clamp(76px,11vh,112px);display:flex;align-items:center;justify-content:center;gap:0;transform:translate(-50%,-50%);opacity:0;animation:splash-cats-accordion 1.35s cubic-bezier(.18,.82,.2,1) 5.02s both;pointer-events:none}
+.splash-cat{display:block;flex:0 1 clamp(70px,10vw,118px);width:clamp(70px,10vw,118px);height:100%;object-fit:contain;filter:drop-shadow(0 8px 12px #55230d70);opacity:0}
+.splash-cat--left{--cat-from-x:-75vw;--cat-from-y:-12vh;animation:splash-cat-arrive .7s cubic-bezier(.16,.9,.28,1.1) 5.02s both}
+.splash-cat--middle{--cat-from-x:0;--cat-from-y:-75vh;animation:splash-cat-arrive .7s cubic-bezier(.16,.9,.28,1.1) 5.12s both}
+.splash-cat--right{--cat-from-x:75vw;--cat-from-y:-12vh;animation:splash-cat-arrive .7s cubic-bezier(.16,.9,.28,1.1) 5.22s both}
+.splash-hint{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);margin:0;color:#ffe3ce;font:600 .8rem 'DM Sans',system-ui,sans-serif;letter-spacing:.08em;opacity:0;animation:splash-hint-show .35s ease 7.35s forwards}
 .splash-dog{position:absolute;z-index:3;bottom:max(-30px,calc(env(safe-area-inset-bottom) - 24px));width:clamp(180px,24vw,350px);max-height:38vh;object-fit:contain;opacity:0;filter:drop-shadow(0 12px 18px #52220f72);will-change:transform,opacity;pointer-events:none}
-.splash-dog--left{left:0;transform:translateX(-118%) rotate(-8deg);animation:splash-dog-peek-left 3.35s cubic-bezier(.18,.8,.2,1) 4.5s both,splash-dog-pant .52s ease-in-out 5.15s 4}
-.splash-dog--right{right:0;transform:translateX(118%) scaleX(-1) rotate(-8deg);animation:splash-dog-peek-right 3.35s cubic-bezier(.18,.8,.2,1) 4.5s both,splash-dog-pant .52s ease-in-out 5.15s 4}
+.splash-dog--left{left:0;transform:translateX(-118%) rotate(-8deg);animation:splash-dog-peek-left 3.35s cubic-bezier(.18,.8,.2,1) 6.55s both,splash-dog-pant .52s ease-in-out 7.2s 4}
+.splash-dog--right{right:0;transform:translateX(118%) scaleX(-1) rotate(-8deg);animation:splash-dog-peek-right 3.35s cubic-bezier(.18,.8,.2,1) 6.55s both,splash-dog-pant .52s ease-in-out 7.2s 4}
 @keyframes splash-dog-peek-left{0%,12%{transform:translateX(-118%) rotate(-8deg);opacity:0}23%,75%{transform:translateX(-45%) rotate(0);opacity:1}84%{transform:translateX(-48%) rotate(-3deg);opacity:.95}100%{transform:translateX(-118%) rotate(-8deg);opacity:0}}
 @keyframes splash-dog-peek-right{0%,12%{transform:translateX(118%) scaleX(-1) rotate(-8deg);opacity:0}23%,75%{transform:translateX(45%) scaleX(-1) rotate(0);opacity:1}84%{transform:translateX(48%) scaleX(-1) rotate(-3deg);opacity:.95}100%{transform:translateX(118%) scaleX(-1) rotate(-8deg);opacity:0}}
 @keyframes splash-dog-pant{0%,100%{translate:0 0;scale:1 1}34%{translate:0 -4px;scale:1 1.025}67%{translate:0 1px;scale:1 .99}}
 .splash-overlay.is-leaving{animation:splash-fade-away .48s ease forwards}
-@keyframes splash-orbit-collapse{0%{transform:scale(1) rotate(0);opacity:1}76%{transform:scale(.58) rotate(310deg);opacity:1}100%{transform:scale(.43) rotate(360deg);opacity:.8}}
-@keyframes splash-scatter{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--scatter-x),var(--scatter-y)) scale(.3) rotate(300deg);opacity:0}}
+@keyframes splash-cats-accordion{0%{transform:translate(-50%,-125vh) scaleX(.55);opacity:0;gap:0}23%{transform:translate(-50%,-50%) scaleX(.55);opacity:1;gap:0}43%{transform:translate(-50%,-50%) scaleX(.62);opacity:1;gap:0}68%{transform:translate(-50%,-50%) scaleX(1.08);opacity:1;gap:clamp(4px,2vw,22px)}84%{transform:translate(-50%,-50%) scaleX(.96);opacity:1;gap:clamp(4px,1.7vw,18px)}100%{transform:translate(-50%,-50%) scaleX(1);opacity:1;gap:clamp(4px,2vw,22px)}}
+@keyframes splash-cat-arrive{0%{transform:translate(var(--cat-from-x),var(--cat-from-y)) scale(.42);opacity:0}68%{transform:translate(0,0) scale(1.12);opacity:1}100%{transform:translate(0,0) scale(1);opacity:1}}
 @keyframes splash-enter-left{0%{transform:translateX(-110vw);opacity:0}70%{transform:translateX(5%);opacity:1}85%{transform:translateX(-2%)}100%{transform:translateX(0);opacity:1}}
 @keyframes splash-enter-right{0%{transform:translateX(110vw);opacity:0}70%{transform:translateX(-5%);opacity:1}85%{transform:translateX(2%)}100%{transform:translateX(0);opacity:1}}
 @keyframes splash-impact-k{0%{transform:scale(1)}36%{transform:translateX(7px) scale(1.3)}58%{transform:translateX(-3px) scale(.9)}100%{transform:translateX(0) scale(1)}}
@@ -119,18 +115,17 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 @keyframes splash-games-slam{0%{transform:translate(-50%,100vh) scale(.25);opacity:0}68%{transform:translate(-50%,-8%) scale(1.12);opacity:1}84%{transform:translate(-50%,4%) scale(.96)}100%{transform:translate(-50%,0) scale(1);opacity:1}}
 @keyframes splash-hint-show{to{opacity:.75}}
 @keyframes splash-fade-away{to{opacity:0;visibility:hidden}}
-@media(max-width:520px){.splash-brand{top:39%;font-size:clamp(2.85rem,14.5vw,4.4rem);letter-spacing:-.09em}.splash-games{top:54%;font-size:clamp(2rem,8vw,2.8rem)}.splash-dog{width:clamp(140px,42vw,210px);max-height:32vh;bottom:max(-18px,calc(env(safe-area-inset-bottom) - 22px))}.splash-orbit{width:min(78vw,68vh,430px)}}
+@media(max-width:520px){.splash-brand{top:28%;font-size:clamp(2.85rem,14.5vw,4.4rem);letter-spacing:-.09em}.splash-cats{top:51%;width:calc(100vw - 26px);height:clamp(68px,10vh,88px)}.splash-cat{flex-basis:clamp(58px,20vw,84px);width:clamp(58px,20vw,84px)}.splash-games{top:68%;font-size:clamp(2rem,8vw,2.8rem)}.splash-dog{width:clamp(140px,42vw,210px);max-height:32vh;bottom:max(-18px,calc(env(safe-area-inset-bottom) - 22px))}}
 </style>
 <link rel="stylesheet" href="/disable-text-selection.css">
 </head>
 <body><div class="splash-overlay" id="portfolio-splash" hidden aria-label="Network Tycoon Games intro">
   <button class="splash-skip" id="splash-skip" type="button">Skip intro</button>
   <div class="splash-stage" aria-hidden="true">
-    <div class="splash-orbit">
-      <img class="splash-logo" src="/images/dog-dark.webp" alt="" aria-hidden="true" draggable="false"><img class="splash-logo" src="/images/dog-tan.webp" alt="" aria-hidden="true" draggable="false"><img class="splash-logo" src="/paws/images/cat-black-fluffy.webp" alt="" aria-hidden="true" draggable="false"><img class="splash-logo" src="/paws/images/cat-black-sleek.webp" alt="" aria-hidden="true" draggable="false"><img class="splash-logo" src="/paws/images/cat-gray.webp" alt="" aria-hidden="true" draggable="false">
-    </div>
     <div class="splash-brand"><span class="splash-word splash-word--left">Networ<span class="splash-k">k</span></span><span class="splash-word splash-word--right"><span class="splash-t">T</span>ycoon</span></div>
-    <span class="splash-impact"></span><p class="splash-games">Games</p><img class="splash-dog splash-dog--left" src="/images/dog-dark.webp" alt="" aria-hidden="true" width="600" height="548"><img class="splash-dog splash-dog--right" src="/images/dog-tan.webp" alt="" aria-hidden="true" width="600" height="548">
+    <span class="splash-impact"></span><p class="splash-games">Games</p>
+    <div class="splash-cats"><img class="splash-cat splash-cat--left" src="/paws/images/cat-black-fluffy.webp" alt="" draggable="false"><img class="splash-cat splash-cat--middle" src="/paws/images/cat-gray.webp" alt="" draggable="false"><img class="splash-cat splash-cat--right" src="/paws/images/cat-black-sleek.webp" alt="" draggable="false"></div>
+    <img class="splash-dog splash-dog--left" src="/images/dog-dark.webp" alt="" aria-hidden="true" width="600" height="548"><img class="splash-dog splash-dog--right" src="/images/dog-tan.webp" alt="" aria-hidden="true" width="600" height="548">
   </div>
   <p class="splash-hint" aria-hidden="true">A little world of play</p>
 </div>
@@ -146,7 +141,7 @@ footer{margin-top:28px;color:#78908d;font-size:.76rem;text-align:center}footer s
 <a class="game paws" href="/paws/" aria-label="Play Pawprint Pursuit"><div class="top"><span class="label">Dash · Dodge · Collect</span><span class="badge">A new maze every run</span></div><div class="art" aria-hidden="true"><span class="halo"></span><span class="emoji">🐕</span></div><h2 class="title">Pawprint Pursuit</h2><p class="desc">Dash through twisty mazes with the pups, collect treats, grab playful boosts, and outwit three mischievous cats.</p><div class="tags"><span>🐾 Winding mazes</span><span>✨ Playful boosts</span><span>🐈 Sneaky chases</span></div><div class="cta"><span>Start the chase</span><span class="arrow" aria-hidden="true">→</span></div></a></nav><footer>Six games, one place to play. <span>Choose your next adventure above.</span></footer>
 </main>
 <script>
-(()=>{const splash=document.getElementById('portfolio-splash');const skip=document.getElementById('splash-skip');if(!splash||!skip)return;splash.hidden=false;let done=false;const finish=()=>{if(done)return;done=true;splash.classList.add('is-leaving');window.setTimeout(()=>{splash.hidden=true},500)};const timer=window.setTimeout(finish,8000);skip.addEventListener('click',()=>{window.clearTimeout(timer);finish()},{once:true})})();
+(()=>{const splash=document.getElementById('portfolio-splash');const skip=document.getElementById('splash-skip');if(!splash||!skip)return;splash.hidden=false;let done=false;const finish=()=>{if(done)return;done=true;splash.classList.add('is-leaving');window.setTimeout(()=>{splash.hidden=true},500)};const timer=window.setTimeout(finish,10500);skip.addEventListener('click',()=>{window.clearTimeout(timer);finish()},{once:true})})();
 </script>
 <script>
 if ("serviceWorker" in navigator) {
