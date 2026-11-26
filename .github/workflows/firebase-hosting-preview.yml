@@ -28,7 +28,6 @@ on:
       - feat/tycoon-shared-companion-guidance
       - feat/story-momentum-guidance
       - feat/story-pacing-calibration
-      - feat/portfolio-intro-refresh
 
 permissions:
   contents: read
