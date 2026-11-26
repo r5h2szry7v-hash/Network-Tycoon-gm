@@ -9,7 +9,7 @@ const CATS=[
 const SVG='http://www.w3.org/2000/svg',PREFS_KEY='network-tycoon-companion-settings-v1', $=selector=>document.querySelector(selector);
 const DEFAULT_PREFS={guidance:true,catFrequency:'regular',animationPace:'playful'};
 const CAT_TIMING={occasional:{min:30000,max:40000},regular:{min:5000,max:12000},frequent:{min:2000,max:7000}};
-let prefs=readPrefs(),catTimer=0,catGroup=null,catRemaining=0,catLastTick=Date.now(),lastMapInteraction=0,lastModalTitle='',lastToast='',lastRecap='',lastCustomerCount=null,lastMilestone=0,lastFinanceReaction=0,eventQueue=[],seenEventKeys=new Set(),reactionTimer=0,settingsObserver=null;
+let prefs=readPrefs(),catTimer=0,catGroup=null,catRemaining=0,catLastTick=Date.now(),lastMapInteraction=0,lastModalTitle='',lastToast='',lastRecap='',lastCustomerCount=null,lastMilestone=0,lastFinanceReaction=0,eventQueue=[],seenEventKeys=new Set(),lastReactionCopy={},reactionTimer=0,settingsObserver=null;
 
 function readPrefs(){try{return{...DEFAULT_PREFS,...JSON.parse(localStorage.getItem(PREFS_KEY)||'{}')}}catch{return{...DEFAULT_PREFS}}}
 function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch{}}
@@ -74,31 +74,31 @@ html.pref-reduced-motion .nt-map-cat-motion,html.pref-reduced-motion .nt-event-r
 `;
 
 const storyLines={
- 1:['Pooch','Let’s pick a neighborhood and get your first connection underway.'],
- 2:['Mack','Two hundred fifty customers! I’ll keep count while you grow the network.'],
- 3:['Pooch','Four neighborhoods connected. Now we can help more of town get online.'],
- 4:['Mack','The first communities are thriving. Let’s find two more places to serve.'],
- 5:['Pooch','Reliable service earns trust. Let’s listen closely and keep those connections healthy.'],
- 6:['Mack','A new region means a fresh start. Let’s connect its first neighborhood.'],
- 7:['Pooch','Fast Fiber gives busy neighborhoods more room to grow.'],
- 8:['Mack','Competition is waking up. Let’s stay ahead by reaching more neighborhoods.'],
- 9:['Pooch','Every new customer is counting on us. I’ll help keep the town growing.'],
- 10:['Mack','The company has a wider footprint now. Let’s establish service in one more region.'],
- 11:['Pooch','Good growth should pay for itself. Let’s keep monthly cash flow positive.'],
- 12:['Mack','Sixteen neighborhoods is a real network. Let’s keep every connection dependable.'],
- 13:['Pooch','Five thousand customers! There are still more neighbors to welcome.'],
- 14:['Mack','Four regions puts us on the county map. Let’s keep extending reliable service.'],
- 15:['Pooch','Let’s put Fast Fiber where demand is strongest and capacity matters most.'],
- 16:['Mack','A full year of positive cash flow is a strong foundation. Keep balancing growth and costs.'],
- 17:['Pooch','Twenty-four neighborhoods connected. This city is growing with us.'],
- 18:['Mack','The final goal is in sight. Let’s build lasting revenue across the whole network.']
+ 1:['Pooch',['Let’s pick a neighborhood and get your first connection underway.','Every network starts with one neighborhood. Which one should we welcome first?','Choose a neighborhood and we’ll bring the town online one connection at a time.']],
+ 2:['Mack',['Two hundred fifty customers! I’ll keep count while you grow the network.','That’s 250 customers relying on us. I’ll track the numbers while you plan the next step.','Two hundred fifty homes are connected. Good progress. Let’s keep it sustainable.']],
+ 3:['Pooch',['Four neighborhoods connected. Now we can help more of town get online.','Four communities are online! Let’s see where the next connection can reach.','The network has reached four neighborhoods. More of town can join us now.']],
+ 4:['Mack',['The first communities are thriving. Let’s find two more places to serve.','We have a solid start. Two more neighborhoods will broaden our footprint.','The first neighborhoods are doing well. Let’s choose the next two with care.']],
+ 5:['Pooch',['Reliable service earns trust. Let’s listen closely and keep those connections healthy.','A dependable connection keeps neighbors with us. Let’s check how service is holding up.','Happy customers start with steady service. We can keep an eye on the network together.']],
+ 6:['Mack',['A new region means a fresh start. Let’s connect its first neighborhood.','New region, new opportunity. Find a neighborhood where service can take root.','We’ve reached new territory. Let’s establish a reliable first connection there.']],
+ 7:['Pooch',['Fast Fiber gives busy neighborhoods more room to grow.','A busy neighborhood may benefit from Fast Fiber. It has room for growing demand.','More neighbors are connecting. Fast Fiber can help a high-demand area keep up.']],
+ 8:['Mack',['Competition is waking up. Let’s stay ahead by reaching more neighborhoods.','Rivals are expanding. A thoughtful next build can keep us in the race.','The competition is moving. Let’s check our strongest opportunity before they do.']],
+ 9:['Pooch',['Every new customer is counting on us. I’ll help keep the town growing.','More neighbors are joining! Let’s make sure our network is ready to care for them.','The town keeps growing, and every new connection matters. I’m here to help.']],
+ 10:['Mack',['The company has a wider footprint now. Let’s establish service in one more region.','Our service area has grown. One more region will put the network on firmer ground.','We have room to expand again. Let’s choose a region where the investment makes sense.']],
+ 11:['Pooch',['Good growth should pay for itself. Let’s keep monthly cash flow positive.','Growth feels best when the company can afford it. Let’s keep cash flow in view.','Let’s keep an eye on monthly income and costs as we grow.']],
+ 12:['Mack',['Sixteen neighborhoods is a real network. Let’s keep every connection dependable.','Sixteen neighborhoods connected. Reliability matters more with every new customer.','The network now serves sixteen neighborhoods. Let’s keep service steady across them.']],
+ 13:['Pooch',['Five thousand customers! There are still more neighbors to welcome.','Five thousand people are online with us. What a milestone, and there’s room to grow!','We’ve reached 5,000 customers. Let’s keep building a network they can count on.']],
+ 14:['Mack',['Four regions puts us on the county map. Let’s keep extending reliable service.','We now cover four regions. The next expansion should strengthen the whole footprint.','Four regions connected. Let’s make sure the network stays dependable as it spreads.']],
+ 15:['Pooch',['Let’s put Fast Fiber where demand is strongest and capacity matters most.','Find the neighborhood with the most pressure, then consider a Fast Fiber upgrade.','Fast Fiber can ease a busy network. Let’s put it where customers need it most.']],
+ 16:['Mack',['A full year of positive cash flow is a strong foundation. Keep balancing growth and costs.','Twelve months in the black gives us options. Let’s keep that balance as we expand.','A year of positive cash flow is a healthy sign. We should protect that momentum.']],
+ 17:['Pooch',['Twenty-four neighborhoods connected. This city is growing with us.','Twenty-four neighborhoods are online! Look how far this little network has reached.','So many neighbors connected. Let’s keep growing at a pace the company can support.']],
+ 18:['Mack',['The final goal is in sight. Let’s build lasting revenue across the whole network.','We’re close to the final goal. Strong revenue and reliable service will carry us there.','The finish line is near. Let’s make the network healthy enough to last beyond it.']]
 };
 
 const REACTIONS={
- build:['Pooch','A new neighborhood is online! That gives the town another place to grow.'],
- capacity:['Mack','Capacity is getting tight here. A little more headroom can protect service as customers grow.'],
- service:['Mack','Service needs attention in a neighborhood. Let’s get the network healthy before more customers are affected.'],
- finance:['Mack','That choice changes the company’s cash cushion. Keep an eye on what remains for repairs and the next build.']
+ build:['Pooch',['A new neighborhood is online! That gives the town another place to grow.','Another part of town is connected. More neighbors can join us now!','A new connection is ready. Let’s see how this community grows.']],
+ capacity:['Mack',['Capacity is getting tight here. A little more headroom can protect service as customers grow.','Demand is pressing against the limit. Consider adding capacity before service slips.','This neighborhood is getting busy. Extra headroom can help the network keep up.']],
+ service:['Mack',['Service needs attention in a neighborhood. Let’s get the network healthy before more customers are affected.','A neighborhood needs a closer look. Restoring service quickly protects customer trust.','Let’s check the affected area and get everyone back online.']],
+ finance:['Mack',['That choice changes the company’s cash cushion. Keep an eye on what remains for repairs and the next build.','Before the next investment, check how much room remains for repairs and operating costs.','A sound plan leaves cash for the unexpected as well as the next build.']]
 };
 
 function addStyles(){if($('#nt-companion-styles'))return;const style=document.createElement('style');style.id='nt-companion-styles';style.textContent=styles;document.head.append(style)}
@@ -118,9 +118,9 @@ function decorateStory(){
  const copy=card.querySelector('.story-card-copy');if(!copy)return;
  const title=copy.querySelector('h3')?.textContent?.trim()||'',eyebrow=copy.querySelector('.eyebrow')?.textContent||'',chapter=Number(eyebrow.match(/CHAPTER\s+(\d+)/i)?.[1]||0),complete=card.classList.contains('is-complete'),finished=card.classList.contains('is-finished');
  let pair;
- if(finished&&eyebrow.includes('STORY ONE'))pair=['Pooch','We connected the town! Ready for the next story, or shall we keep building freely?'];
- else if(finished)pair=['Mack','What a network. You can keep building in free play whenever you like.'];
- else if(complete)pair=[chapter%2?'Pooch':'Mack','Goal reached! Shall we see what the next chapter brings?'];
+ if(finished&&eyebrow.includes('STORY ONE'))pair=['Pooch',['We connected the town! Ready for the next story, or shall we keep building freely?','Story One is complete! Would you like to start the next story or keep building in free play?','We brought the town online. Pick another story when you’re ready, or stay here and build your own way.']];
+ else if(finished)pair=['Mack',['What a network. You can keep building in free play whenever you like.','The story is complete. Free play is ready whenever you want to grow this network further.','That was a strong finish. Continue building freely, or come back for another story.']];
+ else if(complete)pair=[chapter%2?'Pooch':'Mack',['Goal reached! Shall we see what the next chapter brings?','We met the chapter goal. Ready for the next part of the story?','That milestone is complete. Let’s see what comes next.']];
  else pair=storyLines[chapter]||['Mack','I’ll keep an eye on the map while you decide where to grow.'];
  addNarration(copy,pair[0],pair[1],[eyebrow,title,complete,finished].join('|'),complete||finished?'reassure':'think');
 }
@@ -136,7 +136,7 @@ function decorateCoach(){
  if(coach.dataset.ntNarration===key)return;coach.dataset.ntNarration=key;
  const step=Number((coach.dataset.guideStep||'').replace('chapter-',''))||0,pup=step%2?'Pooch':'Mack';
  if(face){if(!face.dataset.ntOriginal)face.dataset.ntOriginal=face.textContent;face.textContent=face.dataset.ntOriginal}
- const line=step===1?'I’ll help you find your way around.':step===2?'We can keep track of the important numbers together.':step===3?'Let’s handle urgent needs first; the rest can wait.':step===7?'Tap the glowing neighborhood when you’re ready.':'I’m here if you need a hand with this step.';
+ const line=step===1?['I’ll help you find your way around.','Let’s take a quick tour so you know where everything lives.','I can point out the important parts of the map as we go.']:step===2?['We can keep track of the important numbers together.','Let’s check the key numbers and see how the company is doing.','I’ll help you read the dashboard as the network grows.']:step===3?['Let’s handle urgent needs first; the rest can wait.','We can sort what needs attention now from what can wait.','Start with the most urgent task, then we’ll work through the rest.']:step===7?['Tap the glowing neighborhood when you’re ready.','The glowing neighborhood is ready for your next move.','Choose the highlighted neighborhood to continue.']:['I’m here if you need a hand with this step.','We can take this one step at a time.','I’ll stay nearby if you want a hint.'];
  const card=announce(copy,pup,line,'reassure');card?.classList.add('nt-coach-voice');
 }
 
@@ -213,11 +213,11 @@ function noteMapUse(event){if(event.target?.closest?.('.nt-map-cat'))return;last
 
 function hints(){
  const cash=Number(($('#cash-value')?.textContent||'').replace(/[^\d-]/g,''))||0,flow=Number(($('#flow-value')?.textContent||'').replace(/[^\d-]/g,''))||0,summary=$('#territory-summary')?.textContent||'',connected=Number(summary.match(/(\d+)\s+of/i)?.[1]||0),outage=document.querySelector('.district-tile.world-struggling,.district-map-badge.outage,.district-map-badge.repair'),list=[];
- if(cash<45000)list.push(['Mack',`Cash is getting tight (${cash.toLocaleString()}). Check net flow and avoid stacking big projects until reserves recover.`]);
- if(flow<0)list.push(['Pooch','Monthly net flow is negative. Review pricing, upkeep, and new construction before advancing too many months.']);
- if(outage)list.push(['Mack','A neighborhood may need attention. Open its map tile and check the service status or repair options.']);
- if(connected<4)list.push(['Pooch','Compare neighborhood demand on the map before choosing where to make your next connection.']);
- list.push(['Mack','Fast Fiber adds capacity in an active neighborhood. Use it where customer demand is pressing against the limit.'],['Pooch','The Next Moves queue gathers repairs, opportunities, and requests so you can handle what needs attention first.'],['Mack','Use the map pages to explore more regions when you are ready to extend your footprint.']);return list;
+ if(cash<45000)list.push(['Mack',[`Cash is getting tight (${cash.toLocaleString()}). Check net flow and avoid stacking big projects until reserves recover.`,`Reserves are low at ${cash.toLocaleString()}. Review your monthly flow before starting another large project.`,`We have ${cash.toLocaleString()} on hand. Protect a repair cushion while cash recovers.`]]);
+ if(flow<0)list.push(['Pooch',['Monthly net flow is negative. Review pricing, upkeep, and new construction before advancing too many months.','The company is spending more than it brings in each month. Check prices and operating costs.','Let’s pause big expansions and look for ways to bring monthly cash flow back above zero.']]);
+ if(outage)list.push(['Mack',['A neighborhood may need attention. Open its map tile and check the service status or repair options.','I spotted a service issue. Check that neighborhood’s tile for a repair action.','Let’s open the affected area and see what it needs to restore service.']]);
+ if(connected<4)list.push(['Pooch',['Compare neighborhood demand on the map before choosing where to make your next connection.','Let’s look for a neighborhood with strong demand for your next build.','A quick look at the map can help us choose the best place to connect next.']]);
+ list.push(['Mack',['Fast Fiber adds capacity in an active neighborhood. Use it where customer demand is pressing against the limit.','Consider Fast Fiber where demand is pushing close to the neighborhood’s capacity.','A busy area may need a Fast Fiber upgrade to keep up with new customers.']],['Pooch',['The Next Moves queue gathers repairs, opportunities, and requests so you can handle what needs attention first.','Check Next Moves for repairs and opportunities that could use your attention.','The Next Moves queue can help us spot useful actions before they slip by.']],['Mack',['Use the map pages to explore more regions when you are ready to extend your footprint.','You can open another map page when you want to plan a wider expansion.','Ready to grow beyond this area? The map pages show the other regions.']]);return list;
 }
 function helper(){
  const card=$('.map-card'),game=$('#game'),story=$('#story-campaign-card');if(!card||!game)return;
@@ -244,7 +244,7 @@ function removeReaction(card){if(!card)return;clearTimeout(reactionTimer);card.c
 function queueReaction(kind,customText='',key=''){
  if(!enabled()||!REACTIONS[kind])return;
  const dedupe=key||`${kind}:${Math.floor(Date.now()/10000)}`;if(seenEventKeys.has(dedupe))return;seenEventKeys.add(dedupe);
- const [pup,defaultText]=REACTIONS[kind];eventQueue.push({kind,pup,text:customText||defaultText,at:Date.now()});eventQueue=eventQueue.slice(-3);flushReaction();
+ const [pup,defaultLines]=REACTIONS[kind],options=Array.isArray(customText)?customText:customText?[customText,...defaultLines.filter(line=>line!==customText)]:defaultLines,previous=lastReactionCopy[kind],available=options.length>1?options.filter(line=>line!==previous):options,text=available[Math.floor(Math.random()*available.length)];lastReactionCopy[kind]=text;eventQueue.push({kind,pup,text,at:Date.now()});eventQueue=eventQueue.slice(-3);flushReaction();
 }
 function flushReaction(){
  if(!enabled()||busyForReaction()||$('.nt-event-reaction')||!eventQueue.length)return;
@@ -256,7 +256,7 @@ function inspectCustomers(){
  if(lastCustomerCount===null){lastCustomerCount=value;lastMilestone=[100,250,500,1000,2500,5000].filter(mark=>mark<=value).at(-1)||0;return}
  if(value<lastCustomerCount){lastMilestone=[100,250,500,1000,2500,5000].filter(mark=>mark<=value).at(-1)||0;lastCustomerCount=value;return}
  const marks=[100,250,500,1000,2500,5000],milestone=marks.filter(mark=>mark>lastMilestone&&lastCustomerCount<mark&&value>=mark).at(-1);
- if(milestone){lastMilestone=milestone;queueReaction('build',`You passed ${milestone.toLocaleString()} customers. That’s a lot more neighbors online!`,`customers:${milestone}:${$('#month-label')?.textContent||''}`)}
+ if(milestone){lastMilestone=milestone;const count=milestone.toLocaleString();queueReaction('build',[`You passed ${count} customers. That’s a lot more neighbors online!`,`${count} customers are connected now. The network is reaching more of town!`,`We’ve reached ${count} customers. Let’s keep their connections dependable.`],`customers:${milestone}:${$('#month-label')?.textContent||''}`)}
  lastCustomerCount=value;
 }
 function inspectModal(){
