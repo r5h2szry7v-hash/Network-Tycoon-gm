@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
   <title id="title">Network Tycoon cityscape</title>
-  <desc id="desc">Black city buildings with orange windows over an orange semicircle on a deep navy background.</desc>
+  <desc id="desc">Black city buildings with warm orange windows over the original orange semicircle on a deep navy background.</desc>
   <rect width="512" height="512" fill="#092B49"/>
   <path d="M91 252a165 165 0 0 1 330 0Z" fill="#D58953"/>
   <path d="M256 114V98" fill="none" stroke="#000000" stroke-linecap="round" stroke-width="12"/>
   <circle cx="256" cy="84" r="13" fill="#D4753D"/>
-  <path d="M73 414V263q0-12 12-12h73v-42q0-12 12-12h42v-69q0-12 12-12h70q12 0 12 12v70h48q12 0 12 12v47h42q12 0 12 12v145Z" fill="#000000" stroke="#000000" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M73 414V263q0-12 12-12h73v-42q0-12 12-12h42v-69q0-12 12-12h94q12 0 12 12v70h24q12 0 12 12v47h42q12 0 12 12v145Z" fill="#000000" stroke="#000000" stroke-width="12" stroke-linejoin="round"/>
   <g fill="#D4753D">
     <rect x="90" y="274" width="12" height="14" rx="3"/><rect x="112" y="274" width="12" height="14" rx="3"/><rect x="134" y="274" width="12" height="14" rx="3"/>
     <rect x="90" y="301" width="12" height="14" rx="3"/><rect x="112" y="301" width="12" height="14" rx="3"/><rect x="134" y="301" width="12" height="14" rx="3"/>
