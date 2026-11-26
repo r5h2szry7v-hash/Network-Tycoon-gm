@@ -33,7 +33,6 @@ html[data-portfolio-color-mode=dark] .portfolio-companion strong,html.dark-mode 
 @keyframes portfolioPupReassure{0%,100%{transform:translateY(0) rotate(-1deg)}45%{transform:translateY(-4px) rotate(2deg)}70%{transform:translateY(-2px) rotate(-1deg)}}
 @keyframes portfolioPupBreath{0%,100%{translate:0 0;scale:1 1}34%{translate:0 -4px;scale:1 1.025}67%{translate:0 1px;scale:1 .99}}
 @keyframes portfolioCompanionEnter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){.portfolio-companion,.portfolio-companion img{animation:none!important;transition:none!important}}
 html.pref-reduced-motion .portfolio-companion,html.pref-reduced-motion .portfolio-companion img{animation:none!important;transition:none!important}
 @media(max-width:600px){:root{--portfolio-companion-gap:7px;--portfolio-companion-card-padding:8px}.portfolio-companion{font-size:.82rem}}
 
