@@ -346,7 +346,7 @@ function render(){
  renderMonthlyReport();
  const d=selectedDistrict();$("district-title").textContent=d.name;$("district-description").textContent=d.description;$("homes-pill").textContent="🏠 "+d.homes+" homes";
  const active=state.project?.districtId===d.id;
- const total=active?(state.project.duration||duration[state.project.tech]||1):1;const elapsed=active?(state.project.elapsed??Math.max(0,total-state.project.remaining)):0;const progress=active?Math.round(elapsed/total*100):0;$("status-pill").textContent=d.status==="served"?"✨ Connected · "+(names[d.tech]||"Network"):active?"🚧 "+names[state.project.tech]+" · "+progress+"% built · "+state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" left:d.status==="locked"?"🔒 Connect a neighbor":"🌱 Ready to grow";
+ const total=active?(state.project.duration||duration[state.project.tech]||1):1;const elapsed=active?(state.project.elapsed??Math.max(0,total-state.project.remaining)):0;const progress=active?Math.round(elapsed/total*100):0;$("status-pill").textContent=d.status==="served"?"✨ Connected · "+(names[d.tech]||"Network"):active?"🚧 "+names[state.project.tech]+" · "+progress+"% built · "+state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" left":d.status==="locked"?"🔒 Connect a neighbor":"🌱 Ready to grow";
  $("panel-kicker").textContent=d.status==="served"?"Neighborhood success":active?"Project in progress":d.status==="locked"?"Coming up next":"Your next opportunity";
  $("build-open").disabled=!canBuild(d)||!!state.project;
  $("build-open").textContent=active?"Construction underway":d.status==="served"?"Neighborhood connected":d.status==="locked"?"Connect Pinebrook first":"Plan a network";
