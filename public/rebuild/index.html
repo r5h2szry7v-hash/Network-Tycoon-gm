@@ -148,7 +148,7 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
 <body>
 <div class="app">
   <header class="page-heading">
-    <div><p class="eyebrow">A bright new beginning</p><h1 id="city-title">Maple Harbor</h1></div>
+    <div><p class="eyebrow">Chapter 1 · First Spark</p><h1 id="city-title">Maple Harbor</h1></div>
     <button class="settings-open" id="settings-open" type="button" aria-label="Open game settings">⚙︎</button>
   </header>
   <section class="hud" aria-label="Company status">
@@ -166,6 +166,15 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
     <div class="city-caption">A little town with big plans</div>
   </section>
   <p class="map-tip" id="map-tip">Tap a neighborhood to see what it needs.</p>
+  <section class="month-report" id="month-report" aria-live="polite" hidden>
+    <div class="month-report-head"><b id="report-month">Monthly report</b><small>Company update</small></div>
+    <p class="month-report-message" id="report-message"></p>
+    <div class="month-report-stats">
+      <div class="month-report-stat good">Cash change<b id="report-cash">+$0</b></div>
+      <div class="month-report-stat">New customers<b id="report-customers">+0</b></div>
+      <div class="month-report-stat">Build progress<b id="report-build">No active build</b></div>
+    </div>
+  </section>
   <div class="bottom-row">
     <section class="district-panel" aria-live="polite">
       <span class="panel-kicker" id="panel-kicker">Your next opportunity</span>
@@ -194,6 +203,21 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
   </section>
 </div>
 
+<div class="modal-backdrop" id="community-modal" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="community-heading">
+    <span class="panel-kicker">A note from the neighborhood</span>
+    <div class="community-person"><div class="community-avatar" aria-hidden="true">👩🏻‍🏫</div><p><b>Maya, Pinebrook library volunteer</b><br>“The new connection is already helping families. Could we celebrate the neighborhood?”</p></div>
+    <h2 id="community-heading">How should Maple Harbor welcome Pinebrook?</h2>
+    <p>Choose a small celebration or save the money for your next build.</p>
+    <div id="community-choices">
+      <button class="community-choice" id="community-picnic" type="button"><span>🌼 Host a welcome picnic<small>Add a flower garden to the map</small></span><b>$5,000</b></button>
+      <button class="community-choice" id="community-save" type="button"><span>🏦 Save for the next build<small>Keep the cash for network growth</small></span><b>Free</b></button>
+    </div>
+    <p class="community-result" id="community-result" hidden></p>
+    <div class="modal-actions"><button class="primary" id="community-done" type="button" hidden>Back to town</button></div>
+  </section>
+</div>
+
 <div class="modal-backdrop" id="settings-modal" hidden>
   <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-heading">
     <span class="panel-kicker">Make it yours</span><h2 id="settings-heading">Your game settings</h2>
@@ -209,7 +233,10 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
     <div class="reward-icon">⭐</div><span class="panel-kicker">A neighborhood milestone</span>
     <h2 id="reward-title">Pinebrook lights up!</h2>
     <p>Your first network is live. Homes are glowing, customers are joining, and you earned the Connection Star.</p>
-    <button class="primary" id="reward-continue" type="button">Keep building</button>
+    <div class="reward-actions">
+      <button class="primary" id="reward-continue" type="button">Keep building</button>
+      <button class="secondary" id="reward-new-company" type="button" hidden>Start a new company</button>
+    </div>
   </section>
 </div>
 
@@ -217,11 +244,22 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
 .setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;font-weight:850;border-bottom:1px solid var(--line)}
 .setting-row input{width:24px;height:24px;accent-color:var(--deep)}
 .small-note{font-size:.78rem!important;margin:4px 0!important}
+.month-report{margin:0 0 11px;padding:10px 12px;border:1px solid #d8e8df;border-radius:16px;background:#fff;box-shadow:0 7px 18px #244d3d0b;animation:pop .28s ease}
+.month-report[hidden]{display:none}.month-report-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px}.month-report-head b{font-size:.86rem}.month-report-head small{font-size:.7rem;color:var(--muted)}
+.month-report-message{font-size:.76rem;color:var(--muted);margin:0 0 8px;line-height:1.35}.month-report-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.month-report-stat{border-radius:11px;padding:7px 8px;background:#f5faf7;color:var(--muted);font-size:.68rem;font-weight:800}.month-report-stat b{display:block;margin-top:2px;color:var(--ink);font-size:.8rem;white-space:nowrap}.month-report-stat.good b{color:#2f8a67}
+.community-person{display:flex;align-items:center;gap:11px;padding:11px;border-radius:16px;background:#f4faf6;margin:12px 0}.community-avatar{display:grid;place-items:center;flex:none;width:50px;height:50px;border-radius:50%;background:#ffe8c3;font-size:1.65rem}.community-person p{margin:0;color:var(--ink);font-size:.84rem;line-height:1.4}
+.community-choice{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);border-radius:15px;background:#fbfdfb;padding:12px;margin-top:8px;font-weight:850}.community-choice small{display:block;margin-top:3px;color:var(--muted);font-size:.73rem;font-weight:650}.community-result{padding:12px;border-radius:14px;background:#fff8df;color:#66552b;font-size:.85rem;line-height:1.4}.community-result[hidden]{display:none}
+.community-garden{position:absolute;left:6px;top:4px;font-size:1.05rem;filter:drop-shadow(0 0 5px #ffe890);animation:twinkle 2s ease-in-out infinite}
+.reward-actions{display:grid;gap:8px}.reward-actions button[hidden]{display:none}
+:root[data-portfolio-color-mode="dark"] .month-report,:root[data-portfolio-color-mode="dark"] .community-person,:root[data-portfolio-color-mode="dark"] .community-choice,:root[data-portfolio-color-mode="dark"] .month-report-stat{background:#263f43;border-color:var(--line);color:var(--ink)}
+:root[data-portfolio-color-mode="dark"] .month-report-message,:root[data-portfolio-color-mode="dark"] .month-report-head small,:root[data-portfolio-color-mode="dark"] .community-choice small{color:var(--muted)}:root[data-portfolio-color-mode="dark"] .community-result{background:#3c3727;color:#f3dc9a}
+@media(max-width:520px){.month-report{padding:9px 10px}.month-report-stat{padding:6px}.month-report-head{margin-bottom:5px}}
 </style>
 <script type="module">
 import { mountPortfolioShell } from "/portfolio-shell.js";
 const GAME_ID="networkTycoonRebuild";
 const SAVE_KEY="network-tycoon-rebuild-save-v1";
+const ARCHIVE_KEY="network-tycoon-rebuild-archives-v1";
 const GUIDE_KEY="portfolio-companions-enabled-v1";
 const THEMES=[
  {id:"sunshine",label:"Sunshine",tokens:{"--brand":"#32846c"}},
@@ -239,12 +277,13 @@ const costs={fiber:42000,coax:31000,wireless:24000};
 const duration={fiber:2,coax:1,wireless:1};
 const names={fiber:"Fast Fiber",coax:"Classic Coax",wireless:"Wide Wireless"};
 const $=id=>document.getElementById(id);
-function fresh(){return{schemaVersion:1,month:0,cash:150000,customers:64,connected:0,selected:"pinebrook",project:null,tech:null,firstReward:false,chapterComplete:false,guide:"pooch",lastReport:"Your city is ready for its first network."}}
+function fresh(){return{schemaVersion:1,month:0,cash:150000,customers:64,connected:0,selected:"pinebrook",project:null,tech:null,firstReward:false,chapterComplete:false,pendingReward:null,communityPending:false,communityChoice:null,report:null,guide:"pooch",lastReport:"Your city is ready for its first network."}}
 function load(){try{const value=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(value?.schemaVersion===1){districts.forEach(d=>{const saved=value.districtState?.[d.id];if(saved){d.status=saved.status||d.status;d.tech=saved.tech||null}});return{...fresh(),...value}}}catch{}return fresh()}
 let state=load(),selectedTech=null,shell=null;
 function save(){try{state.districtState=Object.fromEntries(districts.map(d=>[d.id,{status:d.status,tech:d.tech||null}]));localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
 function money(value){return "$"+Math.round(value).toLocaleString("en-US")}
 function guide(pup,line){state.guide=pup;document.body.dataset.guide=pup;$("guide").dataset.pup=pup;$("guide-name").textContent=pup==="mack"?"Mack says":"Pooch says";$("guide-avatar").src=pup==="mack"?"/images/dog-dark.webp":"/images/dog-tan.webp";$("guide-avatar").alt=pup==="mack"?"Mack, your thoughtful guide":"Pooch, your cheerful guide";$("guide-line").textContent=line;$("guide-next").textContent=pup==="mack"?"Hear Pooch":"Hear Mack";save()}
+function renderMonthlyReport(){const r=state.report;const card=$("month-report");card.hidden=!r;if(!r)return;$("report-month").textContent=r.monthLabel;$("report-message").textContent=r.message;$("report-cash").textContent=(r.cashDelta>=0?"+":"−")+money(Math.abs(r.cashDelta));$("report-customers").textContent="+"+r.customerDelta;$("report-build").textContent=r.buildStatus}
 function countConnected(){return state.connected}
 function selectedDistrict(){return districts.find(d=>d.id===state.selected)||districts[0]}
 function canBuild(d){return d.status==="ready"}
@@ -257,13 +296,14 @@ function renderMap(){
   const b1=document.createElement("i");b1.className="building";const b2=document.createElement("i");b2.className="building tall";const b3=document.createElement("i");b3.className="building wide";blocks.append(b1,b2,b3);
   const label=document.createElement("span");label.className="place";label.textContent=d.name;
   const sub=document.createElement("small");sub.textContent=served?"Connected":inProgress?"Building…":d.status==="locked"?"Locked":"Select";
-  label.append(sub);button.append(blocks,label);if(inProgress){const site=document.createElement("span");site.className="worksite-badge";site.textContent="🏗️";site.setAttribute("aria-hidden","true");button.append(site);const bar=document.createElement("span");bar.className="build-progress";const fill=document.createElement("i");const total=state.project.duration||duration[state.project.tech]||1;const elapsed=state.project.elapsed??Math.max(0,total-state.project.remaining);fill.style.setProperty("--build-progress",Math.min(100,Math.round(elapsed/total*100))+"%");bar.append(fill);button.append(bar)}button.onclick=()=>selectDistrict(d.id);map.append(button);
+  label.append(sub);button.append(blocks,label);if(d.id==="pinebrook"&&state.communityChoice==="picnic"){const garden=document.createElement("span");garden.className="community-garden";garden.textContent="🌼";garden.setAttribute("aria-hidden","true");button.append(garden)}if(inProgress){const site=document.createElement("span");site.className="worksite-badge";site.textContent="🏗️";site.setAttribute("aria-hidden","true");button.append(site);const bar=document.createElement("span");bar.className="build-progress";const fill=document.createElement("i");const total=state.project.duration||duration[state.project.tech]||1;const elapsed=state.project.elapsed??Math.max(0,total-state.project.remaining);fill.style.setProperty("--build-progress",Math.min(100,Math.round(elapsed/total*100))+"%");bar.append(fill);button.append(bar)}button.onclick=()=>selectDistrict(d.id);map.append(button);
  });
  $("connection-one").style.opacity=state.connected?"1":"0";
  $("connection-two").style.opacity=state.connected>1?"1":"0";
 }
 function render(){
  $("cash").textContent=money(state.cash);$("customers").textContent=state.customers.toLocaleString("en-US");$("month").textContent=months[state.month%12]+" · Year "+(Math.floor(state.month/12)+1);
+ renderMonthlyReport();
  const d=selectedDistrict();$("district-title").textContent=d.name;$("district-description").textContent=d.description;$("homes-pill").textContent="🏠 "+d.homes+" homes";
  const active=state.project?.districtId===d.id;
  const total=active?(state.project.duration||duration[state.project.tech]||1):1;const elapsed=active?(state.project.elapsed??Math.max(0,total-state.project.remaining)):0;const progress=active?Math.round(elapsed/total*100):0;$("status-pill").textContent=d.status==="served"?"✨ Connected":active?"🚧 "+progress+"% built · "+state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" left":d.status==="locked"?"🔒 Connect a neighbor":"🌱 Ready to grow";
@@ -296,46 +336,55 @@ function openBuild(){
 }
 function build(){
  if(!selectedTech)return;const d=selectedDistrict();const cost=costs[selectedTech];if(state.cash<cost)return;
- state.cash-=cost;state.project={districtId:d.id,tech:selectedTech,remaining:duration[selectedTech],duration:duration[selectedTech],elapsed:0};state.tech=selectedTech;d.status="building";state.lastReport="Your "+names[selectedTech]+" project is underway in "+d.name+".";
+ state.cash-=cost;state.project={districtId:d.id,tech:selectedTech,remaining:duration[selectedTech],duration:duration[selectedTech],elapsed:0};state.tech=selectedTech;d.status="building";state.report=null;state.lastReport="Your "+names[selectedTech]+" project is underway in "+d.name+".";
  $("build-modal").hidden=true;guide("mack","The crew is on site. Advance the month and watch the network take shape.");save();render();
 }
 function animateMonth(hasBuild){const city=$("city-card");city.classList.remove("month-advance","has-build");$("month").classList.remove("month-flip");$("cash-stat").classList.remove("stat-pop");$("customer-stat").classList.remove("stat-pop");void city.offsetWidth;city.classList.add("month-advance");if(hasBuild)city.classList.add("has-build");$("month").classList.add("month-flip");$("cash-stat").classList.add("stat-pop");$("customer-stat").classList.add("stat-pop");const routes=["connection-one","connection-two"];routes.forEach(id=>$(id).classList.add("route-flash"));setTimeout(()=>{city.classList.remove("month-advance","has-build");$("month").classList.remove("month-flip");$("cash-stat").classList.remove("stat-pop");$("customer-stat").classList.remove("stat-pop");routes.forEach(id=>$(id).classList.remove("route-flash"))},1800)}
-function showReward(chapter){document.querySelector(".reward-icon").textContent=chapter?"🏆":"⭐";document.querySelector(".reward .panel-kicker").textContent=chapter?"Chapter 1 complete":"A neighborhood milestone";$("reward-title").textContent=chapter?"Maple Harbor’s First Spark!":"Pinebrook lights up!";$("reward").querySelector("p").textContent=chapter?"You connected two neighborhoods and earned the Founders’ Ribbon. Market Square and Hilltop are now open for your next build.":"Your first network is live. Homes are glowing, customers are joining, and you earned the Connection Star."; $("reward-continue").textContent=chapter?"Keep expanding":"Keep building";$("reward").hidden=false}
+function showReward(chapter){document.querySelector(".reward-icon").textContent=chapter?"🏆":"⭐";document.querySelector(".reward .panel-kicker").textContent=chapter?"Chapter 1 complete":"A neighborhood milestone";$("reward-title").textContent=chapter?"Maple Harbor’s First Spark!":"Pinebrook lights up!";$("reward").querySelector("p").textContent=chapter?"You connected two neighborhoods and earned the Founders’ Ribbon. Market Square and Hilltop are now open for your next build.":"Your first network is live. Homes are glowing, customers are joining, and you earned the Connection Star."; $("reward-continue").textContent=chapter?"Keep expanding":"Keep building";$("reward-new-company").hidden=!chapter;$("reward").hidden=false}
+function showCommunity(){if(!state.communityPending)return;$("community-choices").hidden=false;$("community-result").hidden=true;$("community-done").hidden=true;$("community-modal").hidden=false}
+function chooseCommunity(choice){if(!state.communityPending)return;if(choice==="picnic"&&state.cash<5000){guide("mack","Your budget is tight this month. Let’s save the cash and keep the network growing.");return}if(choice==="picnic"){state.cash-=5000;state.communityChoice="picnic";$("community-result").textContent="Maya and the neighbors planted a little flower garden. It will brighten Pinebrook whenever you visit."}else{state.communityChoice="save";$("community-result").textContent="Good call. The $5,000 stays in your company for the next network project."}state.communityPending=false;$("community-choices").hidden=true;$("community-result").hidden=false;$("community-done").hidden=false;save();render()}
+function startNewCompany(){if(!state.chapterComplete)return;try{const archives=JSON.parse(localStorage.getItem(ARCHIVE_KEY)||"[]");archives.unshift({archivedAt:Date.now(),save:{...state}});localStorage.setItem(ARCHIVE_KEY,JSON.stringify(archives.slice(0,10)))}catch{}state=fresh();districts.forEach((d,i)=>{d.status=i===0?"ready":"locked";delete d.tech});selectedTech=null;$("reward").hidden=true;$("community-modal").hidden=true;save();render();guide("pooch","Welcome to Maple Harbor! Choose your first neighborhood and we’ll build a new company together.");render()}
 function advance(){
- const hadBuild=!!state.project;state.month++;state.cash+=12000;
- let report="A calm month in Maple Harbor. Your company earned $12,000.";
+ const hadBuild=!!state.project,cashBefore=state.cash,customersBefore=state.customers;state.month++;state.cash+=12000;
+ let report="A calm month in Maple Harbor. Your company earned $12,000.",buildStatus="No active build",completedDistrict="";state.report=null;
  if(state.project){
   const project=state.project;const total=project.duration||duration[project.tech]||1;project.duration=total;project.elapsed=(project.elapsed??Math.max(0,total-project.remaining))+1;project.remaining--;
   if(project.remaining<=0){
    const d=districts.find(x=>x.id===project.districtId);d.status="served";d.tech=project.tech;state.connected++;const added=Math.round(d.homes*.48);state.customers+=added;state.cash+=5000;
-   report=d.name+" is connected! "+added+" homes joined and the town earned a connection bonus.";
+   report=d.name+" is connected! "+added+" homes joined and the town earned a connection bonus.";completedDistrict=d.name;buildStatus=d.name+" connected";
    state.project=null;
-   if(state.connected===1&&!state.firstReward){state.firstReward=true;showReward(false);guide("pooch","Pinebrook is online! You earned your first Connection Star.");}
-   else if(state.connected===2&&!state.chapterComplete){state.chapterComplete=true;showReward(true);guide("mack","Two neighborhoods connected. You’ve completed Maple Harbor’s First Spark!");}
+   if(state.connected===1&&!state.firstReward){state.firstReward=true;state.pendingReward="connection-star";state.communityPending=true;guide("pooch","Pinebrook is online! You earned your first Connection Star. Maya from the library has a note for us.");}
+   else if(state.connected===2&&!state.chapterComplete){state.chapterComplete=true;state.pendingReward="chapter-complete";guide("mack","Two neighborhoods connected. You’ve completed Maple Harbor’s First Spark!");}
    else guide("mack","A new neighborhood is live. Your network is taking shape.");
    if(state.connected===1)districts[1].status="ready";
    if(state.connected>=2){districts[2].status="ready";districts[3].status="ready"}
-  }else{report=project.elapsed+" of "+total+" build months complete in "+districts.find(x=>x.id===project.districtId).name+". The crew is making great progress.";guide("mack","Halfway there! The crew has laid the first connection. One more month and these homes will light up.");}
+   if(state.connected===1)showReward(false);if(state.connected===2)showReward(true);
+  }else{const activeDistrict=districts.find(x=>x.id===project.districtId);buildStatus=activeDistrict.name+" · "+Math.round(project.elapsed/total*100)+"%";report=project.elapsed+" of "+total+" build months complete in "+activeDistrict.name+". The crew is making great progress.";guide("mack","Halfway there! The crew has laid the first connection. One more month and these homes will light up.");}
  }
- state.lastReport=report;save();render();animateMonth(hadBuild);
- if(!state.project&&state.connected>0&&state.connected<2&&state.lastReport&&!state.firstReward)guide("pooch",state.lastReport);
+ if(!state.project&&!completedDistrict&&hadBuild)buildStatus="Construction complete";
+ if(!state.project&&!hadBuild)guide("pooch",state.connected===0?"The month is in the books. Start a network project whenever you’re ready.":"Your city is growing steadily. Choose the next neighborhood when you’re ready.");
+ state.lastReport=report;state.report={monthLabel:months[state.month%12]+" · Year "+(Math.floor(state.month/12)+1),cashDelta:state.cash-cashBefore,customerDelta:state.customers-customersBefore,buildStatus,message:report};save();render();animateMonth(hadBuild);
 }
 $("build-open").addEventListener("click",openBuild);
 $("build-confirm").addEventListener("click",build);
 $("build-cancel").addEventListener("click",()=>$("build-modal").hidden=true);
 $("advance").addEventListener("click",advance);
 $("guide-next").addEventListener("click",()=>guide(state.guide==="pooch"?"mack":"pooch",state.guide==="pooch"?"I’ll keep an eye on the budget and help you plan the next connection.":"Pinebrook is ready for its first network. Choose the place you want to grow."));
-$("reward-continue").addEventListener("click",()=>$("reward").hidden=true);
+$("reward-continue").addEventListener("click",()=>{const pending=state.pendingReward;state.pendingReward=null;$("reward").hidden=true;if(pending==="connection-star"&&state.communityPending)showCommunity();save()});
+$("reward-new-company").addEventListener("click",startNewCompany);
+$("community-picnic").addEventListener("click",()=>chooseCommunity("picnic"));
+$("community-save").addEventListener("click",()=>chooseCommunity("save"));
+$("community-done").addEventListener("click",()=>{$("community-modal").hidden=true;guide("pooch",state.communityChoice==="picnic"?"The welcome garden looks lovely. Now Pinebrook has a place to celebrate.":"We saved the cash for your next build. Willow Gardens is ready when you are.")});
 $("settings-open").addEventListener("click",()=>$("settings-modal").hidden=false);
 document.querySelector("[data-close-settings]").addEventListener("click",()=>$("settings-modal").hidden=true);
-document.querySelectorAll(".modal-backdrop").forEach(backdrop=>backdrop.addEventListener("click",e=>{if(e.target===backdrop)backdrop.hidden=true}));
+document.querySelectorAll(".modal-backdrop").forEach(backdrop=>backdrop.addEventListener("click",e=>{if(e.target===backdrop&&backdrop.id!=="community-modal")backdrop.hidden=true}));
 $("companions-toggle").addEventListener("change",e=>{try{localStorage.setItem(GUIDE_KEY,String(e.target.checked))}catch{};document.dispatchEvent(new CustomEvent("portfolio-companions:change",{detail:{enabled:e.target.checked}}));document.querySelector(".guide").hidden=!e.target.checked;save()});
 try{const pref=localStorage.getItem(GUIDE_KEY);if(pref!==null)$("companions-toggle").checked=pref!=="false";document.querySelector(".guide").hidden=!$("companions-toggle").checked}catch{}
 const motionWatcher=window.matchMedia?.("(prefers-reduced-motion: reduce)");
 const syncMotion=()=>{const settings=shell?.getSettings();const reduce=settings?.accessibility?.motion==="reduce"||(settings?.accessibility?.motion==="system"&&motionWatcher?.matches);document.documentElement.dataset.portfolioMotion=reduce?"reduce":"full"};
 window.addEventListener("portfolio:settings",syncMotion);motionWatcher?.addEventListener?.("change",syncMotion);
-shell=await mountPortfolioShell({gameId:GAME_ID,title:"Network Tycoon · Rebuild",homeUrl:"/",storageKeys:[SAVE_KEY,GUIDE_KEY],themes:THEMES});
-syncMotion();render();
+shell=await mountPortfolioShell({gameId:GAME_ID,title:"Network Tycoon · Rebuild",homeUrl:"/",storageKeys:[SAVE_KEY,ARCHIVE_KEY,GUIDE_KEY],themes:THEMES});
+syncMotion();render();if(state.pendingReward)showReward(state.pendingReward==="chapter-complete");else if(state.communityPending)showCommunity();
 window.addEventListener("pagehide",save);
 </script>
 </body>
