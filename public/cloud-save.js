@@ -38,6 +38,11 @@ const gameStorage = {
     "network-tycoon-player-preferences-v1",
     "network-tycoon-player-legacy-v1"
   ],
+  networkTycoonRebuild: [
+    "network-tycoon-rebuild-save-v1",
+    "network-tycoon-rebuild-archives-v1",
+    "portfolio-companions-enabled-v1"
+  ],
   matchGarden: ["matchGarden"],
   starlightTracer: ["starlightTracer"],
   tinkerFactory: ["tinkerFactory"],
