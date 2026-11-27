@@ -28,6 +28,7 @@ on:
       - feat/tycoon-shared-companion-guidance
       - feat/story-momentum-guidance
       - feat/story-pacing-calibration
+      - feat/network-tycoon-rebuild-preview
 
 permissions:
   contents: read
