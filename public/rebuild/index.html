@@ -126,7 +126,7 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
 @keyframes pop{from{transform:translateY(14px) scale(.95);opacity:.3}to{transform:translateY(0) scale(1);opacity:1}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes twinkle{50%{transform:scale(1.08) rotate(5deg)}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
 :root[data-portfolio-motion="reduce"] *, :root[data-portfolio-motion="reduce"] *:before,:root[data-portfolio-motion="reduce"] *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 :root[data-portfolio-color-mode="dark"]{--ink:#e7f1ec;--muted:#aabdb5;--paper:#14252a;--panel:#20383d;--line:#385257;--shadow:0 16px 40px #0003;color-scheme:dark}
 :root[data-portfolio-color-mode="dark"] body{background:radial-gradient(ellipse at 50% -20%,#243c40 0,#14252a 70%)}
