@@ -271,7 +271,7 @@ function render(){
  $("build-open").disabled=!canBuild(d)||!!state.project;
  $("build-open").textContent=active?"Construction underway":d.status==="served"?"Neighborhood connected":d.status==="locked"?"Connect Pinebrook first":"Plan a network";
  if(state.connected===0){$("goal-title").textContent="Connect your first neighborhood";$("goal-copy").textContent="Choose a place to bring online and help it bloom.";$("goal-progress").style.width=state.project?"35%":"0%"}
- else if(state.connected===1){$("goal-title").textContent="Bring one more neighborhood online";$("goal-copy").textContent="Pinebrook is growing. Connect a nearby place to earn your town star.";$("goal-progress").style.width="55%"}
+ else if(state.connected===1){$("goal-title").textContent="Bring one more neighborhood online";$("goal-copy").textContent="Pinebrook is growing. Connect one more neighborhood to complete the First Spark chapter.";$("goal-progress").style.width="55%"}
  else{$("goal-title").textContent="Chapter 1 complete: First Spark";$("goal-copy").textContent="Your Founders’ Ribbon is earned. Market Square and Hilltop are open for your next build.";$("goal-progress").style.width="100%"}
  $("turn-title").textContent=state.project?"Construction: "+names[state.project.tech]:"Ready when you are";
  $("turn-copy").textContent=state.project?state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" until "+selectedDistrict().name+" opens":"Your city grows when you advance the month.";
