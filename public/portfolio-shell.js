@@ -108,17 +108,18 @@ function installStyles() {
   const style = document.createElement("style");
   style.id = "portfolio-shell-styles";
   style.textContent = [
-    ".portfolio-shell{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:color-mix(in srgb,Canvas 94%,transparent);color:CanvasText;border-bottom:1px solid color-mix(in srgb,CanvasText 14%,transparent);font:600 calc(14px * var(--portfolio-text-scale,1))/1.25 system-ui,sans-serif;backdrop-filter:blur(14px)}",
-    ".portfolio-shell__brand{display:flex;align-items:center;gap:10px;min-width:0}.portfolio-shell__home{color:inherit;text-decoration:none;font-weight:800;white-space:nowrap}.portfolio-shell__title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.78}",
-    ".portfolio-shell__actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.portfolio-shell select,.portfolio-shell button{min-height:38px;border:1px solid color-mix(in srgb,CanvasText 20%,transparent);border-radius:10px;padding:7px 10px;background:Canvas;color:CanvasText;font:inherit}",
-    ".portfolio-shell select:focus-visible,.portfolio-shell button:focus-visible,.portfolio-shell a:focus-visible{outline:3px solid #5b8def;outline-offset:2px}.portfolio-shell__setting{display:flex;align-items:center;gap:6px}.portfolio-shell__setting span{font-size:.85em}.portfolio-shell__game-settings{font-weight:800;white-space:nowrap}.portfolio-shell__status{font-size:.78em;opacity:.72;white-space:nowrap}",
+    ".portfolio-shell{position:sticky;top:0;z-index:1000;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:6px 12px;background:color-mix(in srgb,Canvas 94%,transparent);color:CanvasText;border-bottom:1px solid color-mix(in srgb,CanvasText 12%,transparent);font:600 calc(14px * var(--portfolio-text-scale,1))/1.2 system-ui,sans-serif;backdrop-filter:blur(14px)}",
+    ".portfolio-shell__brand{display:flex;align-items:center;gap:9px;min-width:0}.portfolio-shell__home{display:grid;place-items:center;flex:none;width:32px;height:32px;border:1px solid color-mix(in srgb,CanvasText 14%,transparent);border-radius:11px;background:color-mix(in srgb,#70c9a2 16%,Canvas);color:CanvasText;text-decoration:none;transition:transform .16s,background .16s}.portfolio-shell__home:hover{transform:translateY(-1px);background:color-mix(in srgb,#70c9a2 28%,Canvas)}.portfolio-shell__home svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.portfolio-shell__title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.78;font-size:.92em;font-weight:750}",
+    ".portfolio-shell__toggle{display:grid;place-items:center;flex:none;width:34px;height:34px;padding:0!important;border-radius:12px!important;background:color-mix(in srgb,#76bde2 18%,Canvas)!important;border-color:color-mix(in srgb,#39799a 24%,CanvasText)!important;cursor:pointer;transition:transform .16s,background .16s,box-shadow .16s}.portfolio-shell__toggle:hover{transform:rotate(12deg);background:color-mix(in srgb,#76bde2 30%,Canvas)!important;box-shadow:0 3px 10px #183d4a1c}.portfolio-shell__toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.portfolio-shell__toggle[aria-expanded=true]{background:color-mix(in srgb,#70c9a2 28%,Canvas)!important}",
+    ".portfolio-shell__actions{position:absolute;top:calc(100% + 7px);right:8px;z-index:1001;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:8px;width:min(340px,calc(100vw - 16px));max-height:min(70dvh,460px);overflow:auto;padding:12px;border:1px solid color-mix(in srgb,CanvasText 14%,transparent);border-radius:17px;background:color-mix(in srgb,Canvas 96%,transparent);color:CanvasText;box-shadow:0 14px 38px #18384226;backdrop-filter:blur(18px)}.portfolio-shell__actions[hidden]{display:none}.portfolio-shell__actions:not([hidden]){animation:portfolioPanelIn .18s ease-out}@keyframes portfolioPanelIn{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}",
+    ".portfolio-shell__setting{display:grid;gap:4px;min-width:0;font-size:.76em;font-weight:800}.portfolio-shell__setting span{opacity:.74}.portfolio-shell select,.portfolio-shell button{min-height:36px;border:1px solid color-mix(in srgb,CanvasText 18%,transparent);border-radius:10px;padding:6px 9px;background:Canvas;color:CanvasText;font:inherit}.portfolio-shell select{width:100%;min-width:0}.portfolio-shell__status{grid-column:1/-1;padding-top:2px;font-size:.76em;opacity:.72;overflow-wrap:anywhere}.portfolio-shell__game-settings{font-weight:800;white-space:nowrap}",
+    ".portfolio-shell select:focus-visible,.portfolio-shell button:focus-visible,.portfolio-shell a:focus-visible{outline:3px solid #5b8def;outline-offset:2px}.portfolio-shell__actions .cloud-account-button{grid-column:1/-1;justify-self:stretch;min-height:36px;padding:8px 12px;border-radius:11px;font:800 12px/1.15 system-ui,sans-serif}",
     "html[data-portfolio-motion=reduce] *,html[data-portfolio-motion=reduce] *::before,html[data-portfolio-motion=reduce] *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}",
-    "@media(max-width:760px){.portfolio-shell{align-items:flex-start;flex-direction:column}.portfolio-shell__actions{justify-content:flex-start;width:100%}.portfolio-shell__setting span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.portfolio-shell__status{margin-left:auto}}",
+    "@media(max-width:420px){.portfolio-shell{padding:6px 9px;gap:7px}.portfolio-shell__brand{gap:7px}.portfolio-shell__title{max-width:calc(100vw - 104px);font-size:.86em}.portfolio-shell__actions{right:7px;padding:10px;gap:7px}}",
     "@media(prefers-reduced-motion:reduce){html:not([data-portfolio-motion=full]) *,html:not([data-portfolio-motion=full]) *::before,html:not([data-portfolio-motion=full]) *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}"
   ].join("");
   document.head.appendChild(style);
 }
-
 function element(tag, attrs = {}, text = "") {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs)) {
@@ -160,11 +161,16 @@ export async function mountPortfolioShell(options = {}) {
     theme && /^[a-z][a-z0-9-]{0,47}$/.test(theme.id) && typeof theme.label === "string") : [];
   installStyles();
 
-  const shell = element("header", { className: "portfolio-shell", "aria-label": "Game settings and account" });
+  const shell = element("header", { className: "portfolio-shell", "aria-label": "Game portfolio bar" });
   const brand = element("div", { className: "portfolio-shell__brand" });
-  brand.append(element("a", { className: "portfolio-shell__home", href: options.homeUrl || "/" }, "Game portfolio"));
+  const home = element("a", { className: "portfolio-shell__home", href: options.homeUrl || "/", "aria-label": "Game portfolio", title: "Game portfolio" });
+  home.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.8l8.5 6.7v8.2a1.4 1.4 0 0 1-1.4 1.4h-4.3v-6.3H9.2v6.3H4.9a1.4 1.4 0 0 1-1.4-1.4z"/></svg>';
+  brand.append(home);
   brand.append(element("span", { className: "portfolio-shell__title" }, options.title || gameId));
-  const actions = element("div", { className: "portfolio-shell__actions top-actions" });
+  const settingsToggle = element("button", { className: "portfolio-shell__toggle", type: "button", "aria-label": "Open appearance and sync settings", "aria-expanded": "false", "aria-controls": "portfolio-shell-actions", title: "Appearance and sync settings" });
+  settingsToggle.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="m19.4 13.4 1.1.8-1.6 2.8-1.3-.6a7.8 7.8 0 0 1-1.6.9l-.2 1.4h-3.3l-.2-1.4a7.8 7.8 0 0 1-1.6-.9l-1.3.6-1.6-2.8 1.1-.8a7.5 7.5 0 0 1 0-1.8l-1.1-.8 1.6-2.8 1.3.6a7.8 7.8 0 0 1 1.6-.9l.2-1.4h3.3l.2 1.4a7.8 7.8 0 0 1 1.6.9l1.3-.6 1.6 2.8-1.1.8a7.5 7.5 0 0 1 0 1.8Z"/></svg>';
+  const actions = element("div", { className: "portfolio-shell__actions top-actions", id: "portfolio-shell-actions", role: "region", "aria-label": "Appearance and sync settings" });
+  actions.hidden = true;
 
   const addSelect = (caption, label, choices) => {
     const wrapper = element("label", { className: "portfolio-shell__setting" });
@@ -185,8 +191,20 @@ export async function mountPortfolioShell(options = {}) {
   }
   const status = element("span", { className: "portfolio-shell__status", role: "status", "aria-live": "polite" }, "Device settings");
   actions.append(status);
-  shell.append(brand, actions);
+  shell.append(brand, settingsToggle, actions);
   host.prepend(shell);
+
+  const setSettingsOpen = open => {
+    actions.hidden = !open;
+    settingsToggle.setAttribute("aria-expanded", String(open));
+    settingsToggle.setAttribute("aria-label", open ? "Close appearance and sync settings" : "Open appearance and sync settings");
+    settingsToggle.title = open ? "Close settings" : "Appearance and sync settings";
+  };
+  settingsToggle.addEventListener("click", () => setSettingsOpen(actions.hidden));
+  const outsideClose = event => { if (!shell.contains(event.target)) setSettingsOpen(false); };
+  const escapeClose = event => { if (event.key === "Escape" && !actions.hidden) { setSettingsOpen(false); settingsToggle.focus(); } };
+  document.addEventListener("pointerdown", outsideClose);
+  document.addEventListener("keydown", escapeClose);
 
   let current = readLocalSettings().settings;
   let disposed = false;
@@ -279,6 +297,8 @@ export async function mountPortfolioShell(options = {}) {
       authUnsubscribe();
       window.removeEventListener("online", onlineHandler);
       media?.removeEventListener?.("change", mediaHandler);
+      document.removeEventListener("pointerdown", outsideClose);
+      document.removeEventListener("keydown", escapeClose);
       shell.remove();
     }
   };
