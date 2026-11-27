@@ -43,7 +43,7 @@ h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1
 .season-badge{position:absolute;left:12px;top:10px;z-index:5;padding:6px 9px;border:1px solid #ffffffd9;border-radius:99px;background:#ffffffd9;color:#38585b;font-size:.7rem;font-weight:950;box-shadow:0 3px 10px #244d3d14;backdrop-filter:blur(5px)}
 .season-badge.season-shift{animation:seasonArrive .8s cubic-bezier(.2,.8,.2,1)}
 @keyframes seasonArrive{0%{transform:translateY(-7px) scale(.88);opacity:.65}55%{transform:translateY(2px) scale(1.08)}100%{transform:translateY(0) scale(1);opacity:1}}
-:root[data-portfolio-color-mode="dark"] .season-badge{background:#263b39e8;color:#e4f2ea;border-color:#62786f}
+:root[data-portfolio-color-mode="dark"] .season-badge{background:#263b39e8;color:#e4f2ea;border-color:#62786f}:root[data-portfolio-motion="reduce"] .city-card,:root[data-portfolio-motion="reduce"] .city-card:before,:root[data-portfolio-motion="reduce"] .city-card:after,:root[data-portfolio-motion="reduce"] .hill,:root[data-portfolio-motion="reduce"] .road{transition:none}:root[data-portfolio-motion="reduce"] .season-badge.season-shift{animation:none}
 .city-sky{position:absolute;inset:0;overflow:hidden}
 .sun{position:absolute;top:22px;right:13%;width:52px;height:52px;border-radius:50%;background:#ffe49a;box-shadow:0 0 0 12px #ffe49a44}
 .cloud{position:absolute;left:15%;top:38px;width:70px;height:22px;border-radius:99px;background:#ffffffb7}
