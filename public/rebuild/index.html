@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4fbf7">
+<title>Network Tycoon: New Beginnings</title>
+<style>
+:root{--ink:#203b47;--muted:#647c82;--paper:#f4fbf7;--panel:#fff;--leaf:#73c7a2;--deep:#2f816d;--sun:#ffd56d;--coral:#f28b74;--lav:#9c91e8;--line:#d8e8df;--shadow:0 16px 40px #1e55451a;--portfolio-text-scale:1}
+*{box-sizing:border-box}
+html{background:var(--paper);color:var(--ink);font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;font-size:calc(16px * var(--portfolio-text-scale,1));}
+body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% -20%,#fff 0,#f4fbf7 66%);padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit}
+.app{width:min(100%,1080px);margin:0 auto;padding:14px 16px 30px}
+.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:8px 0 12px}
+.eyebrow{color:var(--deep);font-size:.76rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase;margin:0 0 4px}
+h1{margin:0;font-size:clamp(1.4rem,4vw,2rem);letter-spacing:-.04em;line-height:1.08}
+.settings-open{flex:none;border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;font-weight:850;box-shadow:0 5px 12px #244d3d0b}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:9px 12px;min-width:0}
+.stat span{display:block;color:var(--muted);font-size:.72rem;font-weight:800}
+.stat strong{display:block;font-size:1.05rem;white-space:nowrap}
+.goal{display:flex;align-items:center;gap:10px;padding:11px 13px;background:#fff8df;border:1px solid #f1df9b;border-radius:17px;margin:0 0 12px}
+.goal-star{font-size:1.35rem}
+.goal-copy{flex:1;min-width:0}
+.goal-copy b{display:block;font-size:.93rem}
+.goal-copy small{display:block;color:#73683d;font-size:.8rem;margin-top:2px}
+.progress{height:7px;background:#ebdfb2;border-radius:10px;overflow:hidden;margin-top:7px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f4ba52,#ed8b60);border-radius:10px;transition:width .5s}
+.city-card{position:relative;overflow:hidden;border:1px solid #d1e6dc;border-radius:25px;background:linear-gradient(180deg,#daf4ed 0 45%,#c8e4d5 45% 67%,#f6eccd 67%);box-shadow:var(--shadow);min-height:290px}
+.city-card:before,.city-card:after{content:"";position:absolute;pointer-events:none;border-radius:50%;filter:blur(1px)}
+.city-card:before{width:240px;height:120px;left:-60px;top:13px;background:#c4e8d6}
+.city-card:after{width:290px;height:135px;right:-75px;top:40px;background:#b8e0d3}
+.city-sky{position:absolute;inset:0;overflow:hidden}
+.sun{position:absolute;top:22px;right:13%;width:52px;height:52px;border-radius:50%;background:#ffe49a;box-shadow:0 0 0 12px #ffe49a44}
+.cloud{position:absolute;left:15%;top:38px;width:70px;height:22px;border-radius:99px;background:#ffffffb7}
+.cloud:before,.cloud:after{content:"";position:absolute;bottom:4px;border-radius:50%;background:inherit}
+.cloud:before{width:30px;height:30px;left:12px}.cloud:after{width:24px;height:24px;left:35px}
+.hill{position:absolute;bottom:63px;width:140%;height:110px;left:-20%;border-radius:50%;background:#a8d4ad}
+.hill.back{bottom:81px;left:-8%;background:#b7dfc3}
+.road{position:absolute;left:-5%;right:-5%;bottom:34px;height:54px;background:#f9f0d7;transform:rotate(-5deg);border-top:4px solid #fff9e9;border-bottom:4px solid #fff9e9}
+.road:after{content:"";position:absolute;top:25px;left:0;right:0;border-top:2px dashed #e8c989}
+.map-grid{position:absolute;inset:52px 12px 55px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;z-index:2}
+.neighborhood{position:relative;display:flex;align-items:center;justify-content:center;min-height:76px;border:2px solid transparent;border-radius:18px;background:#ffffff77;backdrop-filter:blur(2px);transition:transform .25s,background .25s,border-color .25s;cursor:pointer}
+.neighborhood:hover{transform:translateY(-2px)}
+.neighborhood.selected{border-color:#fff;background:#ffffffd9;box-shadow:0 7px 15px #35624a22}
+.neighborhood.served{background:#ffffffc7}
+.neighborhood.locked{opacity:.5;filter:saturate(.5)}
+.buildings{display:flex;align-items:end;gap:3px;height:45px;margin-right:7px}
+.building{position:relative;width:16px;height:28px;background:#fff;border:2px solid #a6cbb5;border-radius:4px 4px 2px 2px;box-shadow:inset 0 -4px #e5f1e9}
+.building:before{content:"";position:absolute;inset:6px 3px auto;height:3px;background:repeating-linear-gradient(90deg,#92b8a3 0 3px,transparent 3px 6px);box-shadow:0 8px 0 #92b8a3}
+.building.tall{height:39px;width:20px}
+.building.wide{height:23px;width:24px}
+.neighborhood.served .building{border-color:#6bb690;box-shadow:inset 0 -4px #c3f0d1,0 0 12px #78dfa855}
+.place{font-size:.78rem;font-weight:900;line-height:1.05;max-width:70px}
+.place small{display:block;color:var(--muted);font-size:.65rem;margin-top:4px}
+.connection{position:absolute;height:4px;background:#fff9c8;box-shadow:0 0 0 2px #6fc69b,0 0 12px #fdf3a5;border-radius:9px;z-index:1;transform-origin:left center;opacity:0;transition:opacity .35s}
+.connection.one{left:27%;top:42%;width:47%;transform:rotate(13deg)}
+.connection.two{left:50%;top:50%;height:50px;width:4px;transform:rotate(0)}
+.city-caption{position:absolute;z-index:3;left:13px;bottom:10px;padding:5px 9px;border-radius:999px;background:#ffffffc7;color:#476458;font-size:.68rem;font-weight:900;letter-spacing:.02em}
+.map-tip{color:var(--muted);font-size:.8rem;text-align:center;margin:9px 0 13px}
+.bottom-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.75fr);gap:12px;align-items:stretch}
+.district-panel,.guide{background:#fff;border:1px solid var(--line);border-radius:21px;box-shadow:0 8px 22px #244d3d0b}
+.district-panel{padding:15px}
+.panel-kicker{font-size:.72rem;font-weight:900;color:var(--deep);text-transform:uppercase;letter-spacing:.08em}
+.district-panel h2{margin:5px 0;font-size:1.18rem;letter-spacing:-.03em}
+.district-panel p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.4}
+.project-facts{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.pill{border:1px solid #e3ede7;border-radius:99px;background:#f7fbf8;padding:5px 9px;font-size:.73rem;font-weight:800}
+.primary{width:100%;min-height:48px;border:0;border-radius:15px;background:linear-gradient(135deg,#32846c,#54ae83);color:#fff;font-weight:950;box-shadow:0 7px 0 #236a58;transition:transform .15s,box-shadow .15s}
+.primary:active{transform:translateY(3px);box-shadow:0 3px 0 #236a58}
+.primary:disabled{opacity:.48;box-shadow:none;cursor:not-allowed}
+.secondary{border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 12px;font-weight:850}
+.guide{display:flex;align-items:center;gap:10px;padding:12px 13px;min-height:120px;background:linear-gradient(140deg,#fff,#f6f1ff)}
+.guide img{width:70px;height:78px;object-fit:contain;align-self:flex-end;filter:drop-shadow(0 5px 4px #32425422);animation:breathe 2.7s ease-in-out infinite;transform-origin:50% 90%}
+.guide[data-pup="mack"] img{animation-delay:-1.2s}
+.guide-copy{min-width:0}
+.guide-name{color:#7d6cce;font-size:.72rem;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
+.guide p{font-size:.85rem;line-height:1.38;margin:4px 0 0}
+.guide-actions{display:flex;justify-content:flex-end;margin-top:6px}
+.guide-next{border:0;background:transparent;color:#6d60bc;padding:4px 2px;font-size:.76rem;font-weight:900}
+.turn-bar{position:sticky;bottom:calc(9px + env(safe-area-inset-bottom));z-index:10;display:flex;align-items:center;gap:12px;margin:13px 0 0;padding:9px 10px 9px 14px;border:1px solid #cfe2d7;border-radius:18px;background:#ffffffed;backdrop-filter:blur(12px);box-shadow:0 8px 28px #1e554525}
+.turn-caption{flex:1;min-width:0}
+.turn-caption b{display:block;font-size:.9rem}
+.turn-caption small{display:block;color:var(--muted);font-size:.73rem;margin-top:2px}
+.advance{flex:none;min-height:48px;border:0;border-radius:14px;background:#ffcf62;padding:0 17px;color:#59461d;font-weight:950;box-shadow:0 5px 0 #dfaa3d}
+.advance:active{transform:translateY(2px);box-shadow:0 3px 0 #dfaa3d}
+.modal-backdrop{position:fixed;z-index:10000;inset:0;display:grid;place-items:center;padding:18px;background:#17354588;backdrop-filter:blur(5px)}
+.modal-backdrop[hidden]{display:none}
+.sheet{width:min(100%,480px);max-height:min(85dvh,720px);overflow:auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 24px 80px #0d293644;animation:pop .24s cubic-bezier(.2,.8,.2,1)}
+.sheet h2{font-size:1.35rem;margin:0 0 5px;letter-spacing:-.04em}
+.sheet>p{color:var(--muted);font-size:.88rem;line-height:1.45;margin:0 0 15px}
+.tech-choice{width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin:8px 0;padding:12px;border:1px solid var(--line);background:#fbfdfb;border-radius:17px}
+.tech-choice:active{transform:scale(.99)}
+.tech-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:13px;background:#e4f4eb;font-size:1.35rem}
+.tech-choice:nth-of-type(2) .tech-icon{background:#fff3dc}.tech-choice:nth-of-type(3) .tech-icon{background:#e9e7ff}
+.tech-main{flex:1}.tech-main b{display:block;font-size:.92rem}.tech-main small{display:block;color:var(--muted);font-size:.75rem;margin-top:3px}
+.tech-cost{font-size:.86rem;font-weight:950;white-space:nowrap}
+.modal-actions{display:flex;gap:8px;margin-top:14px}.modal-actions>*{flex:1}
+.reward{position:fixed;z-index:9000;inset:0;display:grid;place-items:center;padding:20px;background:#183f3c6e;backdrop-filter:blur(4px);animation:fade .25s}
+.reward[hidden]{display:none}
+.reward-card{position:relative;width:min(100%,370px);padding:25px 22px 21px;border:3px solid #ffe39b;border-radius:28px;background:linear-gradient(160deg,#fffdf3,#fff);text-align:center;box-shadow:0 22px 70px #173a3a55;animation:pop .45s cubic-bezier(.16,1.2,.4,1)}
+.reward-icon{font-size:3.2rem;animation:twinkle 1.7s ease-in-out infinite}
+.reward-card h2{margin:4px 0;font-size:1.5rem}
+.reward-card p{color:var(--muted);font-size:.9rem;line-height:1.45;margin:6px 0 16px}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.035,.975)}}
+@keyframes pop{from{transform:translateY(14px) scale(.95);opacity:.3}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes twinkle{50%{transform:scale(1.08) rotate(5deg)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+:root[data-portfolio-motion="reduce"] *, :root[data-portfolio-motion="reduce"] *:before,:root[data-portfolio-motion="reduce"] *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+:root[data-portfolio-color-mode="dark"]{--ink:#e7f1ec;--muted:#aabdb5;--paper:#14252a;--panel:#20383d;--line:#385257;--shadow:0 16px 40px #0003;color-scheme:dark}
+:root[data-portfolio-color-mode="dark"] body{background:radial-gradient(ellipse at 50% -20%,#243c40 0,#14252a 70%)}
+:root[data-portfolio-color-mode="dark"] .stat,:root[data-portfolio-color-mode="dark"] .district-panel,:root[data-portfolio-color-mode="dark"] .guide,:root[data-portfolio-color-mode="dark"] .turn-bar,:root[data-portfolio-color-mode="dark"] .sheet,:root[data-portfolio-color-mode="dark"] .reward-card,:root[data-portfolio-color-mode="dark"] .settings-open{background:#20383d;color:var(--ink);border-color:var(--line)}
+:root[data-portfolio-color-mode="dark"] .city-card{filter:brightness(.82) saturate(.9)}
+:root[data-portfolio-color-mode="dark"] .goal{background:#3c3727;border-color:#73633a}
+:root[data-portfolio-color-mode="dark"] .goal-copy small{color:#d9c78c}
+:root[data-portfolio-color-mode="dark"] .guide{background:linear-gradient(140deg,#20383d,#2b2944)}
+:root[data-portfolio-color-mode="dark"] .tech-choice,:root[data-portfolio-color-mode="dark"] .pill{background:#263f43;border-color:var(--line);color:var(--ink)}
+:root[data-portfolio-theme="ocean"]{--leaf:#69b6ce;--deep:#367e9d;--sun:#f7cf78}
+:root[data-portfolio-theme="berry"]{--leaf:#b28de1;--deep:#7955ad;--sun:#f2c976}
+:root[data-portfolio-theme="sunshine"]{--leaf:#73c7a2;--deep:#2f816d;--sun:#ffd56d}
+@media(min-width:760px){.app{padding:24px 26px 40px}.page-heading{margin-top:4px}.hud{gap:12px}.stat{padding:12px 15px}.city-card{min-height:390px}.map-grid{inset:70px 11% 72px;gap:14px}.neighborhood{min-height:110px}.buildings{transform:scale(1.25);margin-right:14px}.place{font-size:.94rem;max-width:100px}.place small{font-size:.73rem}.city-caption{left:20px;bottom:16px}.bottom-row{gap:16px}.district-panel{padding:20px}.guide{padding:16px;min-height:146px}.guide img{width:90px;height:105px}.turn-bar{max-width:650px;margin:18px auto 0;padding:12px 14px}.turn-caption b{font-size:1rem}.advance{padding:0 24px}}
+@media(max-width:520px){.app{padding:10px 12px 25px}.page-heading{margin:5px 0 8px}.hud{margin:10px 0;gap:6px}.stat{padding:8px 9px;border-radius:13px}.stat span{font-size:.67rem}.stat strong{font-size:.93rem}.goal{padding:9px 10px;border-radius:14px}.city-card{min-height:272px}.map-grid{inset:48px 7px 52px;gap:6px}.neighborhood{min-height:75px;border-radius:14px}.buildings{gap:2px;margin-right:4px;transform:scale(.9)}.building{width:13px}.building.tall{width:16px}.building.wide{width:18px}.place{font-size:.7rem;max-width:63px}.place small{font-size:.59rem}.bottom-row{grid-template-columns:1fr;gap:8px}.district-panel{padding:13px}.district-panel h2{font-size:1.08rem}.guide{min-height:95px;padding:7px 12px}.guide img{width:56px;height:64px}.guide p{font-size:.82rem}.guide-next{display:none}.map-tip{margin:7px 0 9px;font-size:.74rem}.turn-bar{margin-top:9px}.advance{padding:0 12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="page-heading">
+    <div><p class="eyebrow">A bright new beginning</p><h1 id="city-title">Maple Harbor</h1></div>
+    <button class="settings-open" id="settings-open" type="button" aria-label="Open game settings">⚙︎</button>
+  </header>
+  <section class="hud" aria-label="Company status">
+    <div class="stat"><span>Cash available</span><strong id="cash">$150,000</strong></div>
+    <div class="stat"><span>Customers</span><strong id="customers">64</strong></div>
+    <div class="stat"><span>Month</span><strong id="month">April · Year 1</strong></div>
+  </section>
+  <section class="goal" aria-label="Current goal">
+    <div class="goal-star">⭐</div><div class="goal-copy"><b id="goal-title">Connect your first neighborhood</b><small id="goal-copy">Choose a place to bring online and help it bloom.</small><div class="progress"><i id="goal-progress"></i></div></div>
+  </section>
+  <section class="city-card" id="city-card" aria-label="Maple Harbor city map">
+    <div class="city-sky"><div class="sun"></div><div class="cloud"></div><div class="hill back"></div><div class="hill"></div><div class="road"></div></div>
+    <div class="connection one" id="connection-one"></div><div class="connection two" id="connection-two"></div>
+    <div class="map-grid" id="map-grid"></div>
+    <div class="city-caption">A little town with big plans</div>
+  </section>
+  <p class="map-tip" id="map-tip">Tap a neighborhood to see what it needs.</p>
+  <div class="bottom-row">
+    <section class="district-panel" aria-live="polite">
+      <span class="panel-kicker" id="panel-kicker">Your next opportunity</span>
+      <h2 id="district-title">Pinebrook</h2>
+      <p id="district-description">A friendly neighborhood with 120 homes ready for faster internet.</p>
+      <div class="project-facts"><span class="pill" id="homes-pill">🏠 120 homes</span><span class="pill" id="status-pill">🌱 Ready to grow</span></div>
+      <button class="primary" id="build-open" type="button">Plan a network</button>
+    </section>
+    <aside class="guide" id="guide" data-pup="pooch" aria-live="polite">
+      <img id="guide-avatar" src="/images/dog-tan.webp" alt="Pooch, your cheerful guide">
+      <div class="guide-copy"><span class="guide-name" id="guide-name">Pooch says</span><p id="guide-line">Pick a neighborhood and we’ll bring it to life together!</p><div class="guide-actions"><button class="guide-next" id="guide-next" type="button">Meet Mack</button></div></div>
+    </aside>
+  </div>
+  <div class="turn-bar"><div class="turn-caption"><b id="turn-title">Ready when you are</b><small id="turn-copy">Your city grows when you advance the month.</small></div><button class="advance" id="advance" type="button">Advance month</button></div>
+</div>
+
+<div class="modal-backdrop" id="build-modal" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="build-heading">
+    <span class="panel-kicker">Choose your first project</span>
+    <h2 id="build-heading">How should we connect Pinebrook?</h2>
+    <p>Each option brings the neighborhood online. Pick the one that fits your budget and your plans.</p>
+    <button class="tech-choice" data-tech="fiber"><span class="tech-icon">✨</span><span class="tech-main"><b>Fast Fiber</b><small>More capacity for a growing town · 2 months</small></span><span class="tech-cost">$42,000</span></button>
+    <button class="tech-choice" data-tech="coax"><span class="tech-icon">🧡</span><span class="tech-main"><b>Classic Coax</b><small>A steady, balanced build · 1 month</small></span><span class="tech-cost">$31,000</span></button>
+    <button class="tech-choice" data-tech="wireless"><span class="tech-icon">📡</span><span class="tech-main"><b>Wide Wireless</b><small>A quick start with room to upgrade · 1 month</small></span><span class="tech-cost">$24,000</span></button>
+    <div class="modal-actions"><button class="secondary" id="build-cancel" type="button">Maybe later</button><button class="primary" id="build-confirm" type="button" disabled>Choose a network</button></div>
+  </section>
+</div>
+
+<div class="modal-backdrop" id="settings-modal" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-heading">
+    <span class="panel-kicker">Make it yours</span><h2 id="settings-heading">Your game settings</h2>
+    <p>These preferences follow your portfolio account and can be changed anytime.</p>
+    <label class="setting-row">Mack & Pooch moments <input type="checkbox" id="companions-toggle" checked></label>
+    <p class="small-note">Guide appearances and celebrations.</p>
+    <div class="modal-actions"><button class="secondary" data-close-settings type="button">Done</button></div>
+  </section>
+</div>
+
+<div class="reward" id="reward" hidden>
+  <section class="reward-card" role="dialog" aria-modal="true" aria-labelledby="reward-title">
+    <div class="reward-icon">🌟</div><span class="panel-kicker">A neighborhood milestone</span>
+    <h2 id="reward-title">Pinebrook is connected!</h2>
+    <p>Your first network is live. Homes are glowing, customers are joining, and Maple Harbor is one step closer to a brighter future.</p>
+    <button class="primary" id="reward-continue" type="button">Keep building</button>
+  </section>
+</div>
+
+<style>
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;font-weight:850;border-bottom:1px solid var(--line)}
+.setting-row input{width:24px;height:24px;accent-color:var(--deep)}
+.small-note{font-size:.78rem!important;margin:4px 0!important}
+</style>
+<script type="module">
+import { mountPortfolioShell } from "/portfolio-shell.js";
+const GAME_ID="networkTycoonRebuild";
+const SAVE_KEY="network-tycoon-rebuild-save-v1";
+const GUIDE_KEY="portfolio-companions-enabled-v1";
+const THEMES=[
+ {id:"sunshine",label:"Sunshine",tokens:{"--brand":"#32846c"}},
+ {id:"ocean",label:"Ocean",tokens:{"--brand":"#367e9d"}},
+ {id:"berry",label:"Berry",tokens:{"--brand":"#7955ad"}}
+];
+const months=["April","May","June","July","August","September","October","November","December","January","February","March"];
+const districts=[
+ {id:"pinebrook",name:"Pinebrook",homes:120,status:"ready",description:"A friendly neighborhood with 120 homes ready for faster internet.",x:0},
+ {id:"willow-gardens",name:"Willow Gardens",homes:95,status:"locked",description:"A quiet green neighborhood. Connect Pinebrook to open this next.",x:1},
+ {id:"market-square",name:"Market Square",homes:82,status:"locked",description:"Local shops are waiting for reliable service. Connect a neighbor first.",x:2},
+ {id:"hilltop",name:"Hilltop",homes:110,status:"locked",description:"A bright new community with room to grow. Connect a neighbor first.",x:3}
+];
+const costs={fiber:42000,coax:31000,wireless:24000};
+const duration={fiber:2,coax:1,wireless:1};
+const names={fiber:"Fast Fiber",coax:"Classic Coax",wireless:"Wide Wireless"};
+const $=id=>document.getElementById(id);
+function fresh(){return{schemaVersion:1,month:0,cash:150000,customers:64,connected:0,selected:"pinebrook",project:null,tech:null,firstReward:false,guide:"pooch",lastReport:"Your city is ready for its first network."}}
+function load(){try{const value=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");if(value?.schemaVersion===1)return{...fresh(),...value}}catch{}return fresh()}
+let state=load(),selectedTech=null,shell=null;
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch{}}
+function money(value){return "$"+Math.round(value).toLocaleString("en-US")}
+function guide(pup,line){state.guide=pup;document.body.dataset.guide=pup;$("guide").dataset.pup=pup;$("guide-name").textContent=pup==="mack"?"Mack says":"Pooch says";$("guide-avatar").src=pup==="mack"?"/images/dog-dark.webp":"/images/dog-tan.webp";$("guide-avatar").alt=pup==="mack"?"Mack, your thoughtful guide":"Pooch, your cheerful guide";$("guide-line").textContent=line;$("guide-next").textContent=pup==="mack"?"Hear Pooch":"Hear Mack";save()}
+function countConnected(){return state.connected}
+function selectedDistrict(){return districts.find(d=>d.id===state.selected)||districts[0]}
+function canBuild(d){return d.status==="ready"||d.status==="locked"&&state.connected>0}
+function renderMap(){
+ const map=$("map-grid");map.replaceChildren();
+ districts.forEach((d,index)=>{
+  const served=d.status==="served";const inProgress=d.status==="building";
+  const button=document.createElement("button");button.type="button";button.className="neighborhood"+(state.selected===d.id?" selected":"")+(served?" served":"")+(d.status==="locked"?" locked":"");button.setAttribute("aria-label",d.name+(served?", connected":inProgress?", construction in progress":d.status==="locked"?", locked":""));
+  const blocks=document.createElement("span");blocks.className="buildings";
+  const b1=document.createElement("i");b1.className="building";const b2=document.createElement("i");b2.className="building tall";const b3=document.createElement("i");b3.className="building wide";blocks.append(b1,b2,b3);
+  const label=document.createElement("span");label.className="place";label.textContent=d.name;
+  const sub=document.createElement("small");sub.textContent=served?"Connected":inProgress?"Building…":d.status==="locked"?"Locked":"Select";
+  label.append(sub);button.append(blocks,label);button.onclick=()=>selectDistrict(d.id);map.append(button);
+ });
+ $("connection-one").style.opacity=state.connected?"1":"0";
+ $("connection-two").style.opacity=state.connected>1?"1":"0";
+}
+function render(){
+ $("cash").textContent=money(state.cash);$("customers").textContent=state.customers.toLocaleString("en-US");$("month").textContent=months[state.month%12]+" · Year "+(Math.floor(state.month/12)+1);
+ const d=selectedDistrict();$("district-title").textContent=d.name;$("district-description").textContent=d.description;$("homes-pill").textContent="🏠 "+d.homes+" homes";
+ const active=state.project?.districtId===d.id;
+ $("status-pill").textContent=d.status==="served"?"✨ Connected":active?"🚧 "+state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" left":d.status==="locked"?"🔒 Connect a neighbor":"🌱 Ready to grow";
+ $("panel-kicker").textContent=d.status==="served"?"Neighborhood success":active?"Project in progress":d.status==="locked"?"Coming up next":"Your next opportunity";
+ $("build-open").disabled=!canBuild(d)||!!state.project;
+ $("build-open").textContent=active?"Construction underway":d.status==="served"?"Neighborhood connected":d.status==="locked"?"Connect Pinebrook first":"Plan a network";
+ if(state.connected===0){$("goal-title").textContent="Connect your first neighborhood";$("goal-copy").textContent="Choose a place to bring online and help it bloom.";$("goal-progress").style.width=state.project?"35%":"0%"}
+ else if(state.connected===1){$("goal-title").textContent="Bring one more neighborhood online";$("goal-copy").textContent="Pinebrook is growing. Connect a nearby place to earn your town star.";$("goal-progress").style.width="55%"}
+ else{$("goal-title").textContent="Maple Harbor is blooming";$("goal-copy").textContent="You connected two neighborhoods and earned the first town star.";$("goal-progress").style.width="100%"}
+ $("turn-title").textContent=state.project?"Construction: "+names[state.project.tech]:"Ready when you are";
+ $("turn-copy").textContent=state.project?state.project.remaining+" month"+(state.project.remaining===1?"":"s")+" until "+selectedDistrict().name+" opens":"Your city grows when you advance the month.";
+ $("advance").textContent=state.project?"Advance month":"Next month";
+ $("map-tip").textContent=state.project?"Advance time to finish the network project.":"Tap a neighborhood to see what it needs.";
+ renderMap();
+}
+function selectDistrict(id){
+ state.selected=id;const d=selectedDistrict();
+ if(d.status==="locked"&&state.connected===0){guide("mack","Let’s start with Pinebrook. Once its network is live, nearby neighborhoods will open up.");}
+ else if(d.status==="served"){guide("pooch",d.name+" is glowing! Look at those homes come to life.");}
+ else if(d.status==="locked"){guide("mack","A neighboring network unlocks new places to build. Pinebrook is our next stop.");}
+ else{guide("pooch","This neighborhood is ready. Choose a network that fits your plan.");}
+ save();render();
+}
+function openBuild(){
+ const d=selectedDistrict();if(!canBuild(d)||state.project)return;
+ $("build-heading").textContent="How should we connect "+d.name+"?";
+ selectedTech=null;$("build-confirm").disabled=true;$("build-confirm").textContent="Choose a network";
+ document.querySelectorAll(".tech-choice").forEach(b=>{b.style.outline="";b.onclick=()=>{selectedTech=b.dataset.tech;document.querySelectorAll(".tech-choice").forEach(x=>x.style.outline=x===b?"3px solid var(--deep)":"");$("build-confirm").textContent="Build for "+money(costs[selectedTech]);$("build-confirm").disabled=state.cash<costs[selectedTech]};});
+ $("build-modal").hidden=false;
+}
+function build(){
+ if(!selectedTech)return;const d=selectedDistrict();const cost=costs[selectedTech];if(state.cash<cost)return;
+ state.cash-=cost;state.project={districtId:d.id,tech:selectedTech,remaining:duration[selectedTech]};state.tech=selectedTech;d.status="building";state.lastReport="Your "+names[selectedTech]+" project is underway in "+d.name+".";
+ $("build-modal").hidden=true;guide("mack","Good plan. Advance the month and we’ll watch the work take shape.");save();render();
+}
+function advance(){
+ state.month++;
+ state.cash+=12000;
+ let report="A calm month in Maple Harbor. Your company earned $12,000.";
+ if(state.project){
+  state.project.remaining--;
+  if(state.project.remaining<=0){
+   const d=districts.find(x=>x.id===state.project.districtId);d.status="served";d.tech=state.project.tech;state.connected++;state.customers+=Math.round(d.homes*.48);state.cash+=5000;
+   report=d.name+" is connected! "+Math.round(d.homes*.48)+" homes joined and the town earned a connection bonus.";
+   state.project=null;
+   if(!state.firstReward){state.firstReward=true;$("reward").hidden=false;guide("pooch","Pinebrook is online! You made the whole town a little brighter.");}
+   else guide("mack","A second neighborhood is live. Your network is taking shape.");
+   if(state.connected===1)districts[1].status="ready";
+   if(state.connected===2){districts[2].status="ready";districts[3].status="ready"}
+  }else{report="Construction is moving along in "+selectedDistrict().name+". One more month to go."}
+ }
+ state.lastReport=report;save();render();
+ if(state.lastReport)guide(state.connected?"pooch":"mack",report);
+}
+$("build-open").addEventListener("click",openBuild);
+$("build-confirm").addEventListener("click",build);
+$("build-cancel").addEventListener("click",()=>$("build-modal").hidden=true);
+$("advance").addEventListener("click",advance);
+$("guide-next").addEventListener("click",()=>guide(state.guide==="pooch"?"mack":"pooch",state.guide==="pooch"?"I’ll keep an eye on the budget and help you plan the next connection.":"Pinebrook is ready for its first network. Choose the place you want to grow."));
+$("reward-continue").addEventListener("click",()=>$("reward").hidden=true);
+$("settings-open").addEventListener("click",()=>$("settings-modal").hidden=false);
+document.querySelector("[data-close-settings]").addEventListener("click",()=>$("settings-modal").hidden=true);
+document.querySelectorAll(".modal-backdrop").forEach(backdrop=>backdrop.addEventListener("click",e=>{if(e.target===backdrop)backdrop.hidden=true}));
+$("companions-toggle").addEventListener("change",e=>{try{localStorage.setItem(GUIDE_KEY,String(e.target.checked))}catch{};document.dispatchEvent(new CustomEvent("portfolio-companions:change",{detail:{enabled:e.target.checked}}));document.querySelector(".guide").hidden=!e.target.checked;save()});
+try{const pref=localStorage.getItem(GUIDE_KEY);if(pref!==null)$("companions-toggle").checked=pref!=="false";document.querySelector(".guide").hidden=!$("companions-toggle").checked}catch{}
+const motionWatcher=window.matchMedia?.("(prefers-reduced-motion: reduce)");
+const syncMotion=()=>{const settings=shell?.getSettings();const reduce=settings?.accessibility?.motion==="reduce"||(settings?.accessibility?.motion==="system"&&motionWatcher?.matches);document.documentElement.dataset.portfolioMotion=reduce?"reduce":"full"};
+window.addEventListener("portfolio:settings",syncMotion);motionWatcher?.addEventListener?.("change",syncMotion);
+shell=await mountPortfolioShell({gameId:GAME_ID,title:"Network Tycoon · Rebuild",homeUrl:"/",storageKeys:[SAVE_KEY,GUIDE_KEY],themes:THEMES});
+syncMotion();render();
+window.addEventListener("pagehide",save);
+</script>
+</body>
+</html>
