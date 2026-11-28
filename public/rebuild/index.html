@@ -481,7 +481,7 @@ world.addEventListener("pointermove",event=>{if(event.pointerType==="touch")retu
 world.addEventListener("pointerup",event=>{if(event.pointerType!=="touch")finish(event.pointerId)}, {passive:true});
 world.addEventListener("pointercancel",event=>{if(event.pointerType!=="touch")finish(event.pointerId,true)}, {passive:true});
 world.addEventListener("lostpointercapture",event=>{if(event.pointerType!=="touch")finish(event.pointerId,true)}, {passive:true});
-card.addEventListener("touchstart",event=>{for(const t of [...event.changedTouches].slice(0,2-mapCamera.pointers.size)){const target=document.elementFromPoint(t.clientX,t.clientY),p=local(t.clientX,t.clientY);begin("touch-"+t.identifier,p,sourceButton(target))}},{passive:false});
+card.addEventListener("touchstart",event=>{for(const t of [...event.changedTouches].slice(0,2-mapCamera.pointers.size)){const target=document.elementFromPoint(t.clientX,t.clientY),button=target instanceof Element?target.closest("button"):null;if(button&&!button.matches(".district,.map-cat"))continue;const p=local(t.clientX,t.clientY);begin("touch-"+t.identifier,p,!!button)}},{passive:false});
 card.addEventListener("touchmove",event=>{const active=new Map([...event.touches].map(t=>["touch-"+t.identifier,local(t.clientX,t.clientY)]));for(const [id,p] of active)move(id,p,event);if([...active.keys()].some(id=>mapCamera.pointers.has(id)))event.preventDefault()},{passive:false});
 const finishTouches=(event,canceled=false)=>{for(const t of event.changedTouches)finish("touch-"+t.identifier,canceled)};
 card.addEventListener("touchend",event=>finishTouches(event),{passive:true});
