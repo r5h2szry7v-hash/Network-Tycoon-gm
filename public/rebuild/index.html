@@ -432,7 +432,7 @@ document.querySelectorAll(".tech-choice").forEach(button=>button.addEventListene
 document.querySelectorAll(".rival-choice").forEach(button=>button.addEventListener("click",()=>chooseRival(button.dataset.rival)));
 document.querySelectorAll(".map-cat").forEach((button,index)=>button.addEventListener("click",()=>{button.classList.remove("pounce");void button.offsetWidth;button.classList.add("pounce");setTimeout(()=>button.classList.remove("pounce"),560);guide(index===0?"pooch":"mack",index===0?"Kitty is checking whether your crews can keep up. Tap the glowing district to plan your next move.":"Westley is watching from the rooftops. Tap the glowing district to see what the city needs.");}));
 document.addEventListener("visibilitychange",()=>{if(document.hidden){cancelAnimationFrame(mapCamera.inertiaRaf);mapCamera.inertiaRaf=0;}});
-setupMapCameraControls();
+setupMapNavigation();
 const motionWatcher=window.matchMedia?.("(prefers-reduced-motion: reduce)");
 const syncMotion=()=>{const settings=shell?.getSettings();const reduce=settings?.accessibility?.motion==="reduce"||(settings?.accessibility?.motion==="system"&&motionWatcher?.matches);document.documentElement.dataset.portfolioMotion=reduce?"reduce":"full"};
 window.addEventListener("portfolio:settings",syncMotion);motionWatcher?.addEventListener?.("change",syncMotion);
