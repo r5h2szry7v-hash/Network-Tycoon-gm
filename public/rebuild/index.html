@@ -247,14 +247,28 @@ html[data-portfolio-motion=reduce] .map-cat,html[data-portfolio-motion=reduce] .
 html[data-portfolio-color-mode=dark] .action-heading b,html[data-portfolio-color-mode=dark] .action-close{background:#203438f2;color:#e5f0eb;border-color:#607575}html[data-portfolio-color-mode=dark] .tech-choice,html[data-portfolio-color-mode=dark] .rival-choice{background:linear-gradient(145deg,#263f43f2,#1d343af0);color:#e5f0eb;border-color:#6a8984}html[data-portfolio-color-mode=dark] .tech-choice small,html[data-portfolio-color-mode=dark] .rival-choice small{color:#c4d9d2}
 @media(max-width:390px){.action-card{width:calc(100% - 20px);gap:6px}.action-toggle{min-height:42px;padding:7px 14px}.tech-grid{gap:6px}.tech-choice{min-height:50px;padding:6px 3px;border-radius:14px}.rival-choice{min-height:46px;padding:6px 5px;font-size:.68rem}.rival-choice small{font-size:.57rem}.guide{left:7px;width:min(260px,calc(100% - 80px));bottom:calc(101px + env(safe-area-inset-bottom))}.app.actions-open .guide{bottom:calc(190px + env(safe-area-inset-bottom))}}
 @media(max-height:720px){.action-card{gap:5px}.tech-choice{min-height:46px}.rival-choice{min-height:42px}.app.actions-open .guide{bottom:calc(174px + env(safe-area-inset-bottom))}}
+
+/* Map first layout: keep only the game, companion guidance, and core controls visible. */
+#challenge-kicker{display:none!important}
+.map-objective,.map-hud,.map-gesture-tip,.cat-roster{display:none!important}
+#guide{position:absolute!important;z-index:19!important;top:calc(env(safe-area-inset-top) + 57px)!important;left:10px!important;right:10px!important;bottom:auto!important;width:auto!important;max-width:none;min-height:46px;margin:0;padding:6px 10px;border:1px solid #ffffffed;border-radius:16px;background:linear-gradient(105deg,#fffef2f2,#f3fff4ed);box-shadow:0 7px 22px #183f4b40;backdrop-filter:blur(12px)}
+#guide .guide-copy{flex:1;min-width:0}
+#guide .guide-copy p{display:block;overflow:visible;white-space:normal;-webkit-line-clamp:unset;-webkit-box-orient:initial;font-size:.76rem;line-height:1.2}
+.map-caption{top:auto!important;right:auto!important;bottom:calc(94px + env(safe-area-inset-bottom))!important;left:10px!important}
+@media(max-width:390px){#guide{left:7px!important;right:7px!important;padding:5px 8px}#guide .guide-copy p{font-size:.7rem;line-height:1.18}.map-caption{left:7px!important}}
+
 </style>
 </head>
 <body>
 <main class="app" id="app">
   <header class="header">
-    <div class="brand"><p class="eyebrow" id="challenge-kicker">Starter Pack · Challenge 1 of 2</p><div class="brand-line"><h1>Network Tycoon</h1><span class="company-name" id="company-name">🌱 Maple Harbor Networks</span></div></div>
+    <div class="brand"><p class="eyebrow" id="challenge-kicker" hidden></p><div class="brand-line"><h1>Network Tycoon</h1><span class="company-name" id="company-name">🌱 Maple Harbor Networks</span></div></div>
     <button class="settings-open" id="settings-open" type="button" aria-label="Game settings">⚙︎</button>
   </header>
+    <aside class="guide" id="guide" aria-live="polite">
+    <div class="guide-pups"><img id="mack-avatar" src="/images/dog-dark.webp" alt="Mack"><img id="pooch-avatar" src="/images/dog-tan.webp" alt="Pooch"></div>
+    <div class="guide-copy"><span class="guide-name" id="guide-name">Mack & Pooch</span><p id="guide-line">Pick a network for Pinebrook. Watch the deadline and your cash.</p></div>
+  </aside>
 
 
 
@@ -282,11 +296,8 @@ html[data-portfolio-color-mode=dark] .action-heading b,html[data-portfolio-color
     
     
   
-    <div class="map-gesture-tip" id="map-gesture-tip">Drag to explore <span>·</span> pinch to zoom</div><div class="map-controls" aria-label="Map navigation controls"><button type="button" id="map-zoom-in" aria-label="Zoom in">+</button><span id="map-zoom-label" aria-live="polite">100%</span><button type="button" id="map-zoom-out" aria-label="Zoom out">−</button><button type="button" id="map-recenter" aria-label="Center on goal district">◎</button></div>
-    <aside class="guide" id="guide" aria-live="polite">
-    <div class="guide-pups"><img id="mack-avatar" src="/images/dog-dark.webp" alt="Mack"><img id="pooch-avatar" src="/images/dog-tan.webp" alt="Pooch"></div>
-    <div class="guide-copy"><span class="guide-name" id="guide-name">Mack & Pooch</span><p id="guide-line">Pick a network for Pinebrook. Watch the deadline and your cash.</p></div>
-  </aside>
+<div class="map-controls" aria-label="Map navigation controls"><button type="button" id="map-zoom-in" aria-label="Zoom in">+</button><span id="map-zoom-label" aria-live="polite">100%</span><button type="button" id="map-zoom-out" aria-label="Zoom out">−</button><button type="button" id="map-recenter" aria-label="Center on goal district">◎</button></div>
+
 
   </section>
 
