@@ -157,7 +157,7 @@ body{height:100dvh;min-height:0}
 .guide-pups img{width:38px;height:38px}.guide-name{font-size:.59rem}.guide-copy p{font-size:.69rem;line-height:1.18}
 .map-cat{position:absolute;z-index:7;bottom:38px;width:43px;height:43px;padding:0;border:0;background:transparent;filter:drop-shadow(0 4px 3px #315c5b3b);cursor:pointer;animation:catBob 2s ease-in-out infinite}
 .map-cat img{width:100%;height:100%;object-fit:contain}.map-cat-one{right:57px}.map-cat-two{right:13px;animation-delay:-.9s}
-.map-cat:active{animation:catTap .35s ease-in-out}@keyframes catTap{50%{transform:translateY(-12px) rotate(-14deg) scale(1.15)}}
+.map-cat:active{animation:catTap .35s ease-in-out}.map-cat.pounce{animation:catTap .55s cubic-bezier(.2,.8,.2,1)}@keyframes catTap{50%{transform:translateY(-12px) rotate(-14deg) scale(1.15)}}
 .cat-roster{display:none}
 .action-card{padding:7px 9px;border-radius:17px;background:linear-gradient(115deg,#fff,#f8f7ff 67%,#eefffa);box-shadow:0 7px 18px #5966a51a}
 .action-heading{margin-bottom:5px}.action-heading b{font-size:.74rem}.action-heading small{font-size:.6rem}
@@ -357,6 +357,7 @@ $("company-input").addEventListener("input",()=>{$("settings-status").textConten
 document.querySelectorAll(".mark").forEach(button=>button.addEventListener("click",()=>setCompanyMark(button)));
 document.querySelectorAll(".tech-choice").forEach(button=>button.addEventListener("click",()=>chooseTech(button.dataset.tech)));
 document.querySelectorAll(".rival-choice").forEach(button=>button.addEventListener("click",()=>chooseRival(button.dataset.rival)));
+document.querySelectorAll(".map-cat").forEach((button,index)=>button.addEventListener("click",()=>{button.classList.remove("pounce");void button.offsetWidth;button.classList.add("pounce");setTimeout(()=>button.classList.remove("pounce"),560);guide(index===0?"pooch":"mack",index===0?"Kitty is checking whether your crews can keep up. Tap the glowing district to plan your next move.":"Westley is watching from the rooftops. Tap the glowing district to see what the city needs.");}));
 const motionWatcher=window.matchMedia?.("(prefers-reduced-motion: reduce)");
 const syncMotion=()=>{const settings=shell?.getSettings();const reduce=settings?.accessibility?.motion==="reduce"||(settings?.accessibility?.motion==="system"&&motionWatcher?.matches);document.documentElement.dataset.portfolioMotion=reduce?"reduce":"full"};
 window.addEventListener("portfolio:settings",syncMotion);motionWatcher?.addEventListener?.("change",syncMotion);
