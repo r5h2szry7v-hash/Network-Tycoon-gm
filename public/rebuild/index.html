@@ -124,24 +124,6 @@ button,input{font:inherit;color:inherit}button{touch-action:manipulation}
 @media(max-width:370px){.app{padding-left:8px;padding-right:8px;gap:5px}.brand-line h1{font-size:1rem}.district{gap:3px;padding:4px}.district-copy b{font-size:.62rem}.district-icon{transform:scale(.9)}.advance{min-width:116px}.action-card{padding:6px}.tech-choice{min-height:42px}.cat small{display:none}}
 @media(max-height:720px){.app{padding-top:5px;gap:5px;grid-template-rows:auto auto auto minmax(115px,1fr) auto auto auto}.challenge-card{padding:7px 9px}.map-card{min-height:115px}.guide{min-height:44px}.guide-pups img{width:27px;height:27px}.action-card{padding:5px 7px}.tech-choice{min-height:40px}.turn-bar{min-height:40px}}
 
-/* Map-integrated challenge readout; collapse keeps the city clear on portrait screens. */
-.map-objective{top:9px;left:9px;width:min(calc(100% - 58px),620px);padding:0;overflow:hidden}
-.map-status-line{display:flex;align-items:center;gap:clamp(5px,1.5vw,13px);min-height:40px;padding:4px 7px 4px 11px;border:1px solid #ffffffed;border-radius:14px;background:linear-gradient(115deg,#fffff4f2,#f1fff6ee);box-shadow:0 5px 15px #214f4b26;backdrop-filter:blur(10px)}
-.map-status-value{display:flex;align-items:baseline;gap:4px;min-width:0;white-space:nowrap;color:#526c70;font-size:.66rem;font-weight:800}
-.map-status-value span{overflow:hidden;text-overflow:ellipsis}
-.map-status-value strong{color:#203c50;font-size:.78rem;font-weight:950}
-.map-status-mechanic{flex:1}
-.map-status-toggle{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:3px;min-height:31px;padding:4px 7px;border:1px solid #c9e5d9;border-radius:10px;background:#ffffffdb;color:#295c58;font-size:.68rem;font-weight:900;touch-action:manipulation}
-.map-status-chevron{font-size:.8rem;transition:transform .18s ease}
-.map-status-toggle[aria-expanded=true] .map-status-chevron{transform:rotate(180deg)}
-.map-objective-details{padding:8px 11px 9px;border-top:1px solid #d9e9d8;background:linear-gradient(120deg,#fffdf0ed,#fffef8e8)}
-.map-objective-details[hidden]{display:none!important}
-.map-objective.is-collapsed{width:min(calc(100% - 58px),620px)}
-.map-objective.is-collapsed .map-status-line{box-shadow:0 4px 12px #214f4b22}
-.map-objective .challenge-kicker{font-size:.59rem}.map-objective .stars-earned{font-size:.68rem}.map-objective .challenge-title{font-size:clamp(.87rem,3vw,1.15rem);margin:2px 0}.map-objective .challenge-objective{font-size:.67rem;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.map-objective .turn-progress{height:4px;margin-top:5px}
-@media(max-width:520px){.map-objective{width:min(calc(100% - 58px),620px)}.map-status-line{gap:clamp(4px,1.3vw,8px);min-height:38px;padding:4px 5px 4px 8px}.map-status-value{gap:3px;font-size:.62rem}.map-status-value strong{font-size:.72rem}.map-status-toggle{min-height:30px;padding:4px 5px;font-size:.63rem}}
-@media(max-width:370px){.map-objective{width:min(calc(100% - 54px),620px)}.map-status-line{gap:4px;padding-left:6px}.map-status-value{font-size:.57rem}.map-status-value strong{font-size:.67rem}.map-status-toggle{padding:3px 4px;font-size:.59rem}}
-@media(max-height:680px){.map-objective-details{max-height:38vh;overflow:auto}}
 /* Map-first campaign surface */
 body{height:100dvh;min-height:0}
 .app{height:100dvh;min-height:0;width:min(100%,980px);padding:8px 10px calc(7px + env(safe-area-inset-bottom));grid-template-rows:auto minmax(0,1fr) auto auto;gap:7px}
@@ -299,6 +281,24 @@ html[data-portfolio-color-mode=dark] .action-heading b,html[data-portfolio-color
 html[data-portfolio-color-mode=dark] .finance-toggle,html[data-portfolio-color-mode=dark] #finance-panel,html[data-portfolio-color-mode=dark] #finance-panel .metric{background:#203438ed;color:#e5f0eb;border-color:#607575}
 @media(max-width:390px){.finance-toggle{right:7px;padding:5px 8px}#finance-panel{right:7px!important;width:min(234px,calc(100% - 14px))!important}}
 
+/* Map-integrated challenge readout; collapse keeps the city clear on portrait screens. */
+.map-objective{top:9px;left:9px;width:min(calc(100% - 58px),620px);padding:0;overflow:hidden}
+.map-status-line{display:flex;align-items:center;gap:clamp(5px,1.5vw,13px);min-height:40px;padding:4px 7px 4px 11px;border:1px solid #ffffffed;border-radius:14px;background:linear-gradient(115deg,#fffff4f2,#f1fff6ee);box-shadow:0 5px 15px #214f4b26;backdrop-filter:blur(10px)}
+.map-status-value{display:flex;align-items:baseline;gap:4px;min-width:0;white-space:nowrap;color:#526c70;font-size:.66rem;font-weight:800}
+.map-status-value span{overflow:hidden;text-overflow:ellipsis}
+.map-status-value strong{color:#203c50;font-size:.78rem;font-weight:950}
+.map-status-mechanic{flex:1}
+.map-status-toggle{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:3px;min-height:31px;padding:4px 7px;border:1px solid #c9e5d9;border-radius:10px;background:#ffffffdb;color:#295c58;font-size:.68rem;font-weight:900;touch-action:manipulation}
+.map-status-chevron{font-size:.8rem;transition:transform .18s ease}
+.map-status-toggle[aria-expanded=true] .map-status-chevron{transform:rotate(180deg)}
+.map-objective-details{padding:8px 11px 9px;border-top:1px solid #d9e9d8;background:linear-gradient(120deg,#fffdf0ed,#fffef8e8)}
+.map-objective-details[hidden]{display:none!important}
+.map-objective.is-collapsed{width:min(calc(100% - 58px),620px)}
+.map-objective.is-collapsed .map-status-line{box-shadow:0 4px 12px #214f4b22}
+.map-objective .challenge-kicker{font-size:.59rem}.map-objective .stars-earned{font-size:.68rem}.map-objective .challenge-title{font-size:clamp(.87rem,3vw,1.15rem);margin:2px 0}.map-objective .challenge-objective{font-size:.67rem;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.map-objective .turn-progress{height:4px;margin-top:5px}
+@media(max-width:520px){.map-objective{width:min(calc(100% - 58px),620px)}.map-status-line{gap:clamp(4px,1.3vw,8px);min-height:38px;padding:4px 5px 4px 8px}.map-status-value{gap:3px;font-size:.62rem}.map-status-value strong{font-size:.72rem}.map-status-toggle{min-height:30px;padding:4px 5px;font-size:.63rem}}
+@media(max-width:370px){.map-objective{width:min(calc(100% - 54px),620px)}.map-status-line{gap:4px;padding-left:6px}.map-status-value{font-size:.57rem}.map-status-value strong{font-size:.67rem}.map-status-toggle{padding:3px 4px;font-size:.59rem}}
+@media(max-height:680px){.map-objective-details{max-height:38vh;overflow:auto}}
 </style>
 </head>
 <body>
