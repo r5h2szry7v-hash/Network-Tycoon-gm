@@ -257,6 +257,14 @@ html[data-portfolio-color-mode=dark] .action-heading b,html[data-portfolio-color
 .map-caption{top:auto!important;right:auto!important;bottom:calc(94px + env(safe-area-inset-bottom))!important;left:10px!important}
 @media(max-width:390px){#guide{left:7px!important;right:7px!important;padding:5px 8px}#guide .guide-copy p{font-size:.7rem;line-height:1.18}.map-caption{left:7px!important}}
 
+
+/* Compact top identity into a settings control; let companion guidance lead the screen. */
+.header{top:calc(env(safe-area-inset-top) + 7px)!important;left:auto!important;right:10px!important;width:42px!important;height:42px!important;min-height:42px!important;padding:2px!important;border:0!important;border-radius:14px!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+.header .brand{display:none!important}
+#guide{top:calc(env(safe-area-inset-top) + 7px)!important;left:10px!important;right:58px!important;width:auto!important;min-height:46px}
+#guide .guide-copy p{display:block;overflow:visible;white-space:normal;-webkit-line-clamp:unset;-webkit-box-orient:initial;font-size:.76rem;line-height:1.2}
+@media(max-width:390px){.header{right:7px!important}#guide{left:7px!important;right:54px!important;padding:5px 8px}#guide .guide-copy p{font-size:.7rem;line-height:1.18}}
+
 </style>
 </head>
 <body>
